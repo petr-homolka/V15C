@@ -1041,56 +1041,60 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           transform-origin: center center !important;
         }
 
-        /* EFEKT ZVÝRAZNĚNÍ ŘÁDKU ÚKOLU NA HOVER */
+        /* 1. ŘÁDEK ÚKOLU - NEBARVIT POZADÍ (ZŮSTÁVÁ ČISTĚ BÍLÉ #FFFFFF) */
         .task-item-row {
-          transition: all 0.18s ease-in-out !important;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
           border: 1px solid #F0F0F4 !important;
           background-color: #FFFFFF !important;
         }
         .task-item-row:hover {
-          background-color: #F8FAFC !important;
-          border-color: #CBD5E1 !important;
-          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
-          transform: translateY(-1px);
+          background-color: #FFFFFF !important; /* Řádek nebarvit */
+          border-color: #E2E8F0 !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
         }
         .task-item-row:hover .task-edit-pen {
           color: #2563EB !important;
           opacity: 1 !important;
         }
 
-        /* EFEKT ZVÝRAZNĚNÍ ZATRHÁVÁTKO (CHECKBOX) NA HOVER */
+        /* 2. ZATRHÁVÁTKO (CHECKBOX) - SYSTÉMOVÁ ČERVENOORANŽOVÁ #FF4742 A CELÁ VIDITELNOST BEZ OŘEZU */
         .task-checkbox {
-          transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+          width: 18px !important;
+          height: 18px !important;
+          border-radius: 5px !important;
           border: 1.5px solid #94A3B8 !important;
           background-color: #FFFFFF !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          cursor: pointer !important;
+          flex-shrink: 0 !important;
+          box-sizing: border-box !important;
+          transition: all 0.15s ease-in-out !important;
           position: relative !important;
         }
         .task-checkbox:hover {
-          border-color: #10B981 !important;
-          background-color: #ECFDF5 !important;
-          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22) !important;
-          transform: scale(1.15);
+          border-color: #FF4742 !important;
+          background-color: #FFF5F5 !important;
         }
         .task-checkbox:hover::after {
           content: '✓';
-          color: #10B981;
+          color: #FF4742;
           font-size: 11px;
           font-weight: 800;
           line-height: 1;
         }
         .task-checkbox.completed {
-          background-color: #10B981 !important;
-          border-color: #10B981 !important;
+          background-color: #FF4742 !important;
+          border-color: #FF4742 !important;
           color: #FFFFFF !important;
         }
         .task-checkbox.completed::after {
           content: none !important;
         }
         .task-checkbox.completed:hover {
-          background-color: #059669 !important;
-          border-color: #059669 !important;
-          box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.25) !important;
-          transform: scale(1.15);
+          background-color: #E03833 !important;
+          border-color: #E03833 !important;
         }
       `}</style>
 
