@@ -1038,6 +1038,58 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           pointer-events: none !important;
           transform-origin: center center !important;
         }
+
+        /* EFEKT ZVÝRAZNĚNÍ ŘÁDKU ÚKOLU NA HOVER */
+        .task-item-row {
+          transition: all 0.18s ease-in-out !important;
+          border: 1px solid #F0F0F4 !important;
+          background-color: #FFFFFF !important;
+        }
+        .task-item-row:hover {
+          background-color: #F8FAFC !important;
+          border-color: #CBD5E1 !important;
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+          transform: translateY(-1px);
+        }
+        .task-item-row:hover .task-edit-pen {
+          color: #2563EB !important;
+          opacity: 1 !important;
+        }
+
+        /* EFEKT ZVÝRAZNĚNÍ ZATRHÁVÁTKO (CHECKBOX) NA HOVER */
+        .task-checkbox {
+          transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+          border: 1.5px solid #94A3B8 !important;
+          background-color: #FFFFFF !important;
+          position: relative !important;
+        }
+        .task-checkbox:hover {
+          border-color: #10B981 !important;
+          background-color: #ECFDF5 !important;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22) !important;
+          transform: scale(1.15);
+        }
+        .task-checkbox:hover::after {
+          content: '✓';
+          color: #10B981;
+          font-size: 11px;
+          font-weight: 800;
+          line-height: 1;
+        }
+        .task-checkbox.completed {
+          background-color: #10B981 !important;
+          border-color: #10B981 !important;
+          color: #FFFFFF !important;
+        }
+        .task-checkbox.completed::after {
+          content: none !important;
+        }
+        .task-checkbox.completed:hover {
+          background-color: #059669 !important;
+          border-color: #059669 !important;
+          box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.25) !important;
+          transform: scale(1.15);
+        }
       `}</style>
 
       {/* 1. Levá schovávací navigace Routine */}
@@ -1674,29 +1726,25 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             key={t.id}
                             draggable
                             onDragStart={(e) => handleDragStartTask(e, t)}
-                            className={disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}
+                            className={`task-item-row ${disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}`}
                             style={{
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
                               padding: '8px 12px',
                               borderRadius: '8px',
-                              backgroundColor: '#FFFFFF',
-                              border: '1px solid #F0F0F4',
-                              cursor: 'grab',
-                              transition: 'all 0.2s ease'
+                              cursor: 'grab'
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               <div 
                                 onClick={() => toggleTask(t.id)}
-                                className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                                title="Označit jako splněné"
+                                className={`task-checkbox ${t.completed ? 'completed' : ''} ${recentlyCheckedId === t.id ? 'anim-check-pop' : ''}`}
                                 style={{
                                   width: '18px',
                                   height: '18px',
                                   borderRadius: '4px',
-                                  border: '1.5px solid #A0A0B0',
-                                  backgroundColor: '#FFFFFF',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
@@ -1704,6 +1752,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                   flexShrink: 0
                                 }}
                               >
+                                {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
                               </div>
                               <span 
                                 onClick={() => setEditingTask(t)}
@@ -1723,6 +1772,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               <button
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); setEditingTask(t); }}
+                                className="task-edit-pen"
                                 title="Upravit úkol"
                                 style={{
                                   border: 'none',
@@ -1760,27 +1810,26 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           key={t.id}
                           draggable
                           onDragStart={(e) => handleDragStartTask(e, t)}
+                          className="task-item-row"
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             padding: '8px 12px',
                             borderRadius: '8px',
-                            backgroundColor: '#FAFAFA',
-                            opacity: 0.75,
+                            opacity: 0.85,
                             cursor: 'grab'
                           }}
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div 
                               onClick={() => toggleTask(t.id)}
-                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              title="Označit jako nesplněné"
+                              className={`task-checkbox completed ${recentlyCheckedId === t.id ? 'anim-check-pop' : ''}`}
                               style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '4px',
-                                border: 'none',
-                                backgroundColor: '#10B981',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -1865,29 +1914,25 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           key={t.id}
                           draggable
                           onDragStart={(e) => handleDragStartTask(e, t)}
-                          className={disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}
+                          className={`task-item-row ${disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}`}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             padding: '8px 12px',
                             borderRadius: '8px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #F0F0F4',
-                            cursor: 'grab',
-                            transition: 'all 0.2s ease'
+                            cursor: 'grab'
                           }}
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
                             <div 
                               onClick={() => toggleTask(t.id)}
-                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              title="Označit jako splněné"
+                              className={`task-checkbox ${t.completed ? 'completed' : ''} ${recentlyCheckedId === t.id ? 'anim-check-pop' : ''}`}
                               style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '4px',
-                                border: t.completed ? 'none' : '1.5px solid #A0A0B0',
-                                backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -1958,6 +2003,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             <button
                               type="button"
                               onClick={(e) => { e.stopPropagation(); setEditingTask(t); }}
+                              className="task-edit-pen"
                               title="Upravit úkol"
                               style={{
                                 border: 'none',
@@ -2007,29 +2053,25 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           key={t.id}
                           draggable
                           onDragStart={(e) => handleDragStartTask(e, t)}
-                          className={disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}
+                          className={`task-item-row ${disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}`}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             padding: '8px 12px',
                             borderRadius: '8px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #F0F0F4',
-                            cursor: 'grab',
-                            transition: 'all 0.2s ease'
+                            cursor: 'grab'
                           }}
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
                             <div 
                               onClick={() => toggleTask(t.id)}
-                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              title="Označit jako splněné"
+                              className={`task-checkbox ${t.completed ? 'completed' : ''} ${recentlyCheckedId === t.id ? 'anim-check-pop' : ''}`}
                               style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '4px',
-                                border: t.completed ? 'none' : '1.5px solid #A0A0B0',
-                                backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -2039,7 +2081,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
                             </div>
-                            <span style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400 }}>{t.title}</span>
+                            <span 
+                              onClick={() => setEditingTask(t)}
+                              style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400, cursor: 'pointer' }}
+                              title="Klikněte pro úpravu úkolu"
+                            >
+                              {t.title}
+                            </span>
                           </div>
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
@@ -2087,6 +2135,25 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 {t.badge}
                               </span>
                             )}
+
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setEditingTask(t); }}
+                              className="task-edit-pen"
+                              title="Upravit úkol"
+                              style={{
+                                border: 'none',
+                                backgroundColor: 'transparent',
+                                color: '#9CA3AF',
+                                cursor: 'pointer',
+                                fontSize: '14px',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                                transition: 'color 0.15s ease'
+                              }}
+                            >
+                              <i className="las la-pen" />
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -2119,27 +2186,26 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           key={t.id}
                           draggable
                           onDragStart={(e) => handleDragStartTask(e, t)}
+                          className="task-item-row"
                           style={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             padding: '8px 12px',
                             borderRadius: '8px',
-                            backgroundColor: '#FAFAFA',
-                            opacity: 0.75,
+                            opacity: 0.85,
                             cursor: 'grab'
                           }}
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div 
                               onClick={() => toggleTask(t.id)}
-                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              title="Označit jako nesplněné"
+                              className={`task-checkbox completed ${recentlyCheckedId === t.id ? 'anim-check-pop' : ''}`}
                               style={{
                                 width: '18px',
                                 height: '18px',
                                 borderRadius: '4px',
-                                border: 'none',
-                                backgroundColor: '#10B981',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
