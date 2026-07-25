@@ -1938,48 +1938,48 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600 }}>● {currentTimeText}</span>
           </div>
 
-          {/* SAMOSTATNÁ STICKY SKUPINA KROUŽKOVÝCH ODZNAKŮ VPRAVO (ZOBRAZÍ SE POUZE POKUD JE POČET AKCÍ / OSLAVENCŮ > 0) */}
+          {/* SAMOSTATNÁ STICKY SKUPINA KROUŽKOVÝCH ODZNAKŮ VPRAVO (BEZ STÍNU, BEZ PODTISKU, S PROBARVENÍM) */}
           {(regularAllDayEvents.length > 0 || activeDayAllDayEvents.length > 0 || childBirthdayEvents.length > 0 || childNameDayEvents.length > 0) && (
             <div style={{
               position: 'absolute',
               right: '32px',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(16px)',
-              boxShadow: '0 4px 18px rgba(0, 0, 0, 0.07)',
-              border: '1px solid rgba(220, 220, 230, 0.8)',
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+              border: 'none',
               borderRadius: '20px',
-              padding: '5px 10px',
+              padding: '2px 4px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
               pointerEvents: 'auto'
             }}>
-              {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ (NEZOBRAZUJE SE POKUD JE POČET 0) */}
+              {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ */}
               {(regularAllDayEvents.length > 0 || activeDayAllDayEvents.length > 0) && (
                 <span 
                   onMouseEnter={() => setHoveredBadgeType('allday')}
                   onMouseLeave={() => setHoveredBadgeType(null)}
                   style={{
-                    backgroundColor: '#F4F4F6',
-                    color: '#171B1F',
-                    border: '1px solid #E5E7EB',
+                    backgroundColor: hoveredBadgeType === 'allday' ? '#EFF6FF' : 'transparent',
+                    color: '#2563EB',
+                    border: 'none',
                     fontSize: '12px',
                     fontWeight: 700,
-                    width: '24px',
-                    height: '24px',
+                    width: '26px',
+                    height: '26px',
                     borderRadius: '50%',
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                    boxShadow: 'none',
                     flexShrink: 0,
                     cursor: 'pointer',
-                    position: 'relative'
+                    position: 'relative',
+                    transition: 'all 0.15s ease'
                   }}
                 >
                   {regularAllDayEvents.length > 0 ? regularAllDayEvents.length : activeDayAllDayEvents.length}
 
-                  {/* INTERAKTIVNÍ BUBLINA NA HOVER SE SOUPISEM CELODENNÍCH UDÁLOSTÍ (KROMĚ NAROZENIN A JMENIN) */}
+                  {/* INTERAKTIVNÍ BUBLINA NA HOVER SE SOUPISEM CELODENNÍCH UDÁLOSTÍ */}
                   {hoveredBadgeType === 'allday' && (
                     <div 
                       style={{
@@ -1999,7 +1999,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     >
                       <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span>Celodenní události</span>
-                        <span style={{ backgroundColor: '#F4F4F6', color: '#171B1F', border: '1px solid #E5E7EB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
+                        <span style={{ backgroundColor: '#EFF6FF', color: '#2563EB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px', fontWeight: 600 }}>
                           {regularAllDayEvents.length}
                         </span>
                       </div>
@@ -2021,26 +2021,27 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 </span>
               )}
 
-            {/* 2. KROUŽEK: DORT PRO NAROZENINY DÍTĚTE V PÉČI -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE JMÉNY OSLAVENCŮ */}
+            {/* 2. DORT PRO NAROZENINY DÍTĚTE V PÉČI */}
             {childBirthdayEvents.length > 0 && (
               <span 
                 onMouseEnter={() => setHoveredBadgeType('birthday')}
                 onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
-                  backgroundColor: '#F4F4F6',
-                  color: '#171B1F',
-                  border: '1px solid #E5E7EB',
+                  backgroundColor: hoveredBadgeType === 'birthday' ? '#FDF2F8' : 'transparent',
+                  color: '#DB2777',
+                  border: 'none',
                   borderRadius: '50%',
-                  width: '24px',
-                  height: '24px',
+                  width: '26px',
+                  height: '26px',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '13px',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                  fontSize: '15px',
+                  boxShadow: 'none',
                   flexShrink: 0,
                   position: 'relative',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
                 }}
               >
                 <i className="las la-birthday-cake"></i>
@@ -2061,13 +2062,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     textAlign: 'left',
                     pointerEvents: 'none'
                   }}>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#DB2777', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <i className="las la-birthday-cake" style={{ fontSize: '15px' }}></i>
                       <span>Narozeniny dětí v péči</span>
                     </div>
                     {childBirthdayEvents.map(ev => (
                       <div key={ev.id} style={{ fontSize: '12px', color: '#171B1F', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span>•</span>
+                        <span style={{ color: '#DB2777' }}>•</span>
                         <span>{ev.personName || ev.title}</span>
                       </div>
                     ))}
@@ -2076,26 +2077,27 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               </span>
             )}
 
-            {/* 3. KROUŽEK: DÁREK PRO JMENINY DÍTĚTE V PÉČI -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE JMÉNY OSLAVENCŮ */}
+            {/* 3. DÁREK PRO JMENINY DÍTĚTE V PÉČI */}
             {childNameDayEvents.length > 0 && (
               <span 
                 onMouseEnter={() => setHoveredBadgeType('nameday')}
                 onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
-                  backgroundColor: '#F4F4F6',
-                  color: '#171B1F',
-                  border: '1px solid #E5E7EB',
+                  backgroundColor: hoveredBadgeType === 'nameday' ? '#F3E8FF' : 'transparent',
+                  color: '#7C3AED',
+                  border: 'none',
                   borderRadius: '50%',
-                  width: '24px',
-                  height: '24px',
+                  width: '26px',
+                  height: '26px',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '13px',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                  fontSize: '15px',
+                  boxShadow: 'none',
                   flexShrink: 0,
                   position: 'relative',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
                 }}
               >
                 <i className="las la-gift"></i>
@@ -2116,7 +2118,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     textAlign: 'left',
                     pointerEvents: 'none'
                   }}>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#7C3AED', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <i className="las la-gift" style={{ fontSize: '15px' }}></i>
                       <span>Jmeniny dětí v péči</span>
                     </div>
@@ -2195,18 +2197,18 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <span 
                         title={`${allDayEvents.length} celodenní akce`}
                         style={{
-                          backgroundColor: '#F4F4F6',
-                          color: '#171B1F',
-                          border: '1px solid #E5E7EB',
-                          fontSize: '11px',
-                          fontWeight: 600,
+                          backgroundColor: 'transparent',
+                          color: '#2563EB',
+                          border: 'none',
+                          fontSize: '12px',
+                          fontWeight: 700,
                           width: '22px',
                           height: '22px',
                           borderRadius: '50%',
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                          boxShadow: 'none',
                           flexShrink: 0
                         }}
                       >
@@ -2219,17 +2221,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <span 
                         title="Dítě v péči má dnes narozeniny!" 
                         style={{
-                          backgroundColor: '#F4F4F6',
-                          color: '#171B1F',
-                          border: '1px solid #E5E7EB',
+                          backgroundColor: 'transparent',
+                          color: '#DB2777',
+                          border: 'none',
                           borderRadius: '50%',
                           width: '24px',
                           height: '24px',
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '13px',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                          fontSize: '15px',
+                          boxShadow: 'none',
                           flexShrink: 0
                         }}
                       >
@@ -2242,17 +2244,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <span 
                         title="Dítě v péči má dnes jmeniny!" 
                         style={{
-                          backgroundColor: '#F4F4F6',
-                          color: '#171B1F',
-                          border: '1px solid #E5E7EB',
+                          backgroundColor: 'transparent',
+                          color: '#7C3AED',
+                          border: 'none',
                           borderRadius: '50%',
                           width: '24px',
                           height: '24px',
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          fontSize: '13px',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                          fontSize: '15px',
+                          boxShadow: 'none',
                           flexShrink: 0
                         }}
                       >
