@@ -336,7 +336,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       dateRange: '23. 3. – 29. 3.',
       entityType: 'foster_parent',
       entityId: 'ent_dvorak',
-      entityName: 'Tomáš Dvořák (Pěstoun)'
+      entityName: 'Tomáš Dvořák'
     },
     { 
       id: 't3', 
@@ -347,7 +347,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       dateRange: '23. 3. – 29. 3.',
       entityType: 'child',
       entityId: 'ent_adam',
-      entityName: 'Adam Novák (Dítě v péči)'
+      entityName: 'Adam Novák'
     },
     { 
       id: 't4', 
@@ -358,7 +358,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       dateRange: '25. března',
       entityType: 'coworker',
       entityId: 'ent_kralova',
-      entityName: 'Mgr. Alena Králová (KO)'
+      entityName: 'Mgr. Alena Králová'
     },
     { 
       id: 't5', 
@@ -402,7 +402,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       badge: 'N',
       entityType: 'foster_parent',
       entityId: 'ent_dvorak',
-      entityName: 'Tomáš Dvořák (Pěstoun)'
+      entityName: 'Tomáš Dvořák'
     },
     { 
       id: 't9', 
@@ -827,18 +827,18 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   color: selectedSegment === seg.id ? '#171B1F' : '#747F8F',
                   fontWeight: selectedSegment === seg.id ? 600 : 500,
                   fontSize: '11px',
-                  padding: '5px 10px',
+                  padding: '6px 12px',
                   borderRadius: '7px',
                   cursor: 'pointer',
                   boxShadow: selectedSegment === seg.id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px',
+                  gap: '5px',
                   whiteSpace: 'nowrap',
                   transition: 'all 0.15s ease'
                 }}
               >
-                <i className={seg.icon} style={{ fontSize: '12px', color: selectedSegment === seg.id ? '#FF4742' : 'inherit' }} />
+                <i className={seg.icon} style={{ fontSize: '15px', color: selectedSegment === seg.id ? '#FF4742' : '#747F8F' }} />
                 <span>{seg.label}</span>
                 {seg.count > 0 && (
                   <span style={{
@@ -856,7 +856,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             ))}
           </div>
 
-          {/* VYHLEDÁVACÍ POLE A ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU (PĚSTOUNA / DÍTĚTE / SPOLUPRACOVNÍKA / RODINY) */}
+          {/* VYHLEDÁVACÍ POLE A ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU */}
           <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             {/* INTERAKTIVNÍ VYHLEDÁVAČ V ÚKOLECH */}
             <div style={{
@@ -872,7 +872,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               boxShadow: searchQuery ? '0 2px 8px rgba(59,130,246,0.1)' : 'none',
               transition: 'all 0.15s ease'
             }}>
-              <i className="las la-search" style={{ color: searchQuery ? '#3B82F6' : '#8896A9', fontSize: '14px' }} />
+              <i className="las la-search" style={{ color: searchQuery ? '#3B82F6' : '#8896A9', fontSize: '16px' }} />
               <input
                 type="text"
                 value={searchQuery}
@@ -892,13 +892,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 <i 
                   className="las la-times" 
                   onClick={() => setSearchQuery('')}
-                  style={{ color: '#8896A9', fontSize: '14px', cursor: 'pointer' }} 
+                  style={{ color: '#8896A9', fontSize: '15px', cursor: 'pointer' }} 
                   title="Vymazat hledání"
                 />
               )}
             </div>
 
-            {/* ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU */}
+            {/* ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU BEZ POPISŮ V ZÁVORKÁCH */}
             <select
               value={selectedEntityFilter}
               onChange={(e) => setSelectedEntityFilter(e.target.value)}
@@ -922,19 +922,19 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 <option value="fam_novak">Rodina Novákova</option>
               </optgroup>
               <optgroup label="Pěstouni">
-                <option value="ent_dvorak">Tomáš Dvořák (Pěstoun)</option>
+                <option value="ent_dvorak">Tomáš Dvořák</option>
               </optgroup>
               <optgroup label="Děti v péči">
-                <option value="ent_adam">Adam Novák (Dítě v péči)</option>
+                <option value="ent_adam">Adam Novák</option>
               </optgroup>
-              <optgroup label="Spolupracovníci & KO">
-                <option value="ent_kralova">Mgr. Alena Králová (KO)</option>
-                <option value="ent_self">Jana Nováková (Já)</option>
+              <optgroup label="Spolupracovníci">
+                <option value="ent_kralova">Mgr. Alena Králová</option>
+                <option value="ent_self">Jana Nováková</option>
               </optgroup>
             </select>
           </div>
 
-          {/* CHIP AKTIVNÍHO FILTRU SUBJEKTU */}
+          {/* CHIP AKTIVNÍHO FILTRU SUBJEKTU BEZ POPISU V ZÁVORCE */}
           {selectedEntityFilter !== 'all' && (
             <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '11px', color: '#747F8F' }}>Zobrazeny úkoly pro:</span>
@@ -943,25 +943,25 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 color: '#2563EB',
                 border: '1px solid #BFDBFE',
                 borderRadius: '12px',
-                padding: '2px 8px',
+                padding: '3px 10px',
                 fontSize: '11px',
                 fontWeight: 600,
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '4px'
+                gap: '5px'
               }}>
-                <i className="las la-user-check" />
+                <i className="las la-user-check" style={{ fontSize: '14px' }} />
                 <span>{
                   selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova' :
                   selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova' :
-                  selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák (Pěstoun)' :
-                  selectedEntityFilter === 'ent_adam' ? 'Adam Novák (Dítě v péči)' :
-                  selectedEntityFilter === 'ent_kralova' ? 'Mgr. Alena Králová (KO)' : 'Jana Nováková'
+                  selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák' :
+                  selectedEntityFilter === 'ent_adam' ? 'Adam Novák' :
+                  selectedEntityFilter === 'ent_kralova' ? 'Mgr. Alena Králová' : 'Jana Nováková'
                 }</span>
                 <i 
                   className="las la-times" 
                   onClick={() => setSelectedEntityFilter('all')}
-                  style={{ cursor: 'pointer', marginLeft: '2px', fontSize: '12px' }} 
+                  style={{ cursor: 'pointer', marginLeft: '3px', fontSize: '13px' }} 
                   title="Zrušit filtr"
                 />
               </span>
