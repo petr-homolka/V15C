@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 /**
- * RoutineSidebar - Plynule schovávací levé menu Routine s o 50% většími ikonami v zabaleném stavu.
+ * RoutineSidebar - Plynule schovávací levé menu Routine s o 50% většími ikonami v zabaleném stavu 
+ * a o 30% užšími linkami (thinner stroke outline) pro maximální eleganci.
  */
 export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQuickConsole, user }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -56,7 +57,18 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             transition: 'all 0.2s ease'
           }}
         >
-          <i className="las la-plus-circle" style={{ fontSize: collapsed ? '30px' : '20px', color: '#FF4742', flexShrink: 0, transition: 'font-size 0.2s ease' }}></i>
+          <i 
+            className={collapsed ? "lar la-plus-circle" : "las la-plus-circle"} 
+            style={{ 
+              fontSize: collapsed ? '29px' : '20px', 
+              color: '#FF4742', 
+              fontWeight: collapsed ? 300 : 400,
+              opacity: collapsed ? 0.88 : 1,
+              WebkitFontSmoothing: 'antialiased',
+              flexShrink: 0, 
+              transition: 'all 0.2s ease' 
+            }}
+          />
           {!collapsed && <span style={{ color: '#FF4742', fontWeight: 600, fontSize: '13px', whiteSpace: 'nowrap' }}>Nový</span>}
         </div>
 
@@ -78,15 +90,28 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             transition: 'all 0.2s ease'
           }}
         >
-          <i className="las la-search" style={{ fontSize: collapsed ? '27px' : '18px', flexShrink: 0, transition: 'font-size 0.2s ease' }}></i>
+          <i 
+            className={collapsed ? "lar la-search" : "las la-search"} 
+            style={{ 
+              fontSize: collapsed ? '26px' : '18px', 
+              fontWeight: collapsed ? 300 : 400,
+              opacity: collapsed ? 0.88 : 1,
+              WebkitFontSmoothing: 'antialiased',
+              flexShrink: 0, 
+              transition: 'all 0.2s ease' 
+            }}
+          />
           {!collapsed && <span style={{ fontSize: '13px', whiteSpace: 'nowrap' }}>Hledat (Ctrl+K)</span>}
         </div>
 
-        {/* Navigační seznam s o 50% většími ikonami při zabalení (18px -> 27px) */}
+        {/* Navigační seznam s o 50% většími ikonami a 30% tenčí konturou (lar + fontWeight 300) */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {mainNav.map((item) => {
             const isActive = (item.page ? activePage === item.page : true) && 
               (item.subView ? activeSubView === item.subView : true);
+
+            // Při zabalení pouzijeme jemnou linkovou verzi ikony (lar namísto las) pro o 30% tenčí konturu
+            const iconClass = collapsed ? item.icon.replace('las ', 'lar ') : item.icon;
 
             return (
               <div
@@ -109,12 +134,15 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
                 }}
               >
                 <i 
-                  className={item.icon} 
+                  className={iconClass} 
                   style={{ 
-                    fontSize: collapsed ? '27px' : '18px', 
-                    color: isActive ? '#FF4742' : '#8896A9', 
+                    fontSize: collapsed ? '26px' : '18px', 
+                    color: isActive ? '#FF4742' : '#747F8F', 
+                    fontWeight: collapsed ? 300 : 400,
+                    opacity: collapsed ? 0.88 : 1,
+                    WebkitFontSmoothing: 'antialiased',
                     flexShrink: 0,
-                    transition: 'font-size 0.2s ease'
+                    transition: 'all 0.2s ease'
                   }} 
                 />
                 {!collapsed && <span style={{ fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>}
@@ -144,7 +172,16 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             transition: 'all 0.2s ease'
           }}
         >
-          <i className={`las ${collapsed ? 'la-angle-double-right' : 'la-angle-double-left'}`} style={{ fontSize: collapsed ? '27px' : '18px', flexShrink: 0, transition: 'font-size 0.2s ease' }}></i>
+          <i 
+            className={`las ${collapsed ? 'la-angle-double-right' : 'la-angle-double-left'}`} 
+            style={{ 
+              fontSize: collapsed ? '26px' : '18px', 
+              fontWeight: collapsed ? 300 : 400,
+              opacity: collapsed ? 0.88 : 1,
+              flexShrink: 0, 
+              transition: 'all 0.2s ease' 
+            }}
+          />
           {!collapsed && <span style={{ whiteSpace: 'nowrap' }}>Sbalit menu</span>}
         </div>
 

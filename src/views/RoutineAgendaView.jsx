@@ -25,6 +25,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
   // Aktuálně zobrazený měsíc a datum v horním přechodu (Gradient fade overlay)
   const [activeVisibleDateStr, setActiveVisibleDateStr] = useState('Pátek 24. Července 2026');
+  const [activeVisibleOffset, setActiveVisibleOffset] = useState(0);
 
   // DYNAMICKÉ SVISLÉ SCROLOVÁNÍ NAPŘÍČ MĚSÍCI
   const [offsets, setOffsets] = useState(() => {
@@ -144,6 +145,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     const currentDayObj = getDayDetails(currentOffset);
     if (currentDayObj && currentDayObj.fullDateStr !== activeVisibleDateStr) {
       setActiveVisibleDateStr(currentDayObj.fullDateStr);
+      setActiveVisibleOffset(currentOffset);
     }
 
     if (el.scrollTop < 600) {
@@ -318,6 +320,16 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     { id: 't9', title: 'Nakonfigurovat denní agenda klíčové osoby', group: 'completed', completed: true, starred: false },
     { id: 't10', title: 'Vytvořit nový spis rodiny jednoduše', group: 'completed', completed: true, starred: false }
   ]);
+
+  // VÝPOČET KROUŽKŮ PRO PROPLÁVAJÍCÍ HLAVNÍ DATUMOVÝ BANNER
+  const activeDayAllDayEvents = events.filter(ev => ev.dayOffset === activeVisibleOffset && ev.isAllDay);
+  const activeDayAllDayCount = activeDayAllDayEvents.length;
+  const activeDayHasChildBirthday = activeDayAllDayEvents.some(ev => 
+    ev.category === 'Narozeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
+  );
+  const activeDayHasChildNameDay = activeDayAllDayEvents.some(ev => 
+    ev.category === 'Jmeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
+  );
 
   // ALGORITMUS PRO ŘEŠENÍ KONFLIKTŮ A SOUBĚŽNÝCH UDÁLOSTÍ (Zobrazení VEDLE SEBE)
   const computeEventLayout = (dayEvs) => {
@@ -904,7 +916,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         onScroll={handleScrollTimeline}
         style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
       >
-        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM VELKÝM DATUMEM */}
+        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A 3 KROUŽKOVÝMI ODZNAKY */}
         <div style={{
           position: 'sticky',
           top: 0,
@@ -918,14 +930,14 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM */}
+          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM A KROUŽKOVÝMI ODZNAKY (SROVNANÉ PODLE VLOŽENÉHO OBRÁZKU) */}
           <div style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(16px)',
             boxShadow: '0 4px 18px rgba(0, 0, 0, 0.07)',
             border: '1px solid rgba(220, 220, 230, 0.8)',
             borderRadius: '20px',
-            padding: '7px 20px',
+            padding: '6px 18px',
             fontSize: '13px',
             fontWeight: 600,
             color: '#171B1F',
@@ -936,7 +948,76 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             gap: '8px'
           }}>
             <span>{activeVisibleDateStr}</span>
-            <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600, marginLeft: '4px' }}>● {currentTimeText}</span>
+            <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600, marginRight: '4px' }}>● {currentTimeText}</span>
+
+            {/* 1. KROUŽEK: POČET CELODENNÍCH UDÁLOSTÍ */}
+            {activeDayAllDayCount > 0 && (
+              <span 
+                title={`${activeDayAllDayCount} celodenních událostí`}
+                style={{
+                  backgroundColor: '#FFF0F0',
+                  color: '#FF4742',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  width: '24px',
+                  height: '24px',
+                  borderRadius: '50%',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 1px 3px rgba(255,71,66,0.12)',
+                  flexShrink: 0
+                }}
+              >
+                {activeDayAllDayCount}
+              </span>
+            )}
+
+            {/* 2. KROUŽEK: DORT PRO NAROZENINY DÍTĚTE V PÉČI */}
+            {activeDayHasChildBirthday && (
+              <span 
+                title="Dítě v péči má dnes narozeniny!"
+                style={{
+                  backgroundColor: '#FDF2F8',
+                  color: '#EC4899',
+                  border: '1px solid #FBCFE8',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '13px',
+                  boxShadow: '0 1px 3px rgba(236,72,153,0.15)',
+                  flexShrink: 0
+                }}
+              >
+                <i className="las la-birthday-cake"></i>
+              </span>
+            )}
+
+            {/* 3. KROUŽEK: DÁREK PRO JMENINY DÍTĚTE V PÉČI */}
+            {activeDayHasChildNameDay && (
+              <span 
+                title="Dítě v péči má dnes jmeniny!"
+                style={{
+                  backgroundColor: '#F3E8FF',
+                  color: '#A855F7',
+                  border: '1px solid #E9D5FF',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '13px',
+                  boxShadow: '0 1px 3px rgba(168,85,247,0.15)',
+                  flexShrink: 0
+                }}
+              >
+                <i className="las la-gift"></i>
+              </span>
+            )}
           </div>
         </div>
 
