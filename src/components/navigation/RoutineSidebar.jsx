@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 /**
- * RoutineSidebar - Plynule schovávací levé menu Routine s o 50% většími ikonami v zabaleném stavu 
- * a o 30% užšími linkami (thinner stroke outline) pro maximální eleganci.
+ * RoutineSidebar - Plynule schovávací levé menu Routine se stabilním vykreslením ikon.
  */
 export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQuickConsole, user }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -23,7 +22,7 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
   return (
     <div 
       style={{
-        width: collapsed ? '68px' : '220px',
+        width: collapsed ? '64px' : '220px',
         transition: 'width 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
         height: '100vh',
         backgroundColor: '#FFFFFF',
@@ -47,8 +46,8 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
             gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '10px 0' : '8px 10px',
-            borderRadius: '10px',
+            padding: collapsed ? '9px 0' : '8px 10px',
+            borderRadius: '8px',
             cursor: 'pointer',
             backgroundColor: '#FFF5F5',
             color: '#FF4742',
@@ -58,15 +57,12 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
           }}
         >
           <i 
-            className={collapsed ? "lar la-plus-circle" : "las la-plus-circle"} 
+            className="las la-plus-circle" 
             style={{ 
-              fontSize: collapsed ? '29px' : '20px', 
+              fontSize: collapsed ? '24px' : '20px', 
               color: '#FF4742', 
-              fontWeight: collapsed ? 300 : 400,
-              opacity: collapsed ? 0.88 : 1,
-              WebkitFontSmoothing: 'antialiased',
               flexShrink: 0, 
-              transition: 'all 0.2s ease' 
+              transition: 'font-size 0.2s ease' 
             }}
           />
           {!collapsed && <span style={{ color: '#FF4742', fontWeight: 600, fontSize: '13px', whiteSpace: 'nowrap' }}>Nový</span>}
@@ -81,8 +77,8 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
             gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '10px 0' : '8px 10px',
-            borderRadius: '10px',
+            padding: collapsed ? '9px 0' : '8px 10px',
+            borderRadius: '8px',
             cursor: 'pointer',
             color: '#5E6774',
             marginBottom: '12px',
@@ -91,27 +87,21 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
           }}
         >
           <i 
-            className={collapsed ? "lar la-search" : "las la-search"} 
+            className="las la-search" 
             style={{ 
-              fontSize: collapsed ? '26px' : '18px', 
-              fontWeight: collapsed ? 300 : 400,
-              opacity: collapsed ? 0.88 : 1,
-              WebkitFontSmoothing: 'antialiased',
+              fontSize: collapsed ? '22px' : '18px', 
               flexShrink: 0, 
-              transition: 'all 0.2s ease' 
+              transition: 'font-size 0.2s ease' 
             }}
           />
           {!collapsed && <span style={{ fontSize: '13px', whiteSpace: 'nowrap' }}>Hledat (Ctrl+K)</span>}
         </div>
 
-        {/* Navigační seznam s o 50% většími ikonami a 30% tenčí konturou (lar + fontWeight 300) */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {/* Navigační seznam s 100% stabilním vykreslením ikon LineAwesome 'las' */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
           {mainNav.map((item) => {
             const isActive = (item.page ? activePage === item.page : true) && 
               (item.subView ? activeSubView === item.subView : true);
-
-            // Při zabalení pouzijeme jemnou linkovou verzi ikony (lar namísto las) pro o 30% tenčí konturu
-            const iconClass = collapsed ? item.icon.replace('las ', 'lar ') : item.icon;
 
             return (
               <div
@@ -123,26 +113,24 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
                   alignItems: 'center',
                   justifyContent: collapsed ? 'center' : 'flex-start',
                   gap: collapsed ? 0 : '12px',
-                  padding: collapsed ? '10px 0' : '8px 10px',
-                  borderRadius: '10px',
+                  padding: collapsed ? '9px 0' : '8px 10px',
+                  borderRadius: '8px',
                   cursor: 'pointer',
                   backgroundColor: isActive ? '#F4F4F6' : 'transparent',
                   color: isActive ? '#171B1F' : '#5E6774',
                   fontWeight: isActive ? 500 : 400,
                   overflow: 'hidden',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.15s ease'
                 }}
               >
                 <i 
-                  className={iconClass} 
+                  className={item.icon} 
                   style={{ 
-                    fontSize: collapsed ? '26px' : '18px', 
-                    color: isActive ? '#FF4742' : '#747F8F', 
-                    fontWeight: collapsed ? 300 : 400,
-                    opacity: collapsed ? 0.88 : 1,
-                    WebkitFontSmoothing: 'antialiased',
+                    fontSize: collapsed ? '23px' : '18px', 
+                    color: isActive ? '#FF4742' : '#8896A9', 
+                    opacity: collapsed ? 0.9 : 1,
                     flexShrink: 0,
-                    transition: 'all 0.2s ease'
+                    transition: 'font-size 0.15s ease'
                   }} 
                 />
                 {!collapsed && <span style={{ fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>}
@@ -162,12 +150,12 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
             gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '10px 0' : '8px 10px',
-            borderRadius: '10px',
+            padding: collapsed ? '9px 0' : '8px 10px',
+            borderRadius: '8px',
             cursor: 'pointer',
             color: '#747F8F',
             fontSize: '13px',
-            marginBottom: '6px',
+            marginBottom: '4px',
             overflow: 'hidden',
             transition: 'all 0.2s ease'
           }}
@@ -175,11 +163,9 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
           <i 
             className={`las ${collapsed ? 'la-angle-double-right' : 'la-angle-double-left'}`} 
             style={{ 
-              fontSize: collapsed ? '26px' : '18px', 
-              fontWeight: collapsed ? 300 : 400,
-              opacity: collapsed ? 0.88 : 1,
+              fontSize: collapsed ? '22px' : '18px', 
               flexShrink: 0, 
-              transition: 'all 0.2s ease' 
+              transition: 'font-size 0.2s ease' 
             }}
           />
           {!collapsed && <span style={{ whiteSpace: 'nowrap' }}>Sbalit menu</span>}
@@ -193,16 +179,16 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             alignItems: 'center',
             justifyContent: collapsed ? 'center' : 'flex-start',
             gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '8px 0' : '6px 8px',
-            borderRadius: '10px',
+            padding: collapsed ? '6px 0' : '6px 8px',
+            borderRadius: '8px',
             cursor: 'pointer',
             overflow: 'hidden',
             transition: 'all 0.2s ease'
           }}
         >
           <div style={{
-            width: collapsed ? '34px' : '28px',
-            height: collapsed ? '34px' : '28px',
+            width: collapsed ? '30px' : '28px',
+            height: collapsed ? '30px' : '28px',
             borderRadius: '50%',
             backgroundColor: '#FF4742',
             color: '#FFF',
@@ -210,7 +196,7 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
             alignItems: 'center',
             justifyContent: 'center',
             fontWeight: 600,
-            fontSize: collapsed ? '13px' : '11px',
+            fontSize: collapsed ? '12px' : '11px',
             flexShrink: 0,
             transition: 'all 0.2s ease'
           }}>
