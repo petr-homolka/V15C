@@ -28,8 +28,21 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [activeVisibleDateStr, setActiveVisibleDateStr] = useState('Pátek 24. Července 2026');
   const [activeVisibleOffset, setActiveVisibleOffset] = useState(0);
 
-  // Stavy pro interaktivní hover bubliny (onMouse) u kroužků u datumu
+  // Stavy pre interaktivní hover bubliny (onMouse) u kroužků u datumu
   const [hoveredBadgeType, setHoveredBadgeType] = useState(null); // 'allday' | 'birthday' | 'nameday' | null
+
+  // Stav pre editačné okno úkolu
+  const [editingTask, setEditingTask] = useState(null);
+
+  // NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN V KALENDÁŘI (DEFAULTNĚ SE SLEDUJÍ POUZE DĚTI V PÉČI)
+  const [birthdayTrackingSettings, setBirthdayTrackingSettings] = useState({
+    child: true,         // Děti v péči (VÝCHOZÍ: ZAPNUTO)
+    foster_parent: false, // Pěstouni (VÝCHOZÍ: VYPNUTO)
+    coworker: false,     // Pracovníci organizace (VÝCHOZÍ: VYPNUTO)
+    other: false         // Ostatní kontakty (VÝCHOZÍ: VYPNUTO)
+  });
+
+  const [showBirthdaySettingsModal, setShowBirthdaySettingsModal] = useState(false);
 
   // DYNAMICKÉ SVISLÉ SCROLOVÁNÍ NAPŘÍČ MĚSÍCI
   const [offsets, setOffsets] = useState(() => {
@@ -445,9 +458,18 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
   // VÝPOČET KROUŽKŮ A BUBLIN PRO PROPLÁVAJÍCÍ HLAVNÍ DATUMOVÝ BANNER
   const activeDayAllDayEvents = events.filter(ev => ev.dayOffset === activeVisibleOffset && ev.isAllDay);
+
+  const isPersonTracked = (ev) => {
+    const role = ev.personRole;
+    if (role === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě'))) return birthdayTrackingSettings.child;
+    if (role === 'Pěstoun' || (ev.title && ev.title.toLowerCase().includes('pěstoun'))) return birthdayTrackingSettings.foster_parent;
+    if (role === 'Pracovník' || (ev.title && ev.title.toLowerCase().includes('pracovník'))) return birthdayTrackingSettings.coworker;
+    return birthdayTrackingSettings.other;
+  };
+
   const regularAllDayEvents = activeDayAllDayEvents.filter(ev => ev.category !== 'Narozeniny' && ev.category !== 'Jmeniny');
-  const childBirthdayEvents = activeDayAllDayEvents.filter(ev => ev.category === 'Narozeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě'))));
-  const childNameDayEvents = activeDayAllDayEvents.filter(ev => ev.category === 'Jmeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě'))));
+  const childBirthdayEvents = activeDayAllDayEvents.filter(ev => ev.category === 'Narozeniny' && isPersonTracked(ev));
+  const childNameDayEvents = activeDayAllDayEvents.filter(ev => ev.category === 'Jmeniny' && isPersonTracked(ev));
 
   // ALGORITMUS PRO ŘEŠENÍ KONFLIKTŮ A SOUBĚŽNÝCH UDÁLOSTÍ (Zobrazení VEDLE SEBE)
   const computeEventLayout = (dayEvs) => {
@@ -1234,6 +1256,30 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               >
                 <i className="las la-sliders-h" />
               </button>
+
+              {/* 5. NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN V KALENDÁŘI */}
+              <button
+                type="button"
+                onClick={() => setShowBirthdaySettingsModal(true)}
+                title="Nastavení sledování narozenin a jmenin"
+                style={{
+                  border: 'none',
+                  boxShadow: 'none',
+                  backgroundColor: showBirthdaySettingsModal ? '#FDF2F8' : '#F4F4F6',
+                  color: showBirthdaySettingsModal ? '#DB2777' : '#5E6774',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <i className="las la-cog" />
+              </button>
             </div>
           </div>
 
@@ -1620,16 +1666,39 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 }}
                               >
                               </div>
-                              <span style={{ fontSize: '13px', color: '#171b1f' }}>
+                              <span 
+                                onClick={() => setEditingTask(t)}
+                                style={{ fontSize: '13px', color: '#171b1f', cursor: 'pointer' }}
+                                title="Klikněte pro úpravu úkolu"
+                              >
                                 {t.title}
                               </span>
                             </div>
 
-                            {t.dateRange && (
-                              <span style={{ fontSize: '11px', color: '#747f8f', backgroundColor: '#F3F4F6', padding: '2px 8px', borderRadius: '6px' }}>
-                                {t.dateRange}
-                              </span>
-                            )}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              {t.dateRange && (
+                                <span style={{ fontSize: '11px', color: '#747f8f', backgroundColor: '#F3F4F6', padding: '2px 8px', borderRadius: '6px' }}>
+                                  {t.dateRange}
+                                </span>
+                              )}
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); setEditingTask(t); }}
+                                title="Upravit úkol"
+                                style={{
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  color: '#9CA3AF',
+                                  cursor: 'pointer',
+                                  fontSize: '14px',
+                                  padding: '2px 4px',
+                                  borderRadius: '4px',
+                                  transition: 'color 0.15s ease'
+                                }}
+                              >
+                                <i className="las la-pen" />
+                              </button>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -1789,7 +1858,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
                             </div>
-                            <span style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400 }}>{t.title}</span>
+                            <span 
+                              onClick={() => setEditingTask(t)}
+                              style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400, cursor: 'pointer' }}
+                              title="Klikněte pro úpravu úkolu"
+                            >
+                              {t.title}
+                            </span>
                           </div>
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
@@ -1840,6 +1915,24 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 {t.dateRange}
                               </span>
                             )}
+
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setEditingTask(t); }}
+                              title="Upravit úkol"
+                              style={{
+                                border: 'none',
+                                backgroundColor: 'transparent',
+                                color: '#9CA3AF',
+                                cursor: 'pointer',
+                                fontSize: '14px',
+                                padding: '2px 4px',
+                                borderRadius: '4px',
+                                transition: 'color 0.15s ease'
+                              }}
+                            >
+                              <i className="las la-pen" />
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -2320,14 +2413,21 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             const layoutedEvents = computeEventLayout(rawEvents);
             const nameDayPerson = getCzechNameDay(dayObj.dateObj);
 
-            // DETEKCE NAROZENIN A JMENIN DĚTÍ PRO ZOBRAZENÍ IKON U DATUMU (POUZE DĚTI V PÉČI)
+            // DETEKCE NAROZENIN A JMENIN PODLE NASTAVENÍ KALENDÁŘE
             const hasChildBirthday = allDayEvents.some(ev => 
-              ev.category === 'Narozeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
+              ev.category === 'Narozeniny' && isPersonTracked(ev)
             );
 
             const hasChildNameDay = allDayEvents.some(ev => 
-              ev.category === 'Jmeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
+              ev.category === 'Jmeniny' && isPersonTracked(ev)
             );
+
+            const visibleAllDayEvents = allDayEvents.filter(ev => {
+              if (ev.category === 'Narozeniny' || ev.category === 'Jmeniny') {
+                return isPersonTracked(ev);
+              }
+              return true;
+            });
 
             return (
               <div 
@@ -2448,8 +2548,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   </div>
                 </div>
 
-                {/* CELODENNÍ AKCE (NAROZENINY/JMENINY: BÍLÉ POZADÍ + BÍLÁ OUTLINE + BEZ BAREVNÉHO ODZNAKU + PROKLIK NA PROFIL) */}
-                {allDayEvents.length > 0 && (
+                {/* CELODENNÍ AKCE (NAROZENINY/JMENINY REŠPEKTUJÚ NASTAVENIE KALENDÁŘE) */}
+                {visibleAllDayEvents.length > 0 && (
                   <div style={{
                     paddingLeft: '80px',
                     paddingRight: '32px',
@@ -2460,7 +2560,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     width: '100%',
                     boxSizing: 'border-box'
                   }}>
-                    {allDayEvents.map(ev => {
+                    {visibleAllDayEvents.map(ev => {
                       const isSpecial = ev.category === 'Narozeniny' || ev.category === 'Jmeniny';
 
                       return (
@@ -2833,6 +2933,294 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 }}
               >
                 Uložit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODÁLNÍ OKNO PRO ÚPRAVU ÚKOLU (TASK EDIT MODAL) */}
+      {editingTask && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999
+          }}
+          onClick={() => setEditingTask(null)}
+        >
+          <div 
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              width: '460px',
+              maxWidth: '90%',
+              padding: '24px',
+              boxShadow: '0 20px 45px rgba(0, 0, 0, 0.18)',
+              fontFamily: 'Inter, sans-serif'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#EFF6FF', color: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+                  <i className="las la-pen" />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#171B1F' }}>Úprava úkolu</h3>
+                  <p style={{ margin: 0, fontSize: '12px', color: '#747F8F' }}>Upravte název, subjekt nebo termín splnění</p>
+                </div>
+              </div>
+              <i className="las la-times" onClick={() => setEditingTask(null)} style={{ fontSize: '20px', cursor: 'pointer', color: '#6B7280' }} />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {/* NÁZEV ÚKOLU */}
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Název úkolu</label>
+                <input
+                  type="text"
+                  value={editingTask.title || ''}
+                  onChange={(e) => setEditingTask(prev => ({ ...prev, title: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid #D1D5DB',
+                    fontSize: '13px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              {/* SUBJEKT */}
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Přiřazený subjekt</label>
+                <select
+                  value={editingTask.entityId || 'none'}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === 'none') {
+                      setEditingTask(prev => ({ ...prev, entityType: null, entityId: null, entityName: null }));
+                    } else if (val === 'fam_dvorak') {
+                      setEditingTask(prev => ({ ...prev, entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' }));
+                    } else if (val === 'fam_novak') {
+                      setEditingTask(prev => ({ ...prev, entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' }));
+                    } else if (val === 'ent_dvorak') {
+                      setEditingTask(prev => ({ ...prev, entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' }));
+                    } else if (val === 'ent_adam') {
+                      setEditingTask(prev => ({ ...prev, entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' }));
+                    } else if (val === 'ent_kralova') {
+                      setEditingTask(prev => ({ ...prev, entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' }));
+                    } else if (val === 'ent_self') {
+                      setEditingTask(prev => ({ ...prev, entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' }));
+                    }
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid #D1D5DB',
+                    fontSize: '13px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    backgroundColor: '#FFFFFF'
+                  }}
+                >
+                  <option value="none">Bez přiřazení k subjektu</option>
+                  <option value="fam_dvorak">Rodina Dvořákova (Rodina)</option>
+                  <option value="fam_novak">Rodina Novákova (Rodina)</option>
+                  <option value="ent_dvorak">Tomáš Dvořák (Pěstoun)</option>
+                  <option value="ent_adam">Adam Novák (Dítě)</option>
+                  <option value="ent_kralova">Mgr. Alena Králová (Spolupracovník)</option>
+                  <option value="ent_self">Jana Nováková (Já)</option>
+                </select>
+              </div>
+
+              {/* TERMÍN */}
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Termín splnění</label>
+                <input
+                  type="text"
+                  value={editingTask.dateRange || ''}
+                  onChange={(e) => setEditingTask(prev => ({ ...prev, dateRange: e.target.value }))}
+                  placeholder="např. Dnes, Zítra nebo 24. 8. → 2. 9."
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid #D1D5DB',
+                    fontSize: '13px',
+                    outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setTasks(prev => prev.filter(t => t.id !== editingTask.id));
+                  setEditingTask(null);
+                }}
+                style={{
+                  backgroundColor: '#FFEBEB',
+                  color: '#EF4444',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 14px',
+                  fontWeight: 600,
+                  fontSize: '12px',
+                  cursor: 'pointer'
+                }}
+              >
+                Smazat úkol
+              </button>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="button"
+                  onClick={() => setEditingTask(null)}
+                  style={{
+                    backgroundColor: '#F3F4F6',
+                    color: '#4B5563',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 14px',
+                    fontWeight: 500,
+                    fontSize: '13px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Zrušit
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTasks(prev => prev.map(t => t.id === editingTask.id ? editingTask : t));
+                    setEditingTask(null);
+                  }}
+                  style={{
+                    backgroundColor: '#FF4742',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '8px 16px',
+                    fontWeight: 600,
+                    fontSize: '13px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Uložit změny
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODÁLNÍ OKNO PRO NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN */}
+      {showBirthdaySettingsModal && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999
+          }}
+          onClick={() => setShowBirthdaySettingsModal(false)}
+        >
+          <div 
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '16px',
+              width: '440px',
+              maxWidth: '90%',
+              padding: '24px',
+              boxShadow: '0 20px 45px rgba(0, 0, 0, 0.18)',
+              fontFamily: 'Inter, sans-serif'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#FDF2F8', color: '#DB2777', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+                  <i className="las la-birthday-cake" />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: '#171B1F' }}>Sledování narozenin a jmenin</h3>
+                  <p style={{ margin: 0, fontSize: '11px', color: '#747F8F' }}>Nastavení zobrazování v kalendáři</p>
+                </div>
+              </div>
+              <i className="las la-times" onClick={() => setShowBirthdaySettingsModal(false)} style={{ fontSize: '20px', cursor: 'pointer', color: '#6B7280' }} />
+            </div>
+
+            <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '12px', marginBottom: '16px', fontSize: '12px', color: '#4B5563', lineHeight: 1.5 }}>
+              Zvolte skupiny osob, jejichž narozeniny a jmeniny se budou zobrazovat v kalendáři. <strong>Výchozí sledování platí pouze pro Děti v péči.</strong>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {[
+                { key: 'child', label: 'Děti v péči', desc: 'Narozeniny a jmeniny dětí (Výchozí)', icon: 'las la-smile', color: '#DB2777' },
+                { key: 'foster_parent', label: 'Pěstouni', desc: 'Narozeniny a jmeniny evidovaných pěstounů', icon: 'las la-heart', color: '#059669' },
+                { key: 'coworker', label: 'Klíčové osoby a pracovníci', desc: 'Narozeniny a jmeniny pracovníků organizace', icon: 'las la-user-tie', color: '#7C3AED' },
+                { key: 'other', label: 'Ostatní kontakty s datem narození', desc: 'Ostatní vymezené osoby v databázi', icon: 'las la-users', color: '#2563EB' }
+              ].map(item => (
+                <label key={item.key} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '10px 12px',
+                  borderRadius: '10px',
+                  border: '1px solid #E5E7EB',
+                  backgroundColor: birthdayTrackingSettings[item.key] ? '#FFFFFF' : '#FAFAFA',
+                  cursor: 'pointer'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <i className={item.icon} style={{ fontSize: '18px', color: item.color }} />
+                    <div>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#171B1F' }}>{item.label}</div>
+                      <div style={{ fontSize: '11px', color: '#6B7280' }}>{item.desc}</div>
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={birthdayTrackingSettings[item.key]}
+                    onChange={(e) => setBirthdayTrackingSettings(prev => ({ ...prev, [item.key]: e.target.checked }))}
+                    style={{ width: '18px', height: '18px', accentColor: '#059669', cursor: 'pointer' }}
+                  />
+                </label>
+              ))}
+            </div>
+
+            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setShowBirthdaySettingsModal(false)}
+                style={{
+                  backgroundColor: '#FF4742',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 18px',
+                  fontWeight: 600,
+                  fontSize: '13px',
+                  cursor: 'pointer'
+                }}
+              >
+                Uložit nastavení
               </button>
             </div>
           </div>
