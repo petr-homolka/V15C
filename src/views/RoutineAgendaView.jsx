@@ -166,7 +166,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     }
   };
 
-  // SEED DATA: Události a celodenní akce (včetně Narozenin a Jmenin)
+  // SEED DATA: Události a celodenní akce (včetně Narozenin a Jmenin dětí i pěstounů)
   const [events, setEvents] = useState([
     {
       id: 'e_allday_1',
@@ -176,6 +176,18 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       color: '#FF4742',
       bgColor: '#FFF5F5',
       borderColor: '#FECDD3',
+      isAllDay: true
+    },
+    {
+      id: 'e_allday_child_bday',
+      dayOffset: 0,
+      title: 'Narozeniny: Adam Novák (dítě v péči) - 8 let',
+      category: 'Narozeniny',
+      personId: 'ent_adam',
+      personName: 'Adam Novák',
+      personRole: 'Dítě v péči',
+      iconClass: 'las la-birthday-cake',
+      color: '#EC4899',
       isAllDay: true
     },
     {
@@ -940,6 +952,15 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             const layoutedEvents = computeEventLayout(rawEvents);
             const nameDayPerson = getCzechNameDay(dayObj.dateObj);
 
+            // DETEKCE NAROZENIN A JMENIN DĚTÍ PRO ZOBRAZENÍ IKON U DATUMU (POUZE DĚTI V PÉČI)
+            const hasChildBirthday = allDayEvents.some(ev => 
+              ev.category === 'Narozeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
+            );
+
+            const hasChildNameDay = allDayEvents.some(ev => 
+              ev.category === 'Jmeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
+            );
+
             return (
               <div 
                 key={offset}
@@ -951,7 +972,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   marginTop: '16px'
                 }}
               >
-                {/* CENTROVANÁ HLAVIČKA DNE A SVÁTKU Z ČESKÉHO KALENDÁŘE (BEZ HORIZONTÁLNÍCH ČÁR) */}
+                {/* CENTROVANÁ HLAVIČKA DNE + KROUŽEK S POČTEM CELODENNÍCH UDÁLOSTÍ + IKONY DORTU A DÁRKU PRO DĚTI */}
                 <div style={{
                   paddingLeft: '80px',
                   paddingRight: '32px',
@@ -962,17 +983,89 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '2px'
+                  gap: '4px'
                 }}>
-                  <h2 style={{
-                    fontSize: '15px',
-                    fontWeight: 600,
-                    color: dayObj.isToday ? '#FF4742' : '#171B1F',
-                    margin: 0,
-                    letterSpacing: '-0.3px'
-                  }}>
-                    {dayObj.subLabel ? `${dayObj.subLabel} – ${dayObj.fullDateStr}` : dayObj.fullDateStr}
-                  </h2>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                    <h2 style={{
+                      fontSize: '15px',
+                      fontWeight: 600,
+                      color: dayObj.isToday ? '#FF4742' : '#171B1F',
+                      margin: 0,
+                      letterSpacing: '-0.3px'
+                    }}>
+                      {dayObj.subLabel ? `${dayObj.subLabel} – ${dayObj.fullDateStr}` : dayObj.fullDateStr}
+                    </h2>
+
+                    {/* KROUŽEK S POČTEM CELODENNÍCH UDÁLOSTÍ */}
+                    {allDayEvents.length > 0 && (
+                      <span 
+                        title={`${allDayEvents.length} celodenní akce`}
+                        style={{
+                          backgroundColor: dayObj.isToday ? '#FFEBEB' : '#F3F4F6',
+                          color: dayObj.isToday ? '#FF4742' : '#5E6774',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          width: '22px',
+                          height: '22px',
+                          borderRadius: '50%',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                          flexShrink: 0
+                        }}
+                      >
+                        {allDayEvents.length}
+                      </span>
+                    )}
+
+                    {/* IKONA DORTU PRO NAROZENINY DÍTĚTE V PÉČI */}
+                    {hasChildBirthday && (
+                      <span 
+                        title="Dítě v péči má dnes narozeniny!" 
+                        style={{
+                          backgroundColor: '#FDF2F8',
+                          color: '#EC4899',
+                          border: '1px solid #FBCFE8',
+                          borderRadius: '50%',
+                          width: '24px',
+                          height: '24px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '13px',
+                          boxShadow: '0 1px 3px rgba(236,72,153,0.15)',
+                          flexShrink: 0
+                        }}
+                      >
+                        <i className="las la-birthday-cake"></i>
+                      </span>
+                    )}
+
+                    {/* IKONA DÁRKU PRO JMENINY DÍTĚTE V PÉČI */}
+                    {hasChildNameDay && (
+                      <span 
+                        title="Dítě v péči má dnes jmeniny!" 
+                        style={{
+                          backgroundColor: '#F3E8FF',
+                          color: '#A855F7',
+                          border: '1px solid #E9D5FF',
+                          borderRadius: '50%',
+                          width: '24px',
+                          height: '24px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '13px',
+                          boxShadow: '0 1px 3px rgba(168,85,247,0.15)',
+                          flexShrink: 0
+                        }}
+                      >
+                        <i className="las la-gift"></i>
+                      </span>
+                    )}
+                  </div>
+
                   <div style={{
                     fontSize: '12px',
                     fontWeight: 500,
