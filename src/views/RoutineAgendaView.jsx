@@ -315,6 +315,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false);
   const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
+  const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
 
   // Úkoly se přiřazenými subjekty pro přesnou segmentaci
   const [tasks, setTasks] = useState([
@@ -497,13 +498,31 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
   const toggleTask = (id) => {
     triggerCheckAnimation(id);
-    setTasks(prev => prev.map(t => {
-      if (t.id === id) {
-        const nextState = !t.completed;
-        return { ...t, completed: nextState, group: nextState ? 'completed' : 'today' };
-      }
-      return t;
-    }));
+    const targetTask = tasks.find(t => t.id === id);
+    if (!targetTask) return;
+
+    if (!targetTask.completed) {
+      // Ak ide o dokončenie (zaškrtnutie nezaškrtnutého úkolu), najprv spustíme plynulú animáciu miznutia
+      setDisappearingTaskIds(prev => [...prev, id]);
+
+      setTimeout(() => {
+        setTasks(prev => prev.map(t => {
+          if (t.id === id) {
+            return { ...t, completed: true, group: 'completed' };
+          }
+          return t;
+        }));
+        setDisappearingTaskIds(prev => prev.filter(tid => tid !== id));
+      }, 420);
+    } else {
+      // Ak odškrtávame z dokončených späť na aktívne
+      setTasks(prev => prev.map(t => {
+        if (t.id === id) {
+          return { ...t, completed: false, group: 'today' };
+        }
+        return t;
+      }));
+    }
 
     setEvents(prev => prev.map(ev => {
       if (ev.taskId === id) {
@@ -748,6 +767,32 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         .anim-check-pop {
           animation: checkPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, checkPulse 0.6s ease-out;
         }
+        @keyframes taskDisappear {
+          0% {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            background-color: #FFFFFF;
+          }
+          30% {
+            opacity: 0.95;
+            transform: translateX(10px) scale(0.99);
+            background-color: #ECFDF5;
+          }
+          100% {
+            opacity: 0;
+            transform: translateX(-35px) scale(0.92);
+            max-height: 0px;
+            margin-bottom: -6px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            border-width: 0px;
+          }
+        }
+        .anim-task-disappearing {
+          animation: taskDisappear 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+          overflow: hidden !important;
+          pointer-events: none !important;
+        }
       `}</style>
 
       {/* 1. Levá schovávací navigace Routine */}
@@ -816,7 +861,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             {[
               { id: 'all', label: 'Vše', icon: 'las la-list', count: tasks.filter(t => !t.completed).length },
               { id: 'family', label: 'Rodiny', icon: 'las la-home', count: tasks.filter(t => t.entityType === 'family' && !t.completed).length },
-              { id: 'foster_parent', label: 'Pěstouni', icon: 'las la-user-friends', count: tasks.filter(t => t.entityType === 'foster_parent' && !t.completed).length },
+              { id: 'foster_parent', label: 'Pěstouni', icon: 'las la-hand-holding-heart', count: tasks.filter(t => t.entityType === 'foster_parent' && !t.completed).length },
               { id: 'child', label: 'Děti', icon: 'las la-smile', count: tasks.filter(t => t.entityType === 'child' && !t.completed).length },
               { id: 'coworker', label: 'Spolupracovníci', icon: 'las la-user-tie', count: tasks.filter(t => t.entityType === 'coworker' && !t.completed).length }
             ].map(seg => (
@@ -1018,7 +1063,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
                     {/* SKUPINA: PĚSTOUNI */}
                     <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i className="las la-user-friends" style={{ fontSize: '12px' }} />
+                      <i className="las la-hand-holding-heart" style={{ fontSize: '12px' }} />
                       <span>Pěstouni</span>
                     </div>
                     {[
@@ -1240,7 +1285,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <i className={
                             sampleTask.entityType === 'family' ? 'las la-home' :
-                            sampleTask.entityType === 'foster_parent' ? 'las la-user-friends' :
+                            sampleTask.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
                             sampleTask.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                           } style={{ fontSize: '15px' }} />
                           <span>{entityName}</span>
@@ -1257,6 +1302,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             key={t.id}
                             draggable
                             onDragStart={(e) => handleDragStartTask(e, t)}
+                            className={disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}
                             style={{
                               display: 'flex',
                               alignItems: 'center',
@@ -1381,7 +1427,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               <i className={
                                 t.entityType === 'family' ? 'las la-home' :
-                                t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
                                 t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                               } style={{ fontSize: '14px' }} />
                               <span>{t.entityName}</span>
@@ -1424,6 +1470,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           key={t.id}
                           draggable
                           onDragStart={(e) => handleDragStartTask(e, t)}
+                          className={disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -1491,7 +1538,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               >
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
-                                  t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                  t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
                                   t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                                 } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
@@ -1541,6 +1588,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           key={t.id}
                           draggable
                           onDragStart={(e) => handleDragStartTask(e, t)}
+                          className={disappearingTaskIds.includes(t.id) ? 'anim-task-disappearing' : ''}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -1608,7 +1656,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               >
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
-                                  t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                  t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
                                   t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                                 } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
@@ -1714,7 +1762,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               <i className={
                                 t.entityType === 'family' ? 'las la-home' :
-                                t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
                                 t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                               } style={{ fontSize: '14px' }} />
                               <span>{t.entityName}</span>

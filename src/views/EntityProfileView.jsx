@@ -125,7 +125,7 @@ export function EntityProfileView({ entity, user, onNavigate, isMobileView }) {
               fontWeight: 800,
               flexShrink: 0
             }}>
-              <i className={entity.type === 'child' ? 'las la-smile' : entity.type === 'foster' ? 'las la-user-friends' : 'las la-user-tie'}></i>
+              <i className={entity.type === 'child' ? 'las la-smile' : entity.type === 'foster' ? 'las la-hand-holding-heart' : 'las la-user-tie'}></i>
             </div>
 
             <div style={{ flexGrow: 1 }}>
