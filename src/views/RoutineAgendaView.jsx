@@ -1491,85 +1491,88 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600 }}>● {currentTimeText}</span>
           </div>
 
-          {/* SAMOSTATNÁ STICKY SKUPINA 3 KROUŽKOVÝCH ODZNAKŮ VPRAVO */}
-          <div style={{
-            position: 'absolute',
-            right: '32px',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(16px)',
-            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.07)',
-            border: '1px solid rgba(220, 220, 230, 0.8)',
-            borderRadius: '20px',
-            padding: '5px 10px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            pointerEvents: 'auto'
-          }}>
-            {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE SOUPISEM AKCÍ */}
-            <span 
-              onMouseEnter={() => setHoveredBadgeType('allday')}
-              onMouseLeave={() => setHoveredBadgeType(null)}
-              style={{
-                backgroundColor: '#F4F4F6',
-                color: '#171B1F',
-                border: '1px solid #E5E7EB',
-                fontSize: '12px',
-                fontWeight: 700,
-                width: '24px',
-                height: '24px',
-                borderRadius: '50%',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                flexShrink: 0,
-                cursor: 'pointer',
-                position: 'relative'
-              }}
-            >
-              {regularAllDayEvents.length > 0 ? regularAllDayEvents.length : activeDayAllDayEvents.length}
-
-              {/* INTERAKTIVNÍ BUBLINA NA HOVER SE SOUPISEM CELODENNÍCH UDÁLOSTÍ (KROMĚ NAROZENIN A JMENIN) */}
-              {hoveredBadgeType === 'allday' && (
-                <div 
+          {/* SAMOSTATNÁ STICKY SKUPINA KROUŽKOVÝCH ODZNAKŮ VPRAVO (ZOBRAZÍ SE POUZE POKUD JE POČET AKCÍ / OSLAVENCŮ > 0) */}
+          {(regularAllDayEvents.length > 0 || activeDayAllDayEvents.length > 0 || childBirthdayEvents.length > 0 || childNameDayEvents.length > 0) && (
+            <div style={{
+              position: 'absolute',
+              right: '32px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(16px)',
+              boxShadow: '0 4px 18px rgba(0, 0, 0, 0.07)',
+              border: '1px solid rgba(220, 220, 230, 0.8)',
+              borderRadius: '20px',
+              padding: '5px 10px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              pointerEvents: 'auto'
+            }}>
+              {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ (NEZOBRAZUJE SE POKUD JE POČET 0) */}
+              {(regularAllDayEvents.length > 0 || activeDayAllDayEvents.length > 0) && (
+                <span 
+                  onMouseEnter={() => setHoveredBadgeType('allday')}
+                  onMouseLeave={() => setHoveredBadgeType(null)}
                   style={{
-                    position: 'absolute',
-                    top: '32px',
-                    right: '-10px',
-                    width: '270px',
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '12px',
-                    boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
-                    border: '1px solid #EAEAEE',
-                    padding: '12px 14px',
-                    zIndex: 1000,
-                    textAlign: 'left',
-                    pointerEvents: 'none'
+                    backgroundColor: '#F4F4F6',
+                    color: '#171B1F',
+                    border: '1px solid #E5E7EB',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                    flexShrink: 0,
+                    cursor: 'pointer',
+                    position: 'relative'
                   }}
                 >
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span>Celodenní události</span>
-                    <span style={{ backgroundColor: '#F4F4F6', color: '#171B1F', border: '1px solid #E5E7EB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
-                      {regularAllDayEvents.length}
-                    </span>
-                  </div>
+                  {regularAllDayEvents.length > 0 ? regularAllDayEvents.length : activeDayAllDayEvents.length}
 
-                  {regularAllDayEvents.length > 0 ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {regularAllDayEvents.map(ev => (
-                        <div key={ev.id} style={{ fontSize: '12px', color: '#171B1F', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <div style={{ width: '4px', height: '14px', borderRadius: '2px', backgroundColor: ev.color || '#FF4742', flexShrink: 0 }} />
-                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ev.title}</span>
+                  {/* INTERAKTIVNÍ BUBLINA NA HOVER SE SOUPISEM CELODENNÍCH UDÁLOSTÍ (KROMĚ NAROZENIN A JMENIN) */}
+                  {hoveredBadgeType === 'allday' && (
+                    <div 
+                      style={{
+                        position: 'absolute',
+                        top: '32px',
+                        right: '-10px',
+                        width: '270px',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '12px',
+                        boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
+                        border: '1px solid #EAEAEE',
+                        padding: '12px 14px',
+                        zIndex: 1000,
+                        textAlign: 'left',
+                        pointerEvents: 'none'
+                      }}
+                    >
+                      <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>Celodenní události</span>
+                        <span style={{ backgroundColor: '#F4F4F6', color: '#171B1F', border: '1px solid #E5E7EB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
+                          {regularAllDayEvents.length}
+                        </span>
+                      </div>
+
+                      {regularAllDayEvents.length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {regularAllDayEvents.map(ev => (
+                            <div key={ev.id} style={{ fontSize: '12px', color: '#171B1F', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <div style={{ width: '4px', height: '14px', borderRadius: '2px', backgroundColor: ev.color || '#FF4742', flexShrink: 0 }} />
+                              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ev.title}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      ) : (
+                        <div style={{ fontSize: '12px', color: '#747F8F' }}>Žádné běžné celodenní akce.</div>
+                      )}
                     </div>
-                  ) : (
-                    <div style={{ fontSize: '12px', color: '#747F8F' }}>Žádné běžné celodenní akce.</div>
                   )}
-                </div>
+                </span>
               )}
-            </span>
 
             {/* 2. KROUŽEK: DORT PRO NAROZENINY DÍTĚTE V PÉČI -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE JMÉNY OSLAVENCŮ */}
             {childBirthdayEvents.length > 0 && (
@@ -1681,6 +1684,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               </span>
             )}
           </div>
+          )}
         </div>
 
         {/* DYNAMICKÝ NEKONEČNÝ STREAM DNŮ */}
