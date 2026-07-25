@@ -1316,17 +1316,16 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <div style={{ height: '1px', backgroundColor: '#F0F0F4' }} />
 
                       {/* SEZNAM SUBJEKTŮ FILTROVANÝ ZÁLOŽKAMI A VYHLEDÁVAČEM */}
-                      <div style={{ maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                      <div className="entity-scrollbar" style={{ maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', paddingRight: '4px' }}>
                         {[
-                          { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
-                          { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
-                          { id: 'ent_dvorak', name: 'Tomáš Dvořák (Pěstoun)', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
-                          { id: 'ent_adam', name: 'Adam Novák (Dítě)', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
-                          { id: 'ent_kralova', name: 'Mgr. Alena Králová (Pracovník)', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
-                          { id: 'ent_self', name: 'Jana Nováková (Já)', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
-                          { id: 'ent_svoboda', name: 'PhDr. Martin Svoboda (OSPOD)', type: 'other', email: 'svoboda@ospod.cz', phone: '+420 604 111 999' }
+                          { id: 'fam_dvorak', uid: 'FAM-001', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
+                          { id: 'fam_novak', uid: 'FAM-002', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
+                          { id: 'ent_dvorak', uid: 'PEST-001', name: 'Tomáš Dvořák', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
+                          { id: 'ent_adam', uid: 'DIT-001', name: 'Adam Novák', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
+                          { id: 'ent_kralova', uid: 'PRA-001', name: 'Mgr. Alena Králová', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                          { id: 'ent_self', uid: 'PRA-002', name: 'Jana Nováková', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
+                          { id: 'ent_svoboda', uid: 'EXT-001', name: 'PhDr. Martin Svoboda', type: 'other', email: 'svoboda@ospod.cz', phone: '+420 604 111 999' }
                         ].filter(item => {
-                          // Filtr podle záložek (Spolupracovníci zahrnují i zaměstnance/pracovníky)
                           if (activeFilterTab !== 'all') {
                             if (activeFilterTab === 'coworker') {
                               if (item.type !== 'coworker' && item.type !== 'employee' && item.type !== 'worker') return false;
@@ -1334,7 +1333,6 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               return false;
                             }
                           }
-                          // Vyhledávání podle textu
                           if (!filterSearchQuery.trim()) return true;
                           const q = filterSearchQuery.toLowerCase();
                           return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
@@ -1352,10 +1350,12 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 borderRadius: '6px',
                                 fontSize: '12px',
                                 cursor: 'pointer',
-                                backgroundColor: isChecked ? '#EFF6FF' : 'transparent'
+                                backgroundColor: isChecked ? '#EFF6FF' : '#FAFAFA',
+                                border: `1px solid ${isChecked ? '#BFDBFE' : '#F1F5F9'}`,
+                                transition: 'all 0.15s ease'
                               }}
                             >
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
                                 <input
                                   type="checkbox"
                                   checked={isChecked}
@@ -1370,10 +1370,15 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                   }}
                                   style={{ accentColor: '#2563EB', cursor: 'pointer' }}
                                 />
-                                <span style={{ fontWeight: isChecked ? 600 : 400, color: isChecked ? '#2563EB' : '#171B1F' }}>
+                                <i className={item.type === 'family' ? 'las la-home' : item.type === 'foster_parent' ? 'las la-heart' : item.type === 'child' ? 'las la-smile' : item.type === 'coworker' ? 'las la-user-tie' : 'las la-address-card'} style={{ color: isChecked ? '#2563EB' : '#64748B', fontSize: '15px', flexShrink: 0 }} />
+                                <span style={{ fontWeight: isChecked ? 600 : 500, color: isChecked ? '#2563EB' : '#171B1F', whiteSpace: 'nowrap' }}>
                                   {item.name}
                                 </span>
                               </div>
+
+                              <span style={{ fontSize: '10.5px', fontWeight: 600, color: '#64748B', backgroundColor: '#F1F5F9', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace, sans-serif', whiteSpace: 'nowrap', marginLeft: '8px' }}>
+                                {item.uid}
+                              </span>
                             </label>
                           );
                         })}
@@ -3339,13 +3344,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     }}
                   >
                     {[
-                      { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', role: 'Rodina', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
-                      { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', role: 'Rodina', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
-                      { id: 'ent_dvorak', name: 'Tomáš Dvořák', type: 'foster_parent', role: 'Pěstoun', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
-                      { id: 'ent_adam', name: 'Adam Novák', type: 'child', role: 'Dítě', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
-                      { id: 'ent_kralova', name: 'Mgr. Alena Králová', type: 'coworker', role: 'Pracovník', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
-                      { id: 'ent_self', name: 'Jana Nováková', type: 'coworker', role: 'Pracovník (Já)', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
-                      { id: 'ent_svoboda', name: 'PhDr. Martin Svoboda', type: 'other', role: 'OSPOD', email: 'svoboda@ospod.cz', phone: '+420 604 111 999' }
+                      { id: 'fam_dvorak', uid: 'FAM-001', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
+                      { id: 'fam_novak', uid: 'FAM-002', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
+                      { id: 'ent_dvorak', uid: 'PEST-001', name: 'Tomáš Dvořák', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
+                      { id: 'ent_adam', uid: 'DIT-001', name: 'Adam Novák', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
+                      { id: 'ent_kralova', uid: 'PRA-001', name: 'Mgr. Alena Králová', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                      { id: 'ent_self', uid: 'PRA-002', name: 'Jana Nováková', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
+                      { id: 'ent_svoboda', uid: 'EXT-001', name: 'PhDr. Martin Svoboda', type: 'other', email: 'svoboda@ospod.cz', phone: '+420 604 111 999' }
                     ].filter(item => {
                       if (modalAssignedTab !== 'all') {
                         if (modalAssignedTab === 'coworker') {
@@ -3403,17 +3408,14 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               }}
                               style={{ accentColor: '#2563EB', cursor: 'pointer' }}
                             />
-                            <i className={item.type === 'family' ? 'las la-home' : item.type === 'foster_parent' ? 'las la-heart' : item.type === 'child' ? 'las la-smile' : item.type === 'coworker' ? 'las la-user-tie' : 'las la-address-card'} style={{ color: isChecked ? '#2563EB' : '#64748B', fontSize: '14px' }} />
+                            <i className={item.type === 'family' ? 'las la-home' : item.type === 'foster_parent' ? 'las la-heart' : item.type === 'child' ? 'las la-smile' : item.type === 'coworker' ? 'las la-user-tie' : 'las la-address-card'} style={{ color: isChecked ? '#2563EB' : '#64748B', fontSize: '15px', flexShrink: 0 }} />
                             <span style={{ fontWeight: isChecked ? 600 : 500, fontSize: '12px', color: isChecked ? '#2563EB' : '#1E293B', whiteSpace: 'nowrap' }}>
                               {item.name}
                             </span>
-                            <span style={{ fontSize: '10px', color: '#64748B', backgroundColor: '#E2E8F0', padding: '1px 6px', borderRadius: '4px' }}>
-                              {item.role}
-                            </span>
                           </div>
 
-                          <span style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap', marginLeft: '12px' }}>
-                            {item.email} • {item.phone}
+                          <span style={{ fontSize: '10.5px', fontWeight: 600, color: '#64748B', backgroundColor: '#F1F5F9', padding: '2px 6px', borderRadius: '4px', fontFamily: 'monospace, sans-serif', whiteSpace: 'nowrap', marginLeft: '8px' }}>
+                            {item.uid}
                           </span>
                         </label>
                       );
