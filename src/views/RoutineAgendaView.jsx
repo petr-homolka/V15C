@@ -27,16 +27,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [activeVisibleDateStr, setActiveVisibleDateStr] = useState('Pátek 24. Července 2026');
   const [activeVisibleOffset, setActiveVisibleOffset] = useState(0);
 
-  // Stavy pro interaktivní bubliny (popover / tooltipy) u kroužků u datumu
-  const [isNumberPopoverOpen, setIsNumberPopoverOpen] = useState(false);
-  const [hoveredBadgeType, setHoveredBadgeType] = useState(null); // 'birthday' | 'nameday' | null
-
-  // Zavření popoveru při kliknutí mimo
-  useEffect(() => {
-    const handleClickOutside = () => setIsNumberPopoverOpen(false);
-    window.addEventListener('click', handleClickOutside);
-    return () => window.removeEventListener('click', handleClickOutside);
-  }, []);
+  // Stavy pro interaktivní hover bubliny (onMouse) u kroužků u datumu
+  const [hoveredBadgeType, setHoveredBadgeType] = useState(null); // 'allday' | 'birthday' | 'nameday' | null
 
   // DYNAMICKÉ SVISLÉ SCROLOVÁNÍ NAPŘÍČ MĚSÍCI
   const [offsets, setOffsets] = useState(() => {
@@ -923,7 +915,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         onScroll={handleScrollTimeline}
         style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
       >
-        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A INTERAKTIVNÍMI BUBLINAMI */}
+        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A INTERAKTIVNÍMI HOVER BUBLINAMI (ONMOUSE) */}
         <div style={{
           position: 'sticky',
           top: 0,
@@ -937,7 +929,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM A INTERAKTIVNÍMI BUBLINAMI SROVNANÝMI PODLE SNÍMKU OBRAZOVKY */}
+          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM A INTERAKTIVNÍMI HOVER BUBLINAMI */}
           <div style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(16px)',
@@ -957,13 +949,10 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             <span>{activeVisibleDateStr}</span>
             <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600, marginRight: '2px' }}>● {currentTimeText}</span>
 
-            {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ -> PO KLIKNUTÍ OTEVŘE BUBLINU SE SOUPISEM AKCÍ */}
+            {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE SOUPISEM AKCÍ */}
             <span 
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsNumberPopoverOpen(!isNumberPopoverOpen);
-              }}
-              title="Klikněte pro zobrazení soupisu celodenních akcí"
+              onMouseEnter={() => setHoveredBadgeType('allday')}
+              onMouseLeave={() => setHoveredBadgeType(null)}
               style={{
                 backgroundColor: '#FFF0F0',
                 color: '#FF4742',
@@ -983,10 +972,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             >
               {regularAllDayEvents.length > 0 ? regularAllDayEvents.length : activeDayAllDayEvents.length}
 
-              {/* INTERAKTIVNÍ BUBLINA PO KLIKNUTÍ SE SOUPISEM CELODENNÍCH UDÁLOSTÍ (KROMĚ NAROZENIN A JMENIN) */}
-              {isNumberPopoverOpen && (
+              {/* INTERAKTIVNÍ BUBLINA NA HOVER SE SOUPISEM CELODENNÍCH UDÁLOSTÍ (KROMĚ NAROZENIN A JMENIN) */}
+              {hoveredBadgeType === 'allday' && (
                 <div 
-                  onClick={(e) => e.stopPropagation()}
                   style={{
                     position: 'absolute',
                     top: '32px',
@@ -995,11 +983,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     backgroundColor: '#FFFFFF',
                     borderRadius: '12px',
                     boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
-                    border: '1px solid #EAEAEA',
+                    border: '1px solid #FFCDD2',
                     padding: '12px 14px',
                     zIndex: 1000,
                     textAlign: 'left',
-                    cursor: 'default'
+                    pointerEvents: 'none'
                   }}
                 >
                   <div style={{ fontSize: '11px', fontWeight: 600, color: '#FF4742', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
