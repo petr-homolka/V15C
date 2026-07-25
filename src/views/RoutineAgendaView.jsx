@@ -767,31 +767,43 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         .anim-check-pop {
           animation: checkPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, checkPulse 0.6s ease-out;
         }
-        @keyframes taskDisappear {
+        @keyframes taskImplode {
           0% {
             opacity: 1;
-            transform: translateX(0) scale(1);
-            background-color: #FFFFFF;
+            transform: scale(1);
+            filter: blur(0px);
+            max-height: 60px;
+            margin-bottom: 6px;
           }
-          30% {
-            opacity: 0.95;
-            transform: translateX(10px) scale(0.99);
+          40% {
+            opacity: 0.85;
+            transform: scale(0.85) scaleY(0.7);
+            filter: blur(1px);
             background-color: #ECFDF5;
+          }
+          80% {
+            opacity: 0.15;
+            transform: scale(0.15) scaleY(0.1);
+            filter: blur(5px);
+            max-height: 12px;
+            margin-bottom: 2px;
           }
           100% {
             opacity: 0;
-            transform: translateX(-35px) scale(0.92);
+            transform: scale(0);
+            filter: blur(10px);
             max-height: 0px;
-            margin-bottom: -6px;
+            margin-bottom: 0px;
             padding-top: 0px;
             padding-bottom: 0px;
             border-width: 0px;
           }
         }
         .anim-task-disappearing {
-          animation: taskDisappear 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+          animation: taskImplode 0.4s cubic-bezier(0.6, -0.15, 0.735, 0.045) forwards !important;
           overflow: hidden !important;
           pointer-events: none !important;
+          transform-origin: center center !important;
         }
       `}</style>
 
