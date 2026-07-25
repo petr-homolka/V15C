@@ -1214,7 +1214,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   const sampleTask = groupTasks[0];
 
                   return (
-                    <div key={entityName} style={{ backgroundColor: '#FAFAFC', borderRadius: '10px', padding: '12px 14px', border: '1px solid #F0F0F4' }}>
+                    <div key={entityName} style={{ marginBottom: '24px' }}>
                       {/* NADPIS ENTITY SUBJEKTU */}
                       <div 
                         onClick={() => {
@@ -1230,7 +1230,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                  sampleTask.entityType === 'child' ? '#DB2777' : '#7C3AED',
                           textTransform: 'uppercase',
                           letterSpacing: '0.4px',
-                          marginBottom: '10px',
+                          marginBottom: '8px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -1242,12 +1242,14 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             sampleTask.entityType === 'family' ? 'las la-home' :
                             sampleTask.entityType === 'foster_parent' ? 'las la-user-friends' :
                             sampleTask.entityType === 'child' ? 'las la-baby' : 'las la-user-tie'
-                          } style={{ fontSize: '14px' }} />
+                          } style={{ fontSize: '15px' }} />
                           <span>{entityName}</span>
                         </div>
-                        <span style={{ backgroundColor: '#FFFFFF', padding: '1px 7px', borderRadius: '10px', fontSize: '10px', color: '#5E6774', border: '1px solid #E5E7EB' }}>
-                          {groupTasks.filter(t => !t.completed).length} aktivní
-                        </span>
+                        {groupTasks.filter(t => !t.completed).length > 0 && (
+                          <span style={{ backgroundColor: '#F3F4F6', padding: '1px 7px', borderRadius: '10px', fontSize: '10px', color: '#5E6774' }}>
+                            {groupTasks.filter(t => !t.completed).length}
+                          </span>
+                        )}
                       </div>
 
                       {/* SEZNAM ÚKOLŮ DANÉHO SUBJEKTU */}
