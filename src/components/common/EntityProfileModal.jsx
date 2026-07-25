@@ -70,7 +70,7 @@ export function EntityProfileModal({ entity, onClose, onNavigateToFamily }) {
                 fontSize: '24px',
                 fontWeight: 800
               }}>
-                <i className="las la-child"></i>
+                <i className="las la-baby"></i>
               </div>
               <div>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#4A85F6', textTransform: 'uppercase' }}>KARTA SVĚŘENÉHO DÍTĚTE</span>

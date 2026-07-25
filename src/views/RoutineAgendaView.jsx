@@ -817,7 +817,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               { id: 'all', label: 'Vše', icon: 'las la-list', count: tasks.filter(t => !t.completed).length },
               { id: 'family', label: 'Rodiny', icon: 'las la-home', count: tasks.filter(t => t.entityType === 'family' && !t.completed).length },
               { id: 'foster_parent', label: 'Pěstouni', icon: 'las la-user-friends', count: tasks.filter(t => t.entityType === 'foster_parent' && !t.completed).length },
-              { id: 'child', label: 'Děti', icon: 'las la-child', count: tasks.filter(t => t.entityType === 'child' && !t.completed).length },
+              { id: 'child', label: 'Děti', icon: 'las la-baby', count: tasks.filter(t => t.entityType === 'child' && !t.completed).length },
               { id: 'coworker', label: 'Spolupracovníci', icon: 'las la-user-tie', count: tasks.filter(t => t.entityType === 'coworker' && !t.completed).length }
             ].map(seg => (
               <button
@@ -1047,7 +1047,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
                     {/* SKUPINA: DĚTI V PÉČI */}
                     <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#DB2777', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i className="las la-child" style={{ fontSize: '12px' }} />
+                      <i className="las la-baby" style={{ fontSize: '12px' }} />
                       <span>Děti v péči</span>
                     </div>
                     {[
@@ -1241,7 +1241,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           <i className={
                             sampleTask.entityType === 'family' ? 'las la-home' :
                             sampleTask.entityType === 'foster_parent' ? 'las la-user-friends' :
-                            sampleTask.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                            sampleTask.entityType === 'child' ? 'las la-baby' : 'las la-user-tie'
                           } style={{ fontSize: '14px' }} />
                           <span>{entityName}</span>
                         </div>
@@ -1405,7 +1405,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
                                   t.entityType === 'foster_parent' ? 'las la-user-friends' :
-                                  t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                                  t.entityType === 'child' ? 'las la-baby' : 'las la-user-tie'
                                 } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
                               </span>
@@ -1522,7 +1522,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
                                   t.entityType === 'foster_parent' ? 'las la-user-friends' :
-                                  t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                                  t.entityType === 'child' ? 'las la-baby' : 'las la-user-tie'
                                 } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
                               </span>
@@ -1628,7 +1628,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               <i className={
                                 t.entityType === 'family' ? 'las la-home' :
                                 t.entityType === 'foster_parent' ? 'las la-user-friends' :
-                                t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                                t.entityType === 'child' ? 'las la-baby' : 'las la-user-tie'
                               } style={{ fontSize: '14px' }} />
                               <span>{t.entityName}</span>
                             </span>
