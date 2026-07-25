@@ -308,9 +308,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     }
   ]);
 
-  // Stavy pro segmentaci úkolů podle subjektů (Rodiny / Pěstouni / Děti / Spolupracovníci)
+  // Stavy pro segmentaci, vyhľadávanie a filtráciu úkolov podľa konkrétneho subjektu
   const [selectedSegment, setSelectedSegment] = useState('all'); // 'all' | 'family' | 'foster_parent' | 'child' | 'coworker'
   const [groupByEntity, setGroupByEntity] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
 
   // Úkoly se přiřazenými subjekty pro přesnou segmentaci
   const [tasks, setTasks] = useState([
@@ -854,6 +856,118 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             ))}
           </div>
 
+          {/* VYHLEDÁVACÍ POLE A ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU (PĚSTOUNA / DÍTĚTE / SPOLUPRACOVNÍKA / RODINY) */}
+          <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            {/* INTERAKTIVNÍ VYHLEDÁVAČ V ÚKOLECH */}
+            <div style={{
+              flex: 1,
+              minWidth: '180px',
+              backgroundColor: '#F4F4F6',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: searchQuery ? '1px solid #3B82F6' : '1px solid #EAEAEA',
+              boxShadow: searchQuery ? '0 2px 8px rgba(59,130,246,0.1)' : 'none',
+              transition: 'all 0.15s ease'
+            }}>
+              <i className="las la-search" style={{ color: searchQuery ? '#3B82F6' : '#8896A9', fontSize: '14px' }} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Hledat úkol, subjekt nebo klíčové slovo..."
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  outline: 'none',
+                  fontSize: '12px',
+                  color: '#171B1F',
+                  width: '100%',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              />
+              {searchQuery && (
+                <i 
+                  className="las la-times" 
+                  onClick={() => setSearchQuery('')}
+                  style={{ color: '#8896A9', fontSize: '14px', cursor: 'pointer' }} 
+                  title="Vymazat hledání"
+                />
+              )}
+            </div>
+
+            {/* ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU */}
+            <select
+              value={selectedEntityFilter}
+              onChange={(e) => setSelectedEntityFilter(e.target.value)}
+              style={{
+                backgroundColor: selectedEntityFilter !== 'all' ? '#EEF4FF' : '#FFFFFF',
+                color: selectedEntityFilter !== 'all' ? '#2563EB' : '#5E6774',
+                border: selectedEntityFilter !== 'all' ? '1px solid #BFDBFE' : '1px solid #EAEAEA',
+                borderRadius: '8px',
+                padding: '6px 10px',
+                fontSize: '12px',
+                fontWeight: selectedEntityFilter !== 'all' ? 600 : 400,
+                outline: 'none',
+                cursor: 'pointer',
+                fontFamily: 'Inter, sans-serif',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+              }}
+            >
+              <option value="all">Filtrovat konkrétní subjekt...</option>
+              <optgroup label="Rodiny">
+                <option value="fam_dvorak">Rodina Dvořákova</option>
+                <option value="fam_novak">Rodina Novákova</option>
+              </optgroup>
+              <optgroup label="Pěstouni">
+                <option value="ent_dvorak">Tomáš Dvořák (Pěstoun)</option>
+              </optgroup>
+              <optgroup label="Děti v péči">
+                <option value="ent_adam">Adam Novák (Dítě v péči)</option>
+              </optgroup>
+              <optgroup label="Spolupracovníci & KO">
+                <option value="ent_kralova">Mgr. Alena Králová (KO)</option>
+                <option value="ent_self">Jana Nováková (Já)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          {/* CHIP AKTIVNÍHO FILTRU SUBJEKTU */}
+          {selectedEntityFilter !== 'all' && (
+            <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '11px', color: '#747F8F' }}>Zobrazeny úkoly pro:</span>
+              <span style={{
+                backgroundColor: '#EFF6FF',
+                color: '#2563EB',
+                border: '1px solid #BFDBFE',
+                borderRadius: '12px',
+                padding: '2px 8px',
+                fontSize: '11px',
+                fontWeight: 600,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}>
+                <i className="las la-user-check" />
+                <span>{
+                  selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova' :
+                  selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova' :
+                  selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák (Pěstoun)' :
+                  selectedEntityFilter === 'ent_adam' ? 'Adam Novák (Dítě v péči)' :
+                  selectedEntityFilter === 'ent_kralova' ? 'Mgr. Alena Králová (KO)' : 'Jana Nováková'
+                }</span>
+                <i 
+                  className="las la-times" 
+                  onClick={() => setSelectedEntityFilter('all')}
+                  style={{ cursor: 'pointer', marginLeft: '2px', fontSize: '12px' }} 
+                  title="Zrušit filtr"
+                />
+              </span>
+            </div>
+          )}
+
           {/* Vstup pro přidání úkolu */}
           <div style={{
             marginTop: '14px',
@@ -889,64 +1003,163 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           </div>
         </div>
 
-        {/* Seznam Úkolů s efektem zaškrtnutí a segmentací */}
+        {/* Seznam Úkolů s efektem zaškrtnutí, segmentací a vyhledáváním */}
         <div style={{ padding: '20px 28px', flexGrow: 1 }}>
           
-          {/* AK SÚ ÚKOLY SESKUPENÉ PODĽA SUBJEKTU (groupByEntity === true) */}
-          {groupByEntity ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {Array.from(new Set(
-                tasks
-                  .filter(t => selectedSegment === 'all' || t.entityType === selectedSegment)
-                  .map(t => t.entityName || 'Ostatní úkoly')
-              )).map(entityName => {
-                const groupTasks = tasks.filter(t => 
-                  (selectedSegment === 'all' || t.entityType === selectedSegment) &&
-                  (t.entityName || 'Ostatní úkoly') === entityName
-                );
-                if (groupTasks.length === 0) return null;
-                const sampleTask = groupTasks[0];
+          {/* POMOCNÁ PŘEDFILTROVANÁ SADA ÚKOLŮ S VYHLEDÁVÁNÍM A FILTREM SUBJEKTU */}
+          {(() => {
+            const q = searchQuery.toLowerCase().trim();
+            const activeFilteredTasks = tasks.filter(t => {
+              const matchesSegment = selectedSegment === 'all' || t.entityType === selectedSegment;
+              const matchesEntity = selectedEntityFilter === 'all' || t.entityId === selectedEntityFilter;
+              const matchesQuery = !q || 
+                t.title.toLowerCase().includes(q) || 
+                (t.entityName && t.entityName.toLowerCase().includes(q)) ||
+                (t.badge && t.badge.toLowerCase().includes(q));
 
-                return (
-                  <div key={entityName} style={{ backgroundColor: '#FAFAFC', borderRadius: '10px', padding: '12px 14px', border: '1px solid #F0F0F4' }}>
-                    {/* NADPIS ENTITY SUBJEKTU */}
-                    <div 
-                      onClick={() => {
-                        if (sampleTask.entityId && onSelectEntity) {
-                          onSelectEntity({ id: sampleTask.entityId, name: sampleTask.entityName, type: sampleTask.entityType });
-                        }
-                      }}
-                      style={{
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        color: sampleTask.entityType === 'family' ? '#2563EB' :
-                               sampleTask.entityType === 'foster_parent' ? '#059669' :
-                               sampleTask.entityType === 'child' ? '#DB2777' : '#7C3AED',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.4px',
-                        marginBottom: '10px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <i className={
-                          sampleTask.entityType === 'family' ? 'las la-home' :
-                          sampleTask.entityType === 'foster_parent' ? 'las la-user-friends' :
-                          sampleTask.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
-                        } style={{ fontSize: '14px' }} />
-                        <span>{entityName}</span>
+              return matchesSegment && matchesEntity && matchesQuery;
+            });
+
+            if (activeFilteredTasks.length === 0) {
+              return (
+                <div style={{ padding: '32px 16px', textAlign: 'center', color: '#8896A9' }}>
+                  <i className="las la-search" style={{ fontSize: '32px', marginBottom: '8px', opacity: 0.6, display: 'block' }} />
+                  <div style={{ fontSize: '13px', fontWeight: 500 }}>Nenalezeny žádné odpovídající úkoly.</div>
+                  <div style={{ fontSize: '11px', marginTop: '4px' }}>Zkuste upravit vyhledávání nebo filtr subjektu.</div>
+                </div>
+              );
+            }
+
+            return groupByEntity ? (
+              /* AK SÚ ÚKOLY SESKUPENÉ PODĽA SUBJEKTU (groupByEntity === true) */
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {Array.from(new Set(
+                  activeFilteredTasks.map(t => t.entityName || 'Ostatní úkoly')
+                )).map(entityName => {
+                  const groupTasks = activeFilteredTasks.filter(t => (t.entityName || 'Ostatní úkoly') === entityName);
+                  if (groupTasks.length === 0) return null;
+                  const sampleTask = groupTasks[0];
+
+                  return (
+                    <div key={entityName} style={{ backgroundColor: '#FAFAFC', borderRadius: '10px', padding: '12px 14px', border: '1px solid #F0F0F4' }}>
+                      {/* NADPIS ENTITY SUBJEKTU */}
+                      <div 
+                        onClick={() => {
+                          if (sampleTask.entityId && onSelectEntity) {
+                            onSelectEntity({ id: sampleTask.entityId, name: sampleTask.entityName, type: sampleTask.entityType });
+                          }
+                        }}
+                        style={{
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          color: sampleTask.entityType === 'family' ? '#2563EB' :
+                                 sampleTask.entityType === 'foster_parent' ? '#059669' :
+                                 sampleTask.entityType === 'child' ? '#DB2777' : '#7C3AED',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.4px',
+                          marginBottom: '10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <i className={
+                            sampleTask.entityType === 'family' ? 'las la-home' :
+                            sampleTask.entityType === 'foster_parent' ? 'las la-user-friends' :
+                            sampleTask.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                          } style={{ fontSize: '14px' }} />
+                          <span>{entityName}</span>
+                        </div>
+                        <span style={{ backgroundColor: '#FFFFFF', padding: '1px 7px', borderRadius: '10px', fontSize: '10px', color: '#5E6774', border: '1px solid #E5E7EB' }}>
+                          {groupTasks.filter(t => !t.completed).length} aktivní
+                        </span>
                       </div>
-                      <span style={{ backgroundColor: '#FFFFFF', padding: '1px 7px', borderRadius: '10px', fontSize: '10px', color: '#5E6774', border: '1px solid #E5E7EB' }}>
-                        {groupTasks.filter(t => !t.completed).length} aktivní
+
+                      {/* SEZNAM ÚKOLŮ DANÉHO SUBJEKTU */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {groupTasks.map(t => (
+                          <div
+                            key={t.id}
+                            draggable
+                            onDragStart={(e) => handleDragStartTask(e, t)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '8px 12px',
+                              borderRadius: '8px',
+                              backgroundColor: '#FFFFFF',
+                              border: '1px solid #F0F0F4',
+                              cursor: 'grab',
+                              transition: 'all 0.2s ease',
+                              opacity: t.completed ? 0.6 : 1
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              <div 
+                                onClick={() => toggleTask(t.id)}
+                                className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                                style={{
+                                  width: '18px',
+                                  height: '18px',
+                                  borderRadius: '4px',
+                                  border: t.completed ? 'none' : '1.5px solid #A0A0B0',
+                                  backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  cursor: 'pointer',
+                                  flexShrink: 0
+                                }}
+                              >
+                                {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
+                              </div>
+                              <span style={{ fontSize: '13px', color: t.completed ? '#6B7280' : '#171b1f', textDecoration: t.completed ? 'line-through' : 'none' }}>
+                                {t.title}
+                              </span>
+                            </div>
+
+                            {t.dateRange && (
+                              <span style={{ fontSize: '11px', color: '#747f8f', backgroundColor: '#F3F4F6', padding: '2px 8px', borderRadius: '6px' }}>
+                                {t.dateRange}
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              /* AK SÚ ÚKOLY ZOBRAZENÉ PODĽA TERMÍNU (STANDARD) */
+              <>
+                {/* SKUPINA: PO TERMÍNU */}
+                {activeFilteredTasks.filter(t => t.group === 'overdue' && !t.completed).length > 0 && (
+                  <div
+                    onDragOver={(e) => handleDragOverGroup(e, 'overdue')}
+                    onDrop={(e) => handleDropTask(e, 'overdue')}
+                    style={{
+                      marginBottom: '24px',
+                      backgroundColor: dragOverGroup === 'overdue' ? '#FFF5F5' : 'transparent',
+                      borderRadius: '8px',
+                      padding: '4px',
+                      transition: 'background-color 0.2s'
+                    }}
+                  >
+                    <div style={{ fontSize: '12px', fontWeight: 500, color: '#FF4742', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>PO TERMÍNU</span>
+                      <span style={{ backgroundColor: '#FFEBEB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
+                        {activeFilteredTasks.filter(t => t.group === 'overdue' && !t.completed).length}
                       </span>
                     </div>
 
-                    {/* SEZNAM ÚKOLŮ DANÉHO SUBJEKTU */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {groupTasks.map(t => (
+                      {activeFilteredTasks
+                        .filter(t => t.group === 'overdue' && !t.completed)
+                        .map(t => (
                         <div
                           key={t.id}
                           draggable
@@ -960,11 +1173,10 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             backgroundColor: '#FFFFFF',
                             border: '1px solid #F0F0F4',
                             cursor: 'grab',
-                            transition: 'all 0.2s ease',
-                            opacity: t.completed ? 0.6 : 1
+                            transition: 'all 0.2s ease'
                           }}
                         >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
                             <div 
                               onClick={() => toggleTask(t.id)}
                               className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
@@ -983,327 +1195,255 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
                             </div>
-                            <span style={{ fontSize: '13px', color: t.completed ? '#6B7280' : '#171b1f', textDecoration: t.completed ? 'line-through' : 'none' }}>
-                              {t.title}
-                            </span>
+                            <span style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400 }}>{t.title}</span>
                           </div>
 
-                          {t.dateRange && (
-                            <span style={{ fontSize: '11px', color: '#747f8f', backgroundColor: '#F3F4F6', padding: '2px 8px', borderRadius: '6px' }}>
-                              {t.dateRange}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                            {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU */}
+                            {t.entityName && (
+                              <span 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (onSelectEntity) {
+                                    onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
+                                  }
+                                }}
+                                title={`Zobrazit profil (${t.entityName})`}
+                                style={{
+                                  fontSize: '10px',
+                                  fontWeight: 500,
+                                  color: t.entityType === 'family' ? '#2563EB' :
+                                         t.entityType === 'foster_parent' ? '#059669' :
+                                         t.entityType === 'child' ? '#DB2777' : '#7C3AED',
+                                  backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
+                                                   t.entityType === 'foster_parent' ? '#ECFDF5' :
+                                                   t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
+                                  border: `1px solid ${
+                                    t.entityType === 'family' ? '#BFDBFE' :
+                                    t.entityType === 'foster_parent' ? '#A7F3D0' :
+                                    t.entityType === 'child' ? '#FBCFE8' : '#DDD6FE'
+                                  }`,
+                                  padding: '2px 6px',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '3px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                <i className={
+                                  t.entityType === 'family' ? 'las la-home' :
+                                  t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                  t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                                } style={{ fontSize: '11px' }} />
+                                <span>{t.entityName}</span>
+                              </span>
+                            )}
+
+                            {t.dateRange && (
+                              <span 
+                                onClick={() => setActiveDatePickerTask(t)}
+                                style={{ fontSize: '11px', color: '#747f8f', backgroundColor: '#F3F4F6', padding: '2px 8px', borderRadius: '6px', cursor: 'pointer' }}
+                              >
+                                {t.dateRange}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* SKUPINA: DNES */}
+                {activeFilteredTasks.filter(t => t.group === 'today' && !t.completed).length > 0 && (
+                  <div
+                    onDragOver={(e) => handleDragOverGroup(e, 'today')}
+                    onDrop={(e) => handleDropTask(e, 'today')}
+                    style={{
+                      marginBottom: '24px',
+                      backgroundColor: dragOverGroup === 'today' ? '#EEF4FF' : 'transparent',
+                      borderRadius: '8px',
+                      padding: '4px',
+                      transition: 'background-color 0.2s'
+                    }}
+                  >
+                    <div style={{ fontSize: '12px', fontWeight: 500, color: '#171b1f', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>DNES</span>
+                      <span style={{ backgroundColor: '#F3F4F6', padding: '1px 6px', borderRadius: '10px', fontSize: '10px', color: '#5e6774' }}>
+                        {activeFilteredTasks.filter(t => t.group === 'today' && !t.completed).length}
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {activeFilteredTasks
+                        .filter(t => t.group === 'today' && !t.completed)
+                        .map(t => (
+                        <div
+                          key={t.id}
+                          draggable
+                          onDragStart={(e) => handleDragStartTask(e, t)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #F0F0F4',
+                            cursor: 'grab',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+                            <div 
+                              onClick={() => toggleTask(t.id)}
+                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              style={{
+                                width: '18px',
+                                height: '18px',
+                                borderRadius: '4px',
+                                border: t.completed ? 'none' : '1.5px solid #A0A0B0',
+                                backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                flexShrink: 0
+                              }}
+                            >
+                              {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
+                            </div>
+                            <span style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400 }}>{t.title}</span>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                            {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU */}
+                            {t.entityName && (
+                              <span 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (onSelectEntity) {
+                                    onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
+                                  }
+                                }}
+                                title={`Zobrazit profil (${t.entityName})`}
+                                style={{
+                                  fontSize: '10px',
+                                  fontWeight: 500,
+                                  color: t.entityType === 'family' ? '#2563EB' :
+                                         t.entityType === 'foster_parent' ? '#059669' :
+                                         t.entityType === 'child' ? '#DB2777' : '#7C3AED',
+                                  backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
+                                                   t.entityType === 'foster_parent' ? '#ECFDF5' :
+                                                   t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
+                                  border: `1px solid ${
+                                    t.entityType === 'family' ? '#BFDBFE' :
+                                    t.entityType === 'foster_parent' ? '#A7F3D0' :
+                                    t.entityType === 'child' ? '#FBCFE8' : '#DDD6FE'
+                                  }`,
+                                  padding: '2px 6px',
+                                  borderRadius: '6px',
+                                  cursor: 'pointer',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '3px',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                <i className={
+                                  t.entityType === 'family' ? 'las la-home' :
+                                  t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                  t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                                } style={{ fontSize: '11px' }} />
+                                <span>{t.entityName}</span>
+                              </span>
+                            )}
+
+                            {t.badge && (
+                              <span style={{ fontSize: '10px', fontWeight: 500, color: '#4A85F6', backgroundColor: '#EEF4FF', padding: '2px 6px', borderRadius: '4px' }}>
+                                {t.badge}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* SKUPINA: DOKONČENÉ */}
+                {activeFilteredTasks.filter(t => t.completed).length > 0 && (
+                  <div
+                    onDragOver={(e) => handleDragOverGroup(e, 'completed')}
+                    onDrop={(e) => handleDropTask(e, 'completed')}
+                    style={{
+                      marginBottom: '24px',
+                      backgroundColor: dragOverGroup === 'completed' ? '#ECFDF5' : 'transparent',
+                      borderRadius: '8px',
+                      padding: '4px',
+                      transition: 'background-color 0.2s'
+                    }}
+                  >
+                    <div style={{ fontSize: '12px', fontWeight: 500, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
+                      DOKONČENÉ
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {activeFilteredTasks
+                        .filter(t => t.completed)
+                        .map(t => (
+                        <div
+                          key={t.id}
+                          draggable
+                          onDragStart={(e) => handleDragStartTask(e, t)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: '#FAFAFA',
+                            opacity: 0.75,
+                            cursor: 'grab'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div 
+                              onClick={() => toggleTask(t.id)}
+                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              style={{
+                                width: '18px',
+                                height: '18px',
+                                borderRadius: '4px',
+                                border: 'none',
+                                backgroundColor: '#10B981',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                flexShrink: 0
+                              }}
+                            >
+                              <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>
+                            </div>
+                            <span style={{ fontSize: '13px', color: '#6B7280', textDecoration: 'line-through' }}>{t.title}</span>
+                          </div>
+
+                          {t.entityName && (
+                            <span style={{ fontSize: '10px', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '2px 6px', borderRadius: '4px' }}>
+                              {t.entityName}
                             </span>
                           )}
                         </div>
                       ))}
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          ) : (
-            /* AK SÚ ÚKOLY ZOBRAZENÉ PODĽA TERMÍNU (STANDARD) */
-            <>
-              {/* SKUPINA: PO TERMÍNU */}
-              <div
-                onDragOver={(e) => handleDragOverGroup(e, 'overdue')}
-                onDrop={(e) => handleDropTask(e, 'overdue')}
-                style={{
-                  marginBottom: '24px',
-                  backgroundColor: dragOverGroup === 'overdue' ? '#FFF5F5' : 'transparent',
-                  borderRadius: '8px',
-                  padding: '4px',
-                  transition: 'background-color 0.2s'
-                }}
-              >
-                <div style={{ fontSize: '12px', fontWeight: 500, color: '#FF4742', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>PO TERMÍNU</span>
-                  <span style={{ backgroundColor: '#FFEBEB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
-                    {tasks.filter(t => (selectedSegment === 'all' || t.entityType === selectedSegment) && t.group === 'overdue' && !t.completed).length}
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {tasks
-                    .filter(t => (selectedSegment === 'all' || t.entityType === selectedSegment) && t.group === 'overdue' && !t.completed)
-                    .map(t => (
-                    <div
-                      key={t.id}
-                      draggable
-                      onDragStart={(e) => handleDragStartTask(e, t)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #F0F0F4',
-                        cursor: 'grab',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
-                        <div 
-                          onClick={() => toggleTask(t.id)}
-                          className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
-                          style={{
-                            width: '18px',
-                            height: '18px',
-                            borderRadius: '4px',
-                            border: t.completed ? 'none' : '1.5px solid #A0A0B0',
-                            backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            flexShrink: 0
-                          }}
-                        >
-                          {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
-                        </div>
-                        <span style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400 }}>{t.title}</span>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                        {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU */}
-                        {t.entityName && (
-                          <span 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (onSelectEntity) {
-                                onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
-                              }
-                            }}
-                            title={`Zobrazit profil (${t.entityName})`}
-                            style={{
-                              fontSize: '10px',
-                              fontWeight: 500,
-                              color: t.entityType === 'family' ? '#2563EB' :
-                                     t.entityType === 'foster_parent' ? '#059669' :
-                                     t.entityType === 'child' ? '#DB2777' : '#7C3AED',
-                              backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
-                                               t.entityType === 'foster_parent' ? '#ECFDF5' :
-                                               t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
-                              border: `1px solid ${
-                                t.entityType === 'family' ? '#BFDBFE' :
-                                t.entityType === 'foster_parent' ? '#A7F3D0' :
-                                t.entityType === 'child' ? '#FBCFE8' : '#DDD6FE'
-                              }`,
-                              padding: '2px 6px',
-                              borderRadius: '6px',
-                              cursor: 'pointer',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '3px',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            <i className={
-                              t.entityType === 'family' ? 'las la-home' :
-                              t.entityType === 'foster_parent' ? 'las la-user-friends' :
-                              t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
-                            } style={{ fontSize: '11px' }} />
-                            <span>{t.entityName}</span>
-                          </span>
-                        )}
-
-                        {t.dateRange && (
-                          <span 
-                            onClick={() => setActiveDatePickerTask(t)}
-                            style={{ fontSize: '11px', color: '#747f8f', backgroundColor: '#F3F4F6', padding: '2px 8px', borderRadius: '6px', cursor: 'pointer' }}
-                          >
-                            {t.dateRange}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* SKUPINA: DNES */}
-              <div
-                onDragOver={(e) => handleDragOverGroup(e, 'today')}
-                onDrop={(e) => handleDropTask(e, 'today')}
-                style={{
-                  marginBottom: '24px',
-                  backgroundColor: dragOverGroup === 'today' ? '#EEF4FF' : 'transparent',
-                  borderRadius: '8px',
-                  padding: '4px',
-                  transition: 'background-color 0.2s'
-                }}
-              >
-                <div style={{ fontSize: '12px', fontWeight: 500, color: '#171b1f', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>DNES</span>
-                  <span style={{ backgroundColor: '#F3F4F6', padding: '1px 6px', borderRadius: '10px', fontSize: '10px', color: '#5e6774' }}>
-                    {tasks.filter(t => (selectedSegment === 'all' || t.entityType === selectedSegment) && t.group === 'today' && !t.completed).length}
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {tasks
-                    .filter(t => (selectedSegment === 'all' || t.entityType === selectedSegment) && t.group === 'today' && !t.completed)
-                    .map(t => (
-                    <div
-                      key={t.id}
-                      draggable
-                      onDragStart={(e) => handleDragStartTask(e, t)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #F0F0F4',
-                        cursor: 'grab',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
-                        <div 
-                          onClick={() => toggleTask(t.id)}
-                          className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
-                          style={{
-                            width: '18px',
-                            height: '18px',
-                            borderRadius: '4px',
-                            border: t.completed ? 'none' : '1.5px solid #A0A0B0',
-                            backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            flexShrink: 0
-                          }}
-                        >
-                          {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
-                        </div>
-                        <span style={{ fontSize: '13px', color: '#171b1f', fontWeight: 400 }}>{t.title}</span>
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                        {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU */}
-                        {t.entityName && (
-                          <span 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (onSelectEntity) {
-                                onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
-                              }
-                            }}
-                            title={`Zobrazit profil (${t.entityName})`}
-                            style={{
-                              fontSize: '10px',
-                              fontWeight: 500,
-                              color: t.entityType === 'family' ? '#2563EB' :
-                                     t.entityType === 'foster_parent' ? '#059669' :
-                                     t.entityType === 'child' ? '#DB2777' : '#7C3AED',
-                              backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
-                                               t.entityType === 'foster_parent' ? '#ECFDF5' :
-                                               t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
-                              border: `1px solid ${
-                                t.entityType === 'family' ? '#BFDBFE' :
-                                t.entityType === 'foster_parent' ? '#A7F3D0' :
-                                t.entityType === 'child' ? '#FBCFE8' : '#DDD6FE'
-                              }`,
-                              padding: '2px 6px',
-                              borderRadius: '6px',
-                              cursor: 'pointer',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '3px',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            <i className={
-                              t.entityType === 'family' ? 'las la-home' :
-                              t.entityType === 'foster_parent' ? 'las la-user-friends' :
-                              t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
-                            } style={{ fontSize: '11px' }} />
-                            <span>{t.entityName}</span>
-                          </span>
-                        )}
-
-                        {t.badge && (
-                          <span style={{ fontSize: '10px', fontWeight: 500, color: '#4A85F6', backgroundColor: '#EEF4FF', padding: '2px 6px', borderRadius: '4px' }}>
-                            {t.badge}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* SKUPINA: DOKONČENÉ */}
-              <div
-                onDragOver={(e) => handleDragOverGroup(e, 'completed')}
-                onDrop={(e) => handleDropTask(e, 'completed')}
-                style={{
-                  marginBottom: '24px',
-                  backgroundColor: dragOverGroup === 'completed' ? '#ECFDF5' : 'transparent',
-                  borderRadius: '8px',
-                  padding: '4px',
-                  transition: 'background-color 0.2s'
-                }}
-              >
-                <div style={{ fontSize: '12px', fontWeight: 500, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
-                  DOKONČENÉ
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {tasks
-                    .filter(t => (selectedSegment === 'all' || t.entityType === selectedSegment) && t.completed)
-                    .map(t => (
-                    <div
-                      key={t.id}
-                      draggable
-                      onDragStart={(e) => handleDragStartTask(e, t)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        backgroundColor: '#FAFAFA',
-                        opacity: 0.75,
-                        cursor: 'grab'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div 
-                          onClick={() => toggleTask(t.id)}
-                          className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
-                          style={{
-                            width: '18px',
-                            height: '18px',
-                            borderRadius: '4px',
-                            border: 'none',
-                            backgroundColor: '#10B981',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            flexShrink: 0
-                          }}
-                        >
-                          <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>
-                        </div>
-                        <span style={{ fontSize: '13px', color: '#6B7280', textDecoration: 'line-through' }}>{t.title}</span>
-                      </div>
-
-                      {t.entityName && (
-                        <span style={{ fontSize: '10px', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '2px 6px', borderRadius: '4px' }}>
-                          {t.entityName}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+                )}
+              </>
+            );
+          })()}
 
         </div>
       </div>
