@@ -1207,9 +1207,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               /* AK SÚ ÚKOLY SESKUPENÉ PODĽA SUBJEKTU (groupByEntity === true) */
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {Array.from(new Set(
-                  activeFilteredTasks.map(t => t.entityName || 'Ostatní úkoly')
+                  activeFilteredTasks.filter(t => !t.completed).map(t => t.entityName || 'Ostatní úkoly')
                 )).map(entityName => {
-                  const groupTasks = activeFilteredTasks.filter(t => (t.entityName || 'Ostatní úkoly') === entityName);
+                  const groupTasks = activeFilteredTasks.filter(t => (t.entityName || 'Ostatní úkoly') === entityName && !t.completed);
                   if (groupTasks.length === 0) return null;
                   const sampleTask = groupTasks[0];
 
@@ -1245,14 +1245,12 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           } style={{ fontSize: '15px' }} />
                           <span>{entityName}</span>
                         </div>
-                        {groupTasks.filter(t => !t.completed).length > 0 && (
-                          <span style={{ backgroundColor: '#F3F4F6', padding: '1px 7px', borderRadius: '10px', fontSize: '10px', color: '#5E6774' }}>
-                            {groupTasks.filter(t => !t.completed).length}
-                          </span>
-                        )}
+                        <span style={{ backgroundColor: '#F3F4F6', padding: '1px 7px', borderRadius: '10px', fontSize: '10px', color: '#5E6774' }}>
+                          {groupTasks.length}
+                        </span>
                       </div>
 
-                      {/* SEZNAM ÚKOLŮ DANÉHO SUBJEKTU */}
+                      {/* SEZNAM AKTÍVNYCH ÚKOLŮ DANÉHO SUBJEKTU */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         {groupTasks.map(t => (
                           <div
@@ -1268,8 +1266,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               backgroundColor: '#FFFFFF',
                               border: '1px solid #F0F0F4',
                               cursor: 'grab',
-                              transition: 'all 0.2s ease',
-                              opacity: t.completed ? 0.6 : 1
+                              transition: 'all 0.2s ease'
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1280,8 +1277,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                   width: '18px',
                                   height: '18px',
                                   borderRadius: '4px',
-                                  border: t.completed ? 'none' : '1.5px solid #A0A0B0',
-                                  backgroundColor: t.completed ? '#10B981' : '#FFFFFF',
+                                  border: '1.5px solid #A0A0B0',
+                                  backgroundColor: '#FFFFFF',
                                   display: 'flex',
                                   alignItems: 'center',
                                   justifyContent: 'center',
@@ -1289,9 +1286,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                   flexShrink: 0
                                 }}
                               >
-                                {t.completed && <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>}
                               </div>
-                              <span style={{ fontSize: '13px', color: t.completed ? '#6B7280' : '#171b1f', textDecoration: t.completed ? 'line-through' : 'none' }}>
+                              <span style={{ fontSize: '13px', color: '#171b1f' }}>
                                 {t.title}
                               </span>
                             </div>
@@ -1307,6 +1303,95 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     </div>
                   );
                 })}
+
+                {/* DOKONČENÉ ÚKOLY V SESKUPENÉM REŽIMU */}
+                {activeFilteredTasks.filter(t => t.completed).length > 0 && (
+                  <div style={{ marginTop: '12px', paddingTop: '16px', borderTop: '1px solid #F0F0F4' }}>
+                    <div style={{ fontSize: '12px', fontWeight: 500, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
+                      DOKONČENÉ
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {activeFilteredTasks
+                        .filter(t => t.completed)
+                        .map(t => (
+                        <div
+                          key={t.id}
+                          draggable
+                          onDragStart={(e) => handleDragStartTask(e, t)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            backgroundColor: '#FAFAFA',
+                            opacity: 0.75,
+                            cursor: 'grab'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div 
+                              onClick={() => toggleTask(t.id)}
+                              className={recentlyCheckedId === t.id ? 'anim-check-pop' : ''}
+                              style={{
+                                width: '18px',
+                                height: '18px',
+                                borderRadius: '4px',
+                                border: 'none',
+                                backgroundColor: '#10B981',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                flexShrink: 0
+                              }}
+                            >
+                              <i className="las la-check" style={{ color: '#FFFFFF', fontSize: '12px' }}></i>
+                            </div>
+                            <span style={{ fontSize: '13px', color: '#6B7280', textDecoration: 'line-through' }}>{t.title}</span>
+                          </div>
+
+                          {t.entityName && (
+                            <span 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (onSelectEntity) {
+                                  onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType, activeTab: 'tasks', initialTab: 'tasks' });
+                                }
+                              }}
+                              title={`Otevřít profil (${t.entityName})`}
+                              style={{
+                                fontSize: '11px',
+                                fontWeight: 500,
+                                color: t.entityType === 'family' ? '#2563EB' :
+                                       t.entityType === 'foster_parent' ? '#059669' :
+                                       t.entityType === 'child' ? '#DB2777' : '#7C3AED',
+                                backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
+                                                 t.entityType === 'foster_parent' ? '#ECFDF5' :
+                                                 t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
+                                border: 'none',
+                                padding: '3px 8px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px'
+                              }}
+                            >
+                              <i className={
+                                t.entityType === 'family' ? 'las la-home' :
+                                t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
+                              } style={{ fontSize: '14px' }} />
+                              <span>{t.entityName}</span>
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               /* AK SÚ ÚKOLY ZOBRAZENÉ PODĽA TERMÍNU (STANDARD) */
