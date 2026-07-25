@@ -365,21 +365,24 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [showSegmentBar, setShowSegmentBar] = useState(false);
+  const leftColumnRef = useRef(null);
   const [leftColumnWidth, setLeftColumnWidth] = useState(48); // % šířky levého sloupce úkolů
   const [isResizingColumns, setIsResizingColumns] = useState(false);
 
-  // EFEKT PRO POSOUVÁNÍ ROZHRANÍ STLAČENÍM A TÁHNUTÍM MYŠI (FLEXIBILNÍ SVISLÉ ROZDELENÍ)
+  // EFEKT PRO PRESNÉ A HLADKÉ UCHOPENÍ LINKY SVISLÉHO ROZDELENIA MYŠÍ (1-TO-1 SLEDOVANIE KURZORU)
   useEffect(() => {
     if (!isResizingColumns) return;
 
     const handleMouseMove = (e) => {
-      const sidebarWidth = 72; // Přibližná šířka levého menu RoutineSidebar
-      const availableWidth = window.innerWidth - sidebarWidth;
-      const mouseOffset = e.clientX - sidebarWidth;
+      let startX = 220; // Výchozí pozice levého okraje úkolů
+      if (leftColumnRef.current) {
+        startX = leftColumnRef.current.getBoundingClientRect().left;
+      }
       
-      let newPercent = (mouseOffset / availableWidth) * 100;
-      if (newPercent < 20) newPercent = 20; // Minimální šířka 20%
-      if (newPercent > 80) newPercent = 80; // Maximální šířka 80%
+      const widthPx = e.clientX - startX;
+      let newPercent = (widthPx / window.innerWidth) * 100;
+      if (newPercent < 15) newPercent = 15; // Minimální šířka 15%
+      if (newPercent > 75) newPercent = 75; // Maximální šířka 75%
 
       setLeftColumnWidth(newPercent);
     };
@@ -1047,17 +1050,20 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       />
 
       {/* 2. LEVÁ ČÁST: ÚKOLY (FLEXIBILNÍ POUŠTĚNÍ A POSOUVÁNÍ ŠÍŘKY SLUPCE) */}
-      <div style={{
-        width: `${leftColumnWidth}%`,
-        flexShrink: 0,
-        height: '100vh',
-        borderRight: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#FFFFFF',
-        overflow: 'hidden',
-        userSelect: isResizingColumns ? 'none' : 'auto'
-      }}>
+      <div 
+        ref={leftColumnRef}
+        style={{
+          width: `${leftColumnWidth}%`,
+          flexShrink: 0,
+          height: '100vh',
+          borderRight: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#FFFFFF',
+          overflow: 'hidden',
+          userSelect: isResizingColumns ? 'none' : 'auto'
+        }}
+      >
         {/* FIXNÍ HLAVIČKA SLOUPCE ÚKOLŮ S TITULEM, IKONOVOU LIŠTOU BEZ STÍNU, SEGMENTACÍ, VYHLEDÁVAČEM A DROPDOWNEM */}
         <div style={{ padding: '24px 28px 16px 28px', flexShrink: 0, backgroundColor: '#FFFFFF', zIndex: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
