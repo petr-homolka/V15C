@@ -642,8 +642,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         backgroundColor: '#FFFFFF',
         overflowY: 'auto'
       }}>
-        {/* Hlavička sloupce Úkolů */}
-        <div style={{ padding: '24px 28px 16px 28px', borderBottom: '1px solid #F0F0F4' }}>
+        {/* Hlavička sloupce Úkolů bez horizontální čáry */}
+        <div style={{ padding: '24px 28px 16px 28px' }}>
           <h1 style={{ fontSize: '22px', fontWeight: 500, color: '#171b1f', margin: 0, letterSpacing: '-0.5px' }}>Dnes</h1>
           <div style={{ fontSize: '13px', color: '#747f8f', marginTop: '4px', fontWeight: 400 }}>Červenec 2026</div>
 
@@ -951,7 +951,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   marginTop: '16px'
                 }}
               >
-                {/* CENTROVANÁ HLAVIČKA DNE A SVÁTKU Z ČESKÉHO KALENDÁŘE */}
+                {/* CENTROVANÁ HLAVIČKA DNE A SVÁTKU Z ČESKÉHO KALENDÁŘE (BEZ HORIZONTÁLNÍCH ČÁR) */}
                 <div style={{
                   paddingLeft: '80px',
                   paddingRight: '32px',
@@ -1045,7 +1045,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               fontWeight: isSpecial ? 600 : 500,
-                              color: isSpecial ? '#171B1F' : '#171B1F'
+                              color: '#171B1F'
                             }}>
                               {ev.title}
                             </span>
