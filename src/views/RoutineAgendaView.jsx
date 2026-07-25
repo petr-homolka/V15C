@@ -312,6 +312,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [selectedSegment, setSelectedSegment] = useState('all'); // 'all' | 'family' | 'foster_parent' | 'child' | 'coworker'
   const [groupByEntity, setGroupByEntity] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchInputFocused, setIsSearchInputFocused] = useState(false);
   const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
 
@@ -859,30 +860,32 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
           {/* VYHLEDÁVACÍ POLE A SHRNUTÍ A CUSTOM ELEGANTNÍ ROZBALOVACÍ VÝBĚR SUBJEKTU */}
           <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap' }}>
-            {/* INTERAKTIVNÍ VYHLEDÁVAČ V ÚKOLECH */}
+            {/* INTERAKTIVNÍ VYHLEDÁVAČ V ÚKOLECH S FOCUS EFEKTEM JAKO POLE PŘIDAT ÚKOL */}
             <div style={{
               flex: 1,
-              backgroundColor: '#F4F4F6',
-              borderRadius: '8px',
-              padding: '6px 10px',
+              backgroundColor: isSearchInputFocused ? '#FFFFFF' : '#F4F4F6',
+              borderRadius: '10px',
+              padding: '8px 12px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              border: searchQuery ? '1px solid #3B82F6' : '1px solid #EAEAEA',
-              boxShadow: searchQuery ? '0 2px 8px rgba(59,130,246,0.1)' : 'none',
-              transition: 'all 0.15s ease'
+              gap: '8px',
+              border: isSearchInputFocused ? '1.5px solid #FF4742' : (searchQuery ? '1px solid #3B82F6' : '1px solid transparent'),
+              boxShadow: isSearchInputFocused ? '0 4px 12px rgba(255,71,66,0.1)' : (searchQuery ? '0 2px 8px rgba(59,130,246,0.1)' : 'none'),
+              transition: 'all 0.2s ease'
             }}>
-              <i className="las la-search" style={{ color: searchQuery ? '#3B82F6' : '#8896A9', fontSize: '16px' }} />
+              <i className="las la-search" style={{ color: isSearchInputFocused ? '#FF4742' : (searchQuery ? '#3B82F6' : '#8896A9'), fontSize: '16px', transition: 'color 0.2s ease' }} />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchInputFocused(true)}
+                onBlur={() => setIsSearchInputFocused(false)}
                 placeholder="Hledat úkol, subjekt..."
                 style={{
                   border: 'none',
                   background: 'transparent',
                   outline: 'none',
-                  fontSize: '12px',
+                  fontSize: '13px',
                   color: '#171B1F',
                   width: '100%',
                   fontFamily: 'Inter, sans-serif'
