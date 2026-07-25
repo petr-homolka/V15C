@@ -39,7 +39,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [activeEventModal, setActiveEventModal] = useState(null);
 
   const HOUR_HEIGHT = 70;
-  const SINGLE_DAY_HEIGHT = 24 * HOUR_HEIGHT + 60;
+  const SINGLE_DAY_HEIGHT = 24 * HOUR_HEIGHT + 100;
 
   // Detail dne bez jakýchkoliv "uší" - 100% čistá typografie Routine.com
   const getDayDetails = (offset) => {
@@ -99,7 +99,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     }
   }, []);
 
-  // DONAČÍTÁNÍ DNŮ S ELEVACE PRO STICKY CENTROVANÝ DATUM V PŘECHODU
+  // DONAČÍTÁNÍ DNŮ S ELEVACÍ PRO STICKY CENTROVANÝ DATUM V PŘECHODU
   const handleScrollTimeline = () => {
     const el = timelineScrollRef.current;
     if (!el || isPrependingRef.current) return;
@@ -139,7 +139,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     {
       id: 'e_allday_1',
       dayOffset: 0,
-      title: 'Dovolená klíčového pracovníka',
+      title: 'Celodenní dovolená klíčového pracovníka',
       category: 'Absence',
       color: '#FF4742',
       bgColor: '#FFF5F5',
@@ -152,6 +152,15 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       category: 'Vzdělávání',
       color: '#F59E0B',
       bgColor: '#FEF3C7',
+      isAllDay: true
+    },
+    {
+      id: 'e_allday_3',
+      dayOffset: 0,
+      title: 'Přezkoumání výročních zpráv doprovázení rodin',
+      category: 'Metodika',
+      color: '#3B82F6',
+      bgColor: '#EFF6FF',
       isAllDay: true
     },
     {
@@ -876,42 +885,63 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   marginTop: '12px'
                 }}
               >
-                {/* ALL DAY SEKCE POD DATUMEM */}
+                {/* ALL DAY SEKCE (ŘAZENÉ POD SEBE, STEJNĚ ŠIROKÉ PODLE ROUTINE STANDARDU) */}
                 {allDayEvents.length > 0 && (
                   <div style={{
                     paddingLeft: '80px',
                     paddingRight: '32px',
-                    marginTop: '8px',
-                    marginBottom: '8px',
+                    marginTop: '12px',
+                    marginBottom: '14px',
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    flexWrap: 'wrap'
+                    flexDirection: 'column',
+                    gap: '6px'
                   }}>
-                    <span style={{ fontSize: '10px', fontWeight: 600, color: '#8896A9', letterSpacing: '0.5px' }}>ALL DAY</span>
-                    {allDayEvents.map(ev => (
-                      <div key={ev.id} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #EAEAEA',
-                        borderRadius: '6px',
-                        padding: '4px 10px',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        color: '#171B1F'
-                      }}>
-                        <div style={{
-                          width: '3.5px',
-                          height: '10px',
-                          backgroundColor: ev.color || '#FF4742',
-                          borderRadius: '4px',
-                          flexShrink: 0
-                        }} />
-                        <span>{ev.title}</span>
-                      </div>
-                    ))}
+                    <div style={{ fontSize: '10px', fontWeight: 600, color: '#8896A9', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '2px' }}>
+                      ALL DAY
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+                      {allDayEvents.map(ev => (
+                        <div 
+                          key={ev.id}
+                          onClick={() => setActiveEventModal({ ...ev })}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #EAEAEA',
+                            borderRadius: '8px',
+                            padding: '8px 12px',
+                            fontSize: '13px',
+                            fontWeight: 500,
+                            color: '#171B1F',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                            boxSizing: 'border-box',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                            {/* ROUTINE CAPSULE INDICATOR */}
+                            <div style={{
+                              width: '3.5px',
+                              height: '14px',
+                              backgroundColor: ev.color || '#FF4742',
+                              borderRadius: '4px',
+                              flexShrink: 0
+                            }} />
+                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {ev.title}
+                            </span>
+                          </div>
+
+                          <span style={{ fontSize: '11px', fontWeight: 500, color: '#8C8C9A', backgroundColor: '#F4F4F6', padding: '2px 8px', borderRadius: '4px', flexShrink: 0 }}>
+                            Celý den
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
