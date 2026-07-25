@@ -201,7 +201,7 @@ export function QuickCaptureConsole({ isOpen, onClose, onNavigate, onSelectEntit
               onClick={() => { onNavigate('dashboard', 'children'); onClose(); }}
               style={{ padding: '12px 16px', borderRadius: '10px', backgroundColor: '#F7F9FC', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px' }}
             >
-              <i className="las la-baby" style={{ fontSize: '20px', color: '#27B973' }}></i>
+              <i className="las la-smile" style={{ fontSize: '20px', color: '#27B973' }}></i>
               <div>
                 <strong style={{ fontSize: '14px', color: '#1C1D21' }}>Přehled dětí a spisu IPODu</strong>
                 <span style={{ display: 'block', fontSize: '12px', color: '#8181A5' }}>Vyhledat děti svěřená do péče</span>

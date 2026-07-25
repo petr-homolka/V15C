@@ -10,7 +10,7 @@ export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQu
     { id: 'agenda', label: 'Agenda & Dnes', icon: 'las la-calendar-check', page: 'dashboard', subView: 'dashboard' },
     { id: 'families', label: 'Rodiny & Spisy', icon: 'las la-folder-open', page: 'dashboard', subView: 'dashboard' },
     { id: 'foster-parents', label: 'Pěstouni', icon: 'las la-user-friends', page: 'dashboard', subView: 'foster-parents' },
-    { id: 'children', label: 'Děti', icon: 'las la-baby', page: 'dashboard', subView: 'children' },
+    { id: 'children', label: 'Děti', icon: 'las la-smile', page: 'dashboard', subView: 'children' },
     { id: 'team', label: 'Tým & KO', icon: 'las la-user-tie', page: 'dashboard', subView: 'team' },
     { id: 'calendar', label: 'Kalendář', icon: 'las la-clock', page: 'calendar' },
     { id: 'notes', label: 'Poznámky', icon: 'las la-file-alt', page: 'notes' },

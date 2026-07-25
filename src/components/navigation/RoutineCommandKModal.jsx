@@ -22,7 +22,7 @@ export default function RoutineCommandKModal({ isOpen, onClose, onSelectAction }
   const quickActions = [
     { id: 'new_visit', title: 'Přidat klíčovou návštěvu v rodině', category: 'Nové záznamy', icon: 'la-home', path: '/notes' },
     { id: 'new_foster', title: 'Registrovat novou pěstounskou pečovatelku', category: 'Pěstouni', icon: 'la-user-plus', path: '/fosters' },
-    { id: 'new_child', title: 'Vložit dítě svěřené do péče', category: 'Děti', icon: 'la-baby', path: '/children' },
+    { id: 'new_child', title: 'Vložit dítě svěřené do péče', category: 'Děti', icon: 'la-smile', path: '/children' },
     { id: 'agenda_today', title: 'Otevřít Dnes (Time-Blocking Agenda)', category: 'Navigace', icon: 'la-calendar-day', path: '/' },
     { id: 'notes_journal', title: 'Zápisník návštěv KO (Journal)', category: 'Dokumentace', icon: 'la-book-open', path: '/notes' },
     { id: 'contacts_inspect', title: 'Kontakty OSPOD a Školy', category: 'Adresář', icon: 'la-address-book', path: '/contacts' },
