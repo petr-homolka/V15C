@@ -359,7 +359,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [groupByEntity, setGroupByEntity] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false);
-  const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
+  const [selectedEntityFilters, setSelectedEntityFilters] = useState(['all']); // ['all'] | Array<entityId>
+  const [filterSearchQuery, setFilterSearchQuery] = useState('');
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
   const [showSearchInput, setShowSearchInput] = useState(false);
@@ -1057,17 +1058,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 <i className="las la-search" />
               </button>
 
-              {/* 2. FILTROVÁNÍ SUBJEKTU */}
+              {/* 2. FILTROVÁNÍ PODLE VAZBY (SUBJEKTU) SE ZATRHÁVÁTKY A VYHLEDÁVAČEM */}
               <div style={{ position: 'relative' }}>
                 <button
                   type="button"
                   onClick={() => setIsEntityDropdownOpen(!isEntityDropdownOpen)}
-                  title="Filtrovat konkrétní subjekt"
+                  title="Filtrovat podle vazby (subjektu)"
                   style={{
                     border: 'none',
                     boxShadow: 'none',
-                    backgroundColor: (isEntityDropdownOpen || selectedEntityFilter !== 'all') ? '#EEF4FF' : '#F4F4F6',
-                    color: (isEntityDropdownOpen || selectedEntityFilter !== 'all') ? '#2563EB' : '#5E6774',
+                    backgroundColor: (isEntityDropdownOpen || !selectedEntityFilters.includes('all')) ? '#EEF4FF' : '#F4F4F6',
+                    color: (isEntityDropdownOpen || !selectedEntityFilters.includes('all')) ? '#2563EB' : '#5E6774',
                     padding: '0 10px',
                     height: '34px',
                     borderRadius: '8px',
@@ -1082,14 +1083,16 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 >
                   <i className="las la-filter" style={{ fontSize: '15px' }} />
                   <span>
-                    {selectedEntityFilter === 'all'
-                      ? 'Filtrovat'
-                      : selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova'
-                      : selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova'
-                      : selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák'
-                      : selectedEntityFilter === 'ent_adam' ? 'Adam Novák'
-                      : selectedEntityFilter === 'ent_kralova' ? 'Alena Králová'
-                      : 'Jana Nováková'
+                    {selectedEntityFilters.includes('all')
+                      ? 'Vazba'
+                      : selectedEntityFilters.length === 1
+                        ? (selectedEntityFilters[0] === 'fam_dvorak' ? 'Rodina Dvořákova'
+                           : selectedEntityFilters[0] === 'fam_novak' ? 'Rodina Novákova'
+                           : selectedEntityFilters[0] === 'ent_dvorak' ? 'Tomáš Dvořák'
+                           : selectedEntityFilters[0] === 'ent_adam' ? 'Adam Novák'
+                           : selectedEntityFilters[0] === 'ent_kralova' ? 'Alena Králová'
+                           : 'Jana Nováková')
+                        : `Vazba (${selectedEntityFilters.length})`
                     }
                   </span>
                   <i className={`las la-angle-${isEntityDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '11px', marginLeft: '2px' }} />
@@ -1111,151 +1114,110 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       borderRadius: '12px',
                       boxShadow: '0 12px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06)',
                       border: '1px solid #EAEAEE',
-                      width: '220px',
-                      padding: '6px 0',
+                      width: '260px',
+                      padding: '12px',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '2px'
+                      gap: '8px'
                     }}>
-                      {/* POLOŽKA: VŠECHNY SUBJEKTY */}
-                      <div
-                        onClick={() => { setSelectedEntityFilter('all'); setIsEntityDropdownOpen(false); }}
+                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                        Filtr dle vazby
+                      </div>
+
+                      {/* VYHLEDÁVAČ PODLE KONTAKTNÍCH ÚDAJŮ */}
+                      <input
+                        type="text"
+                        value={filterSearchQuery}
+                        onChange={(e) => setFilterSearchQuery(e.target.value)}
+                        placeholder="Vyhledat jméno, email, telefon..."
                         style={{
-                          padding: '8px 14px',
+                          width: '100%',
+                          padding: '7px 10px',
+                          borderRadius: '6px',
+                          border: '1px solid #D1D5DB',
                           fontSize: '12px',
-                          fontWeight: selectedEntityFilter === 'all' ? 600 : 400,
-                          color: selectedEntityFilter === 'all' ? '#FF4742' : '#171B1F',
-                          backgroundColor: selectedEntityFilter === 'all' ? '#FFF5F5' : 'transparent',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          transition: 'background-color 0.15s'
+                          outline: 'none',
+                          boxSizing: 'border-box'
                         }}
-                        onMouseEnter={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                        onMouseLeave={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        <i className="las la-list" style={{ fontSize: '15px', color: '#747F8F' }} />
-                        <span>Všechny subjekty</span>
+                      />
+
+                      {/* TLAČÍTKO VŠECHNY SUBJEKTY */}
+                      <label style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                        padding: '6px 8px',
+                        borderRadius: '6px',
+                        backgroundColor: selectedEntityFilters.includes('all') ? '#FFF5F5' : 'transparent'
+                      }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedEntityFilters.includes('all')}
+                          onChange={() => setSelectedEntityFilters(['all'])}
+                          style={{ accentColor: '#FF4742', cursor: 'pointer' }}
+                        />
+                        <span style={{ fontWeight: selectedEntityFilters.includes('all') ? 600 : 400, color: '#171B1F' }}>
+                          Všechny subjekty (Bez filtru)
+                        </span>
+                      </label>
+
+                      <div style={{ height: '1px', backgroundColor: '#F0F0F4' }} />
+
+                      {/* SEZNAM SUBJEKTŮ SE ZATRHÁVÁTKY */}
+                      <div style={{ maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        {[
+                          { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
+                          { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
+                          { id: 'ent_dvorak', name: 'Tomáš Dvořák (Pěstoun)', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
+                          { id: 'ent_adam', name: 'Adam Novák (Dítě)', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
+                          { id: 'ent_kralova', name: 'Mgr. Alena Králová (Pracovník)', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                          { id: 'ent_self', name: 'Jana Nováková (Já)', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' }
+                        ].filter(item => {
+                          if (!filterSearchQuery.trim()) return true;
+                          const q = filterSearchQuery.toLowerCase();
+                          return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
+                        }).map(item => {
+                          const isChecked = !selectedEntityFilters.includes('all') && selectedEntityFilters.includes(item.id);
+
+                          return (
+                            <label
+                              key={item.id}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '6px 8px',
+                                borderRadius: '6px',
+                                fontSize: '12px',
+                                cursor: 'pointer',
+                                backgroundColor: isChecked ? '#EFF6FF' : 'transparent'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      const updated = selectedEntityFilters.filter(id => id !== 'all');
+                                      setSelectedEntityFilters([...updated, item.id]);
+                                    } else {
+                                      const updated = selectedEntityFilters.filter(id => id !== item.id);
+                                      setSelectedEntityFilters(updated.length === 0 ? ['all'] : updated);
+                                    }
+                                  }}
+                                  style={{ accentColor: '#2563EB', cursor: 'pointer' }}
+                                />
+                                <span style={{ fontWeight: isChecked ? 600 : 400, color: isChecked ? '#2563EB' : '#171B1F' }}>
+                                  {item.name}
+                                </span>
+                              </div>
+                            </label>
+                          );
+                        })}
                       </div>
-
-                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                      {/* SKUPINA: RODINY */}
-                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <i className="las la-home" style={{ fontSize: '12px' }} />
-                        <span>Rodiny</span>
-                      </div>
-                      {[
-                        { id: 'fam_dvorak', label: 'Rodina Dvořákova' },
-                        { id: 'fam_novak', label: 'Rodina Novákova' }
-                      ].map(item => (
-                        <div
-                          key={item.id}
-                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                          style={{
-                            padding: '6px 14px 6px 26px',
-                            fontSize: '12px',
-                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                            color: selectedEntityFilter === item.id ? '#2563EB' : '#171B1F',
-                            backgroundColor: selectedEntityFilter === item.id ? '#EFF6FF' : 'transparent',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.15s'
-                          }}
-                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          {item.label}
-                        </div>
-                      ))}
-
-                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                      {/* SKUPINA: PĚSTOUNI */}
-                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <i className="las la-heart" style={{ fontSize: '12px' }} />
-                        <span>Pěstouni</span>
-                      </div>
-                      {[
-                        { id: 'ent_dvorak', label: 'Tomáš Dvořák' }
-                      ].map(item => (
-                        <div
-                          key={item.id}
-                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                          style={{
-                            padding: '6px 14px 6px 26px',
-                            fontSize: '12px',
-                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                            color: selectedEntityFilter === item.id ? '#059669' : '#171B1F',
-                            backgroundColor: selectedEntityFilter === item.id ? '#ECFDF5' : 'transparent',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.15s'
-                          }}
-                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          {item.label}
-                        </div>
-                      ))}
-
-                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                      {/* SKUPINA: DĚTI V PÉČI */}
-                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#DB2777', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <i className="las la-smile" style={{ fontSize: '12px' }} />
-                        <span>Děti v péči</span>
-                      </div>
-                      {[
-                        { id: 'ent_adam', label: 'Adam Novák' }
-                      ].map(item => (
-                        <div
-                          key={item.id}
-                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                          style={{
-                            padding: '6px 14px 6px 26px',
-                            fontSize: '12px',
-                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                            color: selectedEntityFilter === item.id ? '#DB2777' : '#171B1F',
-                            backgroundColor: selectedEntityFilter === item.id ? '#FDF2F8' : 'transparent',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.15s'
-                          }}
-                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          {item.label}
-                        </div>
-                      ))}
-
-                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                      {/* SKUPINA: SPOLUPRACOVNÍCI */}
-                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <i className="las la-user-tie" style={{ fontSize: '12px' }} />
-                        <span>Spolupracovníci</span>
-                      </div>
-                      {[
-                        { id: 'ent_kralova', label: 'Mgr. Alena Králová' },
-                        { id: 'ent_self', label: 'Jana Nováková' }
-                      ].map(item => (
-                        <div
-                          key={item.id}
-                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                          style={{
-                            padding: '6px 14px 6px 26px',
-                            fontSize: '12px',
-                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                            color: selectedEntityFilter === item.id ? '#7C3AED' : '#171B1F',
-                            backgroundColor: selectedEntityFilter === item.id ? '#F3E8FF' : 'transparent',
-                            cursor: 'pointer',
-                            transition: 'background-color 0.15s'
-                          }}
-                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          {item.label}
-                        </div>
-                      ))}
                     </div>
                   </>
                 )}
@@ -1588,7 +1550,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             const q = searchQuery.toLowerCase().trim();
             const activeFilteredTasks = tasks.filter(t => {
               const matchesSegment = selectedSegment === 'all' || t.entityType === selectedSegment;
-              const matchesEntity = selectedEntityFilter === 'all' || t.entityId === selectedEntityFilter;
+              const matchesEntity = selectedEntityFilters.includes('all') ||
+                selectedEntityFilters.includes(t.entityId) ||
+                (t.assignedEntities && t.assignedEntities.some(e => selectedEntityFilters.includes(e.id)));
               const matchesQuery = !q || 
                 t.title.toLowerCase().includes(q) || 
                 (t.entityName && t.entityName.toLowerCase().includes(q)) ||
@@ -3023,122 +2987,199 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 />
               </div>
 
-              {/* 2. PRIŘAZENO (MULTI-SELECT S NAŠEPTÁVAČEM PODLE JMÉNA, EMAILU A TELEFONU) */}
+              {/* 2. VAZBA (MULTI-SELECT S NAŠEPTÁVAČEM A ZATRHÁVÁTKY) */}
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Přiřazeno (možnost více subjektů)</label>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '6px' }}>Vazba</label>
                 
                 {/* ZOBRAZENÍ VYBRANÝCH ENTIT (TAGY / PELLKY) */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
-                  {(editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : [])).map(ent => (
-                    <span key={ent.id || ent.name} style={{
-                      backgroundColor: ent.type === 'family' ? '#EFF6FF' : ent.type === 'foster_parent' ? '#ECFDF5' : ent.type === 'child' ? '#FDF2F8' : '#F3E8FF',
-                      color: ent.type === 'family' ? '#2563EB' : ent.type === 'foster_parent' ? '#059669' : ent.type === 'child' ? '#DB2777' : '#7C3AED',
-                      padding: '3px 10px',
-                      borderRadius: '8px',
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px'
-                    }}>
-                      <i className={ent.type === 'family' ? 'las la-home' : ent.type === 'foster_parent' ? 'las la-heart' : ent.type === 'child' ? 'las la-smile' : 'las la-user-tie'} />
-                      <span>{ent.name}</span>
-                      <i 
-                        className="las la-times" 
-                        style={{ cursor: 'pointer', marginLeft: '3px', fontSize: '12px' }} 
-                        onClick={() => {
-                          const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
-                          const updated = currentArr.filter(item => item.id !== ent.id);
-                          setEditingTask(prev => ({
-                            ...prev,
-                            assignedEntities: updated,
-                            entityName: updated[0] ? updated[0].name : null,
-                            entityId: updated[0] ? updated[0].id : null,
-                            entityType: updated[0] ? updated[0].type : null
-                          }));
-                        }} 
-                      />
-                    </span>
-                  ))}
-                </div>
-
-                {/* NAŠEPTÁVACÍ VSTUP PRO PŘIŘAZENÍ SUBJEKTŮ */}
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="text"
-                    value={assignedEntitiesSearchQuery}
-                    onChange={(e) => setAssignedEntitiesSearchQuery(e.target.value)}
-                    placeholder="Vyhledat jméno, email nebo telefon subjektu..."
-                    style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: '8px',
-                      border: '1px solid #D1D5DB',
-                      fontSize: '12px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                  />
-                  {assignedEntitiesSearchQuery.trim() && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0, right: 0,
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '8px',
-                      boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
-                      maxHeight: '180px',
-                      overflowY: 'auto',
-                      zIndex: 100,
-                      marginTop: '4px'
-                    }}>
-                      {[
-                        { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
-                        { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
-                        { id: 'ent_dvorak', name: 'Tomáš Dvořák', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
-                        { id: 'ent_adam', name: 'Adam Novák', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
-                        { id: 'ent_kralova', name: 'Mgr. Alena Králová', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
-                        { id: 'ent_self', name: 'Jana Nováková', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' }
-                      ].filter(item => {
-                        const q = assignedEntitiesSearchQuery.toLowerCase();
-                        return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
-                      }).map(item => (
-                        <div
-                          key={item.id}
+                {(editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : [])).length > 0 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
+                    {(editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : [])).map(ent => (
+                      <span key={ent.id || ent.name} style={{
+                        backgroundColor: ent.type === 'family' ? '#EFF6FF' : ent.type === 'foster_parent' ? '#ECFDF5' : ent.type === 'child' ? '#FDF2F8' : '#F3E8FF',
+                        color: ent.type === 'family' ? '#2563EB' : ent.type === 'foster_parent' ? '#059669' : ent.type === 'child' ? '#DB2777' : '#7C3AED',
+                        padding: '3px 10px',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <i className={ent.type === 'family' ? 'las la-home' : ent.type === 'foster_parent' ? 'las la-heart' : ent.type === 'child' ? 'las la-smile' : 'las la-user-tie'} />
+                        <span>{ent.name}</span>
+                        <i 
+                          className="las la-times" 
+                          style={{ cursor: 'pointer', marginLeft: '3px', fontSize: '12px' }} 
                           onClick={() => {
                             const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
-                            if (!currentArr.some(x => x.id === item.id)) {
-                              const updated = [...currentArr, { id: item.id, name: item.name, type: item.type }];
-                              setEditingTask(prev => ({
-                                ...prev,
-                                assignedEntities: updated,
-                                entityName: updated[0].name,
-                                entityId: updated[0].id,
-                                entityType: updated[0].type
-                              }));
-                            }
-                            setAssignedEntitiesSearchQuery('');
-                          }}
-                          style={{
-                            padding: '8px 12px',
-                            cursor: 'pointer',
-                            fontSize: '12px',
-                            borderBottom: '1px solid #F3F4F6',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                          }}
-                        >
-                          <div>
-                            <span style={{ fontWeight: 600, color: '#171B1F' }}>{item.name}</span>
-                            <span style={{ fontSize: '11px', color: '#6B7280', marginLeft: '6px' }}>({item.email})</span>
-                          </div>
-                          <span style={{ fontSize: '10px', color: '#9CA3AF' }}>{item.phone}</span>
+                            const updated = currentArr.filter(item => item.id !== ent.id);
+                            setEditingTask(prev => ({
+                              ...prev,
+                              assignedEntities: updated,
+                              entityName: updated[0] ? updated[0].name : null,
+                              entityId: updated[0] ? updated[0].id : null,
+                              entityType: updated[0] ? updated[0].type : null
+                            }));
+                          }} 
+                        />
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {/* LEVÁ ČÁST: NAŠEPTÁVAČ PODLE KONTAKTNÍCH ÚDAJŮ */}
+                  <div>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '4px' }}>Vyhledat v kontaktech</span>
+                    <div style={{ position: 'relative' }}>
+                      <input
+                        type="text"
+                        value={assignedEntitiesSearchQuery}
+                        onChange={(e) => setAssignedEntitiesSearchQuery(e.target.value)}
+                        placeholder="Jméno, email, telefon..."
+                        style={{
+                          width: '100%',
+                          padding: '8px 10px',
+                          borderRadius: '8px',
+                          border: '1px solid #D1D5DB',
+                          fontSize: '12px',
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                      {assignedEntitiesSearchQuery.trim() && (
+                        <div style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0, right: 0,
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #E5E7EB',
+                          borderRadius: '8px',
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
+                          maxHeight: '160px',
+                          overflowY: 'auto',
+                          zIndex: 100,
+                          marginTop: '4px'
+                        }}>
+                          {[
+                            { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
+                            { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
+                            { id: 'ent_dvorak', name: 'Tomáš Dvořák', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
+                            { id: 'ent_adam', name: 'Adam Novák', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
+                            { id: 'ent_kralova', name: 'Mgr. Alena Králová', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                            { id: 'ent_self', name: 'Jana Nováková', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' }
+                          ].filter(item => {
+                            const q = assignedEntitiesSearchQuery.toLowerCase();
+                            return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
+                          }).map(item => (
+                            <div
+                              key={item.id}
+                              onClick={() => {
+                                const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
+                                if (!currentArr.some(x => x.id === item.id)) {
+                                  const updated = [...currentArr, { id: item.id, name: item.name, type: item.type }];
+                                  setEditingTask(prev => ({
+                                    ...prev,
+                                    assignedEntities: updated,
+                                    entityName: updated[0].name,
+                                    entityId: updated[0].id,
+                                    entityType: updated[0].type
+                                  }));
+                                }
+                                setAssignedEntitiesSearchQuery('');
+                              }}
+                              style={{
+                                padding: '8px 10px',
+                                cursor: 'pointer',
+                                fontSize: '11px',
+                                borderBottom: '1px solid #F3F4F6',
+                                display: 'flex',
+                                flexDirection: 'column'
+                              }}
+                            >
+                              <span style={{ fontWeight: 600, color: '#171B1F' }}>{item.name}</span>
+                              <span style={{ fontSize: '10px', color: '#6B7280' }}>{item.email} • {item.phone}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
+                  </div>
+
+                  {/* PRAVÁ ČÁST: SEZNAM MOŽNÝCH SE ZATRHÁVÁTKY */}
+                  <div>
+                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '4px' }}>Seznam se zatrhávátky</span>
+                    <div style={{
+                      border: '1px solid #D1D5DB',
+                      borderRadius: '8px',
+                      padding: '6px 8px',
+                      maxHeight: '120px',
+                      overflowY: 'auto',
+                      backgroundColor: '#FAFAFA',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px'
+                    }}>
+                      {[
+                        { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family' },
+                        { id: 'fam_novak', name: 'Rodina Novákova', type: 'family' },
+                        { id: 'ent_dvorak', name: 'Tomáš Dvořák (Pěstoun)', type: 'foster_parent', rawName: 'Tomáš Dvořák' },
+                        { id: 'ent_adam', name: 'Adam Novák (Dítě)', type: 'child', rawName: 'Adam Novák' },
+                        { id: 'ent_kralova', name: 'Mgr. Alena Králová (Pracovník)', type: 'coworker', rawName: 'Mgr. Alena Králová' },
+                        { id: 'ent_self', name: 'Jana Nováková (Já)', type: 'coworker', rawName: 'Jana Nováková' }
+                      ].map(item => {
+                        const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
+                        const isChecked = currentArr.some(x => x.id === item.id);
+
+                        return (
+                          <label 
+                            key={item.id}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              fontSize: '11px',
+                              cursor: 'pointer',
+                              padding: '2px 4px',
+                              borderRadius: '4px',
+                              backgroundColor: isChecked ? '#EFF6FF' : 'transparent'
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  const updated = [...currentArr, { id: item.id, name: item.rawName || item.name, type: item.type }];
+                                  setEditingTask(prev => ({
+                                    ...prev,
+                                    assignedEntities: updated,
+                                    entityName: updated[0].name,
+                                    entityId: updated[0].id,
+                                    entityType: updated[0].type
+                                  }));
+                                } else {
+                                  const updated = currentArr.filter(x => x.id !== item.id);
+                                  setEditingTask(prev => ({
+                                    ...prev,
+                                    assignedEntities: updated,
+                                    entityName: updated[0] ? updated[0].name : null,
+                                    entityId: updated[0] ? updated[0].id : null,
+                                    entityType: updated[0] ? updated[0].type : null
+                                  }));
+                                }
+                              }}
+                              style={{ accentColor: '#2563EB', cursor: 'pointer' }}
+                            />
+                            <span style={{ fontWeight: isChecked ? 600 : 400, color: isChecked ? '#2563EB' : '#171B1F' }}>
+                              {item.name}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
 
