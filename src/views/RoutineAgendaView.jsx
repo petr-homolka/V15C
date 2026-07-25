@@ -316,8 +316,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
-  const [showSearchInput, setShowSearchInput] = useState(true);
-  const [showSegmentBar, setShowSegmentBar] = useState(true);
+  const [showSearchInput, setShowSearchInput] = useState(false);
+  const [showSegmentBar, setShowSegmentBar] = useState(false);
 
   // Úkoly se přiřazenými subjekty pro přesnou segmentaci
   const [tasks, setTasks] = useState([
@@ -428,6 +428,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       entityType: 'family',
       entityId: 'fam_novak',
       entityName: 'Rodina Novákova'
+    },
+    {
+      id: 't_unassigned_1',
+      title: 'Objednat nové kancelářské potřeby a šanony',
+      group: 'today',
+      completed: false,
+      starred: false,
+      dateRange: 'Dnes',
+      entityType: null,
+      entityId: null,
+      entityName: null
     }
   ]);
 
@@ -557,13 +568,23 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
   const handleAddTask = () => {
     if (!newTaskText.trim()) return;
+
+    let entityInfo = { entityType: null, entityId: null, entityName: null };
+    if (selectedEntityFilter === 'fam_dvorak') entityInfo = { entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' };
+    else if (selectedEntityFilter === 'fam_novak') entityInfo = { entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' };
+    else if (selectedEntityFilter === 'ent_dvorak') entityInfo = { entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' };
+    else if (selectedEntityFilter === 'ent_adam') entityInfo = { entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' };
+    else if (selectedEntityFilter === 'ent_kralova') entityInfo = { entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' };
+    else if (selectedEntityFilter === 'ent_self') entityInfo = { entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' };
+
     const newTask = {
       id: `t_${Date.now()}`,
       title: newTaskText.trim(),
       group: 'today',
       completed: false,
       starred: false,
-      dateRange: 'Dnes'
+      dateRange: 'Dnes',
+      ...entityInfo
     };
     setTasks(prev => [...prev, newTask]);
     setNewTaskText('');
@@ -1344,9 +1365,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               /* AK SÚ ÚKOLY SESKUPENÉ PODĽA SUBJEKTU (groupByEntity === true) */
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {Array.from(new Set(
-                  activeFilteredTasks.filter(t => !t.completed).map(t => t.entityName || 'Ostatní úkoly')
+                  activeFilteredTasks.filter(t => !t.completed).map(t => t.entityName || 'Bez přiřazení')
                 )).map(entityName => {
-                  const groupTasks = activeFilteredTasks.filter(t => (t.entityName || 'Ostatní úkoly') === entityName && !t.completed);
+                  const groupTasks = activeFilteredTasks.filter(t => (t.entityName || 'Bez přiřazení') === entityName && !t.completed);
                   if (groupTasks.length === 0) return null;
                   const sampleTask = groupTasks[0];
 
@@ -1364,21 +1385,23 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           fontWeight: 600,
                           color: sampleTask.entityType === 'family' ? '#2563EB' :
                                  sampleTask.entityType === 'foster_parent' ? '#059669' :
-                                 sampleTask.entityType === 'child' ? '#DB2777' : '#7C3AED',
+                                 sampleTask.entityType === 'child' ? '#DB2777' :
+                                 sampleTask.entityType === 'coworker' ? '#7C3AED' : '#6B7280',
                           textTransform: 'uppercase',
                           letterSpacing: '0.4px',
                           marginBottom: '8px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          cursor: 'pointer'
+                          cursor: sampleTask.entityId ? 'pointer' : 'default'
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <i className={
                             sampleTask.entityType === 'family' ? 'las la-home' :
                             sampleTask.entityType === 'foster_parent' ? 'las la-heart' :
-                            sampleTask.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
+                            sampleTask.entityType === 'child' ? 'las la-smile' :
+                            sampleTask.entityType === 'coworker' ? 'las la-user-tie' : 'las la-tasks'
                           } style={{ fontSize: '15px' }} />
                           <span>{entityName}</span>
                         </div>
