@@ -954,8 +954,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               onMouseEnter={() => setHoveredBadgeType('allday')}
               onMouseLeave={() => setHoveredBadgeType(null)}
               style={{
-                backgroundColor: '#FFF0F0',
-                color: '#FF4742',
+                backgroundColor: '#F4F4F6',
+                color: '#171B1F',
+                border: '1px solid #E5E7EB',
                 fontSize: '12px',
                 fontWeight: 700,
                 width: '24px',
@@ -964,7 +965,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 1px 3px rgba(255,71,66,0.12)',
+                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                 flexShrink: 0,
                 cursor: 'pointer',
                 position: 'relative'
@@ -983,16 +984,16 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     backgroundColor: '#FFFFFF',
                     borderRadius: '12px',
                     boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
-                    border: '1px solid #FFCDD2',
+                    border: '1px solid #EAEAEE',
                     padding: '12px 14px',
                     zIndex: 1000,
                     textAlign: 'left',
                     pointerEvents: 'none'
                   }}
                 >
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#FF4742', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span>Celodenní události</span>
-                    <span style={{ backgroundColor: '#FFEBEB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
+                    <span style={{ backgroundColor: '#F4F4F6', color: '#171B1F', border: '1px solid #E5E7EB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
                       {regularAllDayEvents.length}
                     </span>
                   </div>
@@ -1019,9 +1020,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 onMouseEnter={() => setHoveredBadgeType('birthday')}
                 onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
-                  backgroundColor: '#FDF2F8',
-                  color: '#EC4899',
-                  border: '1px solid #FBCFE8',
+                  backgroundColor: '#F4F4F6',
+                  color: '#171B1F',
+                  border: '1px solid #E5E7EB',
                   borderRadius: '50%',
                   width: '24px',
                   height: '24px',
@@ -1029,7 +1030,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '13px',
-                  boxShadow: '0 1px 3px rgba(236,72,153,0.15)',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                   flexShrink: 0,
                   position: 'relative',
                   cursor: 'pointer'
@@ -1047,13 +1048,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     backgroundColor: '#FFFFFF',
                     borderRadius: '12px',
                     boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
-                    border: '1px solid #FBCFE8',
+                    border: '1px solid #EAEAEE',
                     padding: '12px 14px',
                     zIndex: 1000,
                     textAlign: 'left',
                     pointerEvents: 'none'
                   }}>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#EC4899', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <i className="las la-birthday-cake" style={{ fontSize: '15px' }}></i>
                       <span>Narozeniny dětí v péči</span>
                     </div>
@@ -1074,9 +1075,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 onMouseEnter={() => setHoveredBadgeType('nameday')}
                 onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
-                  backgroundColor: '#F3E8FF',
-                  color: '#A855F7',
-                  border: '1px solid #E9D5FF',
+                  backgroundColor: '#F4F4F6',
+                  color: '#171B1F',
+                  border: '1px solid #E5E7EB',
                   borderRadius: '50%',
                   width: '24px',
                   height: '24px',
@@ -1084,7 +1085,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '13px',
-                  boxShadow: '0 1px 3px rgba(168,85,247,0.15)',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                   flexShrink: 0,
                   position: 'relative',
                   cursor: 'pointer'
@@ -1102,13 +1103,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     backgroundColor: '#FFFFFF',
                     borderRadius: '12px',
                     boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
-                    border: '1px solid #E9D5FF',
+                    border: '1px solid #EAEAEE',
                     padding: '12px 14px',
                     zIndex: 1000,
                     textAlign: 'left',
                     pointerEvents: 'none'
                   }}>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#A855F7', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#171B1F', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <i className="las la-gift" style={{ fontSize: '15px' }}></i>
                       <span>Jmeniny dětí v péči</span>
                     </div>
@@ -1186,8 +1187,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <span 
                         title={`${allDayEvents.length} celodenní akce`}
                         style={{
-                          backgroundColor: dayObj.isToday ? '#FFEBEB' : '#F3F4F6',
-                          color: dayObj.isToday ? '#FF4742' : '#5E6774',
+                          backgroundColor: '#F4F4F6',
+                          color: '#171B1F',
+                          border: '1px solid #E5E7EB',
                           fontSize: '11px',
                           fontWeight: 600,
                           width: '22px',
@@ -1196,7 +1198,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                           flexShrink: 0
                         }}
                       >
@@ -1209,9 +1211,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <span 
                         title="Dítě v péči má dnes narozeniny!" 
                         style={{
-                          backgroundColor: '#FDF2F8',
-                          color: '#EC4899',
-                          border: '1px solid #FBCFE8',
+                          backgroundColor: '#F4F4F6',
+                          color: '#171B1F',
+                          border: '1px solid #E5E7EB',
                           borderRadius: '50%',
                           width: '24px',
                           height: '24px',
@@ -1219,7 +1221,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: '13px',
-                          boxShadow: '0 1px 3px rgba(236,72,153,0.15)',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                           flexShrink: 0
                         }}
                       >
@@ -1232,9 +1234,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <span 
                         title="Dítě v péči má dnes jmeniny!" 
                         style={{
-                          backgroundColor: '#F3E8FF',
-                          color: '#A855F7',
-                          border: '1px solid #E9D5FF',
+                          backgroundColor: '#F4F4F6',
+                          color: '#171B1F',
+                          border: '1px solid #E5E7EB',
                           borderRadius: '50%',
                           width: '24px',
                           height: '24px',
@@ -1242,7 +1244,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: '13px',
-                          boxShadow: '0 1px 3px rgba(168,85,247,0.15)',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
                           flexShrink: 0
                         }}
                       >
