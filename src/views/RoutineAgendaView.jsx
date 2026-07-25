@@ -27,6 +27,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [activeVisibleDateStr, setActiveVisibleDateStr] = useState('Pátek 24. Července 2026');
   const [activeVisibleOffset, setActiveVisibleOffset] = useState(0);
 
+  // Stavy pro interaktivní bubliny (popover / tooltipy) u kroužků u datumu
+  const [isNumberPopoverOpen, setIsNumberPopoverOpen] = useState(false);
+  const [hoveredBadgeType, setHoveredBadgeType] = useState(null); // 'birthday' | 'nameday' | null
+
+  // Zavření popoveru při kliknutí mimo
+  useEffect(() => {
+    const handleClickOutside = () => setIsNumberPopoverOpen(false);
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, []);
+
   // DYNAMICKÉ SVISLÉ SCROLOVÁNÍ NAPŘÍČ MĚSÍCI
   const [offsets, setOffsets] = useState(() => {
     return Array.from({ length: 21 }, (_, i) => i - 10);
@@ -321,15 +332,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     { id: 't10', title: 'Vytvořit nový spis rodiny jednoduše', group: 'completed', completed: true, starred: false }
   ]);
 
-  // VÝPOČET KROUŽKŮ PRO PROPLÁVAJÍCÍ HLAVNÍ DATUMOVÝ BANNER
+  // VÝPOČET KROUŽKŮ A BUBLIN PRO PROPLÁVAJÍCÍ HLAVNÍ DATUMOVÝ BANNER
   const activeDayAllDayEvents = events.filter(ev => ev.dayOffset === activeVisibleOffset && ev.isAllDay);
-  const activeDayAllDayCount = activeDayAllDayEvents.length;
-  const activeDayHasChildBirthday = activeDayAllDayEvents.some(ev => 
-    ev.category === 'Narozeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
-  );
-  const activeDayHasChildNameDay = activeDayAllDayEvents.some(ev => 
-    ev.category === 'Jmeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě')))
-  );
+  const regularAllDayEvents = activeDayAllDayEvents.filter(ev => ev.category !== 'Narozeniny' && ev.category !== 'Jmeniny');
+  const childBirthdayEvents = activeDayAllDayEvents.filter(ev => ev.category === 'Narozeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě'))));
+  const childNameDayEvents = activeDayAllDayEvents.filter(ev => ev.category === 'Jmeniny' && (ev.personRole === 'Dítě v péči' || (ev.title && ev.title.toLowerCase().includes('dítě'))));
 
   // ALGORITMUS PRO ŘEŠENÍ KONFLIKTŮ A SOUBĚŽNÝCH UDÁLOSTÍ (Zobrazení VEDLE SEBE)
   const computeEventLayout = (dayEvs) => {
@@ -916,7 +923,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         onScroll={handleScrollTimeline}
         style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
       >
-        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A 3 KROUŽKOVÝMI ODZNAKY */}
+        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A INTERAKTIVNÍMI BUBLINAMI */}
         <div style={{
           position: 'sticky',
           top: 0,
@@ -930,7 +937,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM A KROUŽKOVÝMI ODZNAKY (SROVNANÉ PODLE VLOŽENÉHO OBRÁZKU) */}
+          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM A INTERAKTIVNÍMI BUBLINAMI SROVNANÝMI PODLE SNÍMKU OBRAZOVKY */}
           <div style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(16px)',
@@ -948,35 +955,81 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             gap: '8px'
           }}>
             <span>{activeVisibleDateStr}</span>
-            <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600, marginRight: '4px' }}>● {currentTimeText}</span>
+            <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600, marginRight: '2px' }}>● {currentTimeText}</span>
 
-            {/* 1. KROUŽEK: POČET CELODENNÍCH UDÁLOSTÍ */}
-            {activeDayAllDayCount > 0 && (
-              <span 
-                title={`${activeDayAllDayCount} celodenních událostí`}
-                style={{
-                  backgroundColor: '#FFF0F0',
-                  color: '#FF4742',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 1px 3px rgba(255,71,66,0.12)',
-                  flexShrink: 0
-                }}
-              >
-                {activeDayAllDayCount}
-              </span>
-            )}
+            {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ -> PO KLIKNUTÍ OTEVŘE BUBLINU SE SOUPISEM AKCÍ */}
+            <span 
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsNumberPopoverOpen(!isNumberPopoverOpen);
+              }}
+              title="Klikněte pro zobrazení soupisu celodenních akcí"
+              style={{
+                backgroundColor: '#FFF0F0',
+                color: '#FF4742',
+                fontSize: '12px',
+                fontWeight: 700,
+                width: '24px',
+                height: '24px',
+                borderRadius: '50%',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 1px 3px rgba(255,71,66,0.12)',
+                flexShrink: 0,
+                cursor: 'pointer',
+                position: 'relative'
+              }}
+            >
+              {regularAllDayEvents.length > 0 ? regularAllDayEvents.length : activeDayAllDayEvents.length}
 
-            {/* 2. KROUŽEK: DORT PRO NAROZENINY DÍTĚTE V PÉČI */}
-            {activeDayHasChildBirthday && (
+              {/* INTERAKTIVNÍ BUBLINA PO KLIKNUTÍ SE SOUPISEM CELODENNÍCH UDÁLOSTÍ (KROMĚ NAROZENIN A JMENIN) */}
+              {isNumberPopoverOpen && (
+                <div 
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    position: 'absolute',
+                    top: '32px',
+                    right: '-10px',
+                    width: '270px',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '12px',
+                    boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
+                    border: '1px solid #EAEAEA',
+                    padding: '12px 14px',
+                    zIndex: 1000,
+                    textAlign: 'left',
+                    cursor: 'default'
+                  }}
+                >
+                  <div style={{ fontSize: '11px', fontWeight: 600, color: '#FF4742', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span>Celodenní události</span>
+                    <span style={{ backgroundColor: '#FFEBEB', padding: '1px 6px', borderRadius: '10px', fontSize: '10px' }}>
+                      {regularAllDayEvents.length}
+                    </span>
+                  </div>
+
+                  {regularAllDayEvents.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {regularAllDayEvents.map(ev => (
+                        <div key={ev.id} style={{ fontSize: '12px', color: '#171B1F', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ width: '4px', height: '14px', borderRadius: '2px', backgroundColor: ev.color || '#FF4742', flexShrink: 0 }} />
+                          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ev.title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: '12px', color: '#747F8F' }}>Žádné běžné celodenní akce.</div>
+                  )}
+                </div>
+              )}
+            </span>
+
+            {/* 2. KROUŽEK: DORT PRO NAROZENINY DÍTĚTE V PÉČI -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE JMÉNY OSLAVENCŮ */}
+            {childBirthdayEvents.length > 0 && (
               <span 
-                title="Dítě v péči má dnes narozeniny!"
+                onMouseEnter={() => setHoveredBadgeType('birthday')}
+                onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
                   backgroundColor: '#FDF2F8',
                   color: '#EC4899',
@@ -989,17 +1042,49 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   justifyContent: 'center',
                   fontSize: '13px',
                   boxShadow: '0 1px 3px rgba(236,72,153,0.15)',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  position: 'relative',
+                  cursor: 'pointer'
                 }}
               >
                 <i className="las la-birthday-cake"></i>
+
+                {/* BUBLINA PRO NAROZENINY DÍTĚTE NA HOVER */}
+                {hoveredBadgeType === 'birthday' && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '32px',
+                    right: '-10px',
+                    width: '250px',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '12px',
+                    boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
+                    border: '1px solid #FBCFE8',
+                    padding: '12px 14px',
+                    zIndex: 1000,
+                    textAlign: 'left',
+                    pointerEvents: 'none'
+                  }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#EC4899', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <i className="las la-birthday-cake" style={{ fontSize: '15px' }}></i>
+                      <span>Narozeniny dětí v péči</span>
+                    </div>
+                    {childBirthdayEvents.map(ev => (
+                      <div key={ev.id} style={{ fontSize: '12px', color: '#171B1F', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>•</span>
+                        <span>{ev.personName || ev.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </span>
             )}
 
-            {/* 3. KROUŽEK: DÁREK PRO JMENINY DÍTĚTE V PÉČI */}
-            {activeDayHasChildNameDay && (
+            {/* 3. KROUŽEK: DÁREK PRO JMENINY DÍTĚTE V PÉČI -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE JMÉNY OSLAVENCŮ */}
+            {childNameDayEvents.length > 0 && (
               <span 
-                title="Dítě v péči má dnes jmeniny!"
+                onMouseEnter={() => setHoveredBadgeType('nameday')}
+                onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
                   backgroundColor: '#F3E8FF',
                   color: '#A855F7',
@@ -1012,10 +1097,41 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   justifyContent: 'center',
                   fontSize: '13px',
                   boxShadow: '0 1px 3px rgba(168,85,247,0.15)',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  position: 'relative',
+                  cursor: 'pointer'
                 }}
               >
                 <i className="las la-gift"></i>
+
+                {/* BUBLINA PRO JMENINY DÍTĚTE NA HOVER */}
+                {hoveredBadgeType === 'nameday' && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '32px',
+                    right: '-10px',
+                    width: '250px',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '12px',
+                    boxShadow: '0 12px 36px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06)',
+                    border: '1px solid #E9D5FF',
+                    padding: '12px 14px',
+                    zIndex: 1000,
+                    textAlign: 'left',
+                    pointerEvents: 'none'
+                  }}>
+                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#A855F7', textTransform: 'uppercase', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <i className="las la-gift" style={{ fontSize: '15px' }}></i>
+                      <span>Jmeniny dětí v péči</span>
+                    </div>
+                    {childNameDayEvents.map(ev => (
+                      <div key={ev.id} style={{ fontSize: '12px', color: '#171B1F', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span>•</span>
+                        <span>{ev.personName || ev.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </span>
             )}
           </div>
