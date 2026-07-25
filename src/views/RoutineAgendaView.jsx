@@ -659,7 +659,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       <div style={{
         flex: 1,
         height: '100vh',
-        borderRight: '1px solid #EAEAEA',
+        borderRight: 'none',
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#FFFFFF',
