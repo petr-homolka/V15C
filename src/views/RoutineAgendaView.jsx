@@ -361,6 +361,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [isSearchInputFocused, setIsSearchInputFocused] = useState(false);
   const [selectedEntityFilters, setSelectedEntityFilters] = useState(['all']); // ['all'] | Array<entityId>
   const [filterSearchQuery, setFilterSearchQuery] = useState('');
+  const [activeFilterTab, setActiveFilterTab] = useState('all'); // 'all' | 'family' | 'foster_parent' | 'child' | 'coworker' | 'other'
+  const [modalAssignedTab, setModalAssignedTab] = useState('all');
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
   const [showSearchInput, setShowSearchInput] = useState(false);
@@ -1205,14 +1207,56 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       borderRadius: '12px',
                       boxShadow: '0 12px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06)',
                       border: '1px solid #EAEAEE',
-                      width: '260px',
+                      width: '330px',
                       padding: '12px',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '8px'
+                      gap: '10px'
                     }}>
                       <div style={{ fontSize: '11px', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
                         Filtr dle vazby
+                      </div>
+
+                      {/* ZÁLOŽKY CATEGORIÍ SUBJEKTŮ */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                        overflowX: 'auto',
+                        paddingBottom: '4px',
+                        scrollbarWidth: 'none'
+                      }}>
+                        {[
+                          { id: 'all', label: 'Vše' },
+                          { id: 'family', label: 'Rodiny' },
+                          { id: 'foster_parent', label: 'Pěstouni' },
+                          { id: 'child', label: 'Děti' },
+                          { id: 'coworker', label: 'Spolupracovníci' },
+                          { id: 'other', label: 'Ostatní' }
+                        ].map(tab => {
+                          const isActive = activeFilterTab === tab.id;
+                          return (
+                            <button
+                              key={tab.id}
+                              type="button"
+                              onClick={() => setActiveFilterTab(tab.id)}
+                              style={{
+                                border: 'none',
+                                backgroundColor: isActive ? '#EEF4FF' : '#F4F4F6',
+                                color: isActive ? '#2563EB' : '#5E6774',
+                                fontWeight: isActive ? 600 : 500,
+                                fontSize: '11px',
+                                padding: '4px 8px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                whiteSpace: 'nowrap',
+                                transition: 'all 0.15s ease'
+                              }}
+                            >
+                              {tab.label}
+                            </button>
+                          );
+                        })}
                       </div>
 
                       {/* VYHLEDÁVAČ PODLE KONTAKTNÍCH ÚDAJŮ */}
@@ -1232,7 +1276,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                         }}
                       />
 
-                      {/* TLAČÍTKO VŠECHNY SUBJEKTY */}
+                      {/* TLAČÍTKO VŠECHNY SUBJEKTY (RESET FILTRU) */}
                       <label style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1256,7 +1300,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
                       <div style={{ height: '1px', backgroundColor: '#F0F0F4' }} />
 
-                      {/* SEZNAM SUBJEKTŮ SE ZATRHÁVÁTKY */}
+                      {/* SEZNAM SUBJEKTŮ FILTROVANÝ ZÁLOŽKAMI A VYHLEDÁVAČEM */}
                       <div style={{ maxHeight: '200px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
                         {[
                           { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
@@ -1264,8 +1308,18 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           { id: 'ent_dvorak', name: 'Tomáš Dvořák (Pěstoun)', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
                           { id: 'ent_adam', name: 'Adam Novák (Dítě)', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
                           { id: 'ent_kralova', name: 'Mgr. Alena Králová (Pracovník)', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
-                          { id: 'ent_self', name: 'Jana Nováková (Já)', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' }
+                          { id: 'ent_self', name: 'Jana Nováková (Já)', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
+                          { id: 'ent_svoboda', name: 'PhDr. Martin Svoboda (OSPOD)', type: 'other', email: 'svoboda@ospod.cz', phone: '+420 604 111 999' }
                         ].filter(item => {
+                          // Filtr podle záložek (Spolupracovníci zahrnují i zaměstnance/pracovníky)
+                          if (activeFilterTab !== 'all') {
+                            if (activeFilterTab === 'coworker') {
+                              if (item.type !== 'coworker' && item.type !== 'employee' && item.type !== 'worker') return false;
+                            } else if (item.type !== activeFilterTab) {
+                              return false;
+                            }
+                          }
+                          // Vyhledávání podle textu
                           if (!filterSearchQuery.trim()) return true;
                           const q = filterSearchQuery.toLowerCase();
                           return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
