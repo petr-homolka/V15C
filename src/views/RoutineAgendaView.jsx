@@ -915,7 +915,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         onScroll={handleScrollTimeline}
         style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
       >
-        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A INTERAKTIVNÍMI HOVER BUBLINAMI (ONMOUSE) */}
+        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A SAMOSTATNÝMI KROUŽKY VPRAVO */}
         <div style={{
           position: 'sticky',
           top: 0,
@@ -927,9 +927,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           pointerEvents: 'none',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          paddingLeft: '32px',
+          paddingRight: '32px'
         }}>
-          {/* CENTROVANÝ WHATSAPP-STYLE DATUM S LETOPOČTEM A INTERAKTIVNÍMI HOVER BUBLINAMI */}
+          {/* CENTROVANÝ STICKY DATUM S LETOPOČTEM A ČASEM */}
           <div style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(16px)',
@@ -947,8 +949,24 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             gap: '8px'
           }}>
             <span>{activeVisibleDateStr}</span>
-            <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600, marginRight: '2px' }}>● {currentTimeText}</span>
+            <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600 }}>● {currentTimeText}</span>
+          </div>
 
+          {/* SAMOSTATNÁ STICKY SKUPINA 3 KROUŽKOVÝCH ODZNAKŮ VPRAVO */}
+          <div style={{
+            position: 'absolute',
+            right: '32px',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(16px)',
+            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.07)',
+            border: '1px solid rgba(220, 220, 230, 0.8)',
+            borderRadius: '20px',
+            padding: '5px 10px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            pointerEvents: 'auto'
+          }}>
             {/* 1. KROUŽEK: POČET BĚŽNÝCH CELODENNÍCH UDÁLOSTÍ -> NA MOUSE HOVER ZOBRAZÍ BUBLINU SE SOUPISEM AKCÍ */}
             <span 
               onMouseEnter={() => setHoveredBadgeType('allday')}
