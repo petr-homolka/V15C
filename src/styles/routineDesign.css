@@ -1,0 +1,365 @@
+/* Routine.co Official Native Bundle Import & Style System */
+
+@import url('https://rsms.me/inter/inter.css');
+
+:root {
+  --vc-clr-primary: #171b1f;
+  --vc-clr-secondary: #090f207f;
+  --vc-clr-white: #ffffff;
+  
+  --routine-bg: #ffffff;
+  --routine-sidebar-bg: #ffffff;
+  --routine-card-bg: #ffffff;
+  --routine-text-primary: #171b1f;
+  --routine-text-secondary: #747f8f;
+  --routine-text-muted: #8896a9;
+  --routine-text-sub: #5e6774;
+  --routine-text-body: #47505d;
+  
+  /* Routine Coral Red & Pastel Accents */
+  --routine-coral: #FF4742;
+  --routine-coral-light: rgba(255, 71, 66, 0.08);
+  --routine-blue: #4A85F6;
+  --routine-blue-light: #EEF4FF;
+  --routine-yellow: #F59E0B;
+  --routine-yellow-light: #FEF3C7;
+  --routine-green: #10B981;
+  
+  --routine-border: #f2f2f2;
+  --routine-border-dark: #d0cbcb;
+  --routine-hover: #f4f4f4;
+  --routine-font: Inter, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+}
+
+*, ::after, ::before {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: var(--routine-text-primary);
+  font-family: var(--routine-font);
+  text-rendering: optimizeLegibility;
+  vertical-align: baseline;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.routine-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Pure White Primary Sidebar */
+.routine-sidebar {
+  width: 230px;
+  height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  flex-shrink: 0;
+  border-right: 1px solid var(--routine-border);
+  padding-top: 16px;
+}
+
+.routine-sidebar.collapsed {
+  width: 64px;
+}
+
+/* Coral Red + Nový Button */
+.routine-new-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin: 0 8px 8px 8px;
+  border-radius: 7px;
+  color: var(--routine-coral);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.12s;
+}
+
+.routine-new-btn:hover {
+  background-color: var(--routine-coral-light);
+}
+
+/* Routine Nav Links */
+.routine-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 12px;
+  margin: 1px 8px;
+  border-radius: 5px;
+  color: var(--routine-text-secondary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.routine-nav-item:hover {
+  background-color: var(--routine-hover);
+  color: var(--routine-text-primary);
+}
+
+.routine-nav-item.active {
+  background-color: #f2f2f2;
+  color: var(--routine-text-primary);
+  font-weight: 500;
+}
+
+/* Main Canvas (Stretch to 100vh) */
+.routine-main-canvas {
+  flex-grow: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Routine Headings */
+h1, .h1 {
+  letter-spacing: -1.5px;
+  font-size: 32px;
+  line-height: 42px;
+  font-weight: 400;
+  color: var(--routine-text-primary);
+}
+
+h2, .h2 {
+  letter-spacing: -1px;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 400;
+  color: var(--routine-text-primary);
+}
+
+h3, .h3 {
+  letter-spacing: -0.5px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  color: var(--routine-text-primary);
+}
+
+/* Checkbox in Routine Style */
+.routine-checkbox {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  border: 1px solid var(--routine-border-dark);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  flex-shrink: 0;
+}
+
+.routine-checkbox.checked {
+  background-color: var(--routine-coral);
+  border-color: var(--routine-coral);
+  color: #ffffff;
+}
+
+/* Time Indicator Line with Pulsing Effect */
+@keyframes routineTimePulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.routine-time-bar {
+  position: relative;
+  border-top: 2px solid var(--routine-coral);
+  z-index: 10;
+}
+
+.routine-time-bubble {
+  position: absolute;
+  left: -58px;
+  top: -11px;
+  background-color: var(--routine-coral);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(255, 71, 66, 0.4);
+  animation: routineTimePulse 2s infinite ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.routine-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: inline-block;
+  animation: routineTimePulse 1.2s infinite ease-in-out;
+}
+
+/* OFFICIAL ROUTINE EDITOR SUGGESTION LIST CSS FROM BUNDLE */
+.suggestion-list {
+  font-family: Inter,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19px;
+  min-width: 240px;
+  max-height: 328px;
+  padding: 4px;
+  overflow-y: auto;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 14px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  background-color: #ffffff;
+  z-index: 1000;
+}
+
+.suggestion-list .group-header {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 0 2px 8px;
+  color: #a9a9a9;
+}
+
+.suggestion-list .separator {
+  height: 1px;
+  width: calc(100% + 8px);
+  margin: 6px 0 6px -4px;
+  background-color: #f2f2f2;
+}
+
+.suggestion-list__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+  border-radius: 7px;
+  padding: 6px 8px 6px 12px;
+  margin-bottom: 1px;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  color: #5e6774;
+  cursor: pointer;
+  transition: background-color .1s ease-in, color .1s ease-in;
+}
+
+.suggestion-list__item:hover, .suggestion-list__item.is-selected {
+  background-color: #f4f4f4;
+  color: #2a3038;
+}
+
+.suggestion-list__item .command-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suggestion-list__item .command-content .command-help {
+  font-size: 11px;
+  color: #94949c;
+  font-family: monospace;
+}
+
+/* OFFICIAL TABLE OF CONTENTS (TOC) CSS FROM ROUTINE BUNDLE */
+.table-of-contents {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 24px);
+  z-index: 10;
+  height: 100%;
+  pointer-events: none;
+}
+
+.table-of-contents .toc-content {
+  position: sticky;
+  top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 7px;
+  overflow-y: auto;
+  width: 32px;
+  pointer-events: auto;
+  cursor: default;
+  background: #ffffff;
+  transition: width 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table-of-contents.expanded .toc-content {
+  width: 160px;
+  box-shadow: -2px 0 6px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.06);
+  border: 1px solid #e5e5e5;
+  padding: 8px;
+}
+
+.table-of-contents .toc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color .15s ease;
+}
+
+.table-of-contents .toc-item:hover {
+  background-color: #f4f4f4;
+}
+
+.table-of-contents .toc-item .toc-line {
+  flex-shrink: 0;
+  height: 2px;
+  border-radius: 1px;
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.table-of-contents .toc-item .toc-line.level-1 { width: 20px; background-color: #a9a9a9; }
+.table-of-contents .toc-item .toc-line.level-2 { width: 14px; background-color: #94949c; }
+.table-of-contents .toc-item .toc-line.level-3 { width: 8px; background-color: #ccc; }
+
+.table-of-contents .toc-item.active .toc-line {
+  background-color: #FF4742 !important;
+  width: 22px !important;
+}
+
+.table-of-contents .toc-item .toc-text {
+  font-size: 12px;
+  color: #79818c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+}
+
+.table-of-contents.expanded .toc-item .toc-text {
+  display: block;
+}
+
+.table-of-contents.expanded .toc-item .toc-line {
+  display: none;
+}

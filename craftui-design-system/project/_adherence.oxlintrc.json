@@ -1,0 +1,2667 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "components/auth/**",
+              "components/calendar-mobile/**",
+              "components/calendar/**",
+              "components/contacts-mobile/**",
+              "components/contacts/**",
+              "components/core/**",
+              "components/counters/**",
+              "components/dashboard/**",
+              "components/dataviz/**",
+              "components/file-icons/**",
+              "components/files-mobile/**",
+              "components/files/**",
+              "components/forms/**",
+              "components/help-center-mobile/**",
+              "components/help-center/**",
+              "components/invoices-mobile/**",
+              "components/invoices/**",
+              "components/ios-chrome/**",
+              "components/kanban-mobile/**",
+              "components/kanban/**",
+              "components/messenger-mobile/**",
+              "components/messenger/**",
+              "components/navigation/**",
+              "components/notifications-mobile/**",
+              "components/notifications/**",
+              "components/products-mobile/**",
+              "components/products/**",
+              "components/projects-mobile/**",
+              "components/projects/**",
+              "components/reports/**",
+              "components/tasks-mobile/**",
+              "components/tasks/**",
+              "components/widgets/**",
+              "ui_kits/crm-dashboard/screens/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:la-solid-900|la-regular-400|la-brands-400|Lato|Source Sans Pro))/i]",
+        "message": "Font not provided by the design system. Available: la-solid-900, la-regular-400, la-brands-400, Lato, Source Sans Pro."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='BadgeOval'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<BadgeOval> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='BadgeRound'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<BadgeRound> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsFilters'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<ButtonsFilters> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconOutlineActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconOutlineActive> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconOutlineArrow'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconOutlineArrow> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconOutlineHover'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconOutlineHover> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconOutlineResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconOutlineResting> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconPrimaryActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconPrimaryActive> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconPrimaryArrow'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconPrimaryArrow> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconPrimaryDisabled'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconPrimaryDisabled> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconPrimaryHover'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconPrimaryHover> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsIconPrimaryResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsIconPrimaryResting> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsLinkButtonActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsLinkButtonActive> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsLinkButtonFocus'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsLinkButtonFocus> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsLinkButtonHover'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ButtonsLinkButtonHover> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainOutlineActiveButton'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainOutlineActiveButton> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainOutlineDisabled'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainOutlineDisabled> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainOutlineResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainOutlineResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainPrimaryActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainPrimaryActive> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainPrimaryDisabled'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainPrimaryDisabled> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainPrimaryHover'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainPrimaryHover> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ButtonsPlainPrimaryResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<ButtonsPlainPrimaryResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Calendar'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Calendar> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CalendarDay'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CalendarDay> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CalendarDayMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CalendarDayMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CalendarEvent'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CalendarEvent> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CalendarEventMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CalendarEventMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CalendarMonthMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CalendarMonthMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CalendarWeek'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CalendarWeek> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsAddNew'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsAddNew> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsDetails'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsDetails> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsDetailsActionsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsDetailsActionsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsDetailsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsDetailsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsGrid01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsGrid01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsGrid01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsGrid01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsGrid02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsGrid02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsGrid02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsGrid02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsGrid03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsGrid03> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsGrid03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsGrid03Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsList01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsList01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsList02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsList02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsList03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsList03> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsList03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsList03Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsProfile01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsProfile01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsProfile02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsProfile02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsProfileOverview01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsProfileOverview01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsProfileOverview01Tasks'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsProfileOverview01Tasks> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsProfileOverview02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsProfileOverview02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsAccounts'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsAccounts> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsAppsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsAppsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsBilling'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsBilling> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsBillingMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsBillingMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsGeneral'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsGeneral> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsMenuMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsMenuMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsNotifications'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsNotifications> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsSecurity'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsSecurity> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ContactsSettingsSecurityMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ContactsSettingsSecurityMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersBarNumericMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<CountersBarNumericMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersBarNumericWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<CountersBarNumericWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersGraphMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<CountersGraphMobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersGraphWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<CountersGraphWeb> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersIconMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<CountersIconMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersIconWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<CountersIconWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersNumericWithIconMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<CountersNumericWithIconMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersNumericWithIconWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<CountersNumericWithIconWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CountersProgress'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<CountersProgress> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='CraftUILogo'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<CraftUILogo> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Dashboard02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<Dashboard02> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Dashboard03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<Dashboard03> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Dashboard04'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<Dashboard04> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='DashboardEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<DashboardEmpty> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Details'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<Details> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsAi'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsAi> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsFolder'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsFolder> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsPdf'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsPdf> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsPhotoshop'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsPhotoshop> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsPowerpoint'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsPowerpoint> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsSketch'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsSketch> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsWord'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsWord> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FileIconsXls'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FileIconsXls> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesDetails'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesDetails> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesDetailsFullMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesDetailsFullMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesDetailsHiddenMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesDetailsHiddenMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesGrid'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesGrid> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesGridMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesGridMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesList'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesList> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesListMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesListMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesUpload'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesUpload> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FilesUploadMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FilesUploadMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Finish'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<Finish> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsCheckboxActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsCheckboxActive> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsCheckboxError'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsCheckboxError> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsCheckboxResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsCheckboxResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsCheckboxSuccess'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsCheckboxSuccess> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputActiveBasic'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<FormsInputActiveBasic> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputActiveIconOn'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<FormsInputActiveIconOn> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputDisabled'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<FormsInputDisabled> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputInactive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<FormsInputInactive> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputStatesError'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<FormsInputStatesError> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputStatesErrorWith'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<FormsInputStatesErrorWith> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputStatesSuccess'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<FormsInputStatesSuccess> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsInputStatesSuccessWith'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<FormsInputStatesSuccessWith> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsRadioActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsRadioActive> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsRadioError'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsRadioError> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsRadioResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsRadioResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsRadioSuccess'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<FormsRadioSuccess> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsSwitchesError'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FormsSwitchesError> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsSwitchesOff'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FormsSwitchesOff> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsSwitchesOn'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FormsSwitchesOn> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='FormsSwitchesSuccess'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<FormsSwitchesSuccess> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsBarsHorizontal'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<GraphsBarsHorizontal> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsBarsVertical'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<GraphsBarsVertical> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsGraphSidebar'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<GraphsGraphSidebar> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsOrdersMobile01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsOrdersMobile01> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsOrdersMobile02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsOrdersMobile02> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsOrdersMobile03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsOrdersMobile03> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsOrdersWebGeometric'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsOrdersWebGeometric> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsOrdersWebWave'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsOrdersWebWave> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsPieSidebarWithCounters'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsPieSidebarWithCounters> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsScheduledMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsScheduledMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsScheduledWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsScheduledWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsSingle'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsSingle> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='GraphsSingleWithCounters'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<GraphsSingleWithCounters> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenter'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenter> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterExistingTickets'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterExistingTickets> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterList02Menu'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterList02Menu> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterList02MenuMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterList02MenuMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterNewTicket'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterNewTicket> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterNewTicketMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterNewTicketMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterSearch'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterSearch> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterSearchEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterSearchEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterSearchHiddenMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterSearchHiddenMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterSearchMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterSearchMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterSearchResults'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterSearchResults> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='HelpCenterTickets'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<HelpCenterTickets> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ChatsIncomingMsg'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ChatsIncomingMsg> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ChatsOutgoingMsg'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<ChatsOutgoingMsg> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesAddNewItemsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesAddNewItemsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesAddNewMenuMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesAddNewMenuMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesAddNewMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesAddNewMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesDetails'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesDetails> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesDetailsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesDetailsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesList01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesList01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesList02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesList02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesNew'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesNew> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='InvoicesNewItems'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<InvoicesNewItems> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='IOSBarsIndicatorDark'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<IOSBarsIndicatorDark> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='IOSBarsIndicatorLight'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<IOSBarsIndicatorLight> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='IOSBarsStatusBarDark'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<IOSBarsStatusBarDark> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='IOSBarsStatusBarLight'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<IOSBarsStatusBarLight> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Kanban'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Kanban> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='KanbanDescription'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<KanbanDescription> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='KanbanEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<KanbanEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='KanbanEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<KanbanEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='KanbanState'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<KanbanState> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='KanbanTaskMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<KanbanTaskMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='KanbanToDoDeskMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<KanbanToDoDeskMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Messages'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Messages> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesAbout'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesAbout> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesConversation'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesConversation> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesConversationMenuMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesConversationMenuMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesConversationMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesConversationMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesListMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesListMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesMedia'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesMedia> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesMediaMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesMediaMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesMenuMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesMenuMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='MessagesNewMessage'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<MessagesNewMessage> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationMobileIconBar'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<NavigationMobileIconBar> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationMobileItemsActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<NavigationMobileItemsActive> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationMobileItemsResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<NavigationMobileItemsResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationMobileTopBar'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<NavigationMobileTopBar> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationWebFullsizeItemsActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<NavigationWebFullsizeItemsActive> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationWebFullsizeItemsResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<NavigationWebFullsizeItemsResting> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationWebIcons'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|icon1|key|ref|className|style|children)$/]",
+        "message": "<NavigationWebIcons> doesn't accept that prop. Declared props: className, style, icon1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationWebIconsItemsActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<NavigationWebIconsItemsActive> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationWebIconsItemsResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<NavigationWebIconsItemsResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NavigationWebTopBar'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<NavigationWebTopBar> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NotificationsGrid'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<NotificationsGrid> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NotificationsList'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<NotificationsList> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NotificationsList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<NotificationsList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='NotificationsList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<NotificationsList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='PaginationBoxed'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<PaginationBoxed> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='PaginationFullsize'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<PaginationFullsize> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='PaginationPrimary'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<PaginationPrimary> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductDetailsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductDetailsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsAddNew'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsAddNew> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsAddNewMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsAddNewMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsGrid01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsGrid01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsGrid01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsGrid01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsGrid02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsGrid02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsGrid02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsGrid02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsItem'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsItem> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsItemCopySaleDetails'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsItemCopySaleDetails> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsItemSettingsGeneral'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsItemSettingsGeneral> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsList01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsList01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsList02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsList02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProductsList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProductsList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsFull'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsFull> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsHigh'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsHigh> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsHigh2'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsHigh2> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsLow'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsLow> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsMedium'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsMedium> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsPrimary'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsPrimary> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProgressBarsResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProgressBarsResting> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsActivityMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsActivityMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsAddNew'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsAddNew> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsAddNewMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsAddNewMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDeskMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDeskMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsActivity'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsActivity> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsDesk'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsDesk> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsFiles'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsFiles> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsHiddenMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsHiddenMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsReports'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsReports> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsSettings'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsSettings> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsDetailsTasks'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsDetailsTasks> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsFilesMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsFilesMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsGrid01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsGrid01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsGrid01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsGrid01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsGrid02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsGrid02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsGrid02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsGrid02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsGrid03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsGrid03> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsGrid03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsGrid03Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsList01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsList01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsList02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsList02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsList03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsList03> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsList03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsList03Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsReportsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsReportsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsSettingsMenuMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsSettingsMenuMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsSettingsMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsSettingsMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsSortMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsSortMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='ProjectsTasksMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<ProjectsTasksMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Recover'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<Recover> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Reports01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Reports01> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Reports02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Reports02> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Reports03'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Reports03> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='SignIn'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<SignIn> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='SignUp'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<SignUp> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsGrid01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsGrid01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsGrid01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsGrid01Web> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsGrid02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsGrid02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsGrid03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsGrid03Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsGrid03Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsGrid03Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsRow01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsRow01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsRow01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsRow01Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsRow02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsRow02Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsRow02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsRow02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsRow03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsRow03Mobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesContactsRow03Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesContactsRow03Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesEventsList'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesEventsList> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesFilesGridMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesFilesGridMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesFilesGridWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesFilesGridWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesFilesListMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TablesFilesListMobile> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesFilesListWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesFilesListWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesInvoicesListWidget'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesInvoicesListWidget> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesInvoicesRow01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesInvoicesRow01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesInvoicesRow01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesInvoicesRow01Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesInvoicesRow02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<TablesInvoicesRow02Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesInvoicesRow02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesInvoicesRow02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsGrid01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsGrid01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsGrid01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsGrid01Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsGrid02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsGrid02Mobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsGrid02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsGrid02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsRow01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsRow01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsRow01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsRow01Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsRow02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsRow02Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProductsRow02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProductsRow02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsGrid01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsGrid01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsGrid01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsGrid01Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsGrid02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsGrid02Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsGrid02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsGrid02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsGrid03Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsGrid03Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsGrid03Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsGrid03Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsRow01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsRow01Mobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsRow01Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsRow01Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsRow02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsRow02Mobile> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsRow02Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsRow02Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesProjectsRow03Web'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesProjectsRow03Web> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesSalesFullwidthListWidget'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesSalesFullwidthListWidget> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesSalesListWidget'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesSalesListWidget> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesSalesRow01'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesSalesRow01> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesSalesRow02'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TablesSalesRow02> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesSalesSmallListWidget'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesSalesSmallListWidget> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesTasksMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TablesTasksMobile> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesTasksWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesTasksWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesTicketsFullsizeMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesTicketsFullsizeMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesTicketsFullsizeWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesTicketsFullsizeWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesTicketsRowMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<TablesTicketsRowMobile> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TablesTicketsRowWeb'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<TablesTicketsRowWeb> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsIconActiveTab'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TabsIconActiveTab> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsIconRestingTab'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TabsIconRestingTab> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsTextActive'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TabsTextActive> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsTextActive2'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TabsTextActive2> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsTextHover'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TabsTextHover> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsTextResting'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TabsTextResting> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TabsTextResting2'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TabsTextResting2> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsBlue'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsBlue> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsGreen2'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsGreen2> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsGrey'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsGrey> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsGreyEditable'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|key|ref|className|style|children)$/]",
+        "message": "<TagsGreyEditable> doesn't accept that prop. Declared props: className, style, text1, text2."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsLightBlue'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsLightBlue> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsPrimary'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsPrimary> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsRed'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsRed> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsStatusTag'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsStatusTag> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TagsYellow2'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<TagsYellow2> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TaskAddNewMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TaskAddNewMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TaskDescriptionMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TaskDescriptionMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='Tasks'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<Tasks> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TasksAddNew'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TasksAddNew> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TasksDescription'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TasksDescription> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TasksEmpty'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TasksEmpty> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TasksEmptyMobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TasksEmptyMobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TasksList01Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TasksList01Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='TasksList02Mobile'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|key|ref|className|style|children)$/]",
+        "message": "<TasksList02Mobile> doesn't accept that prop. Declared props: className, style."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='UIKitHeader'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|key|ref|className|style|children)$/]",
+        "message": "<UIKitHeader> doesn't accept that prop. Declared props: className, style, text1."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='WidgetsGraphsPie'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<WidgetsGraphsPie> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='WidgetsSidebarCalendarEvent'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|text4|key|ref|className|style|children)$/]",
+        "message": "<WidgetsSidebarCalendarEvent> doesn't accept that prop. Declared props: className, style, text1, text2, text3, text4."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='WidgetsSidebarEvent'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<WidgetsSidebarEvent> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='WidgetsSidebarHelp'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<WidgetsSidebarHelp> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      },
+      {
+        "selector": "JSXOpeningElement[name.name='WidgetsSidebarMessage'] > JSXAttribute > JSXIdentifier[name!=/^(?:className|style|text1|text2|text3|key|ref|className|style|children)$/]",
+        "message": "<WidgetsSidebarMessage> doesn't accept that prop. Declared props: className, style, text1, text2, text3."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {
+      "BadgeOval": {
+        "replaces": []
+      },
+      "BadgeRound": {
+        "replaces": []
+      },
+      "ButtonsFilters": {
+        "replaces": []
+      },
+      "ButtonsIconOutlineActive": {
+        "replaces": []
+      },
+      "ButtonsIconOutlineArrow": {
+        "replaces": []
+      },
+      "ButtonsIconOutlineHover": {
+        "replaces": []
+      },
+      "ButtonsIconOutlineResting": {
+        "replaces": []
+      },
+      "ButtonsIconPrimaryActive": {
+        "replaces": []
+      },
+      "ButtonsIconPrimaryArrow": {
+        "replaces": []
+      },
+      "ButtonsIconPrimaryDisabled": {
+        "replaces": []
+      },
+      "ButtonsIconPrimaryHover": {
+        "replaces": []
+      },
+      "ButtonsIconPrimaryResting": {
+        "replaces": []
+      },
+      "ButtonsLinkButtonActive": {
+        "replaces": []
+      },
+      "ButtonsLinkButtonFocus": {
+        "replaces": []
+      },
+      "ButtonsLinkButtonHover": {
+        "replaces": []
+      },
+      "ButtonsPlainOutlineActiveButton": {
+        "replaces": []
+      },
+      "ButtonsPlainOutlineDisabled": {
+        "replaces": []
+      },
+      "ButtonsPlainOutlineResting": {
+        "replaces": []
+      },
+      "ButtonsPlainPrimaryActive": {
+        "replaces": []
+      },
+      "ButtonsPlainPrimaryDisabled": {
+        "replaces": []
+      },
+      "ButtonsPlainPrimaryHover": {
+        "replaces": []
+      },
+      "ButtonsPlainPrimaryResting": {
+        "replaces": []
+      },
+      "Calendar": {
+        "replaces": []
+      },
+      "CalendarDay": {
+        "replaces": []
+      },
+      "CalendarDayMobile": {
+        "replaces": []
+      },
+      "CalendarEvent": {
+        "replaces": []
+      },
+      "CalendarEventMobile": {
+        "replaces": []
+      },
+      "CalendarMonthMobile": {
+        "replaces": []
+      },
+      "CalendarWeek": {
+        "replaces": []
+      },
+      "ContactsAddNew": {
+        "replaces": []
+      },
+      "ContactsDetails": {
+        "replaces": []
+      },
+      "ContactsDetailsActionsMobile": {
+        "replaces": []
+      },
+      "ContactsDetailsMobile": {
+        "replaces": []
+      },
+      "ContactsEmpty": {
+        "replaces": []
+      },
+      "ContactsEmptyMobile": {
+        "replaces": []
+      },
+      "ContactsGrid01": {
+        "replaces": []
+      },
+      "ContactsGrid01Mobile": {
+        "replaces": []
+      },
+      "ContactsGrid02": {
+        "replaces": []
+      },
+      "ContactsGrid02Mobile": {
+        "replaces": []
+      },
+      "ContactsGrid03": {
+        "replaces": []
+      },
+      "ContactsGrid03Mobile": {
+        "replaces": []
+      },
+      "ContactsList01": {
+        "replaces": []
+      },
+      "ContactsList01Mobile": {
+        "replaces": []
+      },
+      "ContactsList02": {
+        "replaces": []
+      },
+      "ContactsList02Mobile": {
+        "replaces": []
+      },
+      "ContactsList03": {
+        "replaces": []
+      },
+      "ContactsList03Mobile": {
+        "replaces": []
+      },
+      "ContactsProfile01": {
+        "replaces": []
+      },
+      "ContactsProfile02": {
+        "replaces": []
+      },
+      "ContactsProfileOverview01Mobile": {
+        "replaces": []
+      },
+      "ContactsProfileOverview01Tasks": {
+        "replaces": []
+      },
+      "ContactsProfileOverview02Mobile": {
+        "replaces": []
+      },
+      "ContactsSettingsAccounts": {
+        "replaces": []
+      },
+      "ContactsSettingsAppsMobile": {
+        "replaces": []
+      },
+      "ContactsSettingsBilling": {
+        "replaces": []
+      },
+      "ContactsSettingsBillingMobile": {
+        "replaces": []
+      },
+      "ContactsSettingsGeneral": {
+        "replaces": []
+      },
+      "ContactsSettingsMenuMobile": {
+        "replaces": []
+      },
+      "ContactsSettingsMobile": {
+        "replaces": []
+      },
+      "ContactsSettingsNotifications": {
+        "replaces": []
+      },
+      "ContactsSettingsSecurity": {
+        "replaces": []
+      },
+      "ContactsSettingsSecurityMobile": {
+        "replaces": []
+      },
+      "CountersBarNumericMobile": {
+        "replaces": []
+      },
+      "CountersBarNumericWeb": {
+        "replaces": []
+      },
+      "CountersGraphMobile": {
+        "replaces": []
+      },
+      "CountersGraphWeb": {
+        "replaces": []
+      },
+      "CountersIconMobile": {
+        "replaces": []
+      },
+      "CountersIconWeb": {
+        "replaces": []
+      },
+      "CountersNumericWithIconMobile": {
+        "replaces": []
+      },
+      "CountersNumericWithIconWeb": {
+        "replaces": []
+      },
+      "CountersProgress": {
+        "replaces": []
+      },
+      "CraftUILogo": {
+        "replaces": []
+      },
+      "Dashboard02": {
+        "replaces": []
+      },
+      "Dashboard03": {
+        "replaces": []
+      },
+      "Dashboard04": {
+        "replaces": []
+      },
+      "DashboardEmpty": {
+        "replaces": []
+      },
+      "Details": {
+        "replaces": []
+      },
+      "FileIconsAi": {
+        "replaces": []
+      },
+      "FileIconsFolder": {
+        "replaces": []
+      },
+      "FileIconsPdf": {
+        "replaces": []
+      },
+      "FileIconsPhotoshop": {
+        "replaces": []
+      },
+      "FileIconsPowerpoint": {
+        "replaces": []
+      },
+      "FileIconsSketch": {
+        "replaces": []
+      },
+      "FileIconsWord": {
+        "replaces": []
+      },
+      "FileIconsXls": {
+        "replaces": []
+      },
+      "FilesDetails": {
+        "replaces": []
+      },
+      "FilesDetailsFullMobile": {
+        "replaces": []
+      },
+      "FilesDetailsHiddenMobile": {
+        "replaces": []
+      },
+      "FilesEmpty": {
+        "replaces": []
+      },
+      "FilesEmptyMobile": {
+        "replaces": []
+      },
+      "FilesGrid": {
+        "replaces": []
+      },
+      "FilesGridMobile": {
+        "replaces": []
+      },
+      "FilesList": {
+        "replaces": []
+      },
+      "FilesListMobile": {
+        "replaces": []
+      },
+      "FilesUpload": {
+        "replaces": []
+      },
+      "FilesUploadMobile": {
+        "replaces": []
+      },
+      "Finish": {
+        "replaces": []
+      },
+      "FormsCheckboxActive": {
+        "replaces": []
+      },
+      "FormsCheckboxError": {
+        "replaces": []
+      },
+      "FormsCheckboxResting": {
+        "replaces": []
+      },
+      "FormsCheckboxSuccess": {
+        "replaces": []
+      },
+      "FormsInputActiveBasic": {
+        "replaces": []
+      },
+      "FormsInputActiveIconOn": {
+        "replaces": []
+      },
+      "FormsInputDisabled": {
+        "replaces": []
+      },
+      "FormsInputInactive": {
+        "replaces": []
+      },
+      "FormsInputStatesError": {
+        "replaces": []
+      },
+      "FormsInputStatesErrorWith": {
+        "replaces": []
+      },
+      "FormsInputStatesSuccess": {
+        "replaces": []
+      },
+      "FormsInputStatesSuccessWith": {
+        "replaces": []
+      },
+      "FormsRadioActive": {
+        "replaces": []
+      },
+      "FormsRadioError": {
+        "replaces": []
+      },
+      "FormsRadioResting": {
+        "replaces": []
+      },
+      "FormsRadioSuccess": {
+        "replaces": []
+      },
+      "FormsSwitchesError": {
+        "replaces": []
+      },
+      "FormsSwitchesOff": {
+        "replaces": []
+      },
+      "FormsSwitchesOn": {
+        "replaces": []
+      },
+      "FormsSwitchesSuccess": {
+        "replaces": []
+      },
+      "GraphsBarsHorizontal": {
+        "replaces": []
+      },
+      "GraphsBarsVertical": {
+        "replaces": []
+      },
+      "GraphsGraphSidebar": {
+        "replaces": []
+      },
+      "GraphsOrdersMobile01": {
+        "replaces": []
+      },
+      "GraphsOrdersMobile02": {
+        "replaces": []
+      },
+      "GraphsOrdersMobile03": {
+        "replaces": []
+      },
+      "GraphsOrdersWebGeometric": {
+        "replaces": []
+      },
+      "GraphsOrdersWebWave": {
+        "replaces": []
+      },
+      "GraphsPieSidebarWithCounters": {
+        "replaces": []
+      },
+      "GraphsScheduledMobile": {
+        "replaces": []
+      },
+      "GraphsScheduledWeb": {
+        "replaces": []
+      },
+      "GraphsSingle": {
+        "replaces": []
+      },
+      "GraphsSingleWithCounters": {
+        "replaces": []
+      },
+      "HelpCenter": {
+        "replaces": []
+      },
+      "HelpCenterExistingTickets": {
+        "replaces": []
+      },
+      "HelpCenterList01Mobile": {
+        "replaces": []
+      },
+      "HelpCenterList02Menu": {
+        "replaces": []
+      },
+      "HelpCenterList02MenuMobile": {
+        "replaces": []
+      },
+      "HelpCenterList02Mobile": {
+        "replaces": []
+      },
+      "HelpCenterMobile": {
+        "replaces": []
+      },
+      "HelpCenterNewTicket": {
+        "replaces": []
+      },
+      "HelpCenterNewTicketMobile": {
+        "replaces": []
+      },
+      "HelpCenterSearch": {
+        "replaces": []
+      },
+      "HelpCenterSearchEmptyMobile": {
+        "replaces": []
+      },
+      "HelpCenterSearchHiddenMobile": {
+        "replaces": []
+      },
+      "HelpCenterSearchMobile": {
+        "replaces": []
+      },
+      "HelpCenterSearchResults": {
+        "replaces": []
+      },
+      "HelpCenterTickets": {
+        "replaces": []
+      },
+      "ChatsIncomingMsg": {
+        "replaces": []
+      },
+      "ChatsOutgoingMsg": {
+        "replaces": []
+      },
+      "InvoicesAddNewItemsMobile": {
+        "replaces": []
+      },
+      "InvoicesAddNewMenuMobile": {
+        "replaces": []
+      },
+      "InvoicesAddNewMobile": {
+        "replaces": []
+      },
+      "InvoicesDetails": {
+        "replaces": []
+      },
+      "InvoicesDetailsMobile": {
+        "replaces": []
+      },
+      "InvoicesEmpty": {
+        "replaces": []
+      },
+      "InvoicesEmptyMobile": {
+        "replaces": []
+      },
+      "InvoicesList01": {
+        "replaces": []
+      },
+      "InvoicesList01Mobile": {
+        "replaces": []
+      },
+      "InvoicesList02": {
+        "replaces": []
+      },
+      "InvoicesList02Mobile": {
+        "replaces": []
+      },
+      "InvoicesNew": {
+        "replaces": []
+      },
+      "InvoicesNewItems": {
+        "replaces": []
+      },
+      "IOSBarsIndicatorDark": {
+        "replaces": []
+      },
+      "IOSBarsIndicatorLight": {
+        "replaces": []
+      },
+      "IOSBarsStatusBarDark": {
+        "replaces": []
+      },
+      "IOSBarsStatusBarLight": {
+        "replaces": []
+      },
+      "Kanban": {
+        "replaces": []
+      },
+      "KanbanDescription": {
+        "replaces": []
+      },
+      "KanbanEmpty": {
+        "replaces": []
+      },
+      "KanbanEmptyMobile": {
+        "replaces": []
+      },
+      "KanbanState": {
+        "replaces": []
+      },
+      "KanbanTaskMobile": {
+        "replaces": []
+      },
+      "KanbanToDoDeskMobile": {
+        "replaces": []
+      },
+      "Messages": {
+        "replaces": []
+      },
+      "MessagesAbout": {
+        "replaces": []
+      },
+      "MessagesConversation": {
+        "replaces": []
+      },
+      "MessagesConversationMenuMobile": {
+        "replaces": []
+      },
+      "MessagesConversationMobile": {
+        "replaces": []
+      },
+      "MessagesEmpty": {
+        "replaces": []
+      },
+      "MessagesEmptyMobile": {
+        "replaces": []
+      },
+      "MessagesListMobile": {
+        "replaces": []
+      },
+      "MessagesMedia": {
+        "replaces": []
+      },
+      "MessagesMediaMobile": {
+        "replaces": []
+      },
+      "MessagesMenuMobile": {
+        "replaces": []
+      },
+      "MessagesNewMessage": {
+        "replaces": []
+      },
+      "NavigationMobileIconBar": {
+        "replaces": []
+      },
+      "NavigationMobileItemsActive": {
+        "replaces": []
+      },
+      "NavigationMobileItemsResting": {
+        "replaces": []
+      },
+      "NavigationMobileTopBar": {
+        "replaces": []
+      },
+      "NavigationWebFullsizeItemsActive": {
+        "replaces": []
+      },
+      "NavigationWebFullsizeItemsResting": {
+        "replaces": []
+      },
+      "NavigationWebIcons": {
+        "replaces": []
+      },
+      "NavigationWebIconsItemsActive": {
+        "replaces": []
+      },
+      "NavigationWebIconsItemsResting": {
+        "replaces": []
+      },
+      "NavigationWebTopBar": {
+        "replaces": []
+      },
+      "NotificationsGrid": {
+        "replaces": []
+      },
+      "NotificationsList": {
+        "replaces": []
+      },
+      "NotificationsList01Mobile": {
+        "replaces": []
+      },
+      "NotificationsList02Mobile": {
+        "replaces": []
+      },
+      "PaginationBoxed": {
+        "replaces": []
+      },
+      "PaginationFullsize": {
+        "replaces": []
+      },
+      "PaginationPrimary": {
+        "replaces": []
+      },
+      "ProductDetailsMobile": {
+        "replaces": []
+      },
+      "ProductsAddNew": {
+        "replaces": []
+      },
+      "ProductsAddNewMobile": {
+        "replaces": []
+      },
+      "ProductsEmpty": {
+        "replaces": []
+      },
+      "ProductsEmptyMobile": {
+        "replaces": []
+      },
+      "ProductsGrid01": {
+        "replaces": []
+      },
+      "ProductsGrid01Mobile": {
+        "replaces": []
+      },
+      "ProductsGrid02": {
+        "replaces": []
+      },
+      "ProductsGrid02Mobile": {
+        "replaces": []
+      },
+      "ProductsItem": {
+        "replaces": []
+      },
+      "ProductsItemCopySaleDetails": {
+        "replaces": []
+      },
+      "ProductsItemSettingsGeneral": {
+        "replaces": []
+      },
+      "ProductsList01": {
+        "replaces": []
+      },
+      "ProductsList01Mobile": {
+        "replaces": []
+      },
+      "ProductsList02": {
+        "replaces": []
+      },
+      "ProductsList02Mobile": {
+        "replaces": []
+      },
+      "ProgressBarsFull": {
+        "replaces": []
+      },
+      "ProgressBarsHigh": {
+        "replaces": []
+      },
+      "ProgressBarsHigh2": {
+        "replaces": []
+      },
+      "ProgressBarsLow": {
+        "replaces": []
+      },
+      "ProgressBarsMedium": {
+        "replaces": []
+      },
+      "ProgressBarsPrimary": {
+        "replaces": []
+      },
+      "ProgressBarsResting": {
+        "replaces": []
+      },
+      "ProjectsActivityMobile": {
+        "replaces": []
+      },
+      "ProjectsAddNew": {
+        "replaces": []
+      },
+      "ProjectsAddNewMobile": {
+        "replaces": []
+      },
+      "ProjectsDeskMobile": {
+        "replaces": []
+      },
+      "ProjectsDetailsActivity": {
+        "replaces": []
+      },
+      "ProjectsDetailsDesk": {
+        "replaces": []
+      },
+      "ProjectsDetailsFiles": {
+        "replaces": []
+      },
+      "ProjectsDetailsHiddenMobile": {
+        "replaces": []
+      },
+      "ProjectsDetailsMobile": {
+        "replaces": []
+      },
+      "ProjectsDetailsReports": {
+        "replaces": []
+      },
+      "ProjectsDetailsSettings": {
+        "replaces": []
+      },
+      "ProjectsDetailsTasks": {
+        "replaces": []
+      },
+      "ProjectsEmpty": {
+        "replaces": []
+      },
+      "ProjectsEmptyMobile": {
+        "replaces": []
+      },
+      "ProjectsFilesMobile": {
+        "replaces": []
+      },
+      "ProjectsGrid01": {
+        "replaces": []
+      },
+      "ProjectsGrid01Mobile": {
+        "replaces": []
+      },
+      "ProjectsGrid02": {
+        "replaces": []
+      },
+      "ProjectsGrid02Mobile": {
+        "replaces": []
+      },
+      "ProjectsGrid03": {
+        "replaces": []
+      },
+      "ProjectsGrid03Mobile": {
+        "replaces": []
+      },
+      "ProjectsList01": {
+        "replaces": []
+      },
+      "ProjectsList01Mobile": {
+        "replaces": []
+      },
+      "ProjectsList02": {
+        "replaces": []
+      },
+      "ProjectsList02Mobile": {
+        "replaces": []
+      },
+      "ProjectsList03": {
+        "replaces": []
+      },
+      "ProjectsList03Mobile": {
+        "replaces": []
+      },
+      "ProjectsReportsMobile": {
+        "replaces": []
+      },
+      "ProjectsSettingsMenuMobile": {
+        "replaces": []
+      },
+      "ProjectsSettingsMobile": {
+        "replaces": []
+      },
+      "ProjectsSortMobile": {
+        "replaces": []
+      },
+      "ProjectsTasksMobile": {
+        "replaces": []
+      },
+      "Recover": {
+        "replaces": []
+      },
+      "Reports01": {
+        "replaces": []
+      },
+      "Reports02": {
+        "replaces": []
+      },
+      "Reports03": {
+        "replaces": []
+      },
+      "SignIn": {
+        "replaces": []
+      },
+      "SignUp": {
+        "replaces": []
+      },
+      "TablesContactsGrid01Mobile": {
+        "replaces": []
+      },
+      "TablesContactsGrid01Web": {
+        "replaces": []
+      },
+      "TablesContactsGrid02Web": {
+        "replaces": []
+      },
+      "TablesContactsGrid03Mobile": {
+        "replaces": []
+      },
+      "TablesContactsGrid03Web": {
+        "replaces": []
+      },
+      "TablesContactsRow01Mobile": {
+        "replaces": []
+      },
+      "TablesContactsRow01Web": {
+        "replaces": []
+      },
+      "TablesContactsRow02Mobile": {
+        "replaces": []
+      },
+      "TablesContactsRow02Web": {
+        "replaces": []
+      },
+      "TablesContactsRow03Mobile": {
+        "replaces": []
+      },
+      "TablesContactsRow03Web": {
+        "replaces": []
+      },
+      "TablesEventsList": {
+        "replaces": []
+      },
+      "TablesFilesGridMobile": {
+        "replaces": []
+      },
+      "TablesFilesGridWeb": {
+        "replaces": []
+      },
+      "TablesFilesListMobile": {
+        "replaces": []
+      },
+      "TablesFilesListWeb": {
+        "replaces": []
+      },
+      "TablesInvoicesListWidget": {
+        "replaces": []
+      },
+      "TablesInvoicesRow01Mobile": {
+        "replaces": []
+      },
+      "TablesInvoicesRow01Web": {
+        "replaces": []
+      },
+      "TablesInvoicesRow02Mobile": {
+        "replaces": []
+      },
+      "TablesInvoicesRow02Web": {
+        "replaces": []
+      },
+      "TablesProductsGrid01Mobile": {
+        "replaces": []
+      },
+      "TablesProductsGrid01Web": {
+        "replaces": []
+      },
+      "TablesProductsGrid02Mobile": {
+        "replaces": []
+      },
+      "TablesProductsGrid02Web": {
+        "replaces": []
+      },
+      "TablesProductsRow01Mobile": {
+        "replaces": []
+      },
+      "TablesProductsRow01Web": {
+        "replaces": []
+      },
+      "TablesProductsRow02Mobile": {
+        "replaces": []
+      },
+      "TablesProductsRow02Web": {
+        "replaces": []
+      },
+      "TablesProjectsGrid01Mobile": {
+        "replaces": []
+      },
+      "TablesProjectsGrid01Web": {
+        "replaces": []
+      },
+      "TablesProjectsGrid02Mobile": {
+        "replaces": []
+      },
+      "TablesProjectsGrid02Web": {
+        "replaces": []
+      },
+      "TablesProjectsGrid03Mobile": {
+        "replaces": []
+      },
+      "TablesProjectsGrid03Web": {
+        "replaces": []
+      },
+      "TablesProjectsRow01Mobile": {
+        "replaces": []
+      },
+      "TablesProjectsRow01Web": {
+        "replaces": []
+      },
+      "TablesProjectsRow02Mobile": {
+        "replaces": []
+      },
+      "TablesProjectsRow02Web": {
+        "replaces": []
+      },
+      "TablesProjectsRow03Web": {
+        "replaces": []
+      },
+      "TablesSalesFullwidthListWidget": {
+        "replaces": []
+      },
+      "TablesSalesListWidget": {
+        "replaces": []
+      },
+      "TablesSalesRow01": {
+        "replaces": []
+      },
+      "TablesSalesRow02": {
+        "replaces": []
+      },
+      "TablesSalesSmallListWidget": {
+        "replaces": []
+      },
+      "TablesTasksMobile": {
+        "replaces": []
+      },
+      "TablesTasksWeb": {
+        "replaces": []
+      },
+      "TablesTicketsFullsizeMobile": {
+        "replaces": []
+      },
+      "TablesTicketsFullsizeWeb": {
+        "replaces": []
+      },
+      "TablesTicketsRowMobile": {
+        "replaces": []
+      },
+      "TablesTicketsRowWeb": {
+        "replaces": []
+      },
+      "TabsIconActiveTab": {
+        "replaces": []
+      },
+      "TabsIconRestingTab": {
+        "replaces": []
+      },
+      "TabsTextActive": {
+        "replaces": []
+      },
+      "TabsTextActive2": {
+        "replaces": []
+      },
+      "TabsTextHover": {
+        "replaces": []
+      },
+      "TabsTextResting": {
+        "replaces": []
+      },
+      "TabsTextResting2": {
+        "replaces": []
+      },
+      "TagsBlue": {
+        "replaces": []
+      },
+      "TagsGreen2": {
+        "replaces": []
+      },
+      "TagsGrey": {
+        "replaces": []
+      },
+      "TagsGreyEditable": {
+        "replaces": []
+      },
+      "TagsLightBlue": {
+        "replaces": []
+      },
+      "TagsPrimary": {
+        "replaces": []
+      },
+      "TagsRed": {
+        "replaces": []
+      },
+      "TagsStatusTag": {
+        "replaces": []
+      },
+      "TagsYellow2": {
+        "replaces": []
+      },
+      "TaskAddNewMobile": {
+        "replaces": []
+      },
+      "TaskDescriptionMobile": {
+        "replaces": []
+      },
+      "Tasks": {
+        "replaces": []
+      },
+      "TasksAddNew": {
+        "replaces": []
+      },
+      "TasksDescription": {
+        "replaces": []
+      },
+      "TasksEmpty": {
+        "replaces": []
+      },
+      "TasksEmptyMobile": {
+        "replaces": []
+      },
+      "TasksList01Mobile": {
+        "replaces": []
+      },
+      "TasksList02Mobile": {
+        "replaces": []
+      },
+      "UIKitHeader": {
+        "replaces": []
+      },
+      "WidgetsGraphsPie": {
+        "replaces": []
+      },
+      "WidgetsSidebarCalendarEvent": {
+        "replaces": []
+      },
+      "WidgetsSidebarEvent": {
+        "replaces": []
+      },
+      "WidgetsSidebarHelp": {
+        "replaces": []
+      },
+      "WidgetsSidebarMessage": {
+        "replaces": []
+      }
+    },
+    "tokens": [
+      "--accent-primary",
+      "--accent-primary-active",
+      "--accent-primary-hover-overlay",
+      "--accent-primary-tint",
+      "--amber-400",
+      "--background-surface-inverted",
+      "--blue-500",
+      "--blue-600",
+      "--border-default",
+      "--border-resting",
+      "--border-strong",
+      "--cyan-300",
+      "--cyan-400",
+      "--font-body",
+      "--font-display",
+      "--font-icon",
+      "--gray-12",
+      "--gray-13",
+      "--green-400",
+      "--green-7",
+      "--grey-100",
+      "--grey-150",
+      "--grey-200",
+      "--grey-300",
+      "--grey-50",
+      "--grey-500",
+      "--indigo-400",
+      "--ink-900",
+      "--leading-normal",
+      "--leading-tight",
+      "--overlay-medium",
+      "--overlay-soft",
+      "--overlay-strong",
+      "--radius-lg",
+      "--radius-md",
+      "--radius-pill",
+      "--radius-sm",
+      "--red-400",
+      "--rose-400",
+      "--shadow-card",
+      "--shadow-color",
+      "--shadow-soft",
+      "--sky-400",
+      "--space-1",
+      "--space-10",
+      "--space-12",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--space-7",
+      "--space-8",
+      "--spacing-40",
+      "--status-error",
+      "--status-info",
+      "--status-neutral",
+      "--status-success",
+      "--status-warning",
+      "--surface-card",
+      "--surface-inverted",
+      "--surface-page",
+      "--text-body",
+      "--text-body-lg",
+      "--text-caption",
+      "--text-h1",
+      "--text-h2",
+      "--text-h3",
+      "--text-h4",
+      "--text-link",
+      "--text-on-accent",
+      "--text-primary",
+      "--text-secondary",
+      "--typography-primary-inverted",
+      "--violet-400",
+      "--violet-500",
+      "--weight-black",
+      "--weight-bold",
+      "--weight-light",
+      "--weight-regular",
+      "--weight-semibold",
+      "--white",
+      "--white-1"
+    ],
+    "tokenKinds": {
+      "--blue-500": "color",
+      "--blue-600": "color",
+      "--ink-900": "color",
+      "--grey-500": "color",
+      "--grey-300": "color",
+      "--grey-200": "color",
+      "--grey-150": "color",
+      "--grey-100": "color",
+      "--grey-50": "color",
+      "--white": "color",
+      "--cyan-400": "color",
+      "--cyan-300": "color",
+      "--red-400": "color",
+      "--green-400": "color",
+      "--amber-400": "color",
+      "--violet-400": "color",
+      "--violet-500": "color",
+      "--sky-400": "color",
+      "--indigo-400": "color",
+      "--rose-400": "color",
+      "--surface-page": "color",
+      "--surface-card": "color",
+      "--surface-inverted": "color",
+      "--border-default": "color",
+      "--border-resting": "color",
+      "--border-strong": "color",
+      "--text-primary": "font",
+      "--text-secondary": "font",
+      "--text-on-accent": "font",
+      "--text-link": "font",
+      "--accent-primary": "color",
+      "--accent-primary-active": "color",
+      "--accent-primary-tint": "color",
+      "--accent-primary-hover-overlay": "color",
+      "--status-success": "color",
+      "--status-error": "color",
+      "--status-warning": "color",
+      "--status-info": "color",
+      "--status-neutral": "color",
+      "--shadow-color": "shadow",
+      "--overlay-soft": "color",
+      "--overlay-medium": "color",
+      "--overlay-strong": "color",
+      "--font-display": "font",
+      "--font-body": "font",
+      "--font-icon": "font",
+      "--text-h1": "font",
+      "--text-h2": "font",
+      "--text-h3": "font",
+      "--text-h4": "font",
+      "--text-body-lg": "font",
+      "--text-body": "font",
+      "--text-caption": "font",
+      "--weight-black": "font",
+      "--weight-bold": "font",
+      "--weight-semibold": "font",
+      "--weight-regular": "font",
+      "--weight-light": "font",
+      "--leading-tight": "font",
+      "--leading-normal": "font",
+      "--space-1": "spacing",
+      "--space-2": "spacing",
+      "--space-3": "spacing",
+      "--space-4": "spacing",
+      "--space-5": "spacing",
+      "--space-6": "spacing",
+      "--space-7": "spacing",
+      "--space-8": "spacing",
+      "--space-10": "spacing",
+      "--space-12": "spacing",
+      "--radius-sm": "radius",
+      "--radius-md": "radius",
+      "--radius-lg": "radius",
+      "--radius-pill": "radius",
+      "--shadow-card": "shadow",
+      "--shadow-soft": "shadow",
+      "--background-surface-inverted": "color",
+      "--gray-12": "color",
+      "--gray-13": "color",
+      "--green-7": "color",
+      "--spacing-40": "spacing",
+      "--typography-primary-inverted": "color",
+      "--white-1": "color"
+    },
+    "fontFamilies": [
+      "Lato",
+      "Source Sans Pro",
+      "la-brands-400",
+      "la-regular-400",
+      "la-solid-900"
+    ]
+  }
+}

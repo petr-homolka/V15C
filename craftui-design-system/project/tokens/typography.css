@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Source+Sans+Pro:wght@400;600&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/css/line-awesome.min.css');
+
+@font-face{font-family:'la-solid-900';src:url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/fonts/la-solid-900.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/fonts/la-solid-900.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'la-regular-400';src:url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/fonts/la-regular-400.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/fonts/la-regular-400.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'la-brands-400';src:url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/fonts/la-brands-400.woff2') format('woff2'),url('https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/dist/line-awesome/fonts/la-brands-400.woff') format('woff');font-weight:400;font-style:normal;font-display:swap;}
+
+:root{
+--font-display:'Lato',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+--font-body:'Source Sans Pro',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+--font-icon:'la-solid-900';
+
+/* type scale — sizes as used verbatim in the source (not snapped to a grid) */
+--text-h1:32px;
+--text-h2:26px;
+--text-h3:22px;
+--text-h4:18px;
+--text-body-lg:16px;
+--text-body:14px;
+--text-caption:12px;
+
+--weight-black:900;
+--weight-bold:700;
+--weight-semibold:600;
+--weight-regular:400;
+--weight-light:300;
+
+--leading-tight:100%;
+--leading-normal:140%;
+}
+body{font-family:var(--font-body);color:var(--text-primary);}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);margin:0;}

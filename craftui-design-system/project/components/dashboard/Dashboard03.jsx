@@ -1,0 +1,3358 @@
+import { CraftUILogo } from '../navigation/CraftUILogo.jsx';
+
+// figma node: 12070:1630 Dashboard / 03
+export function Dashboard03(_p = {}) {
+  const props = _p;
+  return (
+    <div className={props.className} style={{
+      width: "fit-content",
+      backgroundColor: "rgb(245,245,250)",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "flex-start",
+      flexWrap: "nowrap",
+      position: "relative",
+      color: "rgb(240,240,243)",
+      ...props.style,
+    }}>
+      <div style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        flexWrap: "nowrap",
+        flexShrink: 0,
+        alignSelf: "stretch",
+      }}>
+        <div style={{
+          position: "relative",
+          width: 84,
+          flexShrink: 0,
+          alignSelf: "stretch",
+        }}>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: 84,
+            height: 1020,
+            backgroundColor: "rgb(255,255,255)",
+          }} />
+          <svg width={2} height={1021} viewBox="0 0 2 1021" fill="none" style={{
+            position: "absolute",
+            left: 82.5,
+            top: 0,
+            width: 2,
+            height: 1021,
+            color: "rgb(240,240,243)",
+          }}>
+            <path d={"M 1 0.5 L 1 0 L 0 0 L 0 0.5 L 0.5 0.5 L 1 0.5 Z M 0.5 1020.5 L 0.5 1021 L 1.5 1021 L 1.5 1020.5 L 1 1020.5 L 0.5 1020.5 Z M 0.5 0.5 L 0 0.5 L 0.5 1020.5 L 1 1020.5 L 1.5 1020.5 L 1 0.5 L 0.5 0.5 Z"} fill="currentColor" fillRule="nonzero" />
+          </svg>
+          <div style={{
+            position: "absolute",
+            left: 27,
+            top: 963,
+            width: 33,
+            height: 32,
+            overflow: "hidden",
+          }}>
+            <div className="fig-asset-d0d2b4dbf5778dd8" style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 30,
+              height: 30,
+              borderRadius: 5,
+            }} />
+            <svg width={8} height={8} viewBox="0 0 8 8" fill="none" style={{
+              position: "absolute",
+              left: 25,
+              top: 24,
+              width: 8,
+              height: 8,
+              color: "rgb(124,231,172)",
+            }}>
+              <path d={"M 4 8 C 6.209 8 8 6.209 8 4 C 8 1.791 6.209 0 4 0 C 1.791 0 0 1.791 0 4 C 0 6.209 1.791 8 4 8 Z"} fill="rgb(124,231,172)" fillRule="evenodd" />
+              <path d={"M 4 8 L 4 10 C 7.314 10 10 7.314 10 4 L 8 4 L 6 4 C 6 5.105 5.105 6 4 6 L 4 8 Z M 8 4 L 10 4 C 10 0.686 7.314 -2 4 -2 L 4 0 L 4 2 C 5.105 2 6 2.895 6 4 L 8 4 Z M 4 0 L 4 -2 C 0.686 -2 -2 0.686 -2 4 L 0 4 L 2 4 C 2 2.895 2.895 2 4 2 L 4 0 Z M 0 4 L -2 4 C -2 7.314 0.686 10 4 10 L 4 8 L 4 6 C 2.895 6 2 5.105 2 4 L 0 4 Z"} fill="rgb(255,255,255)" fillRule="nonzero" />
+            </svg>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 844,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 780,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 652,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 716,
+            width: 83,
+            height: 64,
+            overflow: "hidden",
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 83,
+              height: 64,
+            }}>
+              <span style={{
+                position: "absolute",
+                left: 31,
+                top: 21,
+                width: 22,
+                height: 22,
+                fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 22,
+                textAlign: "center",
+                whiteSpace: "nowrap",
+                lineHeight: "100%",
+                color: "rgb(129,129,165)",
+              }}></span>
+            </div>
+            <svg width={9.881} height={10} viewBox="0 0 9.881 10" fill="none" style={{
+              position: "absolute",
+              left: 44.464,
+              top: 22,
+              width: 9.881,
+              height: 10,
+              color: "rgb(255,128,139)",
+            }}>
+              <path d={"M 4.94 10 C 7.669 10 9.881 7.761 9.881 5 C 9.881 2.239 7.669 0 4.94 0 C 2.212 0 0 2.239 0 5 C 0 7.761 2.212 10 4.94 10 Z"} fill="rgb(255,128,139)" fillRule="evenodd" />
+              <path d={"M 4.94 10 L 4.94 11 C 8.233 11 10.881 8.302 10.881 5 L 9.881 5 L 8.881 5 C 8.881 7.22 7.105 9 4.94 9 L 4.94 10 Z M 9.881 5 L 10.881 5 C 10.881 1.698 8.233 -1 4.94 -1 L 4.94 0 L 4.94 1 C 7.105 1 8.881 2.78 8.881 5 L 9.881 5 Z M 4.94 0 L 4.94 -1 C 1.648 -1 -1 1.698 -1 5 L 0 5 L 1 5 C 1 2.78 2.775 1 4.94 1 L 4.94 0 Z M 0 5 L -1 5 C -1 8.302 1.648 11 4.94 11 L 4.94 10 L 4.94 9 C 2.775 9 1 7.22 1 5 L 0 5 Z"} fill="rgb(255,255,255)" fillRule="nonzero" />
+            </svg>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 588,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 524,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 460,
+            width: 83,
+            height: 64,
+            overflow: "hidden",
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 83,
+              height: 64,
+            }}>
+              <span style={{
+                position: "absolute",
+                left: 31,
+                top: 21,
+                width: 22,
+                height: 22,
+                fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 22,
+                textAlign: "center",
+                whiteSpace: "nowrap",
+                lineHeight: "100%",
+                color: "rgb(129,129,165)",
+              }}></span>
+            </div>
+            <svg width={9.881} height={10} viewBox="0 0 9.881 10" fill="none" style={{
+              position: "absolute",
+              left: 49.405,
+              top: 22,
+              width: 9.881,
+              height: 10,
+              color: "rgb(138,241,185)",
+            }}>
+              <path d={"M 4.94 10 C 7.669 10 9.881 7.761 9.881 5 C 9.881 2.239 7.669 0 4.94 0 C 2.212 0 0 2.239 0 5 C 0 7.761 2.212 10 4.94 10 Z"} fill="rgb(138,241,185)" fillRule="evenodd" />
+              <path d={"M 4.94 10 L 4.94 11 C 8.233 11 10.881 8.302 10.881 5 L 9.881 5 L 8.881 5 C 8.881 7.22 7.105 9 4.94 9 L 4.94 10 Z M 9.881 5 L 10.881 5 C 10.881 1.698 8.233 -1 4.94 -1 L 4.94 0 L 4.94 1 C 7.105 1 8.881 2.78 8.881 5 L 9.881 5 Z M 4.94 0 L 4.94 -1 C 1.648 -1 -1 1.698 -1 5 L 0 5 L 1 5 C 1 2.78 2.775 1 4.94 1 L 4.94 0 Z M 0 5 L -1 5 C -1 8.302 1.648 11 4.94 11 L 4.94 10 L 4.94 9 C 2.775 9 1 7.22 1 5 L 0 5 Z"} fill="rgb(255,255,255)" fillRule="nonzero" />
+            </svg>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 396,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 332,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 268,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 204,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 140,
+            width: 83,
+            height: 64,
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 76,
+            width: 83,
+            height: 64,
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 18,
+              top: 8,
+              width: 48,
+              height: 48,
+              borderRadius: 4,
+              background: "linear-gradient(rgba(94,129,244,0.1),rgba(94,129,244,0.1)), linear-gradient(rgb(255,255,255),rgb(255,255,255))",
+            }} />
+            <span style={{
+              position: "absolute",
+              left: 31,
+              top: 21,
+              width: 22,
+              height: 22,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 22,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(94,129,244)",
+            }}></span>
+            <div style={{
+              position: "absolute",
+              left: 81,
+              top: 8,
+              width: 2,
+              height: 48,
+              borderRadius: 1,
+              backgroundColor: "rgb(94,129,244)",
+            }} />
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 28,
+            top: 26,
+            width: 30,
+            height: 30,
+          }}>
+            <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 30,
+                height: 30,
+              }}>
+              <CraftUILogo style={{ transform: "scale(0.833, 0.833)", transformOrigin: "0 0" }} />
+            </div>
+          </div>
+        </div>
+        <div style={{
+          position: "relative",
+          width: 389,
+          overflow: "hidden",
+          flexShrink: 0,
+          alignSelf: "stretch",
+        }}>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 0.5,
+            width: 387,
+            height: 1020,
+            backgroundColor: "rgb(255,255,255)",
+          }} />
+          <svg width={2} height={1021} viewBox="0 0 2 1021" fill="none" style={{
+            position: "absolute",
+            left: 386.25,
+            top: 0,
+            width: 2,
+            height: 1021,
+          }}>
+            <path d={"M 1 0.5 L 1 0 L 0 0 L 0 0.5 L 0.5 0.5 L 1 0.5 Z M 0.5 1020.5 L 0.5 1021 L 1.5 1021 L 1.5 1020.5 L 1 1020.5 L 0.5 1020.5 Z M 0.5 0.5 L 0 0.5 L 0.5 1020.5 L 1 1020.5 L 1.5 1020.5 L 1 0.5 L 0.5 0.5 Z"} fill="currentColor" fillRule="nonzero" />
+          </svg>
+          <div style={{
+            position: "absolute",
+            left: 28,
+            top: 763,
+            width: 330,
+            height: 230,
+            overflow: "hidden",
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 2,
+              top: 0,
+              width: 124,
+              height: 24,
+              fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 700,
+              fontSize: 16,
+              whiteSpace: "nowrap",
+              lineHeight: "24px",
+              color: "rgb(28,29,33)",
+            }}>{props.text1 ?? "Upcoming events"}</span>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 40,
+              width: 330,
+              height: 90,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 330,
+                height: 90,
+                borderRadius: 12,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 300,
+                top: 16,
+                width: 16,
+                height: 16,
+                fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 16,
+                textAlign: "center",
+                whiteSpace: "nowrap",
+                lineHeight: "100%",
+                color: "rgb(129,129,165)",
+              }}></span>
+              <span style={{
+                position: "absolute",
+                left: 21,
+                top: 56,
+                width: 208,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 12,
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Tell how to boost website traffic</span>
+              <span style={{
+                position: "absolute",
+                left: 22,
+                top: 36,
+                width: 248,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>Meeting with a client</span>
+              <div style={{
+                position: "absolute",
+                left: 22,
+                top: 14,
+                display: "flex",
+                flexDirection: "row",
+                gap: 6,
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}>
+                <svg width={8} height={8} viewBox="0 0 8 8" fill="none" style={{
+                  position: "relative",
+                  width: 8,
+                  height: 8,
+                  flexShrink: 0,
+                  color: "rgb(94,129,244)",
+                }}>
+                  <path d={"M 4 8 C 6.209 8 8 6.209 8 4 C 8 1.791 6.209 0 4 0 C 1.791 0 0 1.791 0 4 C 0 6.209 1.791 8 4 8 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 12,
+                  whiteSpace: "nowrap",
+                  lineHeight: "18px",
+                  color: "rgb(94,129,244)",
+                  flexShrink: 0,
+                }}>05:48AM</span>
+              </div>
+            </div>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 140,
+              width: 330,
+              height: 90,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 330,
+                height: 90,
+                borderRadius: 12,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 300,
+                top: 16,
+                width: 16,
+                height: 16,
+                fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 16,
+                textAlign: "center",
+                whiteSpace: "nowrap",
+                lineHeight: "100%",
+                color: "rgb(129,129,165)",
+              }}></span>
+              <span style={{
+                position: "absolute",
+                left: 21,
+                top: 56,
+                width: 208,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 12,
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Business Cards Does Your Business </span>
+              <span style={{
+                position: "absolute",
+                left: 22,
+                top: 36,
+                width: 248,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>New project discussion</span>
+              <div style={{
+                position: "absolute",
+                left: 22,
+                top: 14,
+                display: "flex",
+                flexDirection: "row",
+                gap: 6,
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}>
+                <svg width={8} height={8} viewBox="0 0 8 8" fill="none" style={{
+                  position: "relative",
+                  width: 8,
+                  height: 8,
+                  flexShrink: 0,
+                  color: "rgb(94,129,244)",
+                }}>
+                  <path d={"M 4 8 C 6.209 8 8 6.209 8 4 C 8 1.791 6.209 0 4 0 C 1.791 0 0 1.791 0 4 C 0 6.209 1.791 8 4 8 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 12,
+                  whiteSpace: "nowrap",
+                  lineHeight: "18px",
+                  color: "rgb(94,129,244)",
+                  flexShrink: 0,
+                }}>10:28AM</span>
+              </div>
+            </div>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 28,
+            top: 85,
+            width: 170,
+            height: 176,
+            overflow: "hidden",
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 0,
+              top: 110,
+              width: 96,
+              height: 26,
+              fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 300,
+              fontSize: 22,
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              letterSpacing: "0.400px",
+              color: "rgb(28,29,33)",
+            }}>{props.text2 ?? "Welcome,"}</span>
+            <span style={{
+              position: "absolute",
+              left: 0,
+              top: 138,
+              width: 110,
+              height: 38,
+              fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 700,
+              fontSize: 26,
+              whiteSpace: "nowrap",
+              lineHeight: "38px",
+              color: "rgb(28,29,33)",
+            }}>{props.text3 ?? "CRAFTUI"}</span>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 98,
+              height: 98,
+            }}>
+              <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 98,
+                  height: 98,
+                }}>
+                <CraftUILogo style={{ transform: "scale(2.722, 2.722)", transformOrigin: "0 0" }} />
+              </div>
+            </div>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 28,
+            top: 294,
+            width: 330,
+            height: 437,
+            overflow: "hidden",
+          }}>
+            <span style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 105,
+              height: 24,
+              fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 700,
+              fontSize: 16,
+              whiteSpace: "nowrap",
+              lineHeight: "24px",
+              color: "rgb(28,29,33)",
+            }}>{props.text4 ?? "Latest updates"}</span>
+            <div style={{
+              position: "absolute",
+              left: -0.003,
+              top: 42,
+              width: 330.003,
+              height: 72,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 1.041,
+                top: 0,
+                width: 327.921,
+                height: 72,
+                borderRadius: 10,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 256,
+                top: 27,
+                width: 52,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                textAlign: "right",
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>+$890.00</span>
+              <span style={{
+                position: "absolute",
+                left: 70,
+                top: 25,
+                width: 114,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>Item sale #340-00</span>
+              <div style={{
+                position: "absolute",
+                left: 19,
+                top: 17,
+                width: 38,
+                height: 38,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 38,
+                  height: 38,
+                  borderRadius: 8,
+                  background: "linear-gradient(rgba(94,129,244,0.1),rgba(94,129,244,0.1)), linear-gradient(rgb(255,255,255),rgb(255,255,255))",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 10,
+                  top: 10,
+                  width: 18,
+                  height: 18,
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 18,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(94,129,244)",
+                }}></span>
+              </div>
+            </div>
+            <div style={{
+              position: "absolute",
+              left: -0.003,
+              top: 123,
+              width: 330.003,
+              height: 72,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 1.041,
+                top: 0,
+                width: 327.921,
+                height: 72,
+                borderRadius: 10,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 271,
+                top: 27,
+                width: 37,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                textAlign: "right",
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>30 min</span>
+              <span style={{
+                position: "absolute",
+                left: 70,
+                top: 25,
+                width: 109,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>New lead created</span>
+              <div style={{
+                position: "absolute",
+                left: 19,
+                top: 17,
+                width: 38,
+                height: 38,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 38,
+                  height: 38,
+                  borderRadius: 8,
+                  background: "linear-gradient(rgba(94,129,244,0.1),rgba(94,129,244,0.1)), linear-gradient(rgb(255,255,255),rgb(255,255,255))",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 10,
+                  top: 10,
+                  width: 18,
+                  height: 18,
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 18,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(94,129,244)",
+                }}></span>
+              </div>
+            </div>
+            <div style={{
+              position: "absolute",
+              left: -0.003,
+              top: 204,
+              width: 330.003,
+              height: 72,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 1.041,
+                top: 0,
+                width: 327.921,
+                height: 72,
+                borderRadius: 10,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 256,
+                top: 27,
+                width: 52,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                textAlign: "right",
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>+$940.00</span>
+              <span style={{
+                position: "absolute",
+                left: 70,
+                top: 25,
+                width: 114,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>Item sale #360-20</span>
+              <div style={{
+                position: "absolute",
+                left: 19,
+                top: 17,
+                width: 38,
+                height: 38,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 38,
+                  height: 38,
+                  borderRadius: 8,
+                  background: "linear-gradient(rgba(94,129,244,0.1),rgba(94,129,244,0.1)), linear-gradient(rgb(255,255,255),rgb(255,255,255))",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 10,
+                  top: 10,
+                  width: 18,
+                  height: 18,
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 18,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(94,129,244)",
+                }}></span>
+              </div>
+            </div>
+            <div style={{
+              position: "absolute",
+              left: -0.003,
+              top: 285,
+              width: 330.003,
+              height: 72,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 1.041,
+                top: 0,
+                width: 327.921,
+                height: 72,
+                borderRadius: 10,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 271,
+                top: 27,
+                width: 37,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                textAlign: "right",
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>45 min</span>
+              <span style={{
+                position: "absolute",
+                left: 70,
+                top: 25,
+                width: 142,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>Items upload complete</span>
+              <div style={{
+                position: "absolute",
+                left: 19,
+                top: 17,
+                width: 38,
+                height: 38,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 38,
+                  height: 38,
+                  borderRadius: 8,
+                  background: "linear-gradient(rgba(94,129,244,0.1),rgba(94,129,244,0.1)), linear-gradient(rgb(255,255,255),rgb(255,255,255))",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 10,
+                  top: 10,
+                  width: 18,
+                  height: 18,
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 18,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(94,129,244)",
+                }}></span>
+              </div>
+            </div>
+            <div style={{
+              position: "absolute",
+              left: -0.003,
+              top: 365,
+              width: 330.003,
+              height: 72,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 1.041,
+                top: 0,
+                width: 327.921,
+                height: 72,
+                borderRadius: 10,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 281,
+                top: 27,
+                width: 27,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                textAlign: "right",
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>2 hrs</span>
+              <span style={{
+                position: "absolute",
+                left: 70,
+                top: 25,
+                width: 145,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>Email notifications sent</span>
+              <div style={{
+                position: "absolute",
+                left: 19,
+                top: 17,
+                width: 38,
+                height: 38,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 38,
+                  height: 38,
+                  borderRadius: 8,
+                  background: "linear-gradient(rgba(94,129,244,0.1),rgba(94,129,244,0.1)), linear-gradient(rgb(255,255,255),rgb(255,255,255))",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 10,
+                  top: 10,
+                  width: 18,
+                  height: 18,
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 18,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(94,129,244)",
+                }}></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{
+        position: "relative",
+        width: 1209,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        flexWrap: "nowrap",
+        flexShrink: 0,
+        alignSelf: "stretch",
+      }}>
+        <div style={{
+          position: "relative",
+          height: 84,
+          flexShrink: 0,
+          alignSelf: "stretch",
+        }}>
+          <div style={{
+            position: "absolute",
+            left: 28,
+            top: 24,
+            width: 36,
+            height: 36,
+            overflow: "hidden",
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 36,
+              height: 36,
+              borderRadius: 6,
+              backgroundColor: "rgb(240,240,243)",
+            }} />
+            <span style={{
+              position: "absolute",
+              left: 10,
+              top: 10,
+              width: 16,
+              height: 16,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 16,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 1145,
+            top: 24,
+            width: 36,
+            height: 36,
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 36,
+              height: 36,
+              borderRadius: 6,
+              backgroundColor: "rgb(240,240,243)",
+            }} />
+            <span style={{
+              position: "absolute",
+              left: 10,
+              top: 10,
+              width: 16,
+              height: 16,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 16,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <div style={{
+            position: "absolute",
+            left: 1103,
+            top: 24,
+            width: 36,
+            height: 36,
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 36,
+              height: 36,
+              borderRadius: 6,
+              backgroundColor: "rgb(240,240,243)",
+            }} />
+            <span style={{
+              position: "absolute",
+              left: 10,
+              top: 10,
+              width: 16,
+              height: 16,
+              fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 400,
+              fontSize: 16,
+              textAlign: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "100%",
+              color: "rgb(129,129,165)",
+            }}></span>
+          </div>
+          <span style={{
+            position: "absolute",
+            left: 84,
+            top: 25,
+            width: 97,
+            height: 32,
+            fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+            fontWeight: 700,
+            fontSize: 20,
+            whiteSpace: "nowrap",
+            lineHeight: "32px",
+            color: "rgb(28,29,33)",
+          }}>Dashboard</span>
+        </div>
+        <div style={{
+          position: "relative",
+          width: 1152,
+          display: "flex",
+          flexDirection: "column",
+          gap: 28,
+          alignItems: "flex-end",
+          flexWrap: "nowrap",
+          flexShrink: 0,
+        }}>
+          <div style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "row",
+            gap: 28,
+            alignItems: "center",
+            flexWrap: "nowrap",
+            flexShrink: 0,
+            alignSelf: "stretch",
+          }}>
+            <div style={{
+              position: "relative",
+              width: 365,
+              height: 98,
+              flexShrink: 0,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 365,
+                height: 98,
+                borderRadius: 12,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <div style={{
+                position: "absolute",
+                left: 271,
+                top: 22,
+                display: "flex",
+                flexDirection: "row",
+                gap: 4,
+                justifyContent: "flex-end",
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 20,
+                  textAlign: "right",
+                  whiteSpace: "nowrap",
+                  lineHeight: "32px",
+                  color: "rgb(28,29,33)",
+                  flexShrink: 0,
+                }}>1.345</span>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 16,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(124,231,172)",
+                  flexShrink: 0,
+                }}></span>
+              </div>
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 38,
+                width: 111,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(129,129,165)",
+              }}>Week comparison</span>
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 14,
+                width: 41,
+                height: 27,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 18,
+                whiteSpace: "nowrap",
+                lineHeight: "27px",
+                color: "rgb(28,29,33)",
+              }}>Sales</span>
+              <div style={{
+                position: "absolute",
+                left: 25.5,
+                top: 74,
+                width: 316,
+                height: 4,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 316,
+                  height: 4,
+                  borderRadius: 3,
+                  backgroundColor: "rgb(245,245,250)",
+                }} />
+                <svg width={263.845} height={4} viewBox="0 0 263.845 4" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 263.845,
+                  height: 4,
+                  borderRadius: 3,
+                  color: "rgb(124,231,172)",
+                }}>
+                  <path d={"M 0 2 C 0 0.895 0.895 0 2 0 L 261.845 0 C 262.949 0 263.845 0.895 263.845 2 C 263.845 3.105 262.949 4 261.845 4 L 2 4 C 0.895 4 0 3.105 0 2 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+              </div>
+            </div>
+            <div style={{
+              position: "relative",
+              width: 365,
+              height: 98,
+              flexShrink: 0,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 365,
+                height: 98,
+                borderRadius: 12,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <div style={{
+                position: "absolute",
+                left: 271,
+                top: 22,
+                display: "flex",
+                flexDirection: "row",
+                gap: 4,
+                justifyContent: "flex-end",
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 20,
+                  textAlign: "right",
+                  whiteSpace: "nowrap",
+                  lineHeight: "32px",
+                  color: "rgb(28,29,33)",
+                  flexShrink: 0,
+                }}>3.820</span>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 16,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(124,231,172)",
+                  flexShrink: 0,
+                }}></span>
+              </div>
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 38,
+                width: 116,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(129,129,165)",
+              }}>Month comparison</span>
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 14,
+                width: 46,
+                height: 27,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 18,
+                whiteSpace: "nowrap",
+                lineHeight: "27px",
+                color: "rgb(28,29,33)",
+              }}>Leads</span>
+              <div style={{
+                position: "absolute",
+                left: 25.5,
+                top: 74,
+                width: 316,
+                height: 4,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 316,
+                  height: 4,
+                  borderRadius: 3,
+                  backgroundColor: "rgb(245,245,250)",
+                }} />
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 251.573,
+                  height: 4,
+                  borderRadius: 3,
+                  backgroundColor: "rgb(94,129,244)",
+                }} />
+              </div>
+            </div>
+            <div style={{
+              position: "relative",
+              width: 365,
+              height: 98,
+              flexShrink: 0,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 365,
+                height: 98,
+                borderRadius: 12,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <div style={{
+                position: "absolute",
+                left: 248,
+                top: 22,
+                display: "flex",
+                flexDirection: "row",
+                gap: 4,
+                justifyContent: "flex-end",
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 20,
+                  textAlign: "right",
+                  whiteSpace: "nowrap",
+                  lineHeight: "32px",
+                  color: "rgb(28,29,33)",
+                  flexShrink: 0,
+                }}>$690.00</span>
+                <span style={{
+                  position: "relative",
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 16,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(124,231,172)",
+                  flexShrink: 0,
+                }}></span>
+              </div>
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 38,
+                width: 111,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 400,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(129,129,165)",
+              }}>Week comparison</span>
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 14,
+                width: 59,
+                height: 27,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 18,
+                whiteSpace: "nowrap",
+                lineHeight: "27px",
+                color: "rgb(28,29,33)",
+              }}>Income</span>
+              <div style={{
+                position: "absolute",
+                left: 25.5,
+                top: 74,
+                width: 316,
+                height: 4,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 316,
+                  height: 4,
+                  borderRadius: 3,
+                  backgroundColor: "rgb(245,245,250)",
+                }} />
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 70.563,
+                  height: 4,
+                  borderRadius: 3,
+                  backgroundColor: "rgb(255,128,139)",
+                }} />
+              </div>
+            </div>
+          </div>
+          <div style={{
+            position: "relative",
+            display: "flex",
+            flexDirection: "row",
+            gap: 28,
+            alignItems: "center",
+            flexWrap: "nowrap",
+            flexShrink: 0,
+            alignSelf: "stretch",
+          }}>
+            <div style={{
+              position: "relative",
+              width: 758,
+              height: 380,
+              flexShrink: 0,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 756.996,
+                height: 380,
+                borderRadius: 12,
+                backgroundColor: "rgb(255,255,255)",
+                boxShadow: "0 0 0 1px rgb(240,240,243)",
+              }} />
+              <div style={{
+                position: "absolute",
+                left: 24.934,
+                top: 21,
+                width: 707.134,
+                height: 40,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 441,
+                  top: 0,
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 8,
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  flexWrap: "nowrap",
+                }}>
+                  <div style={{
+                    position: "relative",
+                    width: 62,
+                    height: 40,
+                    flexShrink: 0,
+                  }}>
+                    <div style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: 62,
+                      height: 40,
+                      borderRadius: 8,
+                      backgroundColor: "rgb(255,255,255)",
+                      boxShadow: "inset 0 0 0 1px rgb(236,236,242)",
+                    }} />
+                    <span style={{
+                      position: "absolute",
+                      left: 17.5,
+                      top: 10,
+                      width: 26,
+                      height: 21,
+                      fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 14,
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                      lineHeight: "21px",
+                      color: "rgb(28,29,33)",
+                    }}>Day</span>
+                  </div>
+                  <div style={{
+                    position: "relative",
+                    width: 64,
+                    height: 40,
+                    flexShrink: 0,
+                  }}>
+                    <span style={{
+                      position: "absolute",
+                      left: 12.432,
+                      top: 10,
+                      width: 38,
+                      height: 21,
+                      fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 14,
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                      lineHeight: "21px",
+                      color: "rgb(129,129,165)",
+                    }}>Week</span>
+                  </div>
+                  <div style={{
+                    position: "relative",
+                    width: 76,
+                    height: 40,
+                    flexShrink: 0,
+                  }}>
+                    <span style={{
+                      position: "absolute",
+                      left: 16.514,
+                      top: 10,
+                      width: 43,
+                      height: 21,
+                      fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                      fontWeight: 700,
+                      fontSize: 14,
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                      lineHeight: "21px",
+                      color: "rgb(129,129,165)",
+                    }}>Month</span>
+                  </div>
+                  <div style={{
+                    position: "relative",
+                    width: 40,
+                    height: 40,
+                    overflow: "hidden",
+                    flexShrink: 0,
+                  }}>
+                    <div style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: 40,
+                      height: 40,
+                      opacity: 0.1,
+                      borderRadius: 6,
+                      backgroundColor: "rgb(129,129,165)",
+                    }} />
+                    <span style={{
+                      position: "absolute",
+                      left: 11,
+                      top: 11,
+                      width: 18,
+                      height: 18,
+                      fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                      fontWeight: 400,
+                      fontSize: 18,
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                      lineHeight: "100%",
+                      color: "rgb(129,129,165)",
+                    }}></span>
+                  </div>
+                </div>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 7,
+                  width: 65.57,
+                  height: 27,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 18,
+                  lineHeight: "27px",
+                  color: "rgb(28,29,33)",
+                }}>Orders</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 0.499,
+                top: 94.5,
+                width: 756.999,
+                height: 224,
+                overflow: "hidden",
+              }}>
+                <svg width={1} height={756.999} viewBox="0 0 1 756.999" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,0,224)",
+                  transformOrigin: "0 0",
+                  width: 1,
+                  height: 756.999,
+                  color: "rgb(238,238,238)",
+                }}>
+                  <path d={"M 0.997 0.003 L 0.997 -0.497 L -0.003 -0.497 L -0.003 0.003 L 0.497 0.003 L 0.997 0.003 Z M 0.003 756.999 L 0.003 757.499 L 1.003 757.499 L 1.003 756.999 L 0.503 756.999 L 0.003 756.999 Z M 0.497 0.003 L -0.003 0.003 L 0.003 756.999 L 0.503 756.999 L 1.003 756.999 L 0.997 0.003 L 0.497 0.003 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,32.134,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,446.775,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,101.408,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,516.049,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,170.682,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,584.319,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,238.952,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,653.593,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,308.226,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.185 L -0.501 0.186 L -0.499 1.186 L 0.001 1.185 L 0 0.685 L -0.001 0.185 Z M 224.001 0.812 L 224.501 0.811 L 224.499 -0.189 L 223.999 -0.188 L 224 0.312 L 224.001 0.812 Z M 2.001 1.182 L 2.501 1.181 L 2.499 0.181 L 1.999 0.182 L 2 0.682 L 2.001 1.182 Z M 5.999 0.175 L 5.499 0.176 L 5.501 1.176 L 6.001 1.175 L 6 0.675 L 5.999 0.175 Z M 10.001 1.169 L 10.501 1.168 L 10.499 0.168 L 9.999 0.169 L 10 0.669 L 10.001 1.169 Z M 13.999 0.162 L 13.499 0.163 L 13.501 1.163 L 14.001 1.162 L 14 0.662 L 13.999 0.162 Z M 18.001 1.155 L 18.501 1.154 L 18.499 0.154 L 17.999 0.155 L 18 0.655 L 18.001 1.155 Z M 21.999 0.149 L 21.499 0.149 L 21.501 1.149 L 22.001 1.149 L 22 0.649 L 21.999 0.149 Z M 26.001 1.142 L 26.501 1.141 L 26.499 0.141 L 25.999 0.142 L 26 0.642 L 26.001 1.142 Z M 29.999 0.135 L 29.499 0.136 L 29.501 1.136 L 30.001 1.135 L 30 0.635 L 29.999 0.135 Z M 34.001 1.129 L 34.501 1.128 L 34.499 0.128 L 33.999 0.129 L 34 0.629 L 34.001 1.129 Z M 37.999 0.122 L 37.499 0.123 L 37.501 1.123 L 38.001 1.122 L 38 0.622 L 37.999 0.122 Z M 42.001 1.115 L 42.501 1.114 L 42.499 0.114 L 41.999 0.115 L 42 0.615 L 42.001 1.115 Z M 45.999 0.109 L 45.499 0.109 L 45.501 1.109 L 46.001 1.109 L 46 0.609 L 45.999 0.109 Z M 50.001 1.102 L 50.501 1.101 L 50.499 0.101 L 49.999 0.102 L 50 0.602 L 50.001 1.102 Z M 53.999 0.095 L 53.499 0.096 L 53.501 1.096 L 54.001 1.095 L 54 0.595 L 53.999 0.095 Z M 58.001 1.089 L 58.501 1.088 L 58.499 0.088 L 57.999 0.089 L 58 0.589 L 58.001 1.089 Z M 61.999 0.082 L 61.499 0.083 L 61.501 1.083 L 62.001 1.082 L 62 0.582 L 61.999 0.082 Z M 66.001 1.075 L 66.501 1.074 L 66.499 0.074 L 65.999 0.075 L 66 0.575 L 66.001 1.075 Z M 69.999 0.069 L 69.499 0.069 L 69.501 1.069 L 70.001 1.069 L 70 0.569 L 69.999 0.069 Z M 74.001 1.062 L 74.501 1.061 L 74.499 0.061 L 73.999 0.062 L 74 0.562 L 74.001 1.062 Z M 77.999 0.055 L 77.499 0.056 L 77.501 1.056 L 78.001 1.055 L 78 0.555 L 77.999 0.055 Z M 82.001 1.049 L 82.501 1.048 L 82.499 0.048 L 81.999 0.049 L 82 0.549 L 82.001 1.049 Z M 85.999 0.042 L 85.499 0.043 L 85.501 1.043 L 86.001 1.042 L 86 0.542 L 85.999 0.042 Z M 90.001 1.035 L 90.501 1.035 L 90.499 0.035 L 89.999 0.035 L 90 0.535 L 90.001 1.035 Z M 93.999 0.029 L 93.499 0.03 L 93.501 1.03 L 94.001 1.029 L 94 0.529 L 93.999 0.029 Z M 98.001 1.022 L 98.501 1.021 L 98.499 0.021 L 97.999 0.022 L 98 0.522 L 98.001 1.022 Z M 101.999 0.015 L 101.499 0.016 L 101.501 1.016 L 102.001 1.015 L 102 0.515 L 101.999 0.015 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.995 L 114.499 -0.005 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.011 L 117.499 -0.01 L 117.501 0.99 L 118.001 0.989 L 118 0.489 L 117.999 -0.011 Z M 122.001 0.982 L 122.501 0.981 L 122.499 -0.019 L 121.999 -0.018 L 122 0.482 L 122.001 0.982 Z M 125.999 -0.025 L 125.499 -0.024 L 125.501 0.976 L 126.001 0.975 L 126 0.475 L 125.999 -0.025 Z M 130.001 0.969 L 130.501 0.968 L 130.499 -0.032 L 129.999 -0.031 L 130 0.469 L 130.001 0.969 Z M 133.999 -0.038 L 133.499 -0.037 L 133.501 0.963 L 134.001 0.962 L 134 0.462 L 133.999 -0.038 Z M 138.001 0.955 L 138.501 0.955 L 138.499 -0.045 L 137.999 -0.045 L 138 0.455 L 138.001 0.955 Z M 141.999 -0.051 L 141.499 -0.05 L 141.501 0.95 L 142.001 0.949 L 142 0.449 L 141.999 -0.051 Z M 146.001 0.942 L 146.501 0.941 L 146.499 -0.059 L 145.999 -0.058 L 146 0.442 L 146.001 0.942 Z M 149.999 -0.065 L 149.499 -0.064 L 149.501 0.936 L 150.001 0.935 L 150 0.435 L 149.999 -0.065 Z M 154.001 0.929 L 154.501 0.928 L 154.499 -0.072 L 153.999 -0.071 L 154 0.429 L 154.001 0.929 Z M 157.999 -0.078 L 157.499 -0.077 L 157.501 0.923 L 158.001 0.922 L 158 0.422 L 157.999 -0.078 Z M 162.001 0.915 L 162.501 0.915 L 162.499 -0.085 L 161.999 -0.085 L 162 0.415 L 162.001 0.915 Z M 165.999 -0.091 L 165.499 -0.09 L 165.501 0.91 L 166.001 0.909 L 166 0.409 L 165.999 -0.091 Z M 170.001 0.902 L 170.501 0.901 L 170.499 -0.099 L 169.999 -0.098 L 170 0.402 L 170.001 0.902 Z M 173.999 -0.105 L 173.499 -0.104 L 173.501 0.896 L 174.001 0.895 L 174 0.395 L 173.999 -0.105 Z M 178.001 0.889 L 178.501 0.888 L 178.499 -0.112 L 177.999 -0.111 L 178 0.389 L 178.001 0.889 Z M 181.999 -0.118 L 181.499 -0.117 L 181.501 0.883 L 182.001 0.882 L 182 0.382 L 181.999 -0.118 Z M 186.001 0.875 L 186.501 0.875 L 186.499 -0.125 L 185.999 -0.125 L 186 0.375 L 186.001 0.875 Z M 189.999 -0.131 L 189.499 -0.13 L 189.501 0.87 L 190.001 0.869 L 190 0.369 L 189.999 -0.131 Z M 194.001 0.862 L 194.501 0.861 L 194.499 -0.139 L 193.999 -0.138 L 194 0.362 L 194.001 0.862 Z M 197.999 -0.145 L 197.499 -0.144 L 197.501 0.856 L 198.001 0.855 L 198 0.355 L 197.999 -0.145 Z M 202.001 0.849 L 202.501 0.848 L 202.499 -0.152 L 201.999 -0.151 L 202 0.349 L 202.001 0.849 Z M 205.999 -0.158 L 205.499 -0.157 L 205.501 0.843 L 206.001 0.842 L 206 0.342 L 205.999 -0.158 Z M 210.001 0.835 L 210.501 0.835 L 210.499 -0.165 L 209.999 -0.165 L 210 0.335 L 210.001 0.835 Z M 213.999 -0.171 L 213.499 -0.17 L 213.501 0.83 L 214.001 0.829 L 214 0.329 L 213.999 -0.171 Z M 218.001 0.822 L 218.501 0.821 L 218.499 -0.179 L 217.999 -0.178 L 218 0.322 L 218.001 0.822 Z M 221.999 -0.185 L 221.499 -0.184 L 221.501 0.816 L 222.001 0.815 L 222 0.315 L 221.999 -0.185 Z M 0 0.685 L 0.001 1.185 L 2.001 1.182 L 2 0.682 L 1.999 0.182 L -0.001 0.185 L 0 0.685 Z M 6 0.675 L 6.001 1.175 L 10.001 1.169 L 10 0.669 L 9.999 0.169 L 5.999 0.175 L 6 0.675 Z M 14 0.662 L 14.001 1.162 L 18.001 1.155 L 18 0.655 L 17.999 0.155 L 13.999 0.162 L 14 0.662 Z M 22 0.649 L 22.001 1.149 L 26.001 1.142 L 26 0.642 L 25.999 0.142 L 21.999 0.149 L 22 0.649 Z M 30 0.635 L 30.001 1.135 L 34.001 1.129 L 34 0.629 L 33.999 0.129 L 29.999 0.135 L 30 0.635 Z M 38 0.622 L 38.001 1.122 L 42.001 1.115 L 42 0.615 L 41.999 0.115 L 37.999 0.122 L 38 0.622 Z M 46 0.609 L 46.001 1.109 L 50.001 1.102 L 50 0.602 L 49.999 0.102 L 45.999 0.109 L 46 0.609 Z M 54 0.595 L 54.001 1.095 L 58.001 1.089 L 58 0.589 L 57.999 0.089 L 53.999 0.095 L 54 0.595 Z M 62 0.582 L 62.001 1.082 L 66.001 1.075 L 66 0.575 L 65.999 0.075 L 61.999 0.082 L 62 0.582 Z M 70 0.569 L 70.001 1.069 L 74.001 1.062 L 74 0.562 L 73.999 0.062 L 69.999 0.069 L 70 0.569 Z M 78 0.555 L 78.001 1.055 L 82.001 1.049 L 82 0.549 L 81.999 0.049 L 77.999 0.055 L 78 0.555 Z M 86 0.542 L 86.001 1.042 L 90.001 1.035 L 90 0.535 L 89.999 0.035 L 85.999 0.042 L 86 0.542 Z M 94 0.529 L 94.001 1.029 L 98.001 1.022 L 98 0.522 L 97.999 0.022 L 93.999 0.029 L 94 0.529 Z M 102 0.515 L 102.001 1.015 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.015 L 102 0.515 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.489 L 118.001 0.989 L 122.001 0.982 L 122 0.482 L 121.999 -0.018 L 117.999 -0.011 L 118 0.489 Z M 126 0.475 L 126.001 0.975 L 130.001 0.969 L 130 0.469 L 129.999 -0.031 L 125.999 -0.025 L 126 0.475 Z M 134 0.462 L 134.001 0.962 L 138.001 0.955 L 138 0.455 L 137.999 -0.045 L 133.999 -0.038 L 134 0.462 Z M 142 0.449 L 142.001 0.949 L 146.001 0.942 L 146 0.442 L 145.999 -0.058 L 141.999 -0.051 L 142 0.449 Z M 150 0.435 L 150.001 0.935 L 154.001 0.929 L 154 0.429 L 153.999 -0.071 L 149.999 -0.065 L 150 0.435 Z M 158 0.422 L 158.001 0.922 L 162.001 0.915 L 162 0.415 L 161.999 -0.085 L 157.999 -0.078 L 158 0.422 Z M 166 0.409 L 166.001 0.909 L 170.001 0.902 L 170 0.402 L 169.999 -0.098 L 165.999 -0.091 L 166 0.409 Z M 174 0.395 L 174.001 0.895 L 178.001 0.889 L 178 0.389 L 177.999 -0.111 L 173.999 -0.105 L 174 0.395 Z M 182 0.382 L 182.001 0.882 L 186.001 0.875 L 186 0.375 L 185.999 -0.125 L 181.999 -0.118 L 182 0.382 Z M 190 0.369 L 190.001 0.869 L 194.001 0.862 L 194 0.362 L 193.999 -0.138 L 189.999 -0.131 L 190 0.369 Z M 198 0.355 L 198.001 0.855 L 202.001 0.849 L 202 0.349 L 201.999 -0.151 L 197.999 -0.145 L 198 0.355 Z M 206 0.342 L 206.001 0.842 L 210.001 0.835 L 210 0.335 L 209.999 -0.165 L 205.999 -0.158 L 206 0.342 Z M 214 0.329 L 214.001 0.829 L 218.001 0.822 L 218 0.322 L 217.999 -0.178 L 213.999 -0.171 L 214 0.329 Z M 222 0.315 L 222.001 0.815 L 224.001 0.812 L 224 0.312 L 223.999 -0.188 L 221.999 -0.185 L 222 0.315 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,377.501,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={224} height={0.997} viewBox="0 0 224 0.997" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,722.867,224)",
+                  transformOrigin: "0 0",
+                  width: 224,
+                  height: 0.997,
+                }}>
+                  <path d={"M -0.001 0.193 L -0.501 0.194 L -0.499 1.194 L 0.001 1.193 L 0 0.693 L -0.001 0.193 Z M 224.001 0.804 L 224.501 0.803 L 224.499 -0.197 L 223.999 -0.196 L 224 0.304 L 224.001 0.804 Z M 2.001 1.19 L 2.501 1.189 L 2.499 0.189 L 1.999 0.19 L 2 0.69 L 2.001 1.19 Z M 5.999 0.183 L 5.499 0.184 L 5.501 1.184 L 6.001 1.183 L 6 0.683 L 5.999 0.183 Z M 10.001 1.176 L 10.501 1.175 L 10.499 0.175 L 9.999 0.176 L 10 0.676 L 10.001 1.176 Z M 13.999 0.169 L 13.499 0.17 L 13.501 1.17 L 14.001 1.169 L 14 0.669 L 13.999 0.169 Z M 18.001 1.162 L 18.501 1.161 L 18.499 0.161 L 17.999 0.162 L 18 0.662 L 18.001 1.162 Z M 21.999 0.155 L 21.499 0.156 L 21.501 1.156 L 22.001 1.155 L 22 0.655 L 21.999 0.155 Z M 26.001 1.148 L 26.501 1.147 L 26.499 0.147 L 25.999 0.148 L 26 0.648 L 26.001 1.148 Z M 29.999 0.141 L 29.499 0.142 L 29.501 1.142 L 30.001 1.141 L 30 0.641 L 29.999 0.141 Z M 34.001 1.134 L 34.501 1.133 L 34.499 0.133 L 33.999 0.134 L 34 0.634 L 34.001 1.134 Z M 37.999 0.127 L 37.499 0.128 L 37.501 1.128 L 38.001 1.127 L 38 0.627 L 37.999 0.127 Z M 42.001 1.12 L 42.501 1.119 L 42.499 0.119 L 41.999 0.12 L 42 0.62 L 42.001 1.12 Z M 45.999 0.113 L 45.499 0.114 L 45.501 1.114 L 46.001 1.113 L 46 0.613 L 45.999 0.113 Z M 50.001 1.106 L 50.501 1.105 L 50.499 0.105 L 49.999 0.106 L 50 0.606 L 50.001 1.106 Z M 53.999 0.099 L 53.499 0.1 L 53.501 1.1 L 54.001 1.099 L 54 0.599 L 53.999 0.099 Z M 58.001 1.092 L 58.501 1.092 L 58.499 0.092 L 57.999 0.092 L 58 0.592 L 58.001 1.092 Z M 61.999 0.085 L 61.499 0.086 L 61.501 1.086 L 62.001 1.085 L 62 0.585 L 61.999 0.085 Z M 66.001 1.079 L 66.501 1.078 L 66.499 0.078 L 65.999 0.079 L 66 0.579 L 66.001 1.079 Z M 69.999 0.072 L 69.499 0.072 L 69.501 1.072 L 70.001 1.072 L 70 0.572 L 69.999 0.072 Z M 74.001 1.065 L 74.501 1.064 L 74.499 0.064 L 73.999 0.065 L 74 0.565 L 74.001 1.065 Z M 77.999 0.058 L 77.499 0.059 L 77.501 1.059 L 78.001 1.058 L 78 0.558 L 77.999 0.058 Z M 82.001 1.051 L 82.501 1.05 L 82.499 0.05 L 81.999 0.051 L 82 0.551 L 82.001 1.051 Z M 85.999 0.044 L 85.499 0.045 L 85.501 1.045 L 86.001 1.044 L 86 0.544 L 85.999 0.044 Z M 90.001 1.037 L 90.501 1.036 L 90.499 0.036 L 89.999 0.037 L 90 0.537 L 90.001 1.037 Z M 93.999 0.03 L 93.499 0.031 L 93.501 1.031 L 94.001 1.03 L 94 0.53 L 93.999 0.03 Z M 98.001 1.023 L 98.501 1.022 L 98.499 0.022 L 97.999 0.023 L 98 0.523 L 98.001 1.023 Z M 101.999 0.016 L 101.499 0.017 L 101.501 1.017 L 102.001 1.016 L 102 0.516 L 101.999 0.016 Z M 106.001 1.009 L 106.501 1.008 L 106.499 0.008 L 105.999 0.009 L 106 0.509 L 106.001 1.009 Z M 109.999 0.002 L 109.499 0.003 L 109.501 1.003 L 110.001 1.002 L 110 0.502 L 109.999 0.002 Z M 114.001 0.995 L 114.501 0.994 L 114.499 -0.006 L 113.999 -0.005 L 114 0.495 L 114.001 0.995 Z M 117.999 -0.012 L 117.499 -0.011 L 117.501 0.989 L 118.001 0.988 L 118 0.488 L 117.999 -0.012 Z M 122.001 0.981 L 122.501 0.98 L 122.499 -0.02 L 121.999 -0.019 L 122 0.481 L 122.001 0.981 Z M 125.999 -0.026 L 125.499 -0.025 L 125.501 0.975 L 126.001 0.974 L 126 0.474 L 125.999 -0.026 Z M 130.001 0.967 L 130.501 0.967 L 130.499 -0.033 L 129.999 -0.033 L 130 0.467 L 130.001 0.967 Z M 133.999 -0.04 L 133.499 -0.039 L 133.501 0.961 L 134.001 0.96 L 134 0.46 L 133.999 -0.04 Z M 138.001 0.954 L 138.501 0.953 L 138.499 -0.047 L 137.999 -0.046 L 138 0.454 L 138.001 0.954 Z M 141.999 -0.053 L 141.499 -0.053 L 141.501 0.947 L 142.001 0.947 L 142 0.447 L 141.999 -0.053 Z M 146.001 0.94 L 146.501 0.939 L 146.499 -0.061 L 145.999 -0.06 L 146 0.44 L 146.001 0.94 Z M 149.999 -0.067 L 149.499 -0.066 L 149.501 0.934 L 150.001 0.933 L 150 0.433 L 149.999 -0.067 Z M 154.001 0.926 L 154.501 0.925 L 154.499 -0.075 L 153.999 -0.074 L 154 0.426 L 154.001 0.926 Z M 157.999 -0.081 L 157.499 -0.08 L 157.501 0.92 L 158.001 0.919 L 158 0.419 L 157.999 -0.081 Z M 162.001 0.912 L 162.501 0.911 L 162.499 -0.089 L 161.999 -0.088 L 162 0.412 L 162.001 0.912 Z M 165.999 -0.095 L 165.499 -0.094 L 165.501 0.906 L 166.001 0.905 L 166 0.405 L 165.999 -0.095 Z M 170.001 0.898 L 170.501 0.897 L 170.499 -0.103 L 169.999 -0.102 L 170 0.398 L 170.001 0.898 Z M 173.999 -0.109 L 173.499 -0.108 L 173.501 0.892 L 174.001 0.891 L 174 0.391 L 173.999 -0.109 Z M 178.001 0.884 L 178.501 0.883 L 178.499 -0.117 L 177.999 -0.116 L 178 0.384 L 178.001 0.884 Z M 181.999 -0.123 L 181.499 -0.122 L 181.501 0.878 L 182.001 0.877 L 182 0.377 L 181.999 -0.123 Z M 186.001 0.87 L 186.501 0.869 L 186.499 -0.131 L 185.999 -0.13 L 186 0.37 L 186.001 0.87 Z M 189.999 -0.137 L 189.499 -0.136 L 189.501 0.864 L 190.001 0.863 L 190 0.363 L 189.999 -0.137 Z M 194.001 0.856 L 194.501 0.855 L 194.499 -0.145 L 193.999 -0.144 L 194 0.356 L 194.001 0.856 Z M 197.999 -0.151 L 197.499 -0.15 L 197.501 0.85 L 198.001 0.849 L 198 0.349 L 197.999 -0.151 Z M 202.001 0.842 L 202.501 0.842 L 202.499 -0.158 L 201.999 -0.158 L 202 0.342 L 202.001 0.842 Z M 205.999 -0.165 L 205.499 -0.164 L 205.501 0.836 L 206.001 0.835 L 206 0.335 L 205.999 -0.165 Z M 210.001 0.829 L 210.501 0.828 L 210.499 -0.172 L 209.999 -0.171 L 210 0.329 L 210.001 0.829 Z M 213.999 -0.178 L 213.499 -0.178 L 213.501 0.822 L 214.001 0.822 L 214 0.322 L 213.999 -0.178 Z M 218.001 0.815 L 218.501 0.814 L 218.499 -0.186 L 217.999 -0.185 L 218 0.315 L 218.001 0.815 Z M 221.999 -0.192 L 221.499 -0.191 L 221.501 0.809 L 222.001 0.808 L 222 0.308 L 221.999 -0.192 Z M 0 0.693 L 0.001 1.193 L 2.001 1.19 L 2 0.69 L 1.999 0.19 L -0.001 0.193 L 0 0.693 Z M 6 0.683 L 6.001 1.183 L 10.001 1.176 L 10 0.676 L 9.999 0.176 L 5.999 0.183 L 6 0.683 Z M 14 0.669 L 14.001 1.169 L 18.001 1.162 L 18 0.662 L 17.999 0.162 L 13.999 0.169 L 14 0.669 Z M 22 0.655 L 22.001 1.155 L 26.001 1.148 L 26 0.648 L 25.999 0.148 L 21.999 0.155 L 22 0.655 Z M 30 0.641 L 30.001 1.141 L 34.001 1.134 L 34 0.634 L 33.999 0.134 L 29.999 0.141 L 30 0.641 Z M 38 0.627 L 38.001 1.127 L 42.001 1.12 L 42 0.62 L 41.999 0.12 L 37.999 0.127 L 38 0.627 Z M 46 0.613 L 46.001 1.113 L 50.001 1.106 L 50 0.606 L 49.999 0.106 L 45.999 0.113 L 46 0.613 Z M 54 0.599 L 54.001 1.099 L 58.001 1.092 L 58 0.592 L 57.999 0.092 L 53.999 0.099 L 54 0.599 Z M 62 0.585 L 62.001 1.085 L 66.001 1.079 L 66 0.579 L 65.999 0.079 L 61.999 0.085 L 62 0.585 Z M 70 0.572 L 70.001 1.072 L 74.001 1.065 L 74 0.565 L 73.999 0.065 L 69.999 0.072 L 70 0.572 Z M 78 0.558 L 78.001 1.058 L 82.001 1.051 L 82 0.551 L 81.999 0.051 L 77.999 0.058 L 78 0.558 Z M 86 0.544 L 86.001 1.044 L 90.001 1.037 L 90 0.537 L 89.999 0.037 L 85.999 0.044 L 86 0.544 Z M 94 0.53 L 94.001 1.03 L 98.001 1.023 L 98 0.523 L 97.999 0.023 L 93.999 0.03 L 94 0.53 Z M 102 0.516 L 102.001 1.016 L 106.001 1.009 L 106 0.509 L 105.999 0.009 L 101.999 0.016 L 102 0.516 Z M 110 0.502 L 110.001 1.002 L 114.001 0.995 L 114 0.495 L 113.999 -0.005 L 109.999 0.002 L 110 0.502 Z M 118 0.488 L 118.001 0.988 L 122.001 0.981 L 122 0.481 L 121.999 -0.019 L 117.999 -0.012 L 118 0.488 Z M 126 0.474 L 126.001 0.974 L 130.001 0.967 L 130 0.467 L 129.999 -0.033 L 125.999 -0.026 L 126 0.474 Z M 134 0.46 L 134.001 0.96 L 138.001 0.954 L 138 0.454 L 137.999 -0.046 L 133.999 -0.04 L 134 0.46 Z M 142 0.447 L 142.001 0.947 L 146.001 0.94 L 146 0.44 L 145.999 -0.06 L 141.999 -0.053 L 142 0.447 Z M 150 0.433 L 150.001 0.933 L 154.001 0.926 L 154 0.426 L 153.999 -0.074 L 149.999 -0.067 L 150 0.433 Z M 158 0.419 L 158.001 0.919 L 162.001 0.912 L 162 0.412 L 161.999 -0.088 L 157.999 -0.081 L 158 0.419 Z M 166 0.405 L 166.001 0.905 L 170.001 0.898 L 170 0.398 L 169.999 -0.102 L 165.999 -0.095 L 166 0.405 Z M 174 0.391 L 174.001 0.891 L 178.001 0.884 L 178 0.384 L 177.999 -0.116 L 173.999 -0.109 L 174 0.391 Z M 182 0.377 L 182.001 0.877 L 186.001 0.87 L 186 0.37 L 185.999 -0.13 L 181.999 -0.123 L 182 0.377 Z M 190 0.363 L 190.001 0.863 L 194.001 0.856 L 194 0.356 L 193.999 -0.144 L 189.999 -0.137 L 190 0.363 Z M 198 0.349 L 198.001 0.849 L 202.001 0.842 L 202 0.342 L 201.999 -0.158 L 197.999 -0.151 L 198 0.349 Z M 206 0.335 L 206.001 0.835 L 210.001 0.829 L 210 0.329 L 209.999 -0.171 L 205.999 -0.165 L 206 0.335 Z M 214 0.322 L 214.001 0.822 L 218.001 0.815 L 218 0.315 L 217.999 -0.185 L 213.999 -0.178 L 214 0.322 Z M 222 0.308 L 222.001 0.808 L 224.001 0.804 L 224 0.304 L 223.999 -0.196 L 221.999 -0.192 L 222 0.308 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 1.007,
+                top: 88.5,
+                width: 756,
+                height: 228,
+                overflow: "hidden",
+              }}>
+                <svg width={756} height={228} viewBox="0 0 756 228" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 756,
+                  height: 228,
+                }}>
+                  <path d={"M 0 0 L 756 0 L 756 228 L 0 228 L 0 0 Z"} fill="currentColor" fillRule="evenodd" />
+                </svg>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 756,
+                  height: 228,
+                  clipPath: "inset(0px 0px 0px 0px)",
+                }}>
+                  <svg width={1211.987} height={176} viewBox="0 0 1211.987 176" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    transform: "matrix(-1,0,0,1,895.907,63.781)",
+                    transformOrigin: "0 0",
+                    width: 1211.987,
+                    height: 176,
+                    opacity: 0.55,
+                    color: "rgb(255,255,255)",
+                  }}>
+                    <path d={"M 0 68.445 C 0 68.445 34.169 95.054 52.391 84.321 C 70.613 73.589 76.16 39.345 126.014 39.345 C 175.868 39.345 243.84 106.843 282.839 106.843 C 321.838 106.843 362.416 41.955 420.53 74.183 C 478.644 106.411 467.811 127.214 513.96 127.214 C 560.108 127.214 600.28 -0.614 652.608 0.002 C 691.624 0.002 706.601 121.36 719.609 140.188 C 732.618 159.015 768.967 106.843 833.197 106.843 C 889.89 106.843 943.653 6.397 998.697 6.397 C 1053.742 6.397 1076.103 112.918 1124.937 112.918 C 1173.771 112.918 1173.049 74.183 1211.849 74.183 C 1212.124 140.82 1211.849 176 1211.849 176 L 0 176 L 0 68.445 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                  <svg width={1211.987} height={176} viewBox="0 0 1211.987 176" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    transform: "matrix(-1,0,0,1,895.907,63.781)",
+                    transformOrigin: "0 0",
+                    width: 1211.987,
+                    height: 176,
+                    opacity: 0.15,
+                  }}>
+                    <path d={"M 0 68.445 C 0 68.445 34.169 95.054 52.391 84.321 C 70.613 73.589 76.16 39.345 126.014 39.345 C 175.868 39.345 243.84 106.843 282.839 106.843 C 321.838 106.843 362.416 41.955 420.53 74.183 C 478.644 106.411 467.811 127.214 513.96 127.214 C 560.108 127.214 600.28 -0.614 652.608 0.002 C 691.624 0.002 706.601 121.36 719.609 140.188 C 732.618 159.015 768.967 106.843 833.197 106.843 C 889.89 106.843 943.653 6.397 998.697 6.397 C 1053.742 6.397 1076.103 112.918 1124.937 112.918 C 1173.771 112.918 1173.049 74.183 1211.849 74.183 C 1212.124 140.82 1211.849 176 1211.849 176 L 0 176 L 0 68.445 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                  <svg width={1211.987} height={144} viewBox="0 0 1211.987 144" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    transform: "matrix(-1,0,0,1,895.907,63.781)",
+                    transformOrigin: "0 0",
+                    width: 1211.987,
+                    height: 144,
+                    color: "rgb(94,129,244)",
+                  }}>
+                    <path d={"M 652.682 0.002 L 652.67 1.002 L 652.682 1.002 L 652.682 0.002 Z M 0 68.31 C -0.614 69.099 -0.613 69.099 -0.613 69.1 C -0.613 69.1 -0.612 69.1 -0.611 69.101 C -0.61 69.102 -0.608 69.103 -0.606 69.105 C -0.601 69.109 -0.595 69.114 -0.586 69.121 C -0.568 69.134 -0.543 69.154 -0.509 69.18 C -0.442 69.231 -0.343 69.306 -0.213 69.404 C 0.046 69.599 0.426 69.882 0.916 70.239 C 1.895 70.951 3.313 71.954 5.07 73.124 C 8.582 75.462 13.463 78.472 18.925 81.147 C 24.38 83.819 30.456 86.178 36.353 87.184 C 42.245 88.188 48.067 87.86 52.903 85.017 L 52.397 84.155 L 51.89 83.293 C 47.615 85.806 42.331 86.174 36.69 85.212 C 31.054 84.251 25.17 81.979 19.804 79.351 C 14.445 76.726 9.643 73.766 6.178 71.459 C 4.447 70.307 3.052 69.319 2.092 68.621 C 1.612 68.272 1.24 67.995 0.99 67.806 C 0.865 67.712 0.77 67.64 0.706 67.591 C 0.675 67.567 0.651 67.549 0.636 67.537 C 0.628 67.531 0.622 67.527 0.618 67.524 C 0.617 67.522 0.615 67.521 0.614 67.521 C 0.614 67.52 0.614 67.52 0.614 67.52 C 0.614 67.52 0.614 67.52 0 68.31 Z M 52.397 84.155 L 52.903 85.017 C 57.626 82.241 61.486 77.972 65.352 73.257 C 69.248 68.505 73.154 63.297 78.056 58.402 C 87.781 48.691 101.385 40.267 126.028 40.267 L 126.028 39.267 L 126.028 38.267 C 100.813 38.267 86.712 46.932 76.643 56.987 C 71.647 61.975 67.633 67.32 63.805 71.989 C 59.947 76.694 56.279 80.713 51.89 83.293 L 52.397 84.155 Z M 126.028 39.267 L 126.028 40.267 C 138.285 40.267 151.73 44.412 165.674 50.705 C 179.608 56.993 193.954 65.386 208.007 73.808 C 222.039 82.217 235.794 90.664 248.475 97.001 C 261.133 103.328 272.873 107.633 282.871 107.633 L 282.871 106.633 L 282.871 105.633 C 273.368 105.633 261.984 101.517 249.369 95.212 C 236.775 88.919 223.106 80.524 209.035 72.092 C 194.986 63.673 180.55 55.224 166.496 48.882 C 152.452 42.543 138.702 38.267 126.028 38.267 L 126.028 39.267 Z M 282.871 106.633 L 282.871 107.633 C 292.884 107.633 302.918 103.48 313.148 97.894 C 318.272 95.096 323.479 91.918 328.778 88.692 C 334.084 85.462 339.487 82.18 345.035 79.151 C 356.133 73.09 367.744 68.079 380.148 66.553 C 392.526 65.031 405.748 66.973 420.094 74.912 L 420.578 74.037 L 421.062 73.162 C 406.347 65.018 392.701 62.994 379.904 64.568 C 367.134 66.139 355.264 71.286 344.076 77.395 C 338.481 80.451 333.039 83.756 327.738 86.984 C 322.428 90.216 317.264 93.368 312.19 96.139 C 302.024 101.69 292.36 105.633 282.871 105.633 L 282.871 106.633 Z M 420.578 74.037 L 420.094 74.912 C 449.032 90.927 460.757 104.064 471.12 113.308 C 476.32 117.947 481.215 121.639 487.762 124.151 C 494.3 126.659 502.41 127.964 514.018 127.964 L 514.018 126.964 L 514.018 125.964 C 502.55 125.964 494.706 124.673 488.478 122.283 C 482.26 119.897 477.577 116.388 472.451 111.816 C 462.163 102.638 450.244 89.312 421.062 73.162 L 420.578 74.037 Z M 514.018 126.964 L 514.018 127.964 C 526.009 127.964 537.431 119.696 548.529 107.719 C 559.661 95.707 570.69 79.711 581.851 63.827 C 593.037 47.906 604.36 32.089 616.136 20.287 C 627.93 8.466 640.003 0.853 652.67 1.002 L 652.682 0.002 L 652.694 -0.998 C 639.194 -1.156 626.62 6.947 614.72 18.874 C 602.802 30.819 591.383 46.781 580.214 62.677 C 569.02 78.61 558.08 94.47 547.062 106.36 C 536.012 118.284 525.104 125.964 514.018 125.964 L 514.018 126.964 Z M 652.682 0.002 L 652.682 1.002 C 661.874 1.002 669.867 8.145 676.93 19.741 C 683.96 31.281 689.868 46.913 694.987 63.21 C 700.104 79.501 704.405 96.367 708.255 110.388 C 710.178 117.389 711.989 123.686 713.73 128.825 C 715.462 133.938 717.155 138.005 718.869 140.48 L 719.691 139.911 L 720.513 139.342 C 718.975 137.119 717.354 133.292 715.624 128.184 C 713.903 123.103 712.105 116.855 710.184 109.858 C 706.347 95.885 702.026 78.948 696.895 62.611 C 691.765 46.28 685.799 30.457 678.639 18.7 C 671.512 7 663 -0.998 652.682 -0.998 L 652.682 0.002 Z M 719.691 139.911 L 718.869 140.48 C 720.636 143.033 722.858 144.443 725.517 144.864 C 728.122 145.277 731.047 144.723 734.234 143.58 C 740.582 141.302 748.468 136.485 757.776 131.187 C 776.494 120.534 801.449 107.633 833.292 107.633 L 833.292 106.633 L 833.292 105.633 C 800.897 105.633 775.557 118.766 756.787 129.449 C 747.35 134.82 739.693 139.497 733.559 141.697 C 730.505 142.793 727.953 143.225 725.83 142.888 C 723.759 142.56 721.999 141.487 720.513 139.342 L 719.691 139.911 Z M 833.292 106.633 L 833.292 107.633 C 847.759 107.633 861.951 101.241 875.893 91.797 C 889.839 82.35 903.65 69.767 917.344 57.246 C 931.064 44.702 944.664 32.223 958.264 22.872 C 971.868 13.517 985.347 7.384 998.811 7.384 L 998.811 6.384 L 998.811 5.384 C 984.749 5.384 970.863 11.782 957.131 21.224 C 943.394 30.669 929.686 43.252 915.995 55.77 C 902.277 68.312 888.575 80.791 874.772 90.141 C 860.965 99.493 847.175 105.633 833.292 105.633 L 833.292 106.633 Z M 998.811 6.384 L 998.811 7.384 C 1012.221 7.384 1023.708 13.85 1034.21 23.724 C 1044.724 33.608 1054.15 46.81 1063.448 60.113 C 1072.717 73.374 1081.865 86.746 1091.763 96.786 C 1101.665 106.831 1112.463 113.696 1125.065 113.696 L 1125.065 112.696 L 1125.065 111.696 C 1113.248 111.696 1102.935 105.271 1093.188 95.382 C 1083.436 85.49 1074.395 72.284 1065.087 58.967 C 1055.808 45.691 1046.269 32.316 1035.58 22.267 C 1024.879 12.207 1012.926 5.384 998.811 5.384 L 998.811 6.384 Z M 1125.065 112.696 L 1125.065 113.696 C 1137.417 113.696 1146.681 111.249 1154.234 107.553 C 1161.772 103.864 1167.559 98.952 1172.957 94.111 C 1183.763 84.418 1193.016 75.037 1211.987 75.037 L 1211.987 74.037 L 1211.987 73.037 C 1192.153 73.037 1182.365 82.985 1171.621 92.622 C 1166.244 97.445 1160.629 102.197 1153.354 105.757 C 1146.094 109.31 1137.133 111.696 1125.065 111.696 L 1125.065 112.696 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                  <svg width={1212.993} height={207} viewBox="0 0 1212.993 207" fill="none" style={{
+                    position: "absolute",
+                    left: -316.079,
+                    top: 31.781,
+                    width: 1212.993,
+                    height: 207,
+                    opacity: 0.2,
+                  }}>
+                    <path d={"M 0 132.042 C 0 132.042 29.452 132.636 47.665 121.902 C 65.878 111.167 134.45 47.703 184.28 47.703 C 234.111 47.703 255.708 98.816 294.688 98.816 C 333.668 98.816 363.805 89.666 421.892 121.902 C 479.978 154.138 469.151 174.946 515.277 174.946 C 561.403 174.946 584.85 -0.615 637.153 0.002 C 676.151 0.002 712.05 103.07 725.052 121.902 C 738.054 140.734 781.145 184.623 837.81 184.623 C 894.476 184.623 944.766 54.099 999.785 54.099 C 1054.804 54.099 1077.154 160.646 1125.965 160.646 C 1174.776 160.646 1174.054 121.902 1212.835 121.902 C 1213.151 163.84 1212.835 207 1212.835 207 L 0 207 L 0 132.042 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                  <svg width={1212.993} height={184} viewBox="0 0 1212.993 184" fill="none" style={{
+                    position: "absolute",
+                    left: -316.079,
+                    top: 30.781,
+                    width: 1212.993,
+                    height: 184,
+                    color: "rgb(138,241,185)",
+                  }}>
+                    <path d={"M 637.236 0.002 L 637.224 1.002 L 637.236 1.002 L 637.236 0.002 Z M 0 131.597 C -0.02 132.597 -0.02 132.597 -0.019 132.597 C -0.019 132.597 -0.019 132.597 -0.018 132.597 C -0.017 132.597 -0.015 132.597 -0.013 132.597 C -0.009 132.597 -0.003 132.597 0.004 132.597 C 0.02 132.597 0.042 132.598 0.071 132.598 C 0.129 132.599 0.215 132.6 0.327 132.601 C 0.552 132.603 0.882 132.604 1.307 132.601 C 2.157 132.597 3.389 132.578 4.924 132.522 C 7.992 132.409 12.272 132.147 17.127 131.548 C 26.809 130.354 38.891 127.807 48.178 122.353 L 47.671 121.49 L 47.165 120.628 C 38.236 125.872 26.482 128.379 16.882 129.563 C 12.096 130.154 7.875 130.412 4.85 130.523 C 3.339 130.578 2.127 130.597 1.296 130.601 C 0.88 130.604 0.559 130.603 0.343 130.601 C 0.235 130.6 0.153 130.599 0.099 130.598 C 0.072 130.598 0.052 130.598 0.039 130.597 C 0.032 130.597 0.027 130.597 0.024 130.597 C 0.022 130.597 0.021 130.597 0.021 130.597 C 0.02 130.597 0.02 130.597 0.02 130.597 C 0.02 130.597 0.02 130.597 0 131.597 Z M 47.671 121.49 L 48.178 122.353 C 52.799 119.639 60.57 113.624 70.302 106.218 C 80.07 98.786 91.887 89.892 104.685 81.336 C 117.486 72.778 131.248 64.571 144.898 58.506 C 158.558 52.437 172.042 48.542 184.304 48.542 L 184.304 47.542 L 184.304 46.542 C 171.648 46.542 157.871 50.554 144.086 56.678 C 130.291 62.807 116.425 71.081 103.574 79.673 C 90.721 88.266 78.862 97.191 69.091 104.627 C 59.283 112.09 51.651 117.993 47.165 120.628 L 47.671 121.49 Z M 184.304 47.542 L 184.304 48.542 C 208.853 48.542 226.472 61.07 242.974 73.804 C 259.375 86.461 274.818 99.483 294.726 99.483 L 294.726 98.483 L 294.726 97.483 C 275.649 97.483 260.8 85.034 244.195 72.221 C 227.692 59.485 209.592 46.542 184.304 46.542 L 184.304 47.542 Z M 294.726 98.483 L 294.726 99.483 C 304.498 99.483 313.734 98.911 322.92 98.559 C 332.122 98.207 341.31 98.073 351.083 98.935 C 370.602 100.658 392.527 106.363 421.463 122.366 L 421.947 121.49 L 422.431 120.615 C 393.273 104.49 371.08 98.692 351.258 96.943 C 341.36 96.069 332.073 96.207 322.843 96.561 C 313.598 96.915 304.447 97.483 294.726 97.483 L 294.726 98.483 Z M 421.947 121.49 L 421.463 122.366 C 450.388 138.362 462.107 151.484 472.466 160.717 C 477.664 165.351 482.556 169.038 489.1 171.547 C 495.635 174.052 503.741 175.356 515.344 175.356 L 515.344 174.356 L 515.344 173.356 C 503.881 173.356 496.041 172.066 489.816 169.68 C 483.6 167.296 478.919 163.791 473.796 159.224 C 463.513 150.057 451.599 136.746 422.431 120.615 L 421.947 121.49 Z M 515.344 174.356 L 515.344 175.356 C 521.45 175.356 527.094 172.456 532.361 167.572 C 537.625 162.691 542.588 155.762 547.361 147.528 C 556.905 131.063 565.825 109.137 574.897 87.332 C 583.988 65.483 593.233 43.751 603.456 27.518 C 608.565 19.404 613.886 12.719 619.508 8.089 C 625.12 3.466 630.986 0.928 637.224 1.002 L 637.236 0.002 L 637.248 -0.998 C 630.408 -1.079 624.099 1.717 618.236 6.545 C 612.383 11.366 606.929 18.249 601.763 26.452 C 591.435 42.853 582.127 64.748 573.05 86.564 C 563.955 108.425 555.093 130.202 545.631 146.525 C 540.901 154.684 536.055 161.42 531.001 166.105 C 525.952 170.787 520.771 173.356 515.344 173.356 L 515.344 174.356 Z M 637.236 0.002 L 637.236 1.002 C 646.55 1.002 655.855 7.15 664.859 17.019 C 673.834 26.856 682.34 40.202 690.065 54.191 C 697.786 68.173 704.7 82.745 710.505 95.017 C 716.286 107.237 721.013 117.281 724.324 122.06 L 725.146 121.49 L 725.968 120.921 C 722.778 116.316 718.141 106.482 712.313 94.162 C 706.51 81.896 699.572 67.269 691.816 53.224 C 684.065 39.188 675.469 25.681 666.336 15.671 C 657.233 5.693 647.424 -0.998 637.236 -0.998 L 637.236 0.002 Z M 725.146 121.49 L 724.324 122.06 C 730.894 131.542 745.006 147.257 764.594 160.61 C 784.186 173.965 809.322 185 837.919 185 L 837.919 184 L 837.919 183 C 809.843 183 785.095 172.164 765.72 158.957 C 746.341 145.747 732.403 130.208 725.968 120.921 L 725.146 121.49 Z M 837.919 184 L 837.919 185 C 852.468 185 866.475 176.659 880.071 164.418 C 893.684 152.161 907.053 135.836 920.31 119.59 C 933.592 103.313 946.76 87.116 960.034 74.98 C 973.327 62.827 986.548 54.916 999.915 54.916 L 999.915 53.916 L 999.915 52.916 C 985.77 52.916 972.069 61.267 958.684 73.504 C 945.28 85.759 932.014 102.083 918.76 118.326 C 905.48 134.601 892.209 150.797 878.733 162.931 C 865.24 175.08 851.707 183 837.919 183 L 837.919 184 Z M 999.915 53.916 L 999.915 54.916 C 1013.319 54.916 1024.801 61.375 1035.298 71.237 C 1045.807 81.11 1055.229 94.297 1064.522 107.583 C 1073.787 120.829 1082.931 134.185 1092.825 144.215 C 1102.722 154.248 1113.515 161.104 1126.112 161.104 L 1126.112 160.104 L 1126.112 159.104 C 1114.3 159.104 1103.992 152.687 1094.249 142.81 C 1084.501 132.929 1075.465 119.738 1066.161 106.437 C 1056.886 93.177 1047.351 79.817 1036.667 69.779 C 1025.972 59.731 1014.024 52.916 999.915 52.916 L 999.915 53.916 Z M 1126.112 160.104 L 1126.112 161.104 C 1138.457 161.104 1147.717 158.661 1155.266 154.969 C 1162.802 151.284 1168.586 146.378 1173.981 141.542 C 1184.783 131.86 1194.031 122.49 1212.993 122.49 L 1212.993 121.49 L 1212.993 120.49 C 1193.169 120.49 1183.385 130.427 1172.646 140.053 C 1167.271 144.87 1161.659 149.617 1154.388 153.172 C 1147.131 156.721 1138.174 159.104 1126.112 159.104 L 1126.112 160.104 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                </div>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 352.324,
+                top: 130,
+                width: 135,
+                height: 60,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 10,
+                  width: 18.119,
+                  height: 18,
+                  overflow: "hidden",
+                }}>
+                  <svg width={18.119} height={18} viewBox="0 0 18.119 18" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 18.119,
+                    height: 18,
+                    filter: "drop-shadow(0px 2px 6px rgba(0,0,0,0.1271))",
+                    color: "rgb(255,255,255)",
+                  }}>
+                    <path d={"M 9.06 18 C 14.063 18 18.119 13.971 18.119 9 C 18.119 4.029 14.063 0 9.06 0 C 4.056 0 0 4.029 0 9 C 0 13.971 4.056 18 9.06 18 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                  <svg width={18.119} height={18} viewBox="0 0 18.119 18" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 18.119,
+                    height: 18,
+                    opacity: 0.545,
+                    color: "rgb(138,241,185)",
+                  }}>
+                    <path d={"M 9.06 18 C 14.063 18 18.119 13.971 18.119 9 C 18.119 4.029 14.063 0 9.06 0 C 4.056 0 0 4.029 0 9 C 0 13.971 4.056 18 9.06 18 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                  <svg width={10.066} height={10} viewBox="0 0 10.066 10" fill="none" style={{
+                    position: "absolute",
+                    left: 4.026,
+                    top: 4,
+                    width: 10.066,
+                    height: 10,
+                    color: "rgb(138,241,185)",
+                  }}>
+                    <path d={"M 5.033 10 C 7.813 10 10.066 7.761 10.066 5 C 10.066 2.239 7.813 0 5.033 0 C 2.253 0 0 2.239 0 5 C 0 7.761 2.253 10 5.033 10 Z"} fill="currentColor" fillRule="nonzero" />
+                  </svg>
+                </div>
+                <svg width={114.234} height={60} viewBox="0 0 114.234 60" fill="none" style={{
+                  position: "absolute",
+                  left: 20.653,
+                  top: 0,
+                  width: 114.234,
+                  height: 60,
+                  filter: "drop-shadow(0px 15px 35px rgba(152,169,188,0.2))",
+                  color: "rgb(255,255,255)",
+                }}>
+                  <path d={"M 112.234 0 C 113.339 0 114.234 0.895 114.234 2 L 114.234 58 C 114.234 59.105 113.339 60 112.234 60 L 8.526 60 C 7.422 60 6.526 59.105 6.526 58 L 6.526 25.899 L 0.295 19.709 C -0.098 19.318 -0.098 18.682 0.295 18.291 L 6.526 12.1 L 6.526 2 C 6.526 0.895 7.422 0 8.526 0 L 112.234 0 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <span style={{
+                  position: "absolute",
+                  left: 44.291,
+                  top: 7,
+                  width: 49,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>June 16</span>
+                <span style={{
+                  position: "absolute",
+                  left: 44.291,
+                  top: 29,
+                  width: 53,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>$48.200</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 330,
+                width: 757.003,
+                height: 30,
+                overflow: "hidden",
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 757.003,
+                  height: 30,
+                  backgroundColor: "rgb(255,255,255)",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 29.003,
+                  top: 3.5,
+                  width: 21,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Jan</span>
+                <span style={{
+                  position: "absolute",
+                  left: 91.264,
+                  top: 3.5,
+                  width: 23,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Feb</span>
+                <span style={{
+                  position: "absolute",
+                  left: 158.583,
+                  top: 3.5,
+                  width: 25,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Mar</span>
+                <span style={{
+                  position: "absolute",
+                  left: 226.885,
+                  top: 3.5,
+                  width: 23,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Apr</span>
+                <span style={{
+                  position: "absolute",
+                  left: 297.204,
+                  top: 3.5,
+                  width: 22,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Jun</span>
+                <span style={{
+                  position: "absolute",
+                  left: 368.517,
+                  top: 3.5,
+                  width: 17,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Jul</span>
+                <span style={{
+                  position: "absolute",
+                  left: 433.842,
+                  top: 3.5,
+                  width: 25,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Aug</span>
+                <span style={{
+                  position: "absolute",
+                  left: 504.157,
+                  top: 3.5,
+                  width: 23,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Sep</span>
+                <span style={{
+                  position: "absolute",
+                  left: 573.475,
+                  top: 3.5,
+                  width: 23,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Oct</span>
+                <span style={{
+                  position: "absolute",
+                  left: 639.789,
+                  top: 3.5,
+                  width: 26,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Nov</span>
+                <span style={{
+                  position: "absolute",
+                  left: 703.145,
+                  top: 3.5,
+                  width: 25,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Dec</span>
+              </div>
+            </div>
+            <div style={{
+              position: "relative",
+              width: 365,
+              height: 380,
+              flexShrink: 0,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 363.992,
+                height: 380,
+                borderRadius: 12,
+                backgroundColor: "rgb(255,255,255)",
+                boxShadow: "0 0 0 1px rgb(240,240,243)",
+              }} />
+              <div style={{
+                position: "absolute",
+                left: 1.008,
+                top: 100,
+                width: 363.992,
+                height: 219,
+                overflow: "hidden",
+              }}>
+                <svg width={1} height={363.992} viewBox="0 0 1 363.992" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,0,219)",
+                  transformOrigin: "0 0",
+                  width: 1,
+                  height: 363.992,
+                  color: "rgb(236,236,242)",
+                }}>
+                  <path d={"M 1 0 L 1 -0.5 L 0 -0.5 L 0 0 L 0.5 0 L 1 0 Z M 0 363.992 L 0 364.492 L 1 364.492 L 1 363.992 L 0.5 363.992 L 0 363.992 Z M 0.5 0 L 0 0 L 0 363.992 L 0.5 363.992 L 1 363.992 L 1 0 L 0.5 0 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={219} height={1.008} viewBox="0 0 219 1.008" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,32.265,219)",
+                  transformOrigin: "0 0",
+                  width: 219,
+                  height: 1.008,
+                }}>
+                  <path d={"M 0 0.01 L -0.5 0.01 L -0.5 1.01 L 0 1.01 L 0 0.51 L 0 0.01 Z M 219 0.998 L 219.5 0.998 L 219.5 -0.002 L 219 -0.002 L 219 0.498 L 219 0.998 Z M 2.028 1.01 L 2.528 1.01 L 2.528 0.01 L 2.028 0.01 L 2.028 0.51 L 2.028 1.01 Z M 6.083 0.01 L 5.583 0.01 L 5.583 1.01 L 6.083 1.01 L 6.083 0.51 L 6.083 0.01 Z M 10.139 1.01 L 10.639 1.01 L 10.639 0.01 L 10.139 0.01 L 10.139 0.51 L 10.139 1.01 Z M 14.194 0.009 L 13.694 0.009 L 13.694 1.009 L 14.194 1.009 L 14.194 0.509 L 14.194 0.009 Z M 18.25 1.009 L 18.75 1.009 L 18.75 0.009 L 18.25 0.009 L 18.25 0.509 L 18.25 1.009 Z M 22.306 0.009 L 21.806 0.009 L 21.806 1.009 L 22.306 1.009 L 22.306 0.509 L 22.306 0.009 Z M 26.361 1.009 L 26.861 1.009 L 26.861 0.009 L 26.361 0.009 L 26.361 0.509 L 26.361 1.009 Z M 30.417 0.009 L 29.917 0.009 L 29.917 1.009 L 30.417 1.009 L 30.417 0.509 L 30.417 0.009 Z M 34.472 1.008 L 34.972 1.008 L 34.972 0.008 L 34.472 0.008 L 34.472 0.508 L 34.472 1.008 Z M 38.528 0.008 L 38.028 0.008 L 38.028 1.008 L 38.528 1.008 L 38.528 0.508 L 38.528 0.008 Z M 42.583 1.008 L 43.083 1.008 L 43.083 0.008 L 42.583 0.008 L 42.583 0.508 L 42.583 1.008 Z M 46.639 0.008 L 46.139 0.008 L 46.139 1.008 L 46.639 1.008 L 46.639 0.508 L 46.639 0.008 Z M 50.694 1.007 L 51.194 1.007 L 51.194 0.007 L 50.694 0.007 L 50.694 0.507 L 50.694 1.007 Z M 54.75 0.007 L 54.25 0.007 L 54.25 1.007 L 54.75 1.007 L 54.75 0.507 L 54.75 0.007 Z M 58.806 1.007 L 59.306 1.007 L 59.306 0.007 L 58.806 0.007 L 58.806 0.507 L 58.806 1.007 Z M 62.861 0.007 L 62.361 0.007 L 62.361 1.007 L 62.861 1.007 L 62.861 0.507 L 62.861 0.007 Z M 66.917 1.007 L 67.417 1.006 L 67.417 0.006 L 66.917 0.007 L 66.917 0.507 L 66.917 1.007 Z M 70.972 0.006 L 70.472 0.006 L 70.472 1.006 L 70.972 1.006 L 70.972 0.506 L 70.972 0.006 Z M 75.028 1.006 L 75.528 1.006 L 75.528 0.006 L 75.028 0.006 L 75.028 0.506 L 75.028 1.006 Z M 79.083 0.006 L 78.583 0.006 L 78.583 1.006 L 79.083 1.006 L 79.083 0.506 L 79.083 0.006 Z M 83.139 1.006 L 83.639 1.006 L 83.639 0.006 L 83.139 0.006 L 83.139 0.506 L 83.139 1.006 Z M 87.194 0.005 L 86.694 0.005 L 86.694 1.005 L 87.194 1.005 L 87.194 0.505 L 87.194 0.005 Z M 91.25 1.005 L 91.75 1.005 L 91.75 0.005 L 91.25 0.005 L 91.25 0.505 L 91.25 1.005 Z M 95.306 0.005 L 94.806 0.005 L 94.806 1.005 L 95.306 1.005 L 95.306 0.505 L 95.306 0.005 Z M 99.361 1.005 L 99.861 1.005 L 99.861 0.005 L 99.361 0.005 L 99.361 0.505 L 99.361 1.005 Z M 103.417 0.004 L 102.917 0.005 L 102.917 1.005 L 103.417 1.004 L 103.417 0.504 L 103.417 0.004 Z M 107.472 1.004 L 107.972 1.004 L 107.972 0.004 L 107.472 0.004 L 107.472 0.504 L 107.472 1.004 Z M 111.528 0.004 L 111.028 0.004 L 111.028 1.004 L 111.528 1.004 L 111.528 0.504 L 111.528 0.004 Z M 115.583 1.004 L 116.083 1.004 L 116.083 0.004 L 115.583 0.004 L 115.583 0.504 L 115.583 1.004 Z M 119.639 0.004 L 119.139 0.004 L 119.139 1.004 L 119.639 1.004 L 119.639 0.504 L 119.639 0.004 Z M 123.695 1.003 L 124.195 1.003 L 124.194 0.003 L 123.694 0.003 L 123.694 0.503 L 123.695 1.003 Z M 127.75 0.003 L 127.25 0.003 L 127.25 1.003 L 127.75 1.003 L 127.75 0.503 L 127.75 0.003 Z M 131.806 1.003 L 132.306 1.003 L 132.306 0.003 L 131.806 0.003 L 131.806 0.503 L 131.806 1.003 Z M 135.861 0.003 L 135.361 0.003 L 135.361 1.003 L 135.861 1.003 L 135.861 0.503 L 135.861 0.003 Z M 139.917 1.002 L 140.417 1.002 L 140.417 0.002 L 139.917 0.002 L 139.917 0.502 L 139.917 1.002 Z M 143.972 0.002 L 143.472 0.002 L 143.472 1.002 L 143.972 1.002 L 143.972 0.502 L 143.972 0.002 Z M 148.028 1.002 L 148.528 1.002 L 148.528 0.002 L 148.028 0.002 L 148.028 0.502 L 148.028 1.002 Z M 152.083 0.002 L 151.583 0.002 L 151.583 1.002 L 152.083 1.002 L 152.083 0.502 L 152.083 0.002 Z M 156.139 1.002 L 156.639 1.002 L 156.639 0.002 L 156.139 0.002 L 156.139 0.502 L 156.139 1.002 Z M 160.194 0.001 L 159.694 0.001 L 159.695 1.001 L 160.195 1.001 L 160.194 0.501 L 160.194 0.001 Z M 164.25 1.001 L 164.75 1.001 L 164.75 0.001 L 164.25 0.001 L 164.25 0.501 L 164.25 1.001 Z M 168.306 0.001 L 167.806 0.001 L 167.806 1.001 L 168.306 1.001 L 168.306 0.501 L 168.306 0.001 Z M 172.361 1.001 L 172.861 1.001 L 172.861 0.001 L 172.361 0.001 L 172.361 0.501 L 172.361 1.001 Z M 176.417 0 L 175.917 0 L 175.917 1 L 176.417 1 L 176.417 0.5 L 176.417 0 Z M 180.472 1 L 180.972 1 L 180.972 0 L 180.472 0 L 180.472 0.5 L 180.472 1 Z M 184.528 0 L 184.028 0 L 184.028 1 L 184.528 1 L 184.528 0.5 L 184.528 0 Z M 188.583 1 L 189.083 1 L 189.083 0 L 188.583 0 L 188.583 0.5 L 188.583 1 Z M 192.639 0 L 192.139 0 L 192.139 1 L 192.639 1 L 192.639 0.5 L 192.639 0 Z M 196.695 0.999 L 197.195 0.999 L 197.194 -0.001 L 196.694 -0.001 L 196.695 0.499 L 196.695 0.999 Z M 200.75 -0.001 L 200.25 -0.001 L 200.25 0.999 L 200.75 0.999 L 200.75 0.499 L 200.75 -0.001 Z M 204.806 0.999 L 205.306 0.999 L 205.306 -0.001 L 204.806 -0.001 L 204.806 0.499 L 204.806 0.999 Z M 208.861 -0.001 L 208.361 -0.001 L 208.361 0.999 L 208.861 0.999 L 208.861 0.499 L 208.861 -0.001 Z M 212.917 0.998 L 213.417 0.998 L 213.417 -0.002 L 212.917 -0.002 L 212.917 0.498 L 212.917 0.998 Z M 216.972 -0.002 L 216.472 -0.002 L 216.472 0.998 L 216.972 0.998 L 216.972 0.498 L 216.972 -0.002 Z M 0 0.51 L 0 1.01 L 2.028 1.01 L 2.028 0.51 L 2.028 0.01 L 0 0.01 L 0 0.51 Z M 6.083 0.51 L 6.083 1.01 L 10.139 1.01 L 10.139 0.51 L 10.139 0.01 L 6.083 0.01 L 6.083 0.51 Z M 14.194 0.509 L 14.194 1.009 L 18.25 1.009 L 18.25 0.509 L 18.25 0.009 L 14.194 0.009 L 14.194 0.509 Z M 22.306 0.509 L 22.306 1.009 L 26.361 1.009 L 26.361 0.509 L 26.361 0.009 L 22.306 0.009 L 22.306 0.509 Z M 30.417 0.509 L 30.417 1.009 L 34.472 1.008 L 34.472 0.508 L 34.472 0.008 L 30.417 0.009 L 30.417 0.509 Z M 38.528 0.508 L 38.528 1.008 L 42.583 1.008 L 42.583 0.508 L 42.583 0.008 L 38.528 0.008 L 38.528 0.508 Z M 46.639 0.508 L 46.639 1.008 L 50.694 1.007 L 50.694 0.507 L 50.694 0.007 L 46.639 0.008 L 46.639 0.508 Z M 54.75 0.507 L 54.75 1.007 L 58.806 1.007 L 58.806 0.507 L 58.806 0.007 L 54.75 0.007 L 54.75 0.507 Z M 62.861 0.507 L 62.861 1.007 L 66.917 1.007 L 66.917 0.507 L 66.917 0.007 L 62.861 0.007 L 62.861 0.507 Z M 70.972 0.506 L 70.972 1.006 L 75.028 1.006 L 75.028 0.506 L 75.028 0.006 L 70.972 0.006 L 70.972 0.506 Z M 79.083 0.506 L 79.083 1.006 L 83.139 1.006 L 83.139 0.506 L 83.139 0.006 L 79.083 0.006 L 79.083 0.506 Z M 87.194 0.505 L 87.194 1.005 L 91.25 1.005 L 91.25 0.505 L 91.25 0.005 L 87.194 0.005 L 87.194 0.505 Z M 95.306 0.505 L 95.306 1.005 L 99.361 1.005 L 99.361 0.505 L 99.361 0.005 L 95.306 0.005 L 95.306 0.505 Z M 103.417 0.504 L 103.417 1.004 L 107.472 1.004 L 107.472 0.504 L 107.472 0.004 L 103.417 0.004 L 103.417 0.504 Z M 111.528 0.504 L 111.528 1.004 L 115.583 1.004 L 115.583 0.504 L 115.583 0.004 L 111.528 0.004 L 111.528 0.504 Z M 119.639 0.504 L 119.639 1.004 L 123.695 1.003 L 123.694 0.503 L 123.694 0.003 L 119.639 0.004 L 119.639 0.504 Z M 127.75 0.503 L 127.75 1.003 L 131.806 1.003 L 131.806 0.503 L 131.806 0.003 L 127.75 0.003 L 127.75 0.503 Z M 135.861 0.503 L 135.861 1.003 L 139.917 1.002 L 139.917 0.502 L 139.917 0.002 L 135.861 0.003 L 135.861 0.503 Z M 143.972 0.502 L 143.972 1.002 L 148.028 1.002 L 148.028 0.502 L 148.028 0.002 L 143.972 0.002 L 143.972 0.502 Z M 152.083 0.502 L 152.083 1.002 L 156.139 1.002 L 156.139 0.502 L 156.139 0.002 L 152.083 0.002 L 152.083 0.502 Z M 160.194 0.501 L 160.195 1.001 L 164.25 1.001 L 164.25 0.501 L 164.25 0.001 L 160.194 0.001 L 160.194 0.501 Z M 168.306 0.501 L 168.306 1.001 L 172.361 1.001 L 172.361 0.501 L 172.361 0.001 L 168.306 0.001 L 168.306 0.501 Z M 176.417 0.5 L 176.417 1 L 180.472 1 L 180.472 0.5 L 180.472 0 L 176.417 0 L 176.417 0.5 Z M 184.528 0.5 L 184.528 1 L 188.583 1 L 188.583 0.5 L 188.583 0 L 184.528 0 L 184.528 0.5 Z M 192.639 0.5 L 192.639 1 L 196.695 0.999 L 196.695 0.499 L 196.694 -0.001 L 192.639 0 L 192.639 0.5 Z M 200.75 0.499 L 200.75 0.999 L 204.806 0.999 L 204.806 0.499 L 204.806 -0.001 L 200.75 -0.001 L 200.75 0.499 Z M 208.861 0.499 L 208.861 0.999 L 212.917 0.998 L 212.917 0.498 L 212.917 -0.002 L 208.861 -0.001 L 208.861 0.499 Z M 216.972 0.498 L 216.972 0.998 L 219 0.998 L 219 0.498 L 219 -0.002 L 216.972 -0.002 L 216.972 0.498 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={219} height={1.008} viewBox="0 0 219 1.008" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,106.878,219)",
+                  transformOrigin: "0 0",
+                  width: 219,
+                  height: 1.008,
+                }}>
+                  <path d={"M 0 0.01 L -0.5 0.01 L -0.5 1.01 L 0 1.01 L 0 0.51 L 0 0.01 Z M 219 0.998 L 219.5 0.998 L 219.5 -0.002 L 219 -0.002 L 219 0.498 L 219 0.998 Z M 2.028 1.01 L 2.528 1.01 L 2.528 0.01 L 2.028 0.01 L 2.028 0.51 L 2.028 1.01 Z M 6.083 0.01 L 5.583 0.01 L 5.583 1.01 L 6.083 1.01 L 6.083 0.51 L 6.083 0.01 Z M 10.139 1.01 L 10.639 1.01 L 10.639 0.01 L 10.139 0.01 L 10.139 0.51 L 10.139 1.01 Z M 14.194 0.009 L 13.694 0.009 L 13.694 1.009 L 14.194 1.009 L 14.194 0.509 L 14.194 0.009 Z M 18.25 1.009 L 18.75 1.009 L 18.75 0.009 L 18.25 0.009 L 18.25 0.509 L 18.25 1.009 Z M 22.306 0.009 L 21.806 0.009 L 21.806 1.009 L 22.306 1.009 L 22.306 0.509 L 22.306 0.009 Z M 26.361 1.009 L 26.861 1.009 L 26.861 0.009 L 26.361 0.009 L 26.361 0.509 L 26.361 1.009 Z M 30.417 0.009 L 29.917 0.009 L 29.917 1.009 L 30.417 1.009 L 30.417 0.509 L 30.417 0.009 Z M 34.472 1.008 L 34.972 1.008 L 34.972 0.008 L 34.472 0.008 L 34.472 0.508 L 34.472 1.008 Z M 38.528 0.008 L 38.028 0.008 L 38.028 1.008 L 38.528 1.008 L 38.528 0.508 L 38.528 0.008 Z M 42.583 1.008 L 43.083 1.008 L 43.083 0.008 L 42.583 0.008 L 42.583 0.508 L 42.583 1.008 Z M 46.639 0.008 L 46.139 0.008 L 46.139 1.008 L 46.639 1.008 L 46.639 0.508 L 46.639 0.008 Z M 50.694 1.007 L 51.194 1.007 L 51.194 0.007 L 50.694 0.007 L 50.694 0.507 L 50.694 1.007 Z M 54.75 0.007 L 54.25 0.007 L 54.25 1.007 L 54.75 1.007 L 54.75 0.507 L 54.75 0.007 Z M 58.806 1.007 L 59.306 1.007 L 59.306 0.007 L 58.806 0.007 L 58.806 0.507 L 58.806 1.007 Z M 62.861 0.007 L 62.361 0.007 L 62.361 1.007 L 62.861 1.007 L 62.861 0.507 L 62.861 0.007 Z M 66.917 1.007 L 67.417 1.006 L 67.417 0.006 L 66.917 0.007 L 66.917 0.507 L 66.917 1.007 Z M 70.972 0.006 L 70.472 0.006 L 70.472 1.006 L 70.972 1.006 L 70.972 0.506 L 70.972 0.006 Z M 75.028 1.006 L 75.528 1.006 L 75.528 0.006 L 75.028 0.006 L 75.028 0.506 L 75.028 1.006 Z M 79.083 0.006 L 78.583 0.006 L 78.583 1.006 L 79.083 1.006 L 79.083 0.506 L 79.083 0.006 Z M 83.139 1.006 L 83.639 1.006 L 83.639 0.006 L 83.139 0.006 L 83.139 0.506 L 83.139 1.006 Z M 87.194 0.005 L 86.694 0.005 L 86.694 1.005 L 87.194 1.005 L 87.194 0.505 L 87.194 0.005 Z M 91.25 1.005 L 91.75 1.005 L 91.75 0.005 L 91.25 0.005 L 91.25 0.505 L 91.25 1.005 Z M 95.306 0.005 L 94.806 0.005 L 94.806 1.005 L 95.306 1.005 L 95.306 0.505 L 95.306 0.005 Z M 99.361 1.005 L 99.861 1.005 L 99.861 0.005 L 99.361 0.005 L 99.361 0.505 L 99.361 1.005 Z M 103.417 0.004 L 102.917 0.005 L 102.917 1.005 L 103.417 1.004 L 103.417 0.504 L 103.417 0.004 Z M 107.472 1.004 L 107.972 1.004 L 107.972 0.004 L 107.472 0.004 L 107.472 0.504 L 107.472 1.004 Z M 111.528 0.004 L 111.028 0.004 L 111.028 1.004 L 111.528 1.004 L 111.528 0.504 L 111.528 0.004 Z M 115.583 1.004 L 116.083 1.004 L 116.083 0.004 L 115.583 0.004 L 115.583 0.504 L 115.583 1.004 Z M 119.639 0.004 L 119.139 0.004 L 119.139 1.004 L 119.639 1.004 L 119.639 0.504 L 119.639 0.004 Z M 123.695 1.003 L 124.195 1.003 L 124.194 0.003 L 123.694 0.003 L 123.694 0.503 L 123.695 1.003 Z M 127.75 0.003 L 127.25 0.003 L 127.25 1.003 L 127.75 1.003 L 127.75 0.503 L 127.75 0.003 Z M 131.806 1.003 L 132.306 1.003 L 132.306 0.003 L 131.806 0.003 L 131.806 0.503 L 131.806 1.003 Z M 135.861 0.003 L 135.361 0.003 L 135.361 1.003 L 135.861 1.003 L 135.861 0.503 L 135.861 0.003 Z M 139.917 1.002 L 140.417 1.002 L 140.417 0.002 L 139.917 0.002 L 139.917 0.502 L 139.917 1.002 Z M 143.972 0.002 L 143.472 0.002 L 143.472 1.002 L 143.972 1.002 L 143.972 0.502 L 143.972 0.002 Z M 148.028 1.002 L 148.528 1.002 L 148.528 0.002 L 148.028 0.002 L 148.028 0.502 L 148.028 1.002 Z M 152.083 0.002 L 151.583 0.002 L 151.583 1.002 L 152.083 1.002 L 152.083 0.502 L 152.083 0.002 Z M 156.139 1.002 L 156.639 1.002 L 156.639 0.002 L 156.139 0.002 L 156.139 0.502 L 156.139 1.002 Z M 160.194 0.001 L 159.694 0.001 L 159.695 1.001 L 160.195 1.001 L 160.194 0.501 L 160.194 0.001 Z M 164.25 1.001 L 164.75 1.001 L 164.75 0.001 L 164.25 0.001 L 164.25 0.501 L 164.25 1.001 Z M 168.306 0.001 L 167.806 0.001 L 167.806 1.001 L 168.306 1.001 L 168.306 0.501 L 168.306 0.001 Z M 172.361 1.001 L 172.861 1.001 L 172.861 0.001 L 172.361 0.001 L 172.361 0.501 L 172.361 1.001 Z M 176.417 0 L 175.917 0 L 175.917 1 L 176.417 1 L 176.417 0.5 L 176.417 0 Z M 180.472 1 L 180.972 1 L 180.972 0 L 180.472 0 L 180.472 0.5 L 180.472 1 Z M 184.528 0 L 184.028 0 L 184.028 1 L 184.528 1 L 184.528 0.5 L 184.528 0 Z M 188.583 1 L 189.083 1 L 189.083 0 L 188.583 0 L 188.583 0.5 L 188.583 1 Z M 192.639 0 L 192.139 0 L 192.139 1 L 192.639 1 L 192.639 0.5 L 192.639 0 Z M 196.695 0.999 L 197.195 0.999 L 197.194 -0.001 L 196.694 -0.001 L 196.695 0.499 L 196.695 0.999 Z M 200.75 -0.001 L 200.25 -0.001 L 200.25 0.999 L 200.75 0.999 L 200.75 0.499 L 200.75 -0.001 Z M 204.806 0.999 L 205.306 0.999 L 205.306 -0.001 L 204.806 -0.001 L 204.806 0.499 L 204.806 0.999 Z M 208.861 -0.001 L 208.361 -0.001 L 208.361 0.999 L 208.861 0.999 L 208.861 0.499 L 208.861 -0.001 Z M 212.917 0.998 L 213.417 0.998 L 213.417 -0.002 L 212.917 -0.002 L 212.917 0.498 L 212.917 0.998 Z M 216.972 -0.002 L 216.472 -0.002 L 216.472 0.998 L 216.972 0.998 L 216.972 0.498 L 216.972 -0.002 Z M 0 0.51 L 0 1.01 L 2.028 1.01 L 2.028 0.51 L 2.028 0.01 L 0 0.01 L 0 0.51 Z M 6.083 0.51 L 6.083 1.01 L 10.139 1.01 L 10.139 0.51 L 10.139 0.01 L 6.083 0.01 L 6.083 0.51 Z M 14.194 0.509 L 14.194 1.009 L 18.25 1.009 L 18.25 0.509 L 18.25 0.009 L 14.194 0.009 L 14.194 0.509 Z M 22.306 0.509 L 22.306 1.009 L 26.361 1.009 L 26.361 0.509 L 26.361 0.009 L 22.306 0.009 L 22.306 0.509 Z M 30.417 0.509 L 30.417 1.009 L 34.472 1.008 L 34.472 0.508 L 34.472 0.008 L 30.417 0.009 L 30.417 0.509 Z M 38.528 0.508 L 38.528 1.008 L 42.583 1.008 L 42.583 0.508 L 42.583 0.008 L 38.528 0.008 L 38.528 0.508 Z M 46.639 0.508 L 46.639 1.008 L 50.694 1.007 L 50.694 0.507 L 50.694 0.007 L 46.639 0.008 L 46.639 0.508 Z M 54.75 0.507 L 54.75 1.007 L 58.806 1.007 L 58.806 0.507 L 58.806 0.007 L 54.75 0.007 L 54.75 0.507 Z M 62.861 0.507 L 62.861 1.007 L 66.917 1.007 L 66.917 0.507 L 66.917 0.007 L 62.861 0.007 L 62.861 0.507 Z M 70.972 0.506 L 70.972 1.006 L 75.028 1.006 L 75.028 0.506 L 75.028 0.006 L 70.972 0.006 L 70.972 0.506 Z M 79.083 0.506 L 79.083 1.006 L 83.139 1.006 L 83.139 0.506 L 83.139 0.006 L 79.083 0.006 L 79.083 0.506 Z M 87.194 0.505 L 87.194 1.005 L 91.25 1.005 L 91.25 0.505 L 91.25 0.005 L 87.194 0.005 L 87.194 0.505 Z M 95.306 0.505 L 95.306 1.005 L 99.361 1.005 L 99.361 0.505 L 99.361 0.005 L 95.306 0.005 L 95.306 0.505 Z M 103.417 0.504 L 103.417 1.004 L 107.472 1.004 L 107.472 0.504 L 107.472 0.004 L 103.417 0.004 L 103.417 0.504 Z M 111.528 0.504 L 111.528 1.004 L 115.583 1.004 L 115.583 0.504 L 115.583 0.004 L 111.528 0.004 L 111.528 0.504 Z M 119.639 0.504 L 119.639 1.004 L 123.695 1.003 L 123.694 0.503 L 123.694 0.003 L 119.639 0.004 L 119.639 0.504 Z M 127.75 0.503 L 127.75 1.003 L 131.806 1.003 L 131.806 0.503 L 131.806 0.003 L 127.75 0.003 L 127.75 0.503 Z M 135.861 0.503 L 135.861 1.003 L 139.917 1.002 L 139.917 0.502 L 139.917 0.002 L 135.861 0.003 L 135.861 0.503 Z M 143.972 0.502 L 143.972 1.002 L 148.028 1.002 L 148.028 0.502 L 148.028 0.002 L 143.972 0.002 L 143.972 0.502 Z M 152.083 0.502 L 152.083 1.002 L 156.139 1.002 L 156.139 0.502 L 156.139 0.002 L 152.083 0.002 L 152.083 0.502 Z M 160.194 0.501 L 160.195 1.001 L 164.25 1.001 L 164.25 0.501 L 164.25 0.001 L 160.194 0.001 L 160.194 0.501 Z M 168.306 0.501 L 168.306 1.001 L 172.361 1.001 L 172.361 0.501 L 172.361 0.001 L 168.306 0.001 L 168.306 0.501 Z M 176.417 0.5 L 176.417 1 L 180.472 1 L 180.472 0.5 L 180.472 0 L 176.417 0 L 176.417 0.5 Z M 184.528 0.5 L 184.528 1 L 188.583 1 L 188.583 0.5 L 188.583 0 L 184.528 0 L 184.528 0.5 Z M 192.639 0.5 L 192.639 1 L 196.695 0.999 L 196.695 0.499 L 196.694 -0.001 L 192.639 0 L 192.639 0.5 Z M 200.75 0.499 L 200.75 0.999 L 204.806 0.999 L 204.806 0.499 L 204.806 -0.001 L 200.75 -0.001 L 200.75 0.499 Z M 208.861 0.499 L 208.861 0.999 L 212.917 0.998 L 212.917 0.498 L 212.917 -0.002 L 208.861 -0.001 L 208.861 0.499 Z M 216.972 0.498 L 216.972 0.998 L 219 0.998 L 219 0.498 L 219 -0.002 L 216.972 -0.002 L 216.972 0.498 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={219} height={1.008} viewBox="0 0 219 1.008" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,181.492,219)",
+                  transformOrigin: "0 0",
+                  width: 219,
+                  height: 1.008,
+                }}>
+                  <path d={"M 0 0.01 L -0.5 0.01 L -0.5 1.01 L 0 1.01 L 0 0.51 L 0 0.01 Z M 219 0.998 L 219.5 0.998 L 219.5 -0.002 L 219 -0.002 L 219 0.498 L 219 0.998 Z M 2.028 1.01 L 2.528 1.01 L 2.528 0.01 L 2.028 0.01 L 2.028 0.51 L 2.028 1.01 Z M 6.083 0.01 L 5.583 0.01 L 5.583 1.01 L 6.083 1.01 L 6.083 0.51 L 6.083 0.01 Z M 10.139 1.01 L 10.639 1.01 L 10.639 0.01 L 10.139 0.01 L 10.139 0.51 L 10.139 1.01 Z M 14.194 0.009 L 13.694 0.009 L 13.694 1.009 L 14.194 1.009 L 14.194 0.509 L 14.194 0.009 Z M 18.25 1.009 L 18.75 1.009 L 18.75 0.009 L 18.25 0.009 L 18.25 0.509 L 18.25 1.009 Z M 22.306 0.009 L 21.806 0.009 L 21.806 1.009 L 22.306 1.009 L 22.306 0.509 L 22.306 0.009 Z M 26.361 1.009 L 26.861 1.009 L 26.861 0.009 L 26.361 0.009 L 26.361 0.509 L 26.361 1.009 Z M 30.417 0.009 L 29.917 0.009 L 29.917 1.009 L 30.417 1.009 L 30.417 0.509 L 30.417 0.009 Z M 34.472 1.008 L 34.972 1.008 L 34.972 0.008 L 34.472 0.008 L 34.472 0.508 L 34.472 1.008 Z M 38.528 0.008 L 38.028 0.008 L 38.028 1.008 L 38.528 1.008 L 38.528 0.508 L 38.528 0.008 Z M 42.583 1.008 L 43.083 1.008 L 43.083 0.008 L 42.583 0.008 L 42.583 0.508 L 42.583 1.008 Z M 46.639 0.008 L 46.139 0.008 L 46.139 1.008 L 46.639 1.008 L 46.639 0.508 L 46.639 0.008 Z M 50.694 1.007 L 51.194 1.007 L 51.194 0.007 L 50.694 0.007 L 50.694 0.507 L 50.694 1.007 Z M 54.75 0.007 L 54.25 0.007 L 54.25 1.007 L 54.75 1.007 L 54.75 0.507 L 54.75 0.007 Z M 58.806 1.007 L 59.306 1.007 L 59.306 0.007 L 58.806 0.007 L 58.806 0.507 L 58.806 1.007 Z M 62.861 0.007 L 62.361 0.007 L 62.361 1.007 L 62.861 1.007 L 62.861 0.507 L 62.861 0.007 Z M 66.917 1.007 L 67.417 1.006 L 67.417 0.006 L 66.917 0.007 L 66.917 0.507 L 66.917 1.007 Z M 70.972 0.006 L 70.472 0.006 L 70.472 1.006 L 70.972 1.006 L 70.972 0.506 L 70.972 0.006 Z M 75.028 1.006 L 75.528 1.006 L 75.528 0.006 L 75.028 0.006 L 75.028 0.506 L 75.028 1.006 Z M 79.083 0.006 L 78.583 0.006 L 78.583 1.006 L 79.083 1.006 L 79.083 0.506 L 79.083 0.006 Z M 83.139 1.006 L 83.639 1.006 L 83.639 0.006 L 83.139 0.006 L 83.139 0.506 L 83.139 1.006 Z M 87.194 0.005 L 86.694 0.005 L 86.694 1.005 L 87.194 1.005 L 87.194 0.505 L 87.194 0.005 Z M 91.25 1.005 L 91.75 1.005 L 91.75 0.005 L 91.25 0.005 L 91.25 0.505 L 91.25 1.005 Z M 95.306 0.005 L 94.806 0.005 L 94.806 1.005 L 95.306 1.005 L 95.306 0.505 L 95.306 0.005 Z M 99.361 1.005 L 99.861 1.005 L 99.861 0.005 L 99.361 0.005 L 99.361 0.505 L 99.361 1.005 Z M 103.417 0.004 L 102.917 0.005 L 102.917 1.005 L 103.417 1.004 L 103.417 0.504 L 103.417 0.004 Z M 107.472 1.004 L 107.972 1.004 L 107.972 0.004 L 107.472 0.004 L 107.472 0.504 L 107.472 1.004 Z M 111.528 0.004 L 111.028 0.004 L 111.028 1.004 L 111.528 1.004 L 111.528 0.504 L 111.528 0.004 Z M 115.583 1.004 L 116.083 1.004 L 116.083 0.004 L 115.583 0.004 L 115.583 0.504 L 115.583 1.004 Z M 119.639 0.004 L 119.139 0.004 L 119.139 1.004 L 119.639 1.004 L 119.639 0.504 L 119.639 0.004 Z M 123.695 1.003 L 124.195 1.003 L 124.194 0.003 L 123.694 0.003 L 123.694 0.503 L 123.695 1.003 Z M 127.75 0.003 L 127.25 0.003 L 127.25 1.003 L 127.75 1.003 L 127.75 0.503 L 127.75 0.003 Z M 131.806 1.003 L 132.306 1.003 L 132.306 0.003 L 131.806 0.003 L 131.806 0.503 L 131.806 1.003 Z M 135.861 0.003 L 135.361 0.003 L 135.361 1.003 L 135.861 1.003 L 135.861 0.503 L 135.861 0.003 Z M 139.917 1.002 L 140.417 1.002 L 140.417 0.002 L 139.917 0.002 L 139.917 0.502 L 139.917 1.002 Z M 143.972 0.002 L 143.472 0.002 L 143.472 1.002 L 143.972 1.002 L 143.972 0.502 L 143.972 0.002 Z M 148.028 1.002 L 148.528 1.002 L 148.528 0.002 L 148.028 0.002 L 148.028 0.502 L 148.028 1.002 Z M 152.083 0.002 L 151.583 0.002 L 151.583 1.002 L 152.083 1.002 L 152.083 0.502 L 152.083 0.002 Z M 156.139 1.002 L 156.639 1.002 L 156.639 0.002 L 156.139 0.002 L 156.139 0.502 L 156.139 1.002 Z M 160.194 0.001 L 159.694 0.001 L 159.695 1.001 L 160.195 1.001 L 160.194 0.501 L 160.194 0.001 Z M 164.25 1.001 L 164.75 1.001 L 164.75 0.001 L 164.25 0.001 L 164.25 0.501 L 164.25 1.001 Z M 168.306 0.001 L 167.806 0.001 L 167.806 1.001 L 168.306 1.001 L 168.306 0.501 L 168.306 0.001 Z M 172.361 1.001 L 172.861 1.001 L 172.861 0.001 L 172.361 0.001 L 172.361 0.501 L 172.361 1.001 Z M 176.417 0 L 175.917 0 L 175.917 1 L 176.417 1 L 176.417 0.5 L 176.417 0 Z M 180.472 1 L 180.972 1 L 180.972 0 L 180.472 0 L 180.472 0.5 L 180.472 1 Z M 184.528 0 L 184.028 0 L 184.028 1 L 184.528 1 L 184.528 0.5 L 184.528 0 Z M 188.583 1 L 189.083 1 L 189.083 0 L 188.583 0 L 188.583 0.5 L 188.583 1 Z M 192.639 0 L 192.139 0 L 192.139 1 L 192.639 1 L 192.639 0.5 L 192.639 0 Z M 196.695 0.999 L 197.195 0.999 L 197.194 -0.001 L 196.694 -0.001 L 196.695 0.499 L 196.695 0.999 Z M 200.75 -0.001 L 200.25 -0.001 L 200.25 0.999 L 200.75 0.999 L 200.75 0.499 L 200.75 -0.001 Z M 204.806 0.999 L 205.306 0.999 L 205.306 -0.001 L 204.806 -0.001 L 204.806 0.499 L 204.806 0.999 Z M 208.861 -0.001 L 208.361 -0.001 L 208.361 0.999 L 208.861 0.999 L 208.861 0.499 L 208.861 -0.001 Z M 212.917 0.998 L 213.417 0.998 L 213.417 -0.002 L 212.917 -0.002 L 212.917 0.498 L 212.917 0.998 Z M 216.972 -0.002 L 216.472 -0.002 L 216.472 0.998 L 216.972 0.998 L 216.972 0.498 L 216.972 -0.002 Z M 0 0.51 L 0 1.01 L 2.028 1.01 L 2.028 0.51 L 2.028 0.01 L 0 0.01 L 0 0.51 Z M 6.083 0.51 L 6.083 1.01 L 10.139 1.01 L 10.139 0.51 L 10.139 0.01 L 6.083 0.01 L 6.083 0.51 Z M 14.194 0.509 L 14.194 1.009 L 18.25 1.009 L 18.25 0.509 L 18.25 0.009 L 14.194 0.009 L 14.194 0.509 Z M 22.306 0.509 L 22.306 1.009 L 26.361 1.009 L 26.361 0.509 L 26.361 0.009 L 22.306 0.009 L 22.306 0.509 Z M 30.417 0.509 L 30.417 1.009 L 34.472 1.008 L 34.472 0.508 L 34.472 0.008 L 30.417 0.009 L 30.417 0.509 Z M 38.528 0.508 L 38.528 1.008 L 42.583 1.008 L 42.583 0.508 L 42.583 0.008 L 38.528 0.008 L 38.528 0.508 Z M 46.639 0.508 L 46.639 1.008 L 50.694 1.007 L 50.694 0.507 L 50.694 0.007 L 46.639 0.008 L 46.639 0.508 Z M 54.75 0.507 L 54.75 1.007 L 58.806 1.007 L 58.806 0.507 L 58.806 0.007 L 54.75 0.007 L 54.75 0.507 Z M 62.861 0.507 L 62.861 1.007 L 66.917 1.007 L 66.917 0.507 L 66.917 0.007 L 62.861 0.007 L 62.861 0.507 Z M 70.972 0.506 L 70.972 1.006 L 75.028 1.006 L 75.028 0.506 L 75.028 0.006 L 70.972 0.006 L 70.972 0.506 Z M 79.083 0.506 L 79.083 1.006 L 83.139 1.006 L 83.139 0.506 L 83.139 0.006 L 79.083 0.006 L 79.083 0.506 Z M 87.194 0.505 L 87.194 1.005 L 91.25 1.005 L 91.25 0.505 L 91.25 0.005 L 87.194 0.005 L 87.194 0.505 Z M 95.306 0.505 L 95.306 1.005 L 99.361 1.005 L 99.361 0.505 L 99.361 0.005 L 95.306 0.005 L 95.306 0.505 Z M 103.417 0.504 L 103.417 1.004 L 107.472 1.004 L 107.472 0.504 L 107.472 0.004 L 103.417 0.004 L 103.417 0.504 Z M 111.528 0.504 L 111.528 1.004 L 115.583 1.004 L 115.583 0.504 L 115.583 0.004 L 111.528 0.004 L 111.528 0.504 Z M 119.639 0.504 L 119.639 1.004 L 123.695 1.003 L 123.694 0.503 L 123.694 0.003 L 119.639 0.004 L 119.639 0.504 Z M 127.75 0.503 L 127.75 1.003 L 131.806 1.003 L 131.806 0.503 L 131.806 0.003 L 127.75 0.003 L 127.75 0.503 Z M 135.861 0.503 L 135.861 1.003 L 139.917 1.002 L 139.917 0.502 L 139.917 0.002 L 135.861 0.003 L 135.861 0.503 Z M 143.972 0.502 L 143.972 1.002 L 148.028 1.002 L 148.028 0.502 L 148.028 0.002 L 143.972 0.002 L 143.972 0.502 Z M 152.083 0.502 L 152.083 1.002 L 156.139 1.002 L 156.139 0.502 L 156.139 0.002 L 152.083 0.002 L 152.083 0.502 Z M 160.194 0.501 L 160.195 1.001 L 164.25 1.001 L 164.25 0.501 L 164.25 0.001 L 160.194 0.001 L 160.194 0.501 Z M 168.306 0.501 L 168.306 1.001 L 172.361 1.001 L 172.361 0.501 L 172.361 0.001 L 168.306 0.001 L 168.306 0.501 Z M 176.417 0.5 L 176.417 1 L 180.472 1 L 180.472 0.5 L 180.472 0 L 176.417 0 L 176.417 0.5 Z M 184.528 0.5 L 184.528 1 L 188.583 1 L 188.583 0.5 L 188.583 0 L 184.528 0 L 184.528 0.5 Z M 192.639 0.5 L 192.639 1 L 196.695 0.999 L 196.695 0.499 L 196.694 -0.001 L 192.639 0 L 192.639 0.5 Z M 200.75 0.499 L 200.75 0.999 L 204.806 0.999 L 204.806 0.499 L 204.806 -0.001 L 200.75 -0.001 L 200.75 0.499 Z M 208.861 0.499 L 208.861 0.999 L 212.917 0.998 L 212.917 0.498 L 212.917 -0.002 L 208.861 -0.001 L 208.861 0.499 Z M 216.972 0.498 L 216.972 0.998 L 219 0.998 L 219 0.498 L 219 -0.002 L 216.972 -0.002 L 216.972 0.498 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={219} height={1.008} viewBox="0 0 219 1.008" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,256.105,219)",
+                  transformOrigin: "0 0",
+                  width: 219,
+                  height: 1.008,
+                }}>
+                  <path d={"M 0 0.01 L -0.5 0.01 L -0.5 1.01 L 0 1.01 L 0 0.51 L 0 0.01 Z M 219 0.998 L 219.5 0.998 L 219.5 -0.002 L 219 -0.002 L 219 0.498 L 219 0.998 Z M 2.028 1.01 L 2.528 1.01 L 2.528 0.01 L 2.028 0.01 L 2.028 0.51 L 2.028 1.01 Z M 6.083 0.01 L 5.583 0.01 L 5.583 1.01 L 6.083 1.01 L 6.083 0.51 L 6.083 0.01 Z M 10.139 1.009 L 10.639 1.009 L 10.639 0.009 L 10.139 0.009 L 10.139 0.509 L 10.139 1.009 Z M 14.194 0.009 L 13.694 0.009 L 13.694 1.009 L 14.194 1.009 L 14.194 0.509 L 14.194 0.009 Z M 18.25 1.009 L 18.75 1.009 L 18.75 0.009 L 18.25 0.009 L 18.25 0.509 L 18.25 1.009 Z M 22.306 0.009 L 21.806 0.009 L 21.806 1.009 L 22.306 1.009 L 22.306 0.509 L 22.306 0.009 Z M 26.361 1.009 L 26.861 1.009 L 26.861 0.009 L 26.361 0.009 L 26.361 0.509 L 26.361 1.009 Z M 30.417 0.008 L 29.917 0.008 L 29.917 1.008 L 30.417 1.008 L 30.417 0.508 L 30.417 0.008 Z M 34.472 1.008 L 34.972 1.008 L 34.972 0.008 L 34.472 0.008 L 34.472 0.508 L 34.472 1.008 Z M 38.528 0.008 L 38.028 0.008 L 38.028 1.008 L 38.528 1.008 L 38.528 0.508 L 38.528 0.008 Z M 42.583 1.008 L 43.083 1.008 L 43.083 0.008 L 42.583 0.008 L 42.583 0.508 L 42.583 1.008 Z M 46.639 0.008 L 46.139 0.008 L 46.139 1.008 L 46.639 1.008 L 46.639 0.508 L 46.639 0.008 Z M 50.694 1.007 L 51.194 1.007 L 51.194 0.007 L 50.694 0.007 L 50.694 0.507 L 50.694 1.007 Z M 54.75 0.007 L 54.25 0.007 L 54.25 1.007 L 54.75 1.007 L 54.75 0.507 L 54.75 0.007 Z M 58.806 1.007 L 59.306 1.007 L 59.306 0.007 L 58.806 0.007 L 58.806 0.507 L 58.806 1.007 Z M 62.861 0.007 L 62.361 0.007 L 62.361 1.007 L 62.861 1.007 L 62.861 0.507 L 62.861 0.007 Z M 66.917 1.006 L 67.417 1.006 L 67.417 0.006 L 66.917 0.006 L 66.917 0.506 L 66.917 1.006 Z M 70.972 0.006 L 70.472 0.006 L 70.472 1.006 L 70.972 1.006 L 70.972 0.506 L 70.972 0.006 Z M 75.028 1.006 L 75.528 1.006 L 75.528 0.006 L 75.028 0.006 L 75.028 0.506 L 75.028 1.006 Z M 79.083 0.006 L 78.583 0.006 L 78.583 1.006 L 79.083 1.006 L 79.083 0.506 L 79.083 0.006 Z M 83.139 1.006 L 83.639 1.006 L 83.639 0.006 L 83.139 0.006 L 83.139 0.506 L 83.139 1.006 Z M 87.194 0.005 L 86.694 0.005 L 86.694 1.005 L 87.194 1.005 L 87.194 0.505 L 87.194 0.005 Z M 91.25 1.005 L 91.75 1.005 L 91.75 0.005 L 91.25 0.005 L 91.25 0.505 L 91.25 1.005 Z M 95.306 0.005 L 94.806 0.005 L 94.806 1.005 L 95.306 1.005 L 95.306 0.505 L 95.306 0.005 Z M 99.361 1.005 L 99.861 1.005 L 99.861 0.005 L 99.361 0.005 L 99.361 0.505 L 99.361 1.005 Z M 103.417 0.004 L 102.917 0.005 L 102.917 1.005 L 103.417 1.004 L 103.417 0.504 L 103.417 0.004 Z M 107.472 1.004 L 107.972 1.004 L 107.972 0.004 L 107.472 0.004 L 107.472 0.504 L 107.472 1.004 Z M 111.528 0.004 L 111.028 0.004 L 111.028 1.004 L 111.528 1.004 L 111.528 0.504 L 111.528 0.004 Z M 115.583 1.004 L 116.083 1.004 L 116.083 0.004 L 115.583 0.004 L 115.583 0.504 L 115.583 1.004 Z M 119.639 0.004 L 119.139 0.004 L 119.139 1.004 L 119.639 1.004 L 119.639 0.504 L 119.639 0.004 Z M 123.695 1.003 L 124.195 1.003 L 124.194 0.003 L 123.694 0.003 L 123.694 0.503 L 123.695 1.003 Z M 127.75 0.003 L 127.25 0.003 L 127.25 1.003 L 127.75 1.003 L 127.75 0.503 L 127.75 0.003 Z M 131.806 1.003 L 132.306 1.003 L 132.306 0.003 L 131.806 0.003 L 131.806 0.503 L 131.806 1.003 Z M 135.861 0.003 L 135.361 0.003 L 135.361 1.003 L 135.861 1.003 L 135.861 0.503 L 135.861 0.003 Z M 139.917 1.003 L 140.417 1.002 L 140.417 0.002 L 139.917 0.003 L 139.917 0.503 L 139.917 1.003 Z M 143.972 0.002 L 143.472 0.002 L 143.472 1.002 L 143.972 1.002 L 143.972 0.502 L 143.972 0.002 Z M 148.028 1.002 L 148.528 1.002 L 148.528 0.002 L 148.028 0.002 L 148.028 0.502 L 148.028 1.002 Z M 152.083 0.002 L 151.583 0.002 L 151.583 1.002 L 152.083 1.002 L 152.083 0.502 L 152.083 0.002 Z M 156.139 1.002 L 156.639 1.002 L 156.639 0.002 L 156.139 0.002 L 156.139 0.502 L 156.139 1.002 Z M 160.194 0.001 L 159.694 0.001 L 159.695 1.001 L 160.195 1.001 L 160.194 0.501 L 160.194 0.001 Z M 164.25 1.001 L 164.75 1.001 L 164.75 0.001 L 164.25 0.001 L 164.25 0.501 L 164.25 1.001 Z M 168.306 0.001 L 167.806 0.001 L 167.806 1.001 L 168.306 1.001 L 168.306 0.501 L 168.306 0.001 Z M 172.361 1.001 L 172.861 1.001 L 172.861 0.001 L 172.361 0.001 L 172.361 0.501 L 172.361 1.001 Z M 176.417 0.001 L 175.917 0.001 L 175.917 1.001 L 176.417 1.001 L 176.417 0.501 L 176.417 0.001 Z M 180.472 1 L 180.972 1 L 180.972 0 L 180.472 0 L 180.472 0.5 L 180.472 1 Z M 184.528 0 L 184.028 0 L 184.028 1 L 184.528 1 L 184.528 0.5 L 184.528 0 Z M 188.583 1 L 189.083 1 L 189.083 0 L 188.583 0 L 188.583 0.5 L 188.583 1 Z M 192.639 0 L 192.139 0 L 192.139 1 L 192.639 1 L 192.639 0.5 L 192.639 0 Z M 196.695 0.999 L 197.195 0.999 L 197.194 -0.001 L 196.694 -0.001 L 196.695 0.499 L 196.695 0.999 Z M 200.75 -0.001 L 200.25 -0.001 L 200.25 0.999 L 200.75 0.999 L 200.75 0.499 L 200.75 -0.001 Z M 204.806 0.999 L 205.306 0.999 L 205.306 -0.001 L 204.806 -0.001 L 204.806 0.499 L 204.806 0.999 Z M 208.861 -0.001 L 208.361 -0.001 L 208.361 0.999 L 208.861 0.999 L 208.861 0.499 L 208.861 -0.001 Z M 212.917 0.999 L 213.417 0.999 L 213.417 -0.001 L 212.917 -0.001 L 212.917 0.499 L 212.917 0.999 Z M 216.972 -0.002 L 216.472 -0.002 L 216.472 0.998 L 216.972 0.998 L 216.972 0.498 L 216.972 -0.002 Z M 0 0.51 L 0 1.01 L 2.028 1.01 L 2.028 0.51 L 2.028 0.01 L 0 0.01 L 0 0.51 Z M 6.083 0.51 L 6.083 1.01 L 10.139 1.009 L 10.139 0.509 L 10.139 0.009 L 6.083 0.01 L 6.083 0.51 Z M 14.194 0.509 L 14.194 1.009 L 18.25 1.009 L 18.25 0.509 L 18.25 0.009 L 14.194 0.009 L 14.194 0.509 Z M 22.306 0.509 L 22.306 1.009 L 26.361 1.009 L 26.361 0.509 L 26.361 0.009 L 22.306 0.009 L 22.306 0.509 Z M 30.417 0.508 L 30.417 1.008 L 34.472 1.008 L 34.472 0.508 L 34.472 0.008 L 30.417 0.008 L 30.417 0.508 Z M 38.528 0.508 L 38.528 1.008 L 42.583 1.008 L 42.583 0.508 L 42.583 0.008 L 38.528 0.008 L 38.528 0.508 Z M 46.639 0.508 L 46.639 1.008 L 50.694 1.007 L 50.694 0.507 L 50.694 0.007 L 46.639 0.008 L 46.639 0.508 Z M 54.75 0.507 L 54.75 1.007 L 58.806 1.007 L 58.806 0.507 L 58.806 0.007 L 54.75 0.007 L 54.75 0.507 Z M 62.861 0.507 L 62.861 1.007 L 66.917 1.006 L 66.917 0.506 L 66.917 0.006 L 62.861 0.007 L 62.861 0.507 Z M 70.972 0.506 L 70.972 1.006 L 75.028 1.006 L 75.028 0.506 L 75.028 0.006 L 70.972 0.006 L 70.972 0.506 Z M 79.083 0.506 L 79.083 1.006 L 83.139 1.006 L 83.139 0.506 L 83.139 0.006 L 79.083 0.006 L 79.083 0.506 Z M 87.194 0.505 L 87.194 1.005 L 91.25 1.005 L 91.25 0.505 L 91.25 0.005 L 87.194 0.005 L 87.194 0.505 Z M 95.306 0.505 L 95.306 1.005 L 99.361 1.005 L 99.361 0.505 L 99.361 0.005 L 95.306 0.005 L 95.306 0.505 Z M 103.417 0.504 L 103.417 1.004 L 107.472 1.004 L 107.472 0.504 L 107.472 0.004 L 103.417 0.004 L 103.417 0.504 Z M 111.528 0.504 L 111.528 1.004 L 115.583 1.004 L 115.583 0.504 L 115.583 0.004 L 111.528 0.004 L 111.528 0.504 Z M 119.639 0.504 L 119.639 1.004 L 123.695 1.003 L 123.694 0.503 L 123.694 0.003 L 119.639 0.004 L 119.639 0.504 Z M 127.75 0.503 L 127.75 1.003 L 131.806 1.003 L 131.806 0.503 L 131.806 0.003 L 127.75 0.003 L 127.75 0.503 Z M 135.861 0.503 L 135.861 1.003 L 139.917 1.003 L 139.917 0.503 L 139.917 0.003 L 135.861 0.003 L 135.861 0.503 Z M 143.972 0.502 L 143.972 1.002 L 148.028 1.002 L 148.028 0.502 L 148.028 0.002 L 143.972 0.002 L 143.972 0.502 Z M 152.083 0.502 L 152.083 1.002 L 156.139 1.002 L 156.139 0.502 L 156.139 0.002 L 152.083 0.002 L 152.083 0.502 Z M 160.194 0.501 L 160.195 1.001 L 164.25 1.001 L 164.25 0.501 L 164.25 0.001 L 160.194 0.001 L 160.194 0.501 Z M 168.306 0.501 L 168.306 1.001 L 172.361 1.001 L 172.361 0.501 L 172.361 0.001 L 168.306 0.001 L 168.306 0.501 Z M 176.417 0.501 L 176.417 1.001 L 180.472 1 L 180.472 0.5 L 180.472 0 L 176.417 0.001 L 176.417 0.501 Z M 184.528 0.5 L 184.528 1 L 188.583 1 L 188.583 0.5 L 188.583 0 L 184.528 0 L 184.528 0.5 Z M 192.639 0.5 L 192.639 1 L 196.695 0.999 L 196.695 0.499 L 196.694 -0.001 L 192.639 0 L 192.639 0.5 Z M 200.75 0.499 L 200.75 0.999 L 204.806 0.999 L 204.806 0.499 L 204.806 -0.001 L 200.75 -0.001 L 200.75 0.499 Z M 208.861 0.499 L 208.861 0.999 L 212.917 0.999 L 212.917 0.499 L 212.917 -0.001 L 208.861 -0.001 L 208.861 0.499 Z M 216.972 0.498 L 216.972 0.998 L 219 0.998 L 219 0.498 L 219 -0.002 L 216.972 -0.002 L 216.972 0.498 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={219} height={1.008} viewBox="0 0 219 1.008" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  transform: "matrix(0,-1,1,0,330.718,219)",
+                  transformOrigin: "0 0",
+                  width: 219,
+                  height: 1.008,
+                }}>
+                  <path d={"M 0 0.01 L -0.5 0.01 L -0.5 1.01 L 0 1.01 L 0 0.51 L 0 0.01 Z M 219 0.998 L 219.5 0.998 L 219.5 -0.002 L 219 -0.002 L 219 0.498 L 219 0.998 Z M 2.028 1.01 L 2.528 1.01 L 2.528 0.01 L 2.028 0.01 L 2.028 0.51 L 2.028 1.01 Z M 6.083 0.01 L 5.583 0.01 L 5.583 1.01 L 6.083 1.01 L 6.083 0.51 L 6.083 0.01 Z M 10.139 1.01 L 10.639 1.01 L 10.639 0.01 L 10.139 0.01 L 10.139 0.51 L 10.139 1.01 Z M 14.194 0.009 L 13.694 0.009 L 13.694 1.009 L 14.194 1.009 L 14.194 0.509 L 14.194 0.009 Z M 18.25 1.009 L 18.75 1.009 L 18.75 0.009 L 18.25 0.009 L 18.25 0.509 L 18.25 1.009 Z M 22.306 0.009 L 21.806 0.009 L 21.806 1.009 L 22.306 1.009 L 22.306 0.509 L 22.306 0.009 Z M 26.361 1.009 L 26.861 1.009 L 26.861 0.009 L 26.361 0.009 L 26.361 0.509 L 26.361 1.009 Z M 30.417 0.009 L 29.917 0.009 L 29.917 1.009 L 30.417 1.009 L 30.417 0.509 L 30.417 0.009 Z M 34.472 1.008 L 34.972 1.008 L 34.972 0.008 L 34.472 0.008 L 34.472 0.508 L 34.472 1.008 Z M 38.528 0.008 L 38.028 0.008 L 38.028 1.008 L 38.528 1.008 L 38.528 0.508 L 38.528 0.008 Z M 42.583 1.008 L 43.083 1.008 L 43.083 0.008 L 42.583 0.008 L 42.583 0.508 L 42.583 1.008 Z M 46.639 0.008 L 46.139 0.008 L 46.139 1.008 L 46.639 1.008 L 46.639 0.508 L 46.639 0.008 Z M 50.694 1.007 L 51.194 1.007 L 51.194 0.007 L 50.694 0.007 L 50.694 0.507 L 50.694 1.007 Z M 54.75 0.007 L 54.25 0.007 L 54.25 1.007 L 54.75 1.007 L 54.75 0.507 L 54.75 0.007 Z M 58.806 1.007 L 59.306 1.007 L 59.306 0.007 L 58.806 0.007 L 58.806 0.507 L 58.806 1.007 Z M 62.861 0.007 L 62.361 0.007 L 62.361 1.007 L 62.861 1.007 L 62.861 0.507 L 62.861 0.007 Z M 66.917 1.007 L 67.417 1.006 L 67.417 0.006 L 66.917 0.007 L 66.917 0.507 L 66.917 1.007 Z M 70.972 0.006 L 70.472 0.006 L 70.472 1.006 L 70.972 1.006 L 70.972 0.506 L 70.972 0.006 Z M 75.028 1.006 L 75.528 1.006 L 75.528 0.006 L 75.028 0.006 L 75.028 0.506 L 75.028 1.006 Z M 79.083 0.006 L 78.583 0.006 L 78.583 1.006 L 79.083 1.006 L 79.083 0.506 L 79.083 0.006 Z M 83.139 1.006 L 83.639 1.006 L 83.639 0.006 L 83.139 0.006 L 83.139 0.506 L 83.139 1.006 Z M 87.194 0.005 L 86.694 0.005 L 86.694 1.005 L 87.194 1.005 L 87.194 0.505 L 87.194 0.005 Z M 91.25 1.005 L 91.75 1.005 L 91.75 0.005 L 91.25 0.005 L 91.25 0.505 L 91.25 1.005 Z M 95.306 0.005 L 94.806 0.005 L 94.806 1.005 L 95.306 1.005 L 95.306 0.505 L 95.306 0.005 Z M 99.361 1.005 L 99.861 1.005 L 99.861 0.005 L 99.361 0.005 L 99.361 0.505 L 99.361 1.005 Z M 103.417 0.004 L 102.917 0.005 L 102.917 1.005 L 103.417 1.004 L 103.417 0.504 L 103.417 0.004 Z M 107.472 1.004 L 107.972 1.004 L 107.972 0.004 L 107.472 0.004 L 107.472 0.504 L 107.472 1.004 Z M 111.528 0.004 L 111.028 0.004 L 111.028 1.004 L 111.528 1.004 L 111.528 0.504 L 111.528 0.004 Z M 115.583 1.004 L 116.083 1.004 L 116.083 0.004 L 115.583 0.004 L 115.583 0.504 L 115.583 1.004 Z M 119.639 0.004 L 119.139 0.004 L 119.139 1.004 L 119.639 1.004 L 119.639 0.504 L 119.639 0.004 Z M 123.695 1.003 L 124.195 1.003 L 124.194 0.003 L 123.694 0.003 L 123.694 0.503 L 123.695 1.003 Z M 127.75 0.003 L 127.25 0.003 L 127.25 1.003 L 127.75 1.003 L 127.75 0.503 L 127.75 0.003 Z M 131.806 1.003 L 132.306 1.003 L 132.306 0.003 L 131.806 0.003 L 131.806 0.503 L 131.806 1.003 Z M 135.861 0.003 L 135.361 0.003 L 135.361 1.003 L 135.861 1.003 L 135.861 0.503 L 135.861 0.003 Z M 139.917 1.002 L 140.417 1.002 L 140.417 0.002 L 139.917 0.002 L 139.917 0.502 L 139.917 1.002 Z M 143.972 0.002 L 143.472 0.002 L 143.472 1.002 L 143.972 1.002 L 143.972 0.502 L 143.972 0.002 Z M 148.028 1.002 L 148.528 1.002 L 148.528 0.002 L 148.028 0.002 L 148.028 0.502 L 148.028 1.002 Z M 152.083 0.002 L 151.583 0.002 L 151.583 1.002 L 152.083 1.002 L 152.083 0.502 L 152.083 0.002 Z M 156.139 1.002 L 156.639 1.002 L 156.639 0.002 L 156.139 0.002 L 156.139 0.502 L 156.139 1.002 Z M 160.194 0.001 L 159.694 0.001 L 159.695 1.001 L 160.195 1.001 L 160.194 0.501 L 160.194 0.001 Z M 164.25 1.001 L 164.75 1.001 L 164.75 0.001 L 164.25 0.001 L 164.25 0.501 L 164.25 1.001 Z M 168.306 0.001 L 167.806 0.001 L 167.806 1.001 L 168.306 1.001 L 168.306 0.501 L 168.306 0.001 Z M 172.361 1.001 L 172.861 1.001 L 172.861 0.001 L 172.361 0.001 L 172.361 0.501 L 172.361 1.001 Z M 176.417 0 L 175.917 0 L 175.917 1 L 176.417 1 L 176.417 0.5 L 176.417 0 Z M 180.472 1 L 180.972 1 L 180.972 0 L 180.472 0 L 180.472 0.5 L 180.472 1 Z M 184.528 0 L 184.028 0 L 184.028 1 L 184.528 1 L 184.528 0.5 L 184.528 0 Z M 188.583 1 L 189.083 1 L 189.083 0 L 188.583 0 L 188.583 0.5 L 188.583 1 Z M 192.639 0 L 192.139 0 L 192.139 1 L 192.639 1 L 192.639 0.5 L 192.639 0 Z M 196.695 0.999 L 197.195 0.999 L 197.194 -0.001 L 196.694 -0.001 L 196.695 0.499 L 196.695 0.999 Z M 200.75 -0.001 L 200.25 -0.001 L 200.25 0.999 L 200.75 0.999 L 200.75 0.499 L 200.75 -0.001 Z M 204.806 0.999 L 205.306 0.999 L 205.306 -0.001 L 204.806 -0.001 L 204.806 0.499 L 204.806 0.999 Z M 208.861 -0.001 L 208.361 -0.001 L 208.361 0.999 L 208.861 0.999 L 208.861 0.499 L 208.861 -0.001 Z M 212.917 0.998 L 213.417 0.998 L 213.417 -0.002 L 212.917 -0.002 L 212.917 0.498 L 212.917 0.998 Z M 216.972 -0.002 L 216.472 -0.002 L 216.472 0.998 L 216.972 0.998 L 216.972 0.498 L 216.972 -0.002 Z M 0 0.51 L 0 1.01 L 2.028 1.01 L 2.028 0.51 L 2.028 0.01 L 0 0.01 L 0 0.51 Z M 6.083 0.51 L 6.083 1.01 L 10.139 1.01 L 10.139 0.51 L 10.139 0.01 L 6.083 0.01 L 6.083 0.51 Z M 14.194 0.509 L 14.194 1.009 L 18.25 1.009 L 18.25 0.509 L 18.25 0.009 L 14.194 0.009 L 14.194 0.509 Z M 22.306 0.509 L 22.306 1.009 L 26.361 1.009 L 26.361 0.509 L 26.361 0.009 L 22.306 0.009 L 22.306 0.509 Z M 30.417 0.509 L 30.417 1.009 L 34.472 1.008 L 34.472 0.508 L 34.472 0.008 L 30.417 0.009 L 30.417 0.509 Z M 38.528 0.508 L 38.528 1.008 L 42.583 1.008 L 42.583 0.508 L 42.583 0.008 L 38.528 0.008 L 38.528 0.508 Z M 46.639 0.508 L 46.639 1.008 L 50.694 1.007 L 50.694 0.507 L 50.694 0.007 L 46.639 0.008 L 46.639 0.508 Z M 54.75 0.507 L 54.75 1.007 L 58.806 1.007 L 58.806 0.507 L 58.806 0.007 L 54.75 0.007 L 54.75 0.507 Z M 62.861 0.507 L 62.861 1.007 L 66.917 1.007 L 66.917 0.507 L 66.917 0.007 L 62.861 0.007 L 62.861 0.507 Z M 70.972 0.506 L 70.972 1.006 L 75.028 1.006 L 75.028 0.506 L 75.028 0.006 L 70.972 0.006 L 70.972 0.506 Z M 79.083 0.506 L 79.083 1.006 L 83.139 1.006 L 83.139 0.506 L 83.139 0.006 L 79.083 0.006 L 79.083 0.506 Z M 87.194 0.505 L 87.194 1.005 L 91.25 1.005 L 91.25 0.505 L 91.25 0.005 L 87.194 0.005 L 87.194 0.505 Z M 95.306 0.505 L 95.306 1.005 L 99.361 1.005 L 99.361 0.505 L 99.361 0.005 L 95.306 0.005 L 95.306 0.505 Z M 103.417 0.504 L 103.417 1.004 L 107.472 1.004 L 107.472 0.504 L 107.472 0.004 L 103.417 0.004 L 103.417 0.504 Z M 111.528 0.504 L 111.528 1.004 L 115.583 1.004 L 115.583 0.504 L 115.583 0.004 L 111.528 0.004 L 111.528 0.504 Z M 119.639 0.504 L 119.639 1.004 L 123.695 1.003 L 123.694 0.503 L 123.694 0.003 L 119.639 0.004 L 119.639 0.504 Z M 127.75 0.503 L 127.75 1.003 L 131.806 1.003 L 131.806 0.503 L 131.806 0.003 L 127.75 0.003 L 127.75 0.503 Z M 135.861 0.503 L 135.861 1.003 L 139.917 1.002 L 139.917 0.502 L 139.917 0.002 L 135.861 0.003 L 135.861 0.503 Z M 143.972 0.502 L 143.972 1.002 L 148.028 1.002 L 148.028 0.502 L 148.028 0.002 L 143.972 0.002 L 143.972 0.502 Z M 152.083 0.502 L 152.083 1.002 L 156.139 1.002 L 156.139 0.502 L 156.139 0.002 L 152.083 0.002 L 152.083 0.502 Z M 160.194 0.501 L 160.195 1.001 L 164.25 1.001 L 164.25 0.501 L 164.25 0.001 L 160.194 0.001 L 160.194 0.501 Z M 168.306 0.501 L 168.306 1.001 L 172.361 1.001 L 172.361 0.501 L 172.361 0.001 L 168.306 0.001 L 168.306 0.501 Z M 176.417 0.5 L 176.417 1 L 180.472 1 L 180.472 0.5 L 180.472 0 L 176.417 0 L 176.417 0.5 Z M 184.528 0.5 L 184.528 1 L 188.583 1 L 188.583 0.5 L 188.583 0 L 184.528 0 L 184.528 0.5 Z M 192.639 0.5 L 192.639 1 L 196.695 0.999 L 196.695 0.499 L 196.694 -0.001 L 192.639 0 L 192.639 0.5 Z M 200.75 0.499 L 200.75 0.999 L 204.806 0.999 L 204.806 0.499 L 204.806 -0.001 L 200.75 -0.001 L 200.75 0.499 Z M 208.861 0.499 L 208.861 0.999 L 212.917 0.998 L 212.917 0.498 L 212.917 -0.002 L 208.861 -0.001 L 208.861 0.499 Z M 216.972 0.498 L 216.972 0.998 L 219 0.998 L 219 0.498 L 219 -0.002 L 216.972 -0.002 L 216.972 0.498 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 1.008,
+                top: 67.5,
+                width: 362.983,
+                height: 259,
+                overflow: "hidden",
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 181.492,
+                  height: 259,
+                  overflow: "hidden",
+                }}>
+                  <svg width={181.492} height={259} viewBox="0 0 181.492 259" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 181.492,
+                    height: 259,
+                  }}>
+                    <path d={"M 0 0 L 181.492 0 L 181.492 259 L 0 259 L 0 0 Z"} fill="currentColor" fillRule="evenodd" />
+                  </svg>
+                  <div style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 181.49171447753906,
+                    height: 259,
+                    clipPath: "inset(0px 0px 0px 0px)",
+                  }}>
+                    <svg width={1042.569} height={197} viewBox="0 0 1042.569 197" fill="none" style={{
+                      position: "absolute",
+                      left: -271.229,
+                      top: 62,
+                      width: 1042.569,
+                      height: 197,
+                      opacity: 0.2,
+                    }}>
+                      <path d={"M 0 112.99 C 0 112.99 25.314 113.499 40.968 104.313 C 56.622 95.127 115.56 40.821 158.389 40.821 C 201.218 40.821 219.781 84.559 253.284 84.559 C 286.788 84.559 312.691 76.728 362.616 104.313 C 412.542 131.897 403.235 149.703 442.881 149.703 C 482.527 149.703 502.679 -0.525 547.634 0.003 C 581.153 0.003 612.007 88.198 623.183 104.313 C 634.359 120.427 671.395 157.983 720.099 157.983 C 768.803 157.983 812.028 46.294 859.316 46.294 C 906.605 46.294 925.815 137.467 967.768 137.467 C 1009.721 137.467 1009.101 104.313 1042.433 104.313 C 1042.705 140.2 1042.433 197 1042.433 197 L 0 197 L 0 112.99 Z"} fill="currentColor" fillRule="nonzero" />
+                    </svg>
+                    <svg width={1042.569} height={158} viewBox="0 0 1042.569 158" fill="none" style={{
+                      position: "absolute",
+                      left: -271.229,
+                      top: 61,
+                      width: 1042.569,
+                      height: 158,
+                      color: "rgb(150,152,214)",
+                    }}>
+                      <path d={"M 442.939 149.718 L 442.939 150.718 L 442.939 149.718 Z M 547.705 0.001 L 547.693 1.001 L 547.705 1.001 L 547.705 0.001 Z M 0 113.002 C -0.02 114.002 -0.02 114.002 -0.019 114.002 C -0.019 114.002 -0.019 114.002 -0.018 114.002 C -0.017 114.002 -0.016 114.002 -0.014 114.002 C -0.01 114.002 -0.005 114.002 0.001 114.002 C 0.015 114.002 0.034 114.002 0.059 114.003 C 0.109 114.004 0.184 114.004 0.28 114.005 C 0.474 114.007 0.758 114.008 1.124 114.006 C 1.856 114.002 2.917 113.985 4.237 113.937 C 6.877 113.84 10.56 113.615 14.738 113.1 C 23.065 112.074 33.472 109.884 41.479 105.186 L 40.973 104.323 L 40.467 103.461 C 32.818 107.949 22.739 110.099 14.493 111.115 C 10.385 111.621 6.76 111.843 4.164 111.938 C 2.866 111.986 1.826 112.002 1.113 112.006 C 0.756 112.008 0.481 112.007 0.296 112.005 C 0.203 112.004 0.134 112.004 0.087 112.003 C 0.064 112.003 0.047 112.002 0.036 112.002 C 0.03 112.002 0.026 112.002 0.023 112.002 C 0.022 112.002 0.021 112.002 0.021 112.002 C 0.02 112.002 0.02 112.002 0.02 112.002 C 0.02 112.002 0.02 112.002 0 113.002 Z M 40.973 104.323 L 41.479 105.186 C 45.461 102.85 52.15 97.677 60.509 91.322 C 68.905 84.94 79.058 77.305 90.055 69.96 C 101.054 62.614 112.874 55.571 124.597 50.368 C 136.328 45.16 147.898 41.824 158.41 41.824 L 158.41 40.824 L 158.41 39.824 C 147.504 39.824 135.642 43.277 123.785 48.54 C 111.919 53.807 99.993 60.917 88.944 68.297 C 77.893 75.678 67.698 83.345 59.299 89.73 C 50.864 96.142 44.314 101.204 40.467 103.461 L 40.973 104.323 Z M 158.41 40.824 L 158.41 41.824 C 179.457 41.824 194.567 52.553 208.751 63.487 C 222.833 74.345 236.148 85.567 253.317 85.567 L 253.317 84.567 L 253.317 83.567 C 236.978 83.567 224.257 72.917 209.972 61.904 C 195.787 50.967 180.197 39.824 158.41 39.824 L 158.41 40.824 Z M 253.317 84.567 L 253.317 85.567 C 261.72 85.567 269.664 85.075 277.555 84.773 C 285.462 84.471 293.353 84.356 301.743 85.096 C 318.499 86.573 337.325 91.466 362.18 105.199 L 362.664 104.323 L 363.147 103.448 C 338.07 89.593 318.977 84.608 301.919 83.104 C 293.403 82.353 285.414 82.471 277.479 82.775 C 269.528 83.079 261.669 83.567 253.317 83.567 L 253.317 84.567 Z M 362.664 104.323 L 362.18 105.199 C 387.033 118.93 397.664 130.192 406.853 138.123 C 411.463 142.101 415.749 145.275 421.282 147.436 C 426.813 149.597 433.516 150.718 442.939 150.718 L 442.939 149.718 L 442.939 148.718 C 433.67 148.718 427.234 147.614 422.01 145.573 C 416.789 143.534 412.705 140.531 408.16 136.609 C 399.041 128.739 388.226 117.304 363.147 103.448 L 362.664 104.323 Z M 442.939 149.718 L 442.939 150.718 C 447.969 150.718 452.644 148.188 457.022 143.985 C 461.401 139.782 465.575 133.821 469.625 126.748 C 477.724 112.605 485.465 93.77 493.401 75.052 C 501.357 56.291 509.511 37.64 518.466 23.713 C 522.942 16.752 527.585 11.023 532.459 7.059 C 537.325 3.101 542.372 0.939 547.693 1.001 L 547.705 0.001 L 547.717 -0.999 C 541.797 -1.068 536.309 1.349 531.197 5.507 C 526.093 9.658 521.316 15.581 516.784 22.631 C 507.721 36.726 499.503 55.538 491.56 74.272 C 483.598 93.049 475.914 111.742 467.89 125.754 C 463.878 132.758 459.816 138.531 455.637 142.542 C 451.458 146.553 447.255 148.718 442.939 148.718 L 442.939 149.718 Z M 547.705 0.001 L 547.705 1.001 C 555.649 1.001 563.611 6.243 571.344 14.71 C 579.046 23.144 586.351 34.593 592.989 46.602 C 599.623 58.604 605.563 71.113 610.553 81.652 C 615.518 92.137 619.588 100.777 622.442 104.893 L 623.264 104.323 L 624.086 103.753 C 621.352 99.811 617.373 91.382 612.361 80.796 C 607.373 70.263 601.408 57.699 594.74 45.635 C 588.075 33.578 580.681 21.969 572.82 13.361 C 564.989 4.785 556.522 -0.999 547.705 -0.999 L 547.705 0.001 Z M 623.264 104.323 L 622.442 104.893 C 628.099 113.049 640.24 126.556 657.09 138.032 C 673.945 149.511 695.577 159 720.192 159 L 720.192 158 L 720.192 157 C 696.098 157 674.853 147.709 658.216 136.379 C 641.574 125.045 629.607 111.714 624.086 103.753 L 623.264 104.323 Z M 720.192 158 L 720.192 159 C 732.75 159 744.822 151.809 756.516 141.29 C 768.225 130.757 779.724 116.73 791.116 102.781 C 802.534 88.801 813.845 74.902 825.244 64.49 C 836.663 54.06 847.993 47.298 859.428 47.298 L 859.428 46.298 L 859.428 45.298 C 847.216 45.298 835.406 52.499 823.896 63.013 C 812.366 73.544 800.957 87.571 789.567 101.516 C 778.15 115.494 766.752 129.392 755.178 139.803 C 743.588 150.229 731.99 157 720.192 157 L 720.192 158 Z M 859.428 46.298 L 859.428 47.298 C 870.9 47.298 880.735 52.819 889.744 61.274 C 898.764 69.74 906.854 81.052 914.843 92.463 C 922.803 103.833 930.671 115.314 939.184 123.936 C 947.702 132.563 957.012 138.481 967.894 138.481 L 967.894 137.481 L 967.894 136.481 C 957.796 136.481 948.971 131.001 940.607 122.531 C 932.24 114.056 924.481 102.741 916.481 91.316 C 908.511 79.931 900.308 68.447 891.112 59.816 C 881.905 51.174 871.604 45.298 859.428 45.298 L 859.428 46.298 Z M 967.894 137.481 L 967.894 138.481 C 978.525 138.481 986.505 136.378 993.014 133.198 C 999.509 130.025 1004.493 125.801 1009.132 121.647 C 1018.42 113.33 1026.332 105.323 1042.569 105.323 L 1042.569 104.323 L 1042.569 103.323 C 1025.469 103.323 1017.023 111.896 1007.797 120.157 C 1003.179 124.293 998.367 128.357 992.136 131.401 C 985.919 134.439 978.242 136.481 967.894 136.481 L 967.894 137.481 Z"} fill="currentColor" fillRule="nonzero" />
+                    </svg>
+                  </div>
+                </div>
+                <div style={{
+                  position: "absolute",
+                  left: 181.492,
+                  top: 0,
+                  width: 181.492,
+                  height: 259,
+                  overflow: "hidden",
+                }}>
+                  <svg width={181.492} height={259} viewBox="0 0 181.492 259" fill="none" style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 181.492,
+                    height: 259,
+                  }}>
+                    <path d={"M 0 0 L 181.492 0 L 181.492 259 L 0 259 L 0 0 Z"} fill="currentColor" fillRule="evenodd" />
+                  </svg>
+                  <div style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 181.49169921875,
+                    height: 259,
+                    clipPath: "inset(0px 0px 0px 0px)",
+                  }}>
+                    <svg width={1042.569} height={197} viewBox="0 0 1042.569 197" fill="none" style={{
+                      position: "absolute",
+                      left: -452.721,
+                      top: 62,
+                      width: 1042.569,
+                      height: 197,
+                      opacity: 0.2,
+                    }}>
+                      <path d={"M 0 112.99 C 0 112.99 25.314 113.499 40.968 104.313 C 56.622 95.127 115.56 40.821 158.389 40.821 C 201.218 40.821 219.781 84.559 253.284 84.559 C 286.788 84.559 312.691 76.728 362.616 104.313 C 412.542 131.897 403.235 149.703 442.881 149.703 C 482.527 149.703 502.679 -0.525 547.634 0.003 C 581.153 0.003 612.007 88.198 623.183 104.313 C 634.359 120.427 671.395 157.983 720.099 157.983 C 768.803 157.983 812.028 46.294 859.316 46.294 C 906.605 46.294 925.815 137.467 967.768 137.467 C 1009.721 137.467 1009.101 104.313 1042.433 104.313 C 1042.705 140.2 1042.433 197 1042.433 197 L 0 197 L 0 112.99 Z"} fill="currentColor" fillRule="nonzero" />
+                    </svg>
+                    <svg width={1042.569} height={158} viewBox="0 0 1042.569 158" fill="none" style={{
+                      position: "absolute",
+                      left: -452.721,
+                      top: 61,
+                      width: 1042.569,
+                      height: 158,
+                    }}>
+                      <path d={"M 0.02 112.002 C -0.532 111.991 -0.989 112.429 -1 112.982 C -1.011 113.534 -0.572 113.99 -0.02 114.002 L 0 113.002 L 0.02 112.002 Z M 40.973 104.323 L 40.467 103.461 L 40.973 104.323 Z M 362.664 104.323 L 362.18 105.199 L 362.664 104.323 Z M 547.705 0.001 L 547.693 1.001 L 547.705 1.001 L 547.705 0.001 Z M 623.264 104.323 L 624.086 103.753 L 623.264 104.323 Z M 1042.569 105.323 C 1043.121 105.323 1043.569 104.876 1043.569 104.323 C 1043.569 103.771 1043.121 103.323 1042.569 103.323 L 1042.569 104.323 L 1042.569 105.323 Z M 2.119 113.994 C 2.671 113.985 3.111 113.53 3.102 112.977 C 3.092 112.425 2.637 111.985 2.085 111.995 L 2.102 112.994 L 2.119 113.994 Z M 6.289 111.841 C 5.738 111.871 5.315 112.343 5.346 112.894 C 5.376 113.446 5.847 113.868 6.399 113.838 L 6.344 112.84 L 6.289 111.841 Z M 10.647 113.533 C 11.197 113.484 11.604 112.999 11.555 112.449 C 11.506 111.898 11.02 111.492 10.47 111.541 L 10.559 112.537 L 10.647 113.533 Z M 14.647 111.096 C 14.099 111.164 13.71 111.664 13.778 112.212 C 13.846 112.76 14.346 113.149 14.894 113.081 L 14.77 112.088 L 14.647 111.096 Z M 19.119 112.473 C 19.664 112.384 20.033 111.87 19.944 111.325 C 19.855 110.78 19.34 110.41 18.795 110.499 L 18.957 111.486 L 19.119 112.473 Z M 22.915 109.735 C 22.375 109.847 22.028 110.377 22.141 110.918 C 22.253 111.458 22.783 111.805 23.324 111.693 L 23.12 110.714 L 22.915 109.735 Z M 27.493 110.716 C 28.027 110.577 28.347 110.03 28.207 109.496 C 28.067 108.961 27.521 108.642 26.987 108.781 L 27.24 109.749 L 27.493 110.716 Z M 30.992 107.61 C 30.467 107.781 30.18 108.346 30.351 108.871 C 30.522 109.396 31.087 109.683 31.612 109.511 L 31.302 108.561 L 30.992 107.61 Z M 35.655 108.035 C 36.166 107.826 36.412 107.243 36.203 106.731 C 35.994 106.22 35.411 105.975 34.899 106.183 L 35.277 107.109 L 35.655 108.035 Z M 38.662 104.455 C 38.172 104.709 37.98 105.312 38.233 105.803 C 38.487 106.293 39.09 106.485 39.581 106.231 L 39.122 105.343 L 38.662 104.455 Z M 43.203 104.111 C 43.666 103.809 43.796 103.189 43.494 102.727 C 43.191 102.265 42.572 102.135 42.109 102.437 L 42.656 103.274 L 43.203 104.111 Z M 45.337 100.213 C 44.888 100.535 44.784 101.159 45.106 101.609 C 45.427 102.058 46.052 102.161 46.501 101.84 L 45.919 101.027 L 45.337 100.213 Z M 49.74 99.474 C 50.184 99.144 50.276 98.518 49.947 98.074 C 49.618 97.631 48.991 97.539 48.548 97.868 L 49.144 98.671 L 49.74 99.474 Z M 51.718 95.49 C 51.278 95.823 51.19 96.45 51.523 96.891 C 51.856 97.332 52.483 97.419 52.924 97.086 L 52.321 96.288 L 51.718 95.49 Z M 56.101 94.676 C 56.541 94.342 56.626 93.715 56.292 93.275 C 55.958 92.835 55.33 92.75 54.891 93.084 L 55.496 93.88 L 56.101 94.676 Z M 58.063 90.67 C 57.623 91.005 57.538 91.632 57.872 92.072 C 58.207 92.511 58.834 92.596 59.274 92.262 L 58.668 91.466 L 58.063 90.67 Z M 62.446 89.852 C 62.886 89.518 62.972 88.891 62.638 88.451 C 62.305 88.01 61.678 87.924 61.237 88.258 L 61.842 89.055 L 62.446 89.852 Z M 64.419 85.853 C 63.978 86.186 63.89 86.813 64.222 87.254 C 64.554 87.695 65.181 87.783 65.622 87.451 L 65.021 86.652 L 64.419 85.853 Z M 68.807 85.063 C 69.25 84.733 69.341 84.107 69.011 83.664 C 68.681 83.221 68.054 83.13 67.611 83.46 L 68.209 84.262 L 68.807 85.063 Z M 70.818 81.082 C 70.373 81.41 70.278 82.036 70.606 82.48 C 70.934 82.925 71.56 83.019 72.005 82.692 L 71.411 81.887 L 70.818 81.082 Z M 75.217 80.339 C 75.663 80.014 75.762 79.388 75.437 78.942 C 75.112 78.495 74.487 78.396 74.04 78.721 L 74.629 79.53 L 75.217 80.339 Z M 77.281 76.382 C 76.832 76.703 76.729 77.328 77.05 77.777 C 77.372 78.226 77.997 78.329 78.446 78.007 L 77.863 77.195 L 77.281 76.382 Z M 81.687 75.705 C 82.139 75.387 82.247 74.763 81.929 74.312 C 81.611 73.86 80.987 73.752 80.536 74.07 L 81.111 74.887 L 81.687 75.705 Z M 83.807 71.788 C 83.352 72.102 83.238 72.725 83.552 73.179 C 83.866 73.634 84.489 73.748 84.943 73.434 L 84.375 72.611 L 83.807 71.788 Z M 88.223 71.191 C 88.681 70.882 88.801 70.26 88.491 69.803 C 88.182 69.345 87.56 69.225 87.103 69.535 L 87.663 70.363 L 88.223 71.191 Z M 90.425 67.313 C 89.964 67.618 89.837 68.238 90.142 68.699 C 90.446 69.16 91.067 69.286 91.528 68.982 L 90.976 68.148 L 90.425 67.313 Z M 94.856 66.809 C 95.32 66.51 95.454 65.891 95.155 65.427 C 94.856 64.963 94.237 64.829 93.773 65.128 L 94.314 65.969 L 94.856 66.809 Z M 97.146 62.984 C 96.678 63.277 96.536 63.895 96.83 64.363 C 97.123 64.831 97.74 64.972 98.208 64.679 L 97.677 63.832 L 97.146 62.984 Z M 101.586 62.594 C 102.058 62.307 102.208 61.692 101.921 61.22 C 101.634 60.748 101.019 60.598 100.547 60.885 L 101.067 61.74 L 101.586 62.594 Z M 103.981 58.833 C 103.505 59.113 103.345 59.726 103.625 60.202 C 103.905 60.678 104.517 60.837 104.994 60.558 L 104.487 59.695 L 103.981 58.833 Z M 108.431 58.575 C 108.912 58.304 109.081 57.693 108.81 57.213 C 108.538 56.732 107.928 56.563 107.447 56.835 L 107.939 57.705 L 108.431 58.575 Z M 110.946 54.896 C 110.46 55.159 110.28 55.766 110.543 56.252 C 110.807 56.737 111.414 56.917 111.899 56.654 L 111.422 55.775 L 110.946 54.896 Z M 115.401 54.798 C 115.892 54.544 116.084 53.94 115.83 53.45 C 115.576 52.959 114.973 52.767 114.482 53.021 L 114.942 53.909 L 115.401 54.798 Z M 118.062 51.217 C 117.566 51.46 117.361 52.059 117.604 52.555 C 117.847 53.051 118.447 53.255 118.942 53.012 L 118.502 52.114 L 118.062 51.217 Z M 122.52 51.308 C 123.021 51.077 123.24 50.483 123.009 49.981 C 122.777 49.48 122.183 49.261 121.682 49.493 L 122.101 50.4 L 122.52 51.308 Z M 125.344 47.859 C 124.836 48.077 124.602 48.665 124.82 49.173 C 125.039 49.68 125.627 49.914 126.134 49.696 L 125.739 48.777 L 125.344 47.859 Z M 129.786 48.186 C 130.299 47.982 130.551 47.401 130.347 46.888 C 130.144 46.374 129.563 46.123 129.049 46.327 L 129.417 47.256 L 129.786 48.186 Z M 132.8 44.909 C 132.28 45.095 132.01 45.668 132.197 46.188 C 132.384 46.708 132.957 46.978 133.476 46.791 L 133.138 45.85 L 132.8 44.909 Z M 137.217 45.522 C 137.743 45.354 138.034 44.792 137.866 44.266 C 137.699 43.74 137.136 43.449 136.61 43.616 L 136.914 44.569 L 137.217 45.522 Z M 140.473 42.471 C 139.94 42.617 139.627 43.167 139.772 43.7 C 139.918 44.232 140.468 44.546 141.001 44.4 L 140.737 43.436 L 140.473 42.471 Z M 144.823 43.447 C 145.362 43.326 145.701 42.791 145.58 42.252 C 145.46 41.714 144.925 41.375 144.386 41.495 L 144.605 42.471 L 144.823 43.447 Z M 148.347 40.715 C 147.802 40.807 147.436 41.323 147.528 41.867 C 147.62 42.412 148.136 42.779 148.68 42.687 L 148.514 41.701 L 148.347 40.715 Z M 152.566 42.147 C 153.115 42.088 153.512 41.595 153.453 41.046 C 153.394 40.497 152.901 40.1 152.352 40.159 L 152.459 41.153 L 152.566 42.147 Z M 156.393 39.863 C 155.841 39.884 155.41 40.348 155.431 40.9 C 155.452 41.452 155.917 41.882 156.468 41.861 L 156.431 40.862 L 156.393 39.863 Z M 160.444 41.858 C 160.996 41.876 161.458 41.444 161.477 40.892 C 161.495 40.34 161.062 39.877 160.511 39.859 L 160.477 40.858 L 160.444 41.858 Z M 164.668 40.137 C 164.119 40.082 163.628 40.482 163.573 41.032 C 163.517 41.581 163.918 42.072 164.467 42.127 L 164.568 41.132 L 164.668 40.137 Z M 168.461 42.67 C 169.006 42.763 169.522 42.397 169.616 41.852 C 169.709 41.308 169.343 40.791 168.798 40.698 L 168.63 41.684 L 168.461 42.67 Z M 172.879 41.541 C 172.343 41.411 171.802 41.74 171.672 42.277 C 171.542 42.814 171.872 43.354 172.409 43.484 L 172.644 42.513 L 172.879 41.541 Z M 176.294 44.564 C 176.821 44.729 177.382 44.436 177.547 43.909 C 177.713 43.382 177.42 42.821 176.893 42.656 L 176.593 43.61 L 176.294 44.564 Z M 180.825 44.028 C 180.309 43.83 179.731 44.087 179.533 44.603 C 179.335 45.118 179.592 45.697 180.107 45.895 L 180.466 44.961 L 180.825 44.028 Z M 183.839 47.458 C 184.342 47.686 184.934 47.462 185.162 46.959 C 185.39 46.456 185.167 45.864 184.664 45.636 L 184.251 46.547 L 183.839 47.458 Z M 188.402 47.452 C 187.911 47.198 187.308 47.389 187.054 47.879 C 186.799 48.37 186.991 48.973 187.481 49.227 L 187.941 48.34 L 188.402 47.452 Z M 191.037 51.179 C 191.515 51.456 192.126 51.292 192.403 50.814 C 192.68 50.336 192.517 49.725 192.039 49.448 L 191.538 50.313 L 191.037 51.179 Z M 195.58 51.596 C 195.113 51.301 194.496 51.439 194.2 51.906 C 193.905 52.372 194.043 52.99 194.51 53.286 L 195.045 52.441 L 195.58 51.596 Z M 197.91 55.522 C 198.366 55.832 198.988 55.714 199.299 55.258 C 199.61 54.801 199.492 54.179 199.035 53.868 L 198.472 54.695 L 197.91 55.522 Z M 202.417 56.239 C 201.969 55.916 201.344 56.018 201.021 56.466 C 200.699 56.914 200.801 57.539 201.249 57.862 L 201.833 57.05 L 202.417 56.239 Z M 204.54 60.281 C 204.982 60.612 205.609 60.522 205.94 60.08 C 206.271 59.638 206.181 59.011 205.739 58.68 L 205.14 59.481 L 204.54 60.281 Z M 209.017 61.169 C 208.578 60.832 207.951 60.915 207.614 61.353 C 207.278 61.791 207.361 62.419 207.799 62.755 L 208.408 61.962 L 209.017 61.169 Z M 211.042 65.259 C 211.478 65.598 212.107 65.518 212.445 65.082 C 212.783 64.645 212.703 64.017 212.267 63.679 L 211.654 64.469 L 211.042 65.259 Z M 215.51 66.187 C 215.072 65.85 214.444 65.931 214.107 66.369 C 213.771 66.807 213.852 67.435 214.29 67.771 L 214.9 66.979 L 215.51 66.187 Z M 217.565 70.266 C 218.006 70.598 218.633 70.509 218.965 70.068 C 219.297 69.626 219.208 68.999 218.767 68.667 L 218.166 69.467 L 217.565 70.266 Z M 222.053 71.09 C 221.605 70.767 220.98 70.869 220.658 71.317 C 220.335 71.765 220.436 72.39 220.885 72.713 L 221.469 71.901 L 222.053 71.09 Z M 224.27 75.078 C 224.728 75.387 225.35 75.267 225.659 74.809 C 225.968 74.352 225.847 73.73 225.389 73.421 L 224.83 74.25 L 224.27 75.078 Z M 228.801 75.628 C 228.331 75.338 227.715 75.484 227.425 75.954 C 227.135 76.424 227.281 77.04 227.751 77.33 L 228.276 76.479 L 228.801 75.628 Z M 231.344 79.421 C 231.829 79.686 232.436 79.507 232.701 79.022 C 232.965 78.538 232.786 77.93 232.302 77.666 L 231.823 78.543 L 231.344 79.421 Z M 235.902 79.483 C 235.401 79.251 234.807 79.469 234.575 79.971 C 234.343 80.472 234.562 81.066 235.063 81.298 L 235.483 80.39 L 235.902 79.483 Z M 238.923 82.905 C 239.441 83.096 240.016 82.831 240.208 82.313 C 240.399 81.795 240.134 81.22 239.616 81.029 L 239.27 81.967 L 238.923 82.905 Z M 243.435 82.246 C 242.902 82.103 242.353 82.42 242.21 82.953 C 242.067 83.487 242.384 84.035 242.918 84.178 L 243.176 83.212 L 243.435 82.246 Z M 247.028 85.061 C 247.573 85.149 248.087 84.778 248.175 84.233 C 248.263 83.688 247.892 83.174 247.347 83.086 L 247.188 84.073 L 247.028 85.061 Z M 251.312 83.513 C 250.76 83.483 250.289 83.906 250.26 84.458 C 250.23 85.009 250.653 85.48 251.204 85.51 L 251.258 84.511 L 251.312 83.513 Z M 255.351 85.557 C 255.904 85.552 256.347 85.101 256.342 84.548 C 256.337 83.996 255.886 83.553 255.333 83.558 L 255.342 84.557 L 255.351 85.557 Z M 259.354 83.489 C 258.802 83.503 258.365 83.961 258.379 84.513 C 258.392 85.065 258.851 85.502 259.403 85.489 L 259.379 84.489 L 259.354 83.489 Z M 263.455 85.366 C 264.007 85.346 264.438 84.883 264.418 84.331 C 264.399 83.779 263.935 83.347 263.383 83.367 L 263.419 84.366 L 263.455 85.366 Z M 267.414 83.208 C 266.862 83.231 266.434 83.698 266.457 84.249 C 266.481 84.801 266.947 85.23 267.499 85.206 L 267.456 84.207 L 267.414 83.208 Z M 271.536 85.029 C 272.087 85.004 272.515 84.537 272.49 83.985 C 272.466 83.433 271.998 83.006 271.447 83.031 L 271.491 84.03 L 271.536 85.029 Z M 275.487 82.855 C 274.935 82.878 274.506 83.344 274.529 83.895 C 274.552 84.447 275.018 84.876 275.57 84.853 L 275.528 83.854 L 275.487 82.855 Z M 279.599 84.7 C 280.151 84.681 280.583 84.219 280.565 83.667 C 280.546 83.115 280.084 82.682 279.532 82.701 L 279.565 83.7 L 279.599 84.7 Z M 283.584 82.59 C 283.032 82.601 282.594 83.058 282.605 83.61 C 282.616 84.162 283.073 84.601 283.625 84.589 L 283.605 83.59 L 283.584 82.59 Z M 287.646 84.541 C 288.198 84.539 288.644 84.09 288.643 83.538 C 288.641 82.985 288.192 82.539 287.64 82.541 L 287.643 83.541 L 287.646 84.541 Z M 291.702 82.572 C 291.15 82.561 290.694 83 290.683 83.553 C 290.673 84.105 291.112 84.561 291.664 84.571 L 291.683 83.572 L 291.702 82.572 Z M 295.679 84.697 C 296.231 84.722 296.698 84.294 296.723 83.742 C 296.747 83.191 296.32 82.723 295.768 82.699 L 295.724 83.698 L 295.679 84.697 Z M 299.825 82.935 C 299.274 82.895 298.795 83.309 298.755 83.86 C 298.715 84.411 299.13 84.89 299.68 84.93 L 299.753 83.933 L 299.825 82.935 Z M 303.674 85.28 C 304.223 85.337 304.715 84.938 304.771 84.388 C 304.828 83.839 304.429 83.348 303.879 83.291 L 303.777 84.286 L 303.674 85.28 Z M 307.926 83.773 C 307.379 83.699 306.875 84.083 306.801 84.63 C 306.726 85.177 307.11 85.681 307.657 85.755 L 307.792 84.764 L 307.926 83.773 Z M 311.622 86.358 C 312.167 86.45 312.682 86.083 312.774 85.538 C 312.866 84.994 312.499 84.478 311.955 84.386 L 311.788 85.372 L 311.622 86.358 Z M 315.953 85.127 C 315.412 85.018 314.884 85.368 314.775 85.909 C 314.666 86.45 315.016 86.978 315.557 87.087 L 315.755 86.107 L 315.953 85.127 Z M 319.469 87.944 C 320.007 88.071 320.545 87.738 320.672 87.2 C 320.799 86.663 320.466 86.124 319.928 85.997 L 319.699 86.971 L 319.469 87.944 Z M 323.874 86.993 C 323.341 86.849 322.792 87.166 322.649 87.699 C 322.505 88.232 322.822 88.781 323.355 88.924 L 323.614 87.959 L 323.874 86.993 Z M 327.211 90.023 C 327.74 90.183 328.297 89.883 328.457 89.354 C 328.616 88.825 328.316 88.267 327.788 88.108 L 327.499 89.066 L 327.211 90.023 Z M 331.665 89.337 C 331.141 89.163 330.575 89.447 330.401 89.971 C 330.227 90.495 330.51 91.061 331.034 91.235 L 331.35 90.286 L 331.665 89.337 Z M 334.824 92.553 C 335.343 92.742 335.916 92.474 336.105 91.955 C 336.293 91.435 336.025 90.862 335.506 90.673 L 335.165 91.613 L 334.824 92.553 Z M 339.309 92.109 C 338.795 91.908 338.214 92.161 338.013 92.675 C 337.811 93.189 338.064 93.77 338.579 93.971 L 338.944 93.04 L 339.309 92.109 Z M 342.299 95.483 C 342.808 95.697 343.394 95.457 343.608 94.948 C 343.822 94.439 343.583 93.853 343.074 93.639 L 342.686 94.561 L 342.299 95.483 Z M 346.802 95.255 C 346.298 95.03 345.707 95.256 345.481 95.76 C 345.256 96.265 345.482 96.856 345.986 97.081 L 346.394 96.168 L 346.802 95.255 Z M 349.643 98.762 C 350.143 98.998 350.739 98.785 350.975 98.285 C 351.21 97.786 350.997 97.19 350.497 96.954 L 350.07 97.858 L 349.643 98.762 Z M 354.162 98.73 C 353.668 98.484 353.068 98.686 352.822 99.181 C 352.576 99.676 352.778 100.276 353.273 100.521 L 353.717 99.626 L 354.162 98.73 Z M 356.848 102.339 C 357.338 102.594 357.942 102.403 358.197 101.913 C 358.452 101.423 358.261 100.819 357.771 100.565 L 357.31 101.452 L 356.848 102.339 Z M 361.345 102.462 C 360.859 102.199 360.252 102.379 359.989 102.865 C 359.726 103.35 359.906 103.957 360.392 104.22 L 360.868 103.341 L 361.345 102.462 Z M 363.923 106.171 C 364.405 106.442 365.015 106.271 365.285 105.79 C 365.556 105.309 365.386 104.699 364.905 104.428 L 364.414 105.299 L 363.923 106.171 Z M 368.316 106.385 C 367.839 106.106 367.227 106.267 366.948 106.743 C 366.67 107.22 366.83 107.833 367.307 108.111 L 367.812 107.248 L 368.316 106.385 Z M 370.662 110.111 C 371.134 110.398 371.749 110.248 372.036 109.776 C 372.323 109.305 372.173 108.689 371.701 108.402 L 371.182 109.257 L 370.662 110.111 Z M 375.073 110.495 C 374.607 110.2 373.989 110.338 373.693 110.805 C 373.397 111.271 373.536 111.889 374.002 112.185 L 374.538 111.34 L 375.073 110.495 Z M 377.294 114.315 C 377.754 114.62 378.375 114.494 378.679 114.033 C 378.984 113.573 378.858 112.952 378.397 112.647 L 377.845 113.481 L 377.294 114.315 Z M 381.674 114.864 C 381.22 114.55 380.597 114.663 380.283 115.118 C 379.969 115.572 380.082 116.195 380.536 116.509 L 381.105 115.686 L 381.674 114.864 Z M 383.729 118.768 C 384.177 119.092 384.802 118.992 385.126 118.545 C 385.45 118.098 385.35 117.472 384.902 117.148 L 384.316 117.958 L 383.729 118.768 Z M 388.078 119.502 C 387.638 119.168 387.011 119.254 386.677 119.694 C 386.344 120.135 386.43 120.762 386.87 121.096 L 387.474 120.299 L 388.078 119.502 Z M 389.955 123.489 C 390.387 123.832 391.016 123.76 391.36 123.328 C 391.703 122.895 391.631 122.266 391.198 121.923 L 390.576 122.706 L 389.955 123.489 Z M 394.262 124.409 C 393.837 124.057 393.206 124.115 392.854 124.541 C 392.501 124.966 392.56 125.596 392.985 125.949 L 393.624 125.179 L 394.262 124.409 Z M 395.986 128.487 C 396.404 128.847 397.036 128.8 397.396 128.382 C 397.757 127.964 397.71 127.332 397.292 126.972 L 396.639 127.729 L 395.986 128.487 Z M 400.26 129.571 C 399.847 129.204 399.215 129.242 398.849 129.655 C 398.482 130.068 398.52 130.7 398.933 131.067 L 399.597 130.319 L 400.26 129.571 Z M 401.857 133.684 C 402.268 134.053 402.9 134.02 403.269 133.609 C 403.639 133.199 403.605 132.566 403.195 132.197 L 402.526 132.941 L 401.857 133.684 Z M 406.118 134.818 C 405.706 134.451 405.074 134.488 404.707 134.901 C 404.34 135.314 404.377 135.946 404.79 136.313 L 405.454 135.565 L 406.118 134.818 Z M 407.778 138.913 C 408.199 139.27 408.83 139.218 409.187 138.796 C 409.544 138.374 409.491 137.743 409.07 137.387 L 408.424 138.15 L 407.778 138.913 Z M 412.088 139.828 C 411.649 139.492 411.022 139.575 410.686 140.014 C 410.35 140.452 410.433 141.08 410.872 141.416 L 411.48 140.622 L 412.088 139.828 Z M 414.138 143.736 C 414.6 144.037 415.22 143.907 415.522 143.444 C 415.823 142.981 415.692 142.362 415.23 142.06 L 414.684 142.898 L 414.138 143.736 Z M 418.537 143.997 C 418.047 143.743 417.443 143.933 417.188 144.423 C 416.934 144.914 417.124 145.517 417.614 145.772 L 418.076 144.885 L 418.537 143.997 Z M 421.296 147.442 C 421.811 147.643 422.391 147.388 422.591 146.874 C 422.792 146.359 422.538 145.779 422.023 145.579 L 421.66 146.51 L 421.296 147.442 Z M 425.652 146.783 C 425.119 146.635 424.568 146.947 424.42 147.479 C 424.273 148.011 424.584 148.562 425.116 148.71 L 425.384 147.746 L 425.652 146.783 Z M 429.026 149.61 C 429.569 149.712 430.091 149.354 430.193 148.811 C 430.294 148.268 429.936 147.745 429.393 147.644 L 429.21 148.627 L 429.026 149.61 Z M 433.223 148.217 C 432.674 148.153 432.178 148.547 432.115 149.095 C 432.051 149.644 432.445 150.14 432.993 150.203 L 433.108 149.21 L 433.223 148.217 Z M 436.961 150.548 C 437.512 150.582 437.986 150.162 438.02 149.611 C 438.053 149.059 437.633 148.585 437.082 148.552 L 437.022 149.55 L 436.961 150.548 Z M 440.959 148.701 C 440.407 148.691 439.951 149.13 439.941 149.683 C 439.931 150.235 440.371 150.691 440.923 150.701 L 440.941 149.701 L 440.959 148.701 Z M 445.055 150.568 C 445.601 150.491 445.982 149.984 445.904 149.438 C 445.826 148.891 445.32 148.511 444.773 148.588 L 444.914 149.578 L 445.055 150.568 Z M 448.323 147.597 C 447.813 147.809 447.572 148.394 447.784 148.904 C 447.996 149.414 448.582 149.655 449.091 149.443 L 448.707 148.52 L 448.323 147.597 Z M 452.735 147.472 C 453.195 147.166 453.319 146.545 453.013 146.085 C 452.707 145.626 452.086 145.501 451.626 145.808 L 452.181 146.64 L 452.735 147.472 Z M 454.636 143.467 C 454.223 143.834 454.185 144.466 454.552 144.879 C 454.919 145.292 455.551 145.33 455.964 144.963 L 455.3 144.215 L 454.636 143.467 Z M 458.849 142.119 C 459.223 141.713 459.198 141.08 458.792 140.706 C 458.387 140.331 457.754 140.356 457.379 140.762 L 458.114 141.44 L 458.849 142.119 Z M 459.906 137.805 C 459.562 138.237 459.634 138.866 460.066 139.21 C 460.498 139.554 461.127 139.482 461.471 139.05 L 460.689 138.428 L 459.906 137.805 Z M 463.895 135.817 C 464.214 135.366 464.108 134.742 463.657 134.423 C 463.206 134.103 462.582 134.21 462.263 134.66 L 463.079 135.239 L 463.895 135.817 Z M 464.457 131.413 C 464.157 131.877 464.29 132.496 464.754 132.796 C 465.218 133.096 465.837 132.963 466.137 132.499 L 465.297 131.956 L 464.457 131.413 Z M 468.233 129.126 C 468.517 128.652 468.363 128.038 467.889 127.754 C 467.415 127.47 466.801 127.624 466.517 128.098 L 467.375 128.612 L 468.233 129.126 Z M 468.499 124.679 C 468.229 125.161 468.399 125.771 468.881 126.041 C 469.362 126.312 469.972 126.141 470.243 125.659 L 469.371 125.169 L 468.499 124.679 Z M 472.156 122.161 C 472.416 121.673 472.231 121.068 471.744 120.808 C 471.256 120.548 470.651 120.733 470.391 121.22 L 471.273 121.69 L 472.156 122.161 Z M 472.205 117.737 C 471.954 118.229 472.15 118.831 472.642 119.082 C 473.134 119.332 473.736 119.137 473.987 118.644 L 473.096 118.191 L 472.205 117.737 Z M 475.777 115.059 C 476.02 114.563 475.815 113.964 475.319 113.72 C 474.823 113.477 474.224 113.683 473.981 114.178 L 474.879 114.618 L 475.777 115.059 Z M 475.684 110.645 C 475.448 111.144 475.66 111.74 476.159 111.977 C 476.658 112.214 477.255 112.001 477.491 111.502 L 476.588 111.074 L 475.684 110.645 Z M 479.18 107.893 C 479.411 107.392 479.192 106.797 478.691 106.566 C 478.189 106.335 477.595 106.553 477.364 107.055 L 478.272 107.474 L 479.18 107.893 Z M 479.002 103.462 C 478.775 103.966 478.999 104.558 479.502 104.785 C 480.006 105.012 480.598 104.788 480.825 104.285 L 479.914 103.874 L 479.002 103.462 Z M 482.444 100.66 C 482.667 100.155 482.439 99.565 481.934 99.341 C 481.429 99.118 480.838 99.346 480.615 99.851 L 481.529 100.256 L 482.444 100.66 Z M 482.207 96.224 C 481.986 96.73 482.218 97.319 482.724 97.54 C 483.231 97.76 483.82 97.529 484.041 97.022 L 483.124 96.623 L 482.207 96.224 Z M 485.614 93.387 C 485.833 92.88 485.599 92.292 485.091 92.073 C 484.584 91.855 483.996 92.089 483.777 92.597 L 484.696 92.992 L 485.614 93.387 Z M 485.34 88.95 C 485.123 89.458 485.359 90.046 485.867 90.263 C 486.375 90.479 486.963 90.243 487.179 89.735 L 486.26 89.343 L 485.34 88.95 Z M 488.729 86.093 C 488.944 85.585 488.707 84.998 488.199 84.782 C 487.69 84.566 487.103 84.804 486.887 85.312 L 487.808 85.703 L 488.729 86.093 Z M 488.435 81.659 C 488.219 82.168 488.457 82.754 488.966 82.97 C 489.475 83.185 490.061 82.947 490.277 82.438 L 489.356 82.049 L 488.435 81.659 Z M 491.818 78.793 C 492.033 78.284 491.795 77.697 491.287 77.482 C 490.778 77.267 490.191 77.505 489.976 78.014 L 490.897 78.403 L 491.818 78.793 Z M 491.522 74.362 C 491.306 74.871 491.544 75.458 492.052 75.673 C 492.561 75.889 493.147 75.651 493.363 75.143 L 492.442 74.753 L 491.522 74.362 Z M 494.912 71.498 C 495.129 70.99 494.892 70.402 494.384 70.186 C 493.876 69.969 493.289 70.206 493.072 70.714 L 493.992 71.106 L 494.912 71.498 Z M 494.631 67.071 C 494.413 67.579 494.647 68.167 495.155 68.385 C 495.662 68.603 496.25 68.368 496.468 67.861 L 495.549 67.466 L 494.631 67.071 Z M 498.04 64.222 C 498.26 63.715 498.027 63.126 497.521 62.906 C 497.014 62.686 496.425 62.919 496.205 63.425 L 497.122 63.823 L 498.04 64.222 Z M 497.792 59.796 C 497.569 60.302 497.798 60.892 498.304 61.114 C 498.809 61.337 499.4 61.107 499.622 60.602 L 498.707 60.199 L 497.792 59.796 Z M 501.23 56.978 C 501.456 56.474 501.23 55.883 500.726 55.657 C 500.222 55.432 499.63 55.657 499.405 56.161 L 500.317 56.57 L 501.23 56.978 Z M 501.036 52.55 C 500.807 53.053 501.028 53.646 501.531 53.875 C 502.033 54.105 502.627 53.883 502.856 53.381 L 501.946 52.966 L 501.036 52.55 Z M 504.516 49.785 C 504.75 49.284 504.534 48.689 504.033 48.456 C 503.533 48.222 502.938 48.438 502.704 48.938 L 503.61 49.362 L 504.516 49.785 Z M 504.402 45.351 C 504.163 45.849 504.373 46.446 504.871 46.685 C 505.369 46.924 505.966 46.714 506.205 46.216 L 505.303 45.783 L 504.402 45.351 Z M 507.934 42.663 C 508.179 42.168 507.976 41.569 507.481 41.324 C 506.986 41.079 506.386 41.282 506.142 41.777 L 507.038 42.22 L 507.934 42.663 Z M 507.931 38.22 C 507.679 38.712 507.873 39.314 508.365 39.566 C 508.857 39.817 509.459 39.623 509.711 39.131 L 508.821 38.676 L 507.931 38.22 Z M 511.53 35.647 C 511.789 35.159 511.605 34.554 511.117 34.294 C 510.63 34.035 510.024 34.219 509.764 34.707 L 510.647 35.177 L 511.53 35.647 Z M 511.678 31.192 C 511.409 31.675 511.583 32.284 512.065 32.552 C 512.547 32.821 513.156 32.648 513.425 32.166 L 512.552 31.679 L 511.678 31.192 Z M 515.366 28.768 C 515.646 28.292 515.486 27.679 515.01 27.4 C 514.533 27.12 513.921 27.28 513.641 27.756 L 514.504 28.262 L 515.366 28.768 Z M 515.714 24.322 C 515.422 24.791 515.566 25.408 516.035 25.7 C 516.504 25.991 517.121 25.848 517.412 25.379 L 516.563 24.851 L 515.714 24.322 Z M 519.54 22.071 C 519.846 21.612 519.721 20.991 519.262 20.685 C 518.802 20.379 518.181 20.503 517.875 20.963 L 518.707 21.517 L 519.54 22.071 Z M 520.131 17.702 C 519.808 18.151 519.91 18.775 520.358 19.098 C 520.806 19.421 521.431 19.319 521.754 18.871 L 520.943 18.287 L 520.131 17.702 Z M 524.133 15.716 C 524.476 15.283 524.402 14.654 523.969 14.312 C 523.536 13.969 522.907 14.042 522.565 14.475 L 523.349 15.096 L 524.133 15.716 Z M 525.141 11.392 C 524.775 11.805 524.813 12.437 525.227 12.803 C 525.641 13.169 526.273 13.131 526.639 12.717 L 525.89 12.054 L 525.141 11.392 Z M 529.296 9.905 C 529.689 9.517 529.694 8.884 529.306 8.491 C 528.918 8.097 528.285 8.093 527.892 8.481 L 528.594 9.193 L 529.296 9.905 Z M 530.883 5.765 C 530.458 6.118 530.4 6.748 530.752 7.173 C 531.105 7.598 531.735 7.657 532.16 7.304 L 531.522 6.535 L 530.883 5.765 Z M 535.261 4.995 C 535.722 4.691 535.85 4.07 535.546 3.609 C 535.241 3.148 534.621 3.021 534.16 3.325 L 534.711 4.16 L 535.261 4.995 Z M 537.722 1.301 C 537.224 1.539 537.013 2.136 537.251 2.634 C 537.489 3.133 538.086 3.344 538.584 3.106 L 538.153 2.204 L 537.722 1.301 Z M 542.117 1.759 C 542.648 1.608 542.956 1.054 542.804 0.523 C 542.653 -0.008 542.099 -0.316 541.568 -0.164 L 541.843 0.797 L 542.117 1.759 Z M 545.63 -0.92 C 545.08 -0.871 544.673 -0.386 544.721 0.164 C 544.769 0.714 545.254 1.121 545.804 1.073 L 545.717 0.077 L 545.63 -0.92 Z M 549.556 1.095 C 550.106 1.151 550.596 0.75 550.652 0.201 C 550.707 -0.349 550.306 -0.839 549.757 -0.895 L 549.657 0.1 L 549.556 1.095 Z M 553.77 -0.105 C 553.24 -0.259 552.685 0.045 552.53 0.575 C 552.376 1.106 552.68 1.661 553.211 1.815 L 553.49 0.855 L 553.77 -0.105 Z M 556.729 3.149 C 557.23 3.382 557.825 3.165 558.058 2.664 C 558.291 2.163 558.074 1.568 557.573 1.335 L 557.151 2.242 L 556.729 3.149 Z M 561.107 3.255 C 560.638 2.964 560.022 3.109 559.73 3.578 C 559.439 4.047 559.584 4.664 560.053 4.955 L 560.58 4.105 L 561.107 3.255 Z M 563.191 7.122 C 563.63 7.456 564.258 7.37 564.592 6.931 C 564.926 6.491 564.841 5.864 564.401 5.53 L 563.796 6.326 L 563.191 7.122 Z M 567.479 8.064 C 567.066 7.698 566.434 7.736 566.067 8.149 C 565.701 8.563 565.739 9.195 566.152 9.561 L 566.816 8.813 L 567.479 8.064 Z M 568.956 12.207 C 569.346 12.597 569.979 12.598 570.37 12.207 C 570.76 11.817 570.761 11.184 570.37 10.793 L 569.663 11.5 L 568.956 12.207 Z M 573.102 13.671 C 572.732 13.261 572.099 13.23 571.69 13.6 C 571.28 13.971 571.248 14.603 571.619 15.013 L 572.36 14.342 L 573.102 13.671 Z M 574.158 17.943 C 574.511 18.367 575.141 18.425 575.566 18.072 C 575.991 17.719 576.048 17.088 575.695 16.664 L 574.926 17.303 L 574.158 17.943 Z M 578.159 19.735 C 577.821 19.299 577.193 19.219 576.756 19.557 C 576.32 19.896 576.24 20.524 576.578 20.96 L 577.369 20.348 L 578.159 19.735 Z M 578.906 24.062 C 579.231 24.508 579.857 24.607 580.303 24.281 C 580.75 23.956 580.848 23.331 580.523 22.884 L 579.715 23.473 L 578.906 24.062 Z M 582.799 26.098 C 582.486 25.644 581.863 25.529 581.409 25.843 C 580.954 26.156 580.839 26.779 581.153 27.234 L 581.976 26.666 L 582.799 26.098 Z M 583.327 30.465 C 583.63 30.927 584.251 31.055 584.712 30.752 C 585.174 30.449 585.302 29.829 584.999 29.367 L 584.163 29.916 L 583.327 30.465 Z M 587.129 32.681 C 586.835 32.213 586.217 32.073 585.75 32.367 C 585.282 32.661 585.142 33.279 585.436 33.746 L 586.282 33.213 L 587.129 32.681 Z M 587.48 37.059 C 587.766 37.531 588.381 37.683 588.853 37.397 C 589.326 37.111 589.477 36.496 589.191 36.023 L 588.335 36.541 L 587.48 37.059 Z M 591.198 39.399 C 590.919 38.922 590.307 38.761 589.83 39.04 C 589.353 39.318 589.192 39.931 589.471 40.408 L 590.334 39.903 L 591.198 39.399 Z M 591.416 43.79 C 591.688 44.27 592.298 44.439 592.779 44.167 C 593.259 43.895 593.428 43.285 593.156 42.804 L 592.286 43.297 L 591.416 43.79 Z M 595.07 46.234 C 594.804 45.75 594.196 45.573 593.712 45.84 C 593.228 46.106 593.051 46.714 593.318 47.198 L 594.194 46.716 L 595.07 46.234 Z M 595.179 50.627 C 595.44 51.114 596.046 51.297 596.533 51.036 C 597.019 50.775 597.203 50.169 596.942 49.682 L 596.06 50.154 L 595.179 50.627 Z M 598.779 53.151 C 598.523 52.662 597.918 52.473 597.429 52.729 C 596.94 52.985 596.751 53.589 597.007 54.078 L 597.893 53.615 L 598.779 53.151 Z M 598.803 57.548 C 599.055 58.039 599.658 58.234 600.149 57.982 C 600.641 57.73 600.835 57.127 600.583 56.636 L 599.693 57.092 L 598.803 57.548 Z M 602.357 60.131 C 602.109 59.637 601.508 59.438 601.014 59.686 C 600.521 59.934 600.322 60.536 600.57 61.029 L 601.463 60.58 L 602.357 60.131 Z M 602.311 64.52 C 602.555 65.015 603.155 65.218 603.65 64.973 C 604.145 64.728 604.348 64.129 604.103 63.634 L 603.207 64.077 L 602.311 64.52 Z M 605.834 67.158 C 605.592 66.662 604.993 66.456 604.497 66.698 C 604 66.94 603.794 67.538 604.036 68.035 L 604.935 67.597 L 605.834 67.158 Z M 605.743 71.558 C 605.983 72.055 606.58 72.264 607.078 72.024 C 607.575 71.785 607.784 71.187 607.545 70.689 L 606.644 71.123 L 605.743 71.558 Z M 609.239 74.223 C 609.001 73.724 608.404 73.513 607.906 73.751 C 607.407 73.989 607.196 74.586 607.434 75.084 L 608.336 74.654 L 609.239 74.223 Z M 609.113 78.613 C 609.35 79.112 609.946 79.325 610.445 79.088 C 610.944 78.851 611.157 78.255 610.92 77.756 L 610.017 78.184 L 609.113 78.613 Z M 612.593 81.287 C 612.357 80.788 611.76 80.574 611.261 80.811 C 610.762 81.047 610.549 81.643 610.785 82.143 L 611.689 81.715 L 612.593 81.287 Z M 612.458 85.673 C 612.695 86.172 613.292 86.384 613.79 86.147 C 614.289 85.911 614.502 85.314 614.265 84.815 L 613.362 85.244 L 612.458 85.673 Z M 615.945 88.341 C 615.707 87.843 615.109 87.633 614.611 87.871 C 614.113 88.11 613.903 88.707 614.141 89.205 L 615.043 88.773 L 615.945 88.341 Z M 615.848 92.741 C 616.09 93.237 616.689 93.443 617.185 93.201 C 617.681 92.959 617.888 92.36 617.646 91.864 L 616.747 92.302 L 615.848 92.741 Z M 619.383 95.375 C 619.135 94.882 618.534 94.683 618.04 94.932 C 617.547 95.181 617.349 95.782 617.598 96.275 L 618.49 95.825 L 619.383 95.375 Z M 619.417 99.787 C 619.678 100.273 620.284 100.456 620.771 100.196 C 621.258 99.935 621.441 99.328 621.18 98.842 L 620.299 99.314 L 619.417 99.787 Z M 623.062 102.167 C 622.775 101.695 622.16 101.545 621.688 101.832 C 621.216 102.119 621.067 102.734 621.354 103.206 L 622.208 102.686 L 623.062 102.167 Z M 623.649 106.579 C 623.976 107.023 624.602 107.118 625.047 106.791 C 625.491 106.463 625.586 105.837 625.259 105.392 L 624.454 105.985 L 623.649 106.579 Z M 627.737 108.597 C 627.39 108.167 626.76 108.1 626.33 108.447 C 625.901 108.794 625.834 109.424 626.181 109.854 L 626.959 109.225 L 627.737 108.597 Z M 628.828 113.011 C 629.19 113.428 629.821 113.473 630.238 113.11 C 630.655 112.748 630.7 112.117 630.338 111.7 L 629.583 112.355 L 628.828 113.011 Z M 633.062 114.736 C 632.686 114.331 632.054 114.306 631.648 114.682 C 631.243 115.057 631.219 115.689 631.594 116.095 L 632.328 115.415 L 633.062 114.736 Z M 634.433 119.073 C 634.82 119.468 635.453 119.474 635.847 119.087 C 636.242 118.7 636.248 118.067 635.861 117.673 L 635.147 118.373 L 634.433 119.073 Z M 638.756 120.541 C 638.358 120.158 637.725 120.17 637.342 120.567 C 636.958 120.965 636.97 121.598 637.368 121.981 L 638.062 121.261 L 638.756 120.541 Z M 640.381 124.806 C 640.789 125.179 641.421 125.15 641.793 124.742 C 642.166 124.334 642.137 123.701 641.729 123.329 L 641.055 124.068 L 640.381 124.806 Z M 644.767 126.028 C 644.349 125.666 643.718 125.712 643.357 126.13 C 642.995 126.548 643.041 127.18 643.459 127.541 L 644.113 126.784 L 644.767 126.028 Z M 646.614 130.195 C 647.042 130.544 647.672 130.481 648.021 130.054 C 648.371 129.627 648.308 128.997 647.881 128.647 L 647.248 129.421 L 646.614 130.195 Z M 651.066 131.182 C 650.629 130.844 650.001 130.924 649.663 131.361 C 649.325 131.798 649.405 132.426 649.842 132.764 L 650.454 131.973 L 651.066 131.182 Z M 653.14 135.244 C 653.586 135.57 654.212 135.473 654.538 135.027 C 654.863 134.581 654.766 133.955 654.32 133.629 L 653.73 134.437 L 653.14 135.244 Z M 657.641 135.985 C 657.186 135.672 656.563 135.787 656.25 136.242 C 655.937 136.697 656.052 137.319 656.507 137.632 L 657.074 136.809 L 657.641 135.985 Z M 659.941 139.923 C 660.404 140.223 661.023 140.09 661.323 139.626 C 661.623 139.163 661.49 138.544 661.026 138.244 L 660.483 139.084 L 659.941 139.923 Z M 664.476 140.402 C 664.003 140.116 663.388 140.267 663.102 140.74 C 662.816 141.212 662.968 141.827 663.44 142.113 L 663.958 141.258 L 664.476 140.402 Z M 667.005 144.196 C 667.486 144.468 668.096 144.298 668.367 143.817 C 668.638 143.336 668.468 142.726 667.987 142.454 L 667.496 143.325 L 667.005 144.196 Z M 671.559 144.396 C 671.07 144.14 670.466 144.329 670.21 144.819 C 669.954 145.308 670.143 145.912 670.632 146.168 L 671.096 145.282 L 671.559 144.396 Z M 674.322 148.023 C 674.819 148.263 675.417 148.054 675.657 147.556 C 675.897 147.059 675.688 146.461 675.191 146.221 L 674.756 147.122 L 674.322 148.023 Z M 678.88 147.925 C 678.374 147.702 677.784 147.931 677.561 148.436 C 677.338 148.941 677.567 149.532 678.072 149.755 L 678.476 148.84 L 678.88 147.925 Z M 681.88 151.357 C 682.393 151.563 682.975 151.314 683.18 150.801 C 683.386 150.288 683.137 149.706 682.624 149.501 L 682.252 150.429 L 681.88 151.357 Z M 686.421 150.943 C 685.901 150.756 685.328 151.026 685.141 151.546 C 684.955 152.066 685.225 152.638 685.744 152.825 L 686.082 151.884 L 686.421 150.943 Z M 689.66 154.151 C 690.186 154.318 690.748 154.027 690.916 153.501 C 691.083 152.975 690.792 152.412 690.266 152.245 L 689.963 153.198 L 689.66 154.151 Z M 694.156 153.401 C 693.624 153.254 693.073 153.566 692.926 154.098 C 692.778 154.631 693.091 155.182 693.623 155.329 L 693.889 154.365 L 694.156 153.401 Z M 697.63 156.352 C 698.168 156.479 698.706 156.145 698.832 155.607 C 698.958 155.069 698.624 154.531 698.087 154.405 L 697.858 155.379 L 697.63 156.352 Z M 702.053 155.252 C 701.511 155.148 700.986 155.503 700.882 156.045 C 700.778 156.587 701.133 157.112 701.675 157.216 L 701.864 156.234 L 702.053 155.252 Z M 705.753 157.915 C 706.299 157.997 706.808 157.62 706.89 157.074 C 706.972 156.528 706.596 156.019 706.05 155.937 L 705.901 156.926 L 705.753 157.915 Z M 710.07 156.455 C 709.521 156.396 709.028 156.793 708.969 157.342 C 708.91 157.891 709.307 158.385 709.856 158.444 L 709.963 157.449 L 710.07 156.455 Z M 713.979 158.799 C 714.53 158.834 715.006 158.417 715.042 157.865 C 715.077 157.314 714.66 156.839 714.108 156.803 L 714.044 157.801 L 713.979 158.799 Z M 718.158 156.978 C 717.605 156.966 717.148 157.404 717.136 157.956 C 717.124 158.508 717.562 158.965 718.114 158.977 L 718.136 157.978 L 718.158 156.978 Z M 722.249 158.936 C 722.8 158.902 723.219 158.427 723.185 157.876 C 723.151 157.325 722.676 156.906 722.125 156.94 L 722.187 157.938 L 722.249 158.936 Z M 725.963 156.471 C 725.419 156.57 725.059 157.09 725.157 157.633 C 725.256 158.177 725.777 158.537 726.32 158.439 L 726.141 157.455 L 725.963 156.471 Z M 730.306 157.49 C 730.836 157.334 731.139 156.778 730.983 156.248 C 730.827 155.718 730.271 155.415 729.742 155.571 L 730.024 156.53 L 730.306 157.49 Z M 733.433 154.291 C 732.92 154.495 732.67 155.077 732.875 155.59 C 733.079 156.103 733.661 156.353 734.174 156.149 L 733.804 155.22 L 733.433 154.291 Z M 737.879 154.493 C 738.374 154.248 738.577 153.648 738.332 153.153 C 738.088 152.658 737.488 152.455 736.993 152.7 L 737.436 153.596 L 737.879 154.493 Z M 740.437 150.844 C 739.96 151.122 739.798 151.734 740.076 152.212 C 740.354 152.689 740.966 152.85 741.443 152.573 L 740.94 151.708 L 740.437 150.844 Z M 744.88 150.432 C 745.34 150.127 745.466 149.507 745.161 149.046 C 744.856 148.586 744.236 148.46 743.775 148.765 L 744.327 149.599 L 744.88 150.432 Z M 747.017 146.497 C 746.572 146.825 746.477 147.451 746.804 147.895 C 747.132 148.34 747.758 148.435 748.202 148.108 L 747.61 147.303 L 747.017 146.497 Z M 751.396 145.651 C 751.827 145.305 751.896 144.676 751.551 144.245 C 751.205 143.814 750.576 143.745 750.145 144.091 L 750.771 144.871 L 751.396 145.651 Z M 753.176 141.567 C 752.758 141.928 752.711 142.559 753.072 142.977 C 753.432 143.396 754.064 143.442 754.482 143.082 L 753.829 142.324 L 753.176 141.567 Z M 757.493 140.402 C 757.9 140.029 757.928 139.396 757.555 138.989 C 757.181 138.582 756.549 138.555 756.142 138.928 L 756.818 139.665 L 757.493 140.402 Z M 759.034 136.204 C 758.637 136.588 758.626 137.221 759.009 137.618 C 759.393 138.015 760.026 138.026 760.423 137.643 L 759.729 136.923 L 759.034 136.204 Z M 763.269 134.83 C 763.658 134.438 763.654 133.805 763.262 133.416 C 762.87 133.028 762.236 133.031 761.848 133.423 L 762.558 134.127 L 763.269 134.83 Z M 764.622 130.566 C 764.241 130.966 764.256 131.599 764.656 131.98 C 765.056 132.361 765.689 132.346 766.07 131.946 L 765.346 131.256 L 764.622 130.566 Z M 768.81 129.021 C 769.184 128.615 769.159 127.982 768.753 127.608 C 768.347 127.234 767.714 127.259 767.34 127.665 L 768.075 128.343 L 768.81 129.021 Z M 770.012 124.726 C 769.643 125.137 769.678 125.769 770.089 126.138 C 770.5 126.506 771.132 126.472 771.501 126.061 L 770.756 125.393 L 770.012 124.726 Z M 774.164 123.055 C 774.528 122.639 774.486 122.007 774.071 121.644 C 773.655 121.28 773.023 121.322 772.659 121.737 L 773.412 122.396 L 774.164 123.055 Z M 775.262 118.735 C 774.902 119.154 774.95 119.786 775.369 120.145 C 775.788 120.505 776.419 120.457 776.779 120.038 L 776.02 119.387 L 775.262 118.735 Z M 779.374 116.99 C 779.731 116.569 779.678 115.938 779.256 115.581 C 778.834 115.225 778.203 115.278 777.847 115.7 L 778.61 116.345 L 779.374 116.99 Z M 780.41 112.645 C 780.057 113.069 780.114 113.7 780.538 114.054 C 780.962 114.407 781.592 114.35 781.946 113.926 L 781.178 113.286 L 780.41 112.645 Z M 784.497 110.852 C 784.849 110.427 784.789 109.796 784.363 109.444 C 783.937 109.093 783.307 109.153 782.955 109.579 L 783.726 110.215 L 784.497 110.852 Z M 785.493 106.496 C 785.142 106.923 785.204 107.553 785.631 107.903 C 786.058 108.254 786.688 108.191 787.039 107.764 L 786.266 107.13 L 785.493 106.496 Z M 789.568 104.676 C 789.917 104.248 789.854 103.618 789.427 103.269 C 788.999 102.919 788.369 102.982 788.019 103.41 L 788.794 104.043 L 789.568 104.676 Z M 790.546 100.318 C 790.196 100.745 790.26 101.375 790.688 101.725 C 791.115 102.074 791.745 102.01 792.095 101.583 L 791.32 100.95 L 790.546 100.318 Z M 794.62 98.493 C 794.97 98.066 794.907 97.436 794.479 97.086 C 794.052 96.736 793.422 96.799 793.072 97.226 L 793.846 97.86 L 794.62 98.493 Z M 795.607 94.135 C 795.257 94.562 795.318 95.192 795.745 95.543 C 796.171 95.894 796.801 95.832 797.152 95.406 L 796.38 94.771 L 795.607 94.135 Z M 799.687 92.335 C 800.039 91.91 799.98 91.279 799.555 90.927 C 799.13 90.575 798.499 90.634 798.147 91.059 L 798.917 91.697 L 799.687 92.335 Z M 800.711 87.981 C 800.356 88.405 800.412 89.035 800.835 89.39 C 801.258 89.745 801.889 89.689 802.244 89.266 L 801.477 88.624 L 800.711 87.981 Z M 804.813 86.222 C 805.17 85.801 805.119 85.17 804.698 84.812 C 804.278 84.455 803.647 84.506 803.289 84.926 L 804.051 85.574 L 804.813 86.222 Z M 805.892 81.89 C 805.531 82.308 805.576 82.939 805.994 83.301 C 806.412 83.662 807.043 83.617 807.405 83.199 L 806.648 82.545 L 805.892 81.89 Z M 810.03 80.197 C 810.396 79.783 810.357 79.151 809.944 78.785 C 809.53 78.419 808.898 78.458 808.532 78.872 L 809.281 79.534 L 810.03 80.197 Z M 811.195 75.898 C 810.824 76.307 810.854 76.94 811.263 77.311 C 811.672 77.682 812.305 77.651 812.676 77.243 L 811.935 76.57 L 811.195 75.898 Z M 815.379 74.308 C 815.756 73.905 815.735 73.272 815.332 72.895 C 814.929 72.518 814.296 72.539 813.919 72.942 L 814.649 73.625 L 815.379 74.308 Z M 816.686 70.037 C 816.301 70.433 816.311 71.066 816.707 71.451 C 817.103 71.835 817.736 71.826 818.121 71.429 L 817.403 70.733 L 816.686 70.037 Z M 820.902 68.622 C 821.294 68.234 821.298 67.601 820.91 67.208 C 820.522 66.815 819.889 66.811 819.496 67.199 L 820.199 67.911 L 820.902 68.622 Z M 822.402 64.397 C 822 64.775 821.98 65.408 822.359 65.81 C 822.737 66.213 823.37 66.232 823.772 65.854 L 823.087 65.125 L 822.402 64.397 Z M 826.698 63.181 C 827.112 62.815 827.15 62.183 826.784 61.769 C 826.417 61.356 825.785 61.318 825.372 61.684 L 826.035 62.433 L 826.698 63.181 Z M 828.413 59.078 C 827.988 59.43 827.928 60.06 828.28 60.486 C 828.632 60.912 829.262 60.971 829.688 60.619 L 829.051 59.849 L 828.413 59.078 Z M 832.794 58.153 C 833.234 57.818 833.319 57.191 832.985 56.751 C 832.651 56.312 832.023 56.226 831.584 56.561 L 832.189 57.357 L 832.794 58.153 Z M 834.863 54.187 C 834.407 54.5 834.292 55.122 834.604 55.577 C 834.917 56.033 835.54 56.148 835.995 55.835 L 835.429 55.011 L 834.863 54.187 Z M 839.293 53.702 C 839.766 53.416 839.917 52.801 839.631 52.329 C 839.345 51.856 838.73 51.705 838.257 51.992 L 838.775 52.847 L 839.293 53.702 Z M 841.784 50.012 C 841.293 50.265 841.101 50.868 841.354 51.359 C 841.608 51.85 842.211 52.042 842.702 51.789 L 842.243 50.9 L 841.784 50.012 Z M 846.244 50.133 C 846.753 49.92 846.994 49.335 846.781 48.825 C 846.568 48.316 845.983 48.075 845.473 48.288 L 845.858 49.21 L 846.244 50.133 Z M 849.32 46.888 C 848.792 47.051 848.497 47.611 848.66 48.139 C 848.823 48.667 849.383 48.962 849.911 48.799 L 849.615 47.844 L 849.32 46.888 Z M 853.673 47.856 C 854.215 47.752 854.571 47.228 854.467 46.685 C 854.363 46.143 853.839 45.787 853.296 45.891 L 853.485 46.873 L 853.673 47.856 Z M 857.369 45.366 C 856.818 45.402 856.401 45.878 856.437 46.429 C 856.473 46.98 856.949 47.397 857.5 47.361 L 857.435 46.363 L 857.369 45.366 Z M 861.432 47.354 C 861.984 47.386 862.456 46.964 862.487 46.412 C 862.519 45.861 862.097 45.389 861.546 45.358 L 861.489 46.356 L 861.432 47.354 Z M 865.713 45.832 C 865.169 45.738 864.652 46.104 864.558 46.648 C 864.465 47.192 864.831 47.709 865.375 47.803 L 865.544 46.817 L 865.713 45.832 Z M 869.245 48.693 C 869.776 48.846 870.33 48.54 870.483 48.01 C 870.637 47.479 870.331 46.925 869.8 46.771 L 869.523 47.732 L 869.245 48.693 Z M 873.757 48.145 C 873.246 47.938 872.662 48.184 872.454 48.696 C 872.247 49.207 872.493 49.791 873.005 49.998 L 873.381 49.072 L 873.757 48.145 Z M 876.626 51.677 C 877.115 51.933 877.719 51.743 877.975 51.253 C 878.23 50.763 878.04 50.159 877.55 49.904 L 877.088 50.791 L 876.626 51.677 Z M 881.164 51.989 C 880.697 51.694 880.079 51.833 879.784 52.299 C 879.489 52.766 879.628 53.384 880.094 53.679 L 880.629 52.834 L 881.164 51.989 Z M 883.407 55.953 C 883.851 56.281 884.478 56.187 884.806 55.743 C 885.134 55.299 885.041 54.673 884.596 54.345 L 884.002 55.149 L 883.407 55.953 Z M 887.857 56.92 C 887.434 56.565 886.804 56.62 886.448 57.043 C 886.093 57.466 886.148 58.096 886.571 58.452 L 887.214 57.686 L 887.857 56.92 Z M 889.591 61.132 C 889.995 61.509 890.628 61.487 891.005 61.083 C 891.382 60.68 891.36 60.047 890.956 59.67 L 890.274 60.401 L 889.591 61.132 Z M 893.908 62.555 C 893.522 62.161 892.889 62.154 892.494 62.541 C 892.1 62.928 892.093 63.561 892.48 63.955 L 893.194 63.255 L 893.908 62.555 Z M 895.258 66.901 C 895.629 67.309 896.262 67.339 896.67 66.967 C 897.079 66.596 897.109 65.963 896.737 65.555 L 895.997 66.228 L 895.258 66.901 Z M 899.461 68.647 C 899.102 68.227 898.471 68.178 898.051 68.536 C 897.631 68.895 897.581 69.526 897.94 69.946 L 898.7 69.297 L 899.461 68.647 Z M 900.54 73.073 C 900.888 73.502 901.517 73.568 901.946 73.22 C 902.375 72.872 902.441 72.243 902.094 71.814 L 901.317 72.443 L 900.54 73.073 Z M 904.65 75.039 C 904.311 74.603 903.683 74.524 903.247 74.862 C 902.811 75.201 902.732 75.829 903.07 76.265 L 903.86 75.652 L 904.65 75.039 Z M 905.54 79.506 C 905.871 79.947 906.498 80.037 906.94 79.706 C 907.381 79.375 907.471 78.748 907.14 78.306 L 906.34 78.906 L 905.54 79.506 Z M 909.576 81.604 C 909.251 81.158 908.625 81.06 908.179 81.385 C 907.733 81.711 907.635 82.336 907.96 82.782 L 908.768 82.193 L 909.576 81.604 Z M 910.347 86.092 C 910.668 86.542 911.293 86.646 911.742 86.325 C 912.192 86.004 912.296 85.379 911.975 84.93 L 911.161 85.511 L 910.347 86.092 Z M 914.345 88.273 C 914.027 87.822 913.403 87.714 912.952 88.032 C 912.5 88.35 912.392 88.974 912.71 89.425 L 913.528 88.849 L 914.345 88.273 Z M 915.058 92.77 C 915.375 93.223 915.999 93.333 916.451 93.016 C 916.904 92.7 917.014 92.076 916.697 91.624 L 915.878 92.197 L 915.058 92.77 Z M 919.041 94.975 C 918.725 94.523 918.101 94.413 917.649 94.729 C 917.196 95.046 917.086 95.669 917.403 96.122 L 918.222 95.549 L 919.041 94.975 Z M 919.755 99.475 C 920.073 99.926 920.697 100.034 921.149 99.716 C 921.6 99.398 921.708 98.774 921.39 98.323 L 920.573 98.899 L 919.755 99.475 Z M 923.753 101.656 C 923.432 101.207 922.808 101.102 922.358 101.423 C 921.909 101.744 921.805 102.369 922.126 102.818 L 922.94 102.237 L 923.753 101.656 Z M 924.524 106.143 C 924.85 106.589 925.475 106.687 925.922 106.361 C 926.368 106.036 926.465 105.41 926.14 104.964 L 925.332 105.553 L 924.524 106.143 Z M 928.561 108.236 C 928.229 107.794 927.602 107.705 927.161 108.037 C 926.719 108.369 926.63 108.996 926.962 109.437 L 927.761 108.837 L 928.561 108.236 Z M 929.46 112.702 C 929.8 113.137 930.429 113.215 930.864 112.875 C 931.299 112.535 931.377 111.907 931.037 111.471 L 930.249 112.087 L 929.46 112.702 Z M 933.579 114.653 C 933.229 114.225 932.599 114.163 932.172 114.513 C 931.745 114.863 931.682 115.493 932.032 115.92 L 932.806 115.286 L 933.579 114.653 Z M 934.691 119.072 C 935.053 119.488 935.685 119.532 936.102 119.17 C 936.518 118.807 936.562 118.176 936.199 117.759 L 935.445 118.415 L 934.691 119.072 Z M 938.914 120.77 C 938.537 120.367 937.904 120.346 937.501 120.724 C 937.098 121.101 937.077 121.734 937.455 122.137 L 938.185 121.453 L 938.914 120.77 Z M 940.347 125.091 C 940.742 125.477 941.375 125.469 941.761 125.073 C 942.146 124.678 942.138 124.045 941.743 123.659 L 941.045 124.375 L 940.347 125.091 Z M 944.705 126.395 C 944.288 126.032 943.657 126.075 943.294 126.492 C 942.931 126.908 942.974 127.54 943.391 127.903 L 944.048 127.149 L 944.705 126.395 Z M 946.612 130.528 C 947.052 130.861 947.68 130.775 948.013 130.335 C 948.347 129.894 948.26 129.267 947.82 128.934 L 947.216 129.731 L 946.612 130.528 Z M 951.106 131.221 C 950.64 130.925 950.022 131.064 949.726 131.53 C 949.431 131.997 949.569 132.614 950.036 132.91 L 950.571 132.065 L 951.106 131.221 Z M 953.678 134.976 C 954.172 135.223 954.773 135.023 955.02 134.529 C 955.267 134.036 955.067 133.435 954.574 133.188 L 954.126 134.082 L 953.678 134.976 Z M 958.217 134.756 C 957.697 134.569 957.124 134.838 956.937 135.358 C 956.75 135.877 957.019 136.45 957.538 136.638 L 957.878 135.697 L 958.217 134.756 Z M 961.589 137.805 C 962.128 137.921 962.661 137.579 962.777 137.039 C 962.894 136.499 962.551 135.967 962.011 135.85 L 961.8 136.827 L 961.589 137.805 Z M 965.91 136.41 C 965.359 136.37 964.88 136.785 964.841 137.336 C 964.801 137.887 965.216 138.365 965.766 138.405 L 965.838 137.407 L 965.91 136.41 Z M 969.861 138.456 C 970.413 138.442 970.849 137.984 970.835 137.431 C 970.821 136.879 970.362 136.443 969.81 136.457 L 969.835 137.457 L 969.861 138.456 Z M 973.571 136.262 C 973.02 136.306 972.61 136.788 972.654 137.338 C 972.697 137.889 973.179 138.3 973.73 138.256 L 973.65 137.259 L 973.571 136.262 Z M 977.586 137.832 C 978.133 137.755 978.513 137.249 978.436 136.702 C 978.359 136.155 977.853 135.774 977.306 135.852 L 977.446 136.842 L 977.586 137.832 Z M 980.995 135.204 C 980.455 135.318 980.11 135.848 980.224 136.389 C 980.338 136.929 980.869 137.275 981.409 137.16 L 981.202 136.182 L 980.995 135.204 Z M 985.181 136.217 C 985.711 136.064 986.017 135.509 985.863 134.978 C 985.709 134.448 985.154 134.143 984.623 134.297 L 984.902 135.257 L 985.181 136.217 Z M 988.184 133.11 C 987.667 133.305 987.407 133.883 987.602 134.399 C 987.798 134.916 988.375 135.176 988.891 134.981 L 988.538 134.045 L 988.184 133.11 Z M 992.479 133.456 C 992.978 133.22 993.191 132.623 992.955 132.124 C 992.718 131.625 992.122 131.412 991.623 131.648 L 992.051 132.552 L 992.479 133.456 Z M 994.939 129.914 C 994.46 130.189 994.294 130.8 994.569 131.279 C 994.844 131.758 995.455 131.924 995.934 131.649 L 995.437 130.781 L 994.939 129.914 Z M 999.238 129.589 C 999.696 129.281 999.818 128.66 999.509 128.201 C 999.201 127.743 998.58 127.622 998.121 127.93 L 998.68 128.76 L 999.238 129.589 Z M 1001.174 125.733 C 1000.736 126.068 1000.652 126.696 1000.988 127.135 C 1001.323 127.573 1001.951 127.657 1002.39 127.321 L 1001.782 126.527 L 1001.174 125.733 Z M 1005.402 124.899 C 1005.825 124.544 1005.88 123.913 1005.525 123.49 C 1005.17 123.067 1004.539 123.012 1004.116 123.367 L 1004.759 124.133 L 1005.402 124.899 Z M 1006.986 120.881 C 1006.573 121.247 1006.535 121.88 1006.902 122.293 C 1007.269 122.706 1007.901 122.743 1008.314 122.376 L 1007.65 121.629 L 1006.986 120.881 Z M 1011.164 119.819 C 1011.574 119.449 1011.607 118.817 1011.237 118.406 C 1010.867 117.996 1010.235 117.963 1009.825 118.333 L 1010.494 119.076 L 1011.164 119.819 Z M 1012.69 115.779 C 1012.274 116.143 1012.232 116.775 1012.595 117.19 C 1012.959 117.606 1013.591 117.648 1014.006 117.285 L 1013.348 116.532 L 1012.69 115.779 Z M 1016.897 114.841 C 1017.326 114.493 1017.392 113.863 1017.044 113.434 C 1016.696 113.005 1016.067 112.939 1015.638 113.287 L 1016.267 114.064 L 1016.897 114.841 Z M 1018.722 110.929 C 1018.273 111.25 1018.169 111.875 1018.49 112.324 C 1018.811 112.774 1019.435 112.878 1019.885 112.557 L 1019.304 111.743 L 1018.722 110.929 Z M 1023.011 110.504 C 1023.486 110.221 1023.64 109.607 1023.357 109.133 C 1023.074 108.659 1022.46 108.504 1021.986 108.787 L 1022.499 109.646 L 1023.011 110.504 Z M 1025.44 106.943 C 1024.941 107.179 1024.726 107.774 1024.962 108.274 C 1025.197 108.774 1025.793 108.988 1026.292 108.753 L 1025.866 107.848 L 1025.44 106.943 Z M 1029.734 107.349 C 1030.256 107.168 1030.533 106.599 1030.352 106.077 C 1030.171 105.555 1029.602 105.279 1029.08 105.459 L 1029.407 106.404 L 1029.734 107.349 Z M 1032.847 104.376 C 1032.309 104.5 1031.974 105.037 1032.098 105.576 C 1032.222 106.114 1032.759 106.449 1033.297 106.324 L 1033.072 105.35 L 1032.847 104.376 Z M 1036.971 105.668 C 1037.519 105.598 1037.906 105.097 1037.836 104.549 C 1037.766 104.001 1037.264 103.614 1036.717 103.685 L 1036.844 104.677 L 1036.971 105.668 Z M 1040.596 103.362 C 1040.044 103.384 1039.615 103.85 1039.637 104.401 C 1039.659 104.953 1040.124 105.383 1040.676 105.361 L 1040.636 104.361 L 1040.596 103.362 Z M 0 113.002 C -0.02 114.002 -0.02 114.002 -0.02 114.002 C -0.02 114.002 -0.02 114.002 -0.02 114.002 C -0.02 114.002 -0.02 114.002 -0.02 114.002 C -0.02 114.002 -0.019 114.002 -0.019 114.002 C -0.018 114.002 -0.018 114.002 -0.017 114.002 C -0.015 114.002 -0.012 114.002 -0.009 114.002 C -0.003 114.002 0.007 114.002 0.019 114.002 C 0.044 114.003 0.081 114.003 0.128 114.004 C 0.223 114.005 0.363 114.006 0.545 114.007 C 0.909 114.008 1.441 114.006 2.119 113.994 L 2.102 112.994 L 2.085 111.995 C 1.422 112.006 0.903 112.008 0.551 112.007 C 0.375 112.006 0.241 112.005 0.152 112.004 C 0.107 112.003 0.073 112.003 0.051 112.002 C 0.04 112.002 0.032 112.002 0.027 112.002 C 0.024 112.002 0.022 112.002 0.021 112.002 C 0.021 112.002 0.02 112.002 0.02 112.002 C 0.02 112.002 0.02 112.002 0.02 112.002 C 0.02 112.002 0.02 112.002 0.02 112.002 C 0.02 112.002 0.02 112.002 0.02 112.002 C 0.02 112.002 0.02 112.002 0 113.002 Z M 6.344 112.84 L 6.399 113.838 C 7.676 113.768 9.105 113.67 10.647 113.533 L 10.559 112.537 L 10.47 111.541 C 8.952 111.676 7.546 111.772 6.289 111.841 L 6.344 112.84 Z M 14.77 112.088 L 14.894 113.081 C 16.256 112.911 17.671 112.71 19.119 112.473 L 18.957 111.486 L 18.795 110.499 C 17.375 110.732 15.986 110.929 14.647 111.096 L 14.77 112.088 Z M 23.12 110.714 L 23.324 111.693 C 24.705 111.404 26.099 111.081 27.493 110.716 L 27.24 109.749 L 26.987 108.781 C 25.629 109.136 24.267 109.453 22.915 109.735 L 23.12 110.714 Z M 31.302 108.561 L 31.612 109.511 C 32.979 109.066 34.332 108.575 35.655 108.035 L 35.277 107.109 L 34.899 106.183 C 33.625 106.703 32.318 107.177 30.992 107.61 L 31.302 108.561 Z M 39.122 105.343 L 39.581 106.231 C 40.226 105.898 40.86 105.549 41.479 105.186 L 40.973 104.323 L 40.467 103.461 C 39.88 103.806 39.278 104.137 38.662 104.455 L 39.122 105.343 Z M 40.973 104.323 L 41.479 105.186 C 42.011 104.874 42.587 104.514 43.203 104.111 L 42.656 103.274 L 42.109 102.437 C 41.513 102.827 40.965 103.169 40.467 103.461 L 40.973 104.323 Z M 45.919 101.027 L 46.501 101.84 C 47.509 101.119 48.591 100.327 49.74 99.474 L 49.144 98.671 L 48.548 97.868 C 47.405 98.717 46.333 99.501 45.337 100.213 L 45.919 101.027 Z M 52.321 96.288 L 52.924 97.086 C 53.942 96.317 55.002 95.512 56.101 94.676 L 55.496 93.88 L 54.891 93.084 C 53.792 93.92 52.734 94.723 51.718 95.49 L 52.321 96.288 Z M 58.668 91.466 L 59.274 92.262 C 60.303 91.478 61.361 90.674 62.446 89.852 L 61.842 89.055 L 61.237 88.258 C 60.152 89.081 59.093 89.886 58.063 90.67 L 58.668 91.466 Z M 65.021 86.652 L 65.622 87.451 C 66.663 86.667 67.726 85.87 68.807 85.063 L 68.209 84.262 L 67.611 83.46 C 66.527 84.269 65.462 85.068 64.419 85.853 L 65.021 86.652 Z M 71.411 81.887 L 72.005 82.692 C 73.06 81.914 74.131 81.129 75.217 80.339 L 74.629 79.53 L 74.04 78.721 C 72.95 79.514 71.876 80.302 70.818 81.082 L 71.411 81.887 Z M 77.863 77.195 L 78.446 78.007 C 79.514 77.242 80.595 76.474 81.687 75.705 L 81.111 74.887 L 80.536 74.07 C 79.439 74.842 78.353 75.613 77.281 76.382 L 77.863 77.195 Z M 84.375 72.611 L 84.943 73.434 C 86.027 72.685 87.121 71.937 88.223 71.191 L 87.663 70.363 L 87.103 69.535 C 85.994 70.285 84.895 71.036 83.807 71.788 L 84.375 72.611 Z M 90.976 68.148 L 91.528 68.982 C 92.629 68.253 93.739 67.529 94.856 66.809 L 94.314 65.969 L 93.773 65.128 C 92.649 65.852 91.533 66.581 90.425 67.313 L 90.976 68.148 Z M 97.677 63.832 L 98.208 64.679 C 99.328 63.977 100.455 63.282 101.586 62.594 L 101.067 61.74 L 100.547 60.885 C 99.408 61.577 98.274 62.278 97.146 62.984 L 97.677 63.832 Z M 104.487 59.695 L 104.994 60.558 C 106.136 59.887 107.282 59.226 108.431 58.575 L 107.939 57.705 L 107.447 56.835 C 106.288 57.49 105.132 58.157 103.981 58.833 L 104.487 59.695 Z M 111.422 55.775 L 111.899 56.654 C 113.065 56.022 114.232 55.402 115.401 54.798 L 114.942 53.909 L 114.482 53.021 C 113.301 53.632 112.122 54.258 110.946 54.896 L 111.422 55.775 Z M 118.502 52.114 L 118.942 53.012 C 120.135 52.427 121.328 51.859 122.52 51.308 L 122.101 50.4 L 121.682 49.493 C 120.474 50.05 119.267 50.625 118.062 51.217 L 118.502 52.114 Z M 125.739 48.777 L 126.134 49.696 C 127.353 49.171 128.571 48.667 129.786 48.186 L 129.417 47.256 L 129.049 46.327 C 127.815 46.815 126.58 47.327 125.344 47.859 L 125.739 48.777 Z M 133.138 45.85 L 133.476 46.791 C 134.728 46.341 135.975 45.918 137.217 45.522 L 136.914 44.569 L 136.61 43.616 C 135.344 44.02 134.074 44.451 132.8 44.909 L 133.138 45.85 Z M 140.737 43.436 L 141.001 44.4 C 142.283 44.049 143.558 43.731 144.823 43.447 L 144.605 42.471 L 144.386 41.495 C 143.088 41.786 141.783 42.112 140.473 42.471 L 140.737 43.436 Z M 148.514 41.701 L 148.68 42.687 C 149.987 42.466 151.283 42.285 152.566 42.147 L 152.459 41.153 L 152.352 40.159 C 151.027 40.301 149.692 40.487 148.347 40.715 L 148.514 41.701 Z M 156.431 40.862 L 156.468 41.861 C 157.119 41.837 157.767 41.824 158.41 41.824 L 158.41 40.824 L 158.41 39.824 C 157.741 39.824 157.068 39.837 156.393 39.863 L 156.431 40.862 Z M 158.41 40.824 L 158.41 41.824 C 159.094 41.824 159.772 41.836 160.444 41.858 L 160.477 40.858 L 160.511 39.859 C 159.816 39.836 159.116 39.824 158.41 39.824 L 158.41 40.824 Z M 164.568 41.132 L 164.467 42.127 C 165.824 42.264 167.154 42.446 168.461 42.67 L 168.63 41.684 L 168.798 40.698 C 167.447 40.467 166.071 40.279 164.668 40.137 L 164.568 41.132 Z M 172.644 42.513 L 172.409 43.484 C 173.727 43.804 175.022 44.165 176.294 44.564 L 176.593 43.61 L 176.893 42.656 C 175.579 42.244 174.242 41.871 172.879 41.541 L 172.644 42.513 Z M 180.466 44.961 L 180.107 45.895 C 181.372 46.381 182.615 46.903 183.839 47.458 L 184.251 46.547 L 184.664 45.636 C 183.407 45.066 182.128 44.529 180.825 44.028 L 180.466 44.961 Z M 187.941 48.34 L 187.481 49.227 C 188.684 49.851 189.868 50.503 191.037 51.179 L 191.538 50.313 L 192.039 49.448 C 190.845 48.757 189.634 48.09 188.402 47.452 L 187.941 48.34 Z M 195.045 52.441 L 194.51 53.286 C 195.657 54.012 196.789 54.759 197.91 55.522 L 198.472 54.695 L 199.035 53.868 C 197.899 53.095 196.748 52.336 195.58 51.596 L 195.045 52.441 Z M 201.833 57.05 L 201.249 57.862 C 202.356 58.658 203.452 59.466 204.54 60.281 L 205.14 59.481 L 205.739 58.68 C 204.643 57.859 203.536 57.044 202.417 56.239 L 201.833 57.05 Z M 208.408 61.962 L 207.799 62.755 C 208.886 63.589 209.966 64.426 211.042 65.259 L 211.654 64.469 L 212.267 63.679 C 211.191 62.845 210.107 62.006 209.017 61.169 L 208.408 61.962 Z M 214.9 66.979 L 214.29 67.771 C 215.383 68.613 216.474 69.446 217.565 70.266 L 218.166 69.467 L 218.767 68.667 C 217.684 67.853 216.599 67.025 215.51 66.187 L 214.9 66.979 Z M 221.469 71.901 L 220.885 72.713 C 222.009 73.523 223.137 74.313 224.27 75.078 L 224.83 74.25 L 225.389 73.421 C 224.276 72.669 223.164 71.89 222.053 71.09 L 221.469 71.901 Z M 228.276 76.479 L 227.751 77.33 C 228.938 78.063 230.135 78.762 231.344 79.421 L 231.823 78.543 L 232.302 77.666 C 231.127 77.025 229.961 76.344 228.801 75.628 L 228.276 76.479 Z M 235.483 80.39 L 235.063 81.298 C 236.333 81.885 237.619 82.423 238.923 82.905 L 239.27 81.967 L 239.616 81.029 C 238.365 80.567 237.128 80.049 235.902 79.483 L 235.483 80.39 Z M 243.176 83.212 L 242.918 84.178 C 244.265 84.539 245.634 84.836 247.028 85.061 L 247.188 84.073 L 247.347 83.086 C 246.023 82.872 244.72 82.59 243.435 82.246 L 243.176 83.212 Z M 251.258 84.511 L 251.204 85.51 C 251.902 85.548 252.607 85.567 253.317 85.567 L 253.317 84.567 L 253.317 83.567 C 252.643 83.567 251.974 83.549 251.312 83.513 L 251.258 84.511 Z M 253.317 84.567 L 253.317 85.567 C 253.998 85.567 254.676 85.564 255.351 85.557 L 255.342 84.557 L 255.333 83.558 C 254.664 83.564 253.992 83.567 253.317 83.567 L 253.317 84.567 Z M 259.379 84.489 L 259.403 85.489 C 260.763 85.456 262.113 85.414 263.455 85.366 L 263.419 84.366 L 263.383 83.367 C 262.048 83.415 260.706 83.456 259.354 83.489 L 259.379 84.489 Z M 267.456 84.207 L 267.499 85.206 C 268.85 85.149 270.195 85.088 271.536 85.029 L 271.491 84.03 L 271.447 83.031 C 270.105 83.09 268.762 83.15 267.414 83.208 L 267.456 84.207 Z M 275.528 83.854 L 275.57 84.853 C 276.914 84.797 278.256 84.745 279.599 84.7 L 279.565 83.7 L 279.532 82.701 C 278.182 82.746 276.834 82.799 275.487 82.855 L 275.528 83.854 Z M 283.605 83.59 L 283.625 84.589 C 284.961 84.562 286.301 84.545 287.646 84.541 L 287.643 83.541 L 287.64 82.541 C 286.281 82.545 284.93 82.562 283.584 82.59 L 283.605 83.59 Z M 291.683 83.572 L 291.664 84.571 C 292.994 84.596 294.332 84.637 295.679 84.697 L 295.724 83.698 L 295.768 82.699 C 294.402 82.639 293.047 82.597 291.702 82.572 L 291.683 83.572 Z M 299.753 83.933 L 299.68 84.93 C 300.999 85.026 302.33 85.142 303.674 85.28 L 303.777 84.286 L 303.879 83.291 C 302.514 83.15 301.164 83.033 299.825 82.935 L 299.753 83.933 Z M 307.792 84.764 L 307.657 85.755 C 308.964 85.932 310.285 86.132 311.622 86.358 L 311.788 85.372 L 311.955 84.386 C 310.596 84.157 309.254 83.953 307.926 83.773 L 307.792 84.764 Z M 315.755 86.107 L 315.557 87.087 C 316.845 87.348 318.149 87.633 319.469 87.944 L 319.699 86.971 L 319.928 85.997 C 318.587 85.681 317.262 85.392 315.953 85.127 L 315.755 86.107 Z M 323.614 87.959 L 323.355 88.924 C 324.624 89.265 325.908 89.631 327.211 90.023 L 327.499 89.066 L 327.788 88.108 C 326.466 87.71 325.162 87.339 323.874 86.993 L 323.614 87.959 Z M 331.35 90.286 L 331.034 91.235 C 332.281 91.65 333.544 92.089 334.824 92.553 L 335.165 91.613 L 335.506 90.673 C 334.209 90.203 332.929 89.758 331.665 89.337 L 331.35 90.286 Z M 338.944 93.04 L 338.579 93.971 C 339.803 94.451 341.043 94.955 342.299 95.483 L 342.686 94.561 L 343.074 93.639 C 341.803 93.105 340.548 92.595 339.309 92.109 L 338.944 93.04 Z M 346.394 96.168 L 345.986 97.081 C 347.19 97.619 348.409 98.179 349.643 98.762 L 350.07 97.858 L 350.497 96.954 C 349.251 96.365 348.019 95.799 346.802 95.255 L 346.394 96.168 Z M 353.717 99.626 L 353.273 100.521 C 354.45 101.106 355.642 101.712 356.848 102.339 L 357.31 101.452 L 357.771 100.565 C 356.554 99.932 355.351 99.321 354.162 98.73 L 353.717 99.626 Z M 360.868 103.341 L 360.392 104.22 C 360.985 104.541 361.581 104.867 362.18 105.199 L 362.664 104.323 L 363.147 103.448 C 362.543 103.114 361.942 102.785 361.345 102.462 L 360.868 103.341 Z M 362.664 104.323 L 362.18 105.199 C 362.769 105.524 363.35 105.848 363.923 106.171 L 364.414 105.299 L 364.905 104.428 C 364.327 104.103 363.741 103.776 363.147 103.448 L 362.664 104.323 Z M 367.812 107.248 L 367.307 108.111 C 368.459 108.785 369.576 109.451 370.662 110.111 L 371.182 109.257 L 371.701 108.402 C 370.606 107.736 369.478 107.064 368.316 106.385 L 367.812 107.248 Z M 374.538 111.34 L 374.002 112.185 C 375.136 112.903 376.233 113.614 377.294 114.315 L 377.845 113.481 L 378.397 112.647 C 377.325 111.938 376.218 111.221 375.073 110.495 L 374.538 111.34 Z M 381.105 115.686 L 380.536 116.509 C 381.641 117.273 382.704 118.026 383.729 118.768 L 384.316 117.958 L 384.902 117.148 C 383.866 116.398 382.791 115.636 381.674 114.864 L 381.105 115.686 Z M 387.474 120.299 L 386.87 121.096 C 387.941 121.908 388.968 122.706 389.955 123.489 L 390.576 122.706 L 391.198 121.923 C 390.2 121.13 389.162 120.323 388.078 119.502 L 387.474 120.299 Z M 393.624 125.179 L 392.985 125.949 C 394.029 126.814 395.027 127.66 395.986 128.487 L 396.639 127.729 L 397.292 126.972 C 396.325 126.138 395.317 125.284 394.262 124.409 L 393.624 125.179 Z M 399.597 130.319 L 398.933 131.067 C 399.946 131.966 400.917 132.839 401.857 133.684 L 402.526 132.941 L 403.195 132.197 C 402.254 131.351 401.279 130.475 400.26 129.571 L 399.597 130.319 Z M 405.454 135.565 L 404.79 136.313 C 405.806 137.217 406.798 138.084 407.778 138.913 L 408.424 138.15 L 409.07 137.387 C 408.107 136.572 407.129 135.716 406.118 134.818 L 405.454 135.565 Z M 411.48 140.622 L 410.872 141.416 C 411.946 142.238 413.027 143.012 414.138 143.736 L 414.684 142.898 L 415.23 142.06 C 414.168 141.368 413.128 140.624 412.088 139.828 L 411.48 140.622 Z M 418.076 144.885 L 417.614 145.772 C 418.789 146.382 420.009 146.94 421.296 147.442 L 421.66 146.51 L 422.023 145.579 C 420.805 145.103 419.649 144.576 418.537 143.997 L 418.076 144.885 Z M 425.384 147.746 L 425.116 148.71 C 426.354 149.053 427.653 149.354 429.026 149.61 L 429.21 148.627 L 429.393 147.644 C 428.073 147.398 426.83 147.11 425.652 146.783 L 425.384 147.746 Z M 433.108 149.21 L 432.993 150.203 C 434.254 150.349 435.574 150.464 436.961 150.548 L 437.022 149.55 L 437.082 148.552 C 435.729 148.47 434.445 148.358 433.223 148.217 L 433.108 149.21 Z M 440.941 149.701 L 440.923 150.701 C 441.581 150.712 442.253 150.718 442.939 150.718 L 442.939 149.718 L 442.939 148.718 C 442.264 148.718 441.604 148.712 440.959 148.701 L 440.941 149.701 Z M 442.939 149.718 L 442.939 150.718 C 443.65 150.718 444.355 150.668 445.055 150.568 L 444.914 149.578 L 444.773 148.588 C 444.165 148.674 443.554 148.718 442.939 148.718 L 442.939 149.718 Z M 448.707 148.52 L 449.091 149.443 C 450.329 148.928 451.543 148.266 452.735 147.472 L 452.181 146.64 L 451.626 145.808 C 450.528 146.539 449.428 147.137 448.323 147.597 L 448.707 148.52 Z M 455.3 144.215 L 455.964 144.963 C 456.937 144.099 457.898 143.148 458.849 142.119 L 458.114 141.44 L 457.379 140.762 C 456.468 141.749 455.554 142.652 454.636 143.467 L 455.3 144.215 Z M 460.689 138.428 L 461.471 139.05 C 462.285 138.027 463.093 136.948 463.895 135.817 L 463.079 135.239 L 462.263 134.66 C 461.48 135.764 460.695 136.814 459.906 137.805 L 460.689 138.428 Z M 465.297 131.956 L 466.137 132.499 C 466.839 131.412 467.538 130.286 468.233 129.126 L 467.375 128.612 L 466.517 128.098 C 465.833 129.241 465.146 130.347 464.457 131.413 L 465.297 131.956 Z M 469.371 125.169 L 470.243 125.659 C 470.883 124.52 471.52 123.353 472.156 122.161 L 471.273 121.69 L 470.391 121.22 C 469.762 122.401 469.131 123.555 468.499 124.679 L 469.371 125.169 Z M 473.096 118.191 L 473.987 118.644 C 474.585 117.47 475.182 116.274 475.777 115.059 L 474.879 114.618 L 473.981 114.178 C 473.39 115.385 472.798 116.572 472.205 117.737 L 473.096 118.191 Z M 476.588 111.074 L 477.491 111.502 C 478.055 110.314 478.618 109.111 479.18 107.893 L 478.272 107.474 L 477.364 107.055 C 476.804 108.267 476.245 109.464 475.684 110.645 L 476.588 111.074 Z M 479.914 103.874 L 480.825 104.285 C 481.365 103.088 481.905 101.879 482.444 100.66 L 481.529 100.256 L 480.615 99.851 C 480.077 101.066 479.54 102.27 479.002 103.462 L 479.914 103.874 Z M 483.124 96.623 L 484.041 97.022 C 484.565 95.818 485.09 94.606 485.614 93.387 L 484.696 92.992 L 483.777 92.597 C 483.254 93.813 482.73 95.022 482.207 96.224 L 483.124 96.623 Z M 486.26 89.343 L 487.179 89.735 C 487.695 88.526 488.212 87.312 488.729 86.093 L 487.808 85.703 L 486.887 85.312 C 486.371 86.529 485.855 87.743 485.34 88.95 L 486.26 89.343 Z M 489.356 82.049 L 490.277 82.438 C 490.79 81.225 491.304 80.009 491.818 78.793 L 490.897 78.403 L 489.976 78.014 C 489.461 79.231 488.948 80.446 488.435 81.659 L 489.356 82.049 Z M 492.442 74.753 L 493.363 75.143 C 493.878 73.927 494.395 72.712 494.912 71.498 L 493.992 71.106 L 493.072 70.714 C 492.554 71.929 492.037 73.146 491.522 74.362 L 492.442 74.753 Z M 495.549 67.466 L 496.468 67.861 C 496.991 66.645 497.514 65.431 498.04 64.222 L 497.122 63.823 L 496.205 63.425 C 495.679 64.637 495.154 65.853 494.631 67.071 L 495.549 67.466 Z M 498.707 60.199 L 499.622 60.602 C 500.156 59.388 500.692 58.18 501.23 56.978 L 500.317 56.57 L 499.405 56.161 C 498.865 57.367 498.327 58.579 497.792 59.796 L 498.707 60.199 Z M 501.946 52.966 L 502.856 53.381 C 503.407 52.173 503.961 50.974 504.516 49.785 L 503.61 49.362 L 502.704 48.938 C 502.146 50.133 501.59 51.338 501.036 52.55 L 501.946 52.966 Z M 505.303 45.783 L 506.205 46.216 C 506.779 45.019 507.355 43.834 507.934 42.663 L 507.038 42.22 L 506.142 41.777 C 505.559 42.956 504.979 44.147 504.402 45.351 L 505.303 45.783 Z M 508.821 38.676 L 509.711 39.131 C 510.314 37.953 510.92 36.791 511.53 35.647 L 510.647 35.177 L 509.764 34.707 C 509.15 35.861 508.538 37.033 507.931 38.22 L 508.821 38.676 Z M 512.552 31.679 L 513.425 32.166 C 514.069 31.011 514.716 29.878 515.366 28.768 L 514.504 28.262 L 513.641 27.756 C 512.982 28.88 512.328 30.026 511.678 31.192 L 512.552 31.679 Z M 516.563 24.851 L 517.412 25.379 C 518.117 24.246 518.826 23.143 519.54 22.071 L 518.707 21.517 L 517.875 20.963 C 517.149 22.053 516.429 23.174 515.714 24.322 L 516.563 24.851 Z M 520.943 18.287 L 521.754 18.871 C 522.541 17.779 523.334 16.726 524.133 15.716 L 523.349 15.096 L 522.565 14.475 C 521.746 15.51 520.935 16.587 520.131 17.702 L 520.943 18.287 Z M 525.89 12.054 L 526.639 12.717 C 527.518 11.724 528.403 10.785 529.296 9.905 L 528.594 9.193 L 527.892 8.481 C 526.964 9.396 526.047 10.368 525.141 11.392 L 525.89 12.054 Z M 531.522 6.535 L 532.16 7.304 C 533.185 6.454 534.219 5.683 535.261 4.995 L 534.711 4.16 L 534.16 3.325 C 533.051 4.057 531.959 4.872 530.883 5.765 L 531.522 6.535 Z M 538.153 2.204 L 538.584 3.106 C 539.75 2.549 540.927 2.098 542.117 1.759 L 541.843 0.797 L 541.568 -0.164 C 540.264 0.208 538.982 0.7 537.722 1.301 L 538.153 2.204 Z M 545.717 0.077 L 545.804 1.073 C 546.429 1.018 547.059 0.994 547.693 1.001 L 547.705 0.001 L 547.717 -0.999 C 547.016 -1.007 546.32 -0.98 545.63 -0.92 L 545.717 0.077 Z M 547.705 0.001 L 547.705 1.001 C 548.322 1.001 548.94 1.033 549.556 1.095 L 549.657 0.1 L 549.757 -0.895 C 549.075 -0.964 548.391 -0.999 547.705 -0.999 L 547.705 0.001 Z M 553.49 0.855 L 553.211 1.815 C 554.383 2.157 555.557 2.604 556.729 3.149 L 557.151 2.242 L 557.573 1.335 C 556.316 0.751 555.048 0.268 553.77 -0.105 L 553.49 0.855 Z M 560.58 4.105 L 560.053 4.955 C 561.101 5.605 562.147 6.329 563.191 7.122 L 563.796 6.326 L 564.401 5.53 C 563.312 4.702 562.214 3.942 561.107 3.255 L 560.58 4.105 Z M 566.816 8.813 L 566.152 9.561 C 567.091 10.392 568.025 11.276 568.956 12.207 L 569.663 11.5 L 570.37 10.793 C 569.414 9.836 568.45 8.925 567.479 8.064 L 566.816 8.813 Z M 572.36 14.342 L 571.619 15.013 C 572.47 15.953 573.316 16.931 574.158 17.943 L 574.926 17.303 L 575.695 16.664 C 574.837 15.632 573.973 14.634 573.102 13.671 L 572.36 14.342 Z M 577.369 20.348 L 576.578 20.96 C 577.359 21.968 578.135 23.003 578.906 24.062 L 579.715 23.473 L 580.523 22.884 C 579.741 21.811 578.953 20.76 578.159 19.735 L 577.369 20.348 Z M 581.976 26.666 L 581.153 27.234 C 581.883 28.292 582.608 29.37 583.327 30.465 L 584.163 29.916 L 584.999 29.367 C 584.272 28.26 583.538 27.17 582.799 26.098 L 581.976 26.666 Z M 586.282 33.213 L 585.436 33.746 C 586.123 34.838 586.804 35.943 587.48 37.059 L 588.335 36.541 L 589.191 36.023 C 588.51 34.898 587.822 33.783 587.129 32.681 L 586.282 33.213 Z M 590.334 39.903 L 589.471 40.408 C 590.125 41.527 590.774 42.655 591.416 43.79 L 592.286 43.297 L 593.156 42.804 C 592.51 41.662 591.857 40.526 591.198 39.399 L 590.334 39.903 Z M 594.194 46.716 L 593.318 47.198 C 593.944 48.337 594.565 49.481 595.179 50.627 L 596.06 50.154 L 596.942 49.682 C 596.324 48.53 595.7 47.38 595.07 46.234 L 594.194 46.716 Z M 597.893 53.615 L 597.007 54.078 C 597.612 55.236 598.211 56.393 598.803 57.548 L 599.693 57.092 L 600.583 56.636 C 599.989 55.476 599.387 54.314 598.779 53.151 L 597.893 53.615 Z M 601.463 60.58 L 600.57 61.029 C 601.158 62.198 601.738 63.362 602.311 64.52 L 603.207 64.077 L 604.103 63.634 C 603.529 62.472 602.947 61.304 602.357 60.131 L 601.463 60.58 Z M 604.935 67.597 L 604.036 68.035 C 604.614 69.22 605.183 70.395 605.743 71.558 L 606.644 71.123 L 607.545 70.689 C 606.983 69.524 606.413 68.347 605.834 67.158 L 604.935 67.597 Z M 608.336 74.654 L 607.434 75.084 C 608.004 76.278 608.564 77.456 609.113 78.613 L 610.017 78.184 L 610.92 77.756 C 610.37 76.597 609.81 75.419 609.239 74.223 L 608.336 74.654 Z M 611.689 81.715 L 610.785 82.143 C 611.356 83.347 611.914 84.525 612.458 85.673 L 613.362 85.244 L 614.265 84.815 C 613.721 83.669 613.164 82.492 612.593 81.287 L 611.689 81.715 Z M 615.043 88.773 L 614.141 89.205 C 614.728 90.43 615.297 91.61 615.848 92.741 L 616.747 92.302 L 617.646 91.864 C 617.097 90.739 616.53 89.563 615.945 88.341 L 615.043 88.773 Z M 618.49 95.825 L 617.598 96.275 C 618.232 97.534 618.839 98.709 619.417 99.787 L 620.299 99.314 L 621.18 98.842 C 620.612 97.782 620.013 96.623 619.383 95.375 L 618.49 95.825 Z M 622.208 102.686 L 621.354 103.206 C 621.731 103.826 622.094 104.391 622.442 104.893 L 623.264 104.323 L 624.086 103.753 C 623.765 103.291 623.424 102.761 623.062 102.167 L 622.208 102.686 Z M 623.264 104.323 L 622.442 104.893 C 622.817 105.433 623.219 105.995 623.649 106.579 L 624.454 105.985 L 625.259 105.392 C 624.84 104.824 624.449 104.277 624.086 103.753 L 623.264 104.323 Z M 626.959 109.225 L 626.181 109.854 C 626.999 110.867 627.882 111.922 628.828 113.011 L 629.583 112.355 L 630.338 111.7 C 629.407 110.628 628.539 109.591 627.737 108.597 L 626.959 109.225 Z M 632.328 115.415 L 631.594 116.095 C 632.496 117.07 633.443 118.064 634.433 119.073 L 635.147 118.373 L 635.861 117.673 C 634.884 116.677 633.951 115.697 633.062 114.736 L 632.328 115.415 Z M 638.062 121.261 L 637.368 121.981 C 638.338 122.916 639.342 123.859 640.381 124.806 L 641.055 124.068 L 641.729 123.329 C 640.704 122.394 639.713 121.463 638.756 120.541 L 638.062 121.261 Z M 644.113 126.784 L 643.459 127.541 C 644.483 128.425 645.535 129.311 646.614 130.195 L 647.248 129.421 L 647.881 128.647 C 646.815 127.775 645.777 126.901 644.767 126.028 L 644.113 126.784 Z M 650.454 131.973 L 649.842 132.764 C 650.917 133.596 652.017 134.424 653.14 135.244 L 653.73 134.437 L 654.32 133.629 C 653.212 132.82 652.127 132.003 651.066 131.182 L 650.454 131.973 Z M 657.074 136.809 L 656.507 137.632 C 657.63 138.405 658.775 139.17 659.941 139.923 L 660.483 139.084 L 661.026 138.244 C 659.877 137.501 658.748 136.747 657.641 135.985 L 657.074 136.809 Z M 663.958 141.258 L 663.44 142.113 C 664.609 142.821 665.798 143.516 667.005 144.196 L 667.496 143.325 L 667.987 142.454 C 666.798 141.784 665.628 141.099 664.476 140.402 L 663.958 141.258 Z M 671.096 145.282 L 670.632 146.168 C 671.845 146.803 673.075 147.421 674.322 148.023 L 674.756 147.122 L 675.191 146.221 C 673.964 145.63 672.753 145.021 671.559 144.396 L 671.096 145.282 Z M 678.476 148.84 L 678.072 149.755 C 679.326 150.308 680.595 150.843 681.88 151.357 L 682.252 150.429 L 682.624 149.501 C 681.361 148.995 680.113 148.469 678.88 147.925 L 678.476 148.84 Z M 686.082 151.884 L 685.744 152.825 C 687.035 153.289 688.34 153.731 689.66 154.151 L 689.963 153.198 L 690.266 152.245 C 688.97 151.833 687.689 151.399 686.421 150.943 L 686.082 151.884 Z M 693.889 154.365 L 693.623 155.329 C 694.946 155.694 696.281 156.036 697.63 156.352 L 697.858 155.379 L 698.087 154.405 C 696.764 154.095 695.454 153.76 694.156 153.401 L 693.889 154.365 Z M 701.864 156.234 L 701.675 157.216 C 703.022 157.476 704.382 157.709 705.753 157.915 L 705.901 156.926 L 706.05 155.937 C 704.706 155.735 703.374 155.506 702.053 155.252 L 701.864 156.234 Z M 709.963 157.449 L 709.856 158.444 C 711.22 158.59 712.595 158.709 713.979 158.799 L 714.044 157.801 L 714.108 156.803 C 712.752 156.715 711.406 156.599 710.07 156.455 L 709.963 157.449 Z M 718.136 157.978 L 718.114 158.977 C 718.805 158.992 719.497 159 720.192 159 L 720.192 158 L 720.192 157 C 719.512 157 718.833 156.993 718.158 156.978 L 718.136 157.978 Z M 720.192 158 L 720.192 159 C 720.879 159 721.565 158.978 722.249 158.936 L 722.187 157.938 L 722.125 156.94 C 721.482 156.98 720.837 157 720.192 157 L 720.192 158 Z M 726.141 157.455 L 726.32 158.439 C 727.654 158.197 728.983 157.879 730.306 157.49 L 730.024 156.53 L 729.742 155.571 C 728.483 155.941 727.224 156.242 725.963 156.471 L 726.141 157.455 Z M 733.804 155.22 L 734.174 156.149 C 735.414 155.654 736.649 155.101 737.879 154.493 L 737.436 153.596 L 736.993 152.7 C 735.807 153.286 734.621 153.817 733.433 154.291 L 733.804 155.22 Z M 740.94 151.708 L 741.443 152.573 C 742.592 151.903 743.738 151.189 744.88 150.432 L 744.327 149.599 L 743.775 148.765 C 742.663 149.502 741.551 150.196 740.437 150.844 L 740.94 151.708 Z M 747.61 147.303 L 748.202 148.108 C 749.27 147.323 750.334 146.503 751.396 145.651 L 750.771 144.871 L 750.145 144.091 C 749.103 144.926 748.06 145.729 747.017 146.497 L 747.61 147.303 Z M 753.829 142.324 L 754.482 143.082 C 755.488 142.214 756.492 141.32 757.493 140.402 L 756.818 139.665 L 756.142 138.928 C 755.154 139.833 754.165 140.714 753.176 141.567 L 753.829 142.324 Z M 759.729 136.923 L 760.423 137.643 C 761.374 136.725 762.322 135.787 763.269 134.83 L 762.558 134.127 L 761.848 133.423 C 760.911 134.37 759.973 135.297 759.034 136.204 L 759.729 136.923 Z M 765.346 131.256 L 766.07 131.946 C 766.984 130.986 767.898 130.01 768.81 129.021 L 768.075 128.343 L 767.34 127.665 C 766.434 128.647 765.528 129.615 764.622 130.566 L 765.346 131.256 Z M 770.756 125.393 L 771.501 126.061 C 772.39 125.07 773.277 124.067 774.164 123.055 L 773.412 122.396 L 772.659 121.737 C 771.777 122.744 770.895 123.741 770.012 124.726 L 770.756 125.393 Z M 776.02 119.387 L 776.779 120.038 C 777.645 119.03 778.51 118.013 779.374 116.99 L 778.61 116.345 L 777.847 115.7 C 776.985 116.719 776.124 117.731 775.262 118.735 L 776.02 119.387 Z M 781.178 113.286 L 781.946 113.926 C 782.797 112.906 783.647 111.881 784.497 110.852 L 783.726 110.215 L 782.955 109.579 C 782.107 110.605 781.259 111.628 780.41 112.645 L 781.178 113.286 Z M 786.266 107.13 L 787.039 107.764 C 787.882 106.737 788.725 105.707 789.568 104.676 L 788.794 104.043 L 788.019 103.41 C 787.177 104.44 786.335 105.469 785.493 106.496 L 786.266 107.13 Z M 791.32 100.95 L 792.095 101.583 C 792.937 100.552 793.779 99.521 794.62 98.493 L 793.846 97.86 L 793.072 97.226 C 792.23 98.255 791.388 99.286 790.546 100.318 L 791.32 100.95 Z M 796.38 94.771 L 797.152 95.406 C 797.997 94.378 798.842 93.354 799.687 92.335 L 798.917 91.697 L 798.147 91.059 C 797.3 92.08 796.454 93.106 795.607 94.135 L 796.38 94.771 Z M 801.477 88.624 L 802.244 89.266 C 803.1 88.244 803.957 87.229 804.813 86.222 L 804.051 85.574 L 803.289 84.926 C 802.429 85.938 801.57 86.956 800.711 87.981 L 801.477 88.624 Z M 806.648 82.545 L 807.405 83.199 C 808.28 82.188 809.155 81.186 810.03 80.197 L 809.281 79.534 L 808.532 78.872 C 807.652 79.867 806.772 80.874 805.892 81.89 L 806.648 82.545 Z M 811.935 76.57 L 812.676 77.243 C 813.577 76.25 814.478 75.271 815.379 74.308 L 814.649 73.625 L 813.919 72.942 C 813.01 73.913 812.102 74.899 811.195 75.898 L 811.935 76.57 Z M 817.403 70.733 L 818.121 71.429 C 819.048 70.474 819.975 69.538 820.902 68.622 L 820.199 67.911 L 819.496 67.199 C 818.558 68.126 817.621 69.072 816.686 70.037 L 817.403 70.733 Z M 823.087 65.125 L 823.772 65.854 C 824.747 64.937 825.723 64.046 826.698 63.181 L 826.035 62.433 L 825.372 61.684 C 824.381 62.563 823.391 63.468 822.402 64.397 L 823.087 65.125 Z M 829.051 59.849 L 829.688 60.619 C 830.723 59.763 831.759 58.94 832.794 58.153 L 832.189 57.357 L 831.584 56.561 C 830.525 57.366 829.468 58.206 828.413 59.078 L 829.051 59.849 Z M 835.429 55.011 L 835.995 55.835 C 837.094 55.08 838.194 54.368 839.293 53.702 L 838.775 52.847 L 838.257 51.992 C 837.123 52.679 835.991 53.412 834.863 54.187 L 835.429 55.011 Z M 842.243 50.9 L 842.702 51.789 C 843.882 51.179 845.063 50.626 846.244 50.133 L 845.858 49.21 L 845.473 48.288 C 844.239 48.803 843.01 49.379 841.784 50.012 L 842.243 50.9 Z M 849.615 47.844 L 849.911 48.799 C 851.164 48.412 852.418 48.096 853.673 47.856 L 853.485 46.873 L 853.296 45.891 C 851.966 46.146 850.64 46.48 849.32 46.888 L 849.615 47.844 Z M 857.435 46.363 L 857.5 47.361 C 858.143 47.319 858.785 47.298 859.428 47.298 L 859.428 46.298 L 859.428 45.298 C 858.741 45.298 858.055 45.321 857.369 45.366 L 857.435 46.363 Z M 859.428 46.298 L 859.428 47.298 C 860.102 47.298 860.77 47.317 861.432 47.354 L 861.489 46.356 L 861.546 45.358 C 860.846 45.318 860.14 45.298 859.428 45.298 L 859.428 46.298 Z M 865.544 46.817 L 865.375 47.803 C 866.686 48.028 867.976 48.326 869.245 48.693 L 869.523 47.732 L 869.8 46.771 C 868.462 46.385 867.1 46.07 865.713 45.832 L 865.544 46.817 Z M 873.381 49.072 L 873.005 49.998 C 874.229 50.496 875.436 51.057 876.626 51.677 L 877.088 50.791 L 877.55 49.904 C 876.308 49.256 875.044 48.668 873.757 48.145 L 873.381 49.072 Z M 880.629 52.834 L 880.094 53.679 C 881.213 54.387 882.317 55.146 883.407 55.953 L 884.002 55.149 L 884.596 54.345 C 883.47 53.511 882.326 52.725 881.164 51.989 L 880.629 52.834 Z M 887.214 57.686 L 886.571 58.452 C 887.589 59.307 888.595 60.201 889.591 61.132 L 890.274 60.401 L 890.956 59.67 C 889.937 58.718 888.904 57.8 887.857 56.92 L 887.214 57.686 Z M 893.194 63.255 L 892.48 63.955 C 893.414 64.909 894.34 65.892 895.258 66.901 L 895.997 66.228 L 896.737 65.555 C 895.804 64.529 894.862 63.528 893.908 62.555 L 893.194 63.255 Z M 898.7 69.297 L 897.94 69.946 C 898.813 70.968 899.68 72.012 900.54 73.073 L 901.317 72.443 L 902.094 71.814 C 901.223 70.74 900.346 69.684 899.461 68.647 L 898.7 69.297 Z M 903.86 75.652 L 903.07 76.265 C 903.898 77.332 904.721 78.413 905.54 79.506 L 906.34 78.906 L 907.14 78.306 C 906.315 77.206 905.486 76.116 904.65 75.039 L 903.86 75.652 Z M 908.768 82.193 L 907.96 82.782 C 908.759 83.878 909.555 84.983 910.347 86.092 L 911.161 85.511 L 911.975 84.93 C 911.179 83.816 910.38 82.706 909.576 81.604 L 908.768 82.193 Z M 913.528 88.849 L 912.71 89.425 C 913.495 90.538 914.277 91.654 915.058 92.77 L 915.878 92.197 L 916.697 91.624 C 915.915 90.507 915.131 89.389 914.345 88.273 L 913.528 88.849 Z M 918.222 95.549 L 917.403 96.122 C 918.187 97.243 918.971 98.362 919.755 99.475 L 920.573 98.899 L 921.39 98.323 C 920.608 97.212 919.825 96.096 919.041 94.975 L 918.222 95.549 Z M 922.94 102.237 L 922.126 102.818 C 922.924 103.936 923.723 105.045 924.524 106.143 L 925.332 105.553 L 926.14 104.964 C 925.344 103.872 924.548 102.769 923.753 101.656 L 922.94 102.237 Z M 927.761 108.837 L 926.962 109.437 C 927.791 110.541 928.624 111.631 929.46 112.702 L 930.249 112.087 L 931.037 111.471 C 930.209 110.411 929.384 109.331 928.561 108.236 L 927.761 108.837 Z M 932.806 115.286 L 932.032 115.92 C 932.913 116.995 933.799 118.046 934.691 119.072 L 935.445 118.415 L 936.199 117.759 C 935.321 116.75 934.448 115.713 933.579 114.653 L 932.806 115.286 Z M 938.185 121.453 L 937.455 122.137 C 938.41 123.156 939.374 124.143 940.347 125.091 L 941.045 124.375 L 941.743 123.659 C 940.793 122.733 939.851 121.769 938.914 120.77 L 938.185 121.453 Z M 944.048 127.149 L 943.391 127.903 C 944.451 128.827 945.524 129.704 946.612 130.528 L 947.216 129.731 L 947.82 128.934 C 946.772 128.139 945.734 127.292 944.705 126.395 L 944.048 127.149 Z M 950.571 132.065 L 950.036 132.91 C 951.231 133.667 952.444 134.358 953.678 134.976 L 954.126 134.082 L 954.574 133.188 C 953.404 132.602 952.249 131.945 951.106 131.221 L 950.571 132.065 Z M 957.878 135.697 L 957.538 136.638 C 958.864 137.116 960.214 137.507 961.589 137.805 L 961.8 136.827 L 962.011 135.85 C 960.727 135.572 959.463 135.206 958.217 134.756 L 957.878 135.697 Z M 965.838 137.407 L 965.766 138.405 C 966.47 138.455 967.179 138.481 967.894 138.481 L 967.894 137.481 L 967.894 136.481 C 967.227 136.481 966.565 136.457 965.91 136.41 L 965.838 137.407 Z M 967.894 137.481 L 967.894 138.481 C 968.56 138.481 969.215 138.473 969.861 138.456 L 969.835 137.457 L 969.81 136.457 C 969.182 136.473 968.543 136.481 967.894 136.481 L 967.894 137.481 Z M 973.65 137.259 L 973.73 138.256 C 975.06 138.15 976.344 138.008 977.586 137.832 L 977.446 136.842 L 977.306 135.852 C 976.105 136.022 974.862 136.159 973.571 136.262 L 973.65 137.259 Z M 981.202 136.182 L 981.409 137.16 C 982.716 136.884 983.972 136.568 985.181 136.217 L 984.902 135.257 L 984.623 134.297 C 983.462 134.634 982.254 134.937 980.995 135.204 L 981.202 136.182 Z M 988.538 134.045 L 988.891 134.981 C 990.138 134.509 991.332 133.999 992.479 133.456 L 992.051 132.552 L 991.623 131.648 C 990.523 132.169 989.379 132.658 988.184 133.11 L 988.538 134.045 Z M 995.437 130.781 L 995.934 131.649 C 997.081 130.991 998.18 130.302 999.238 129.589 L 998.68 128.76 L 998.121 127.93 C 997.099 128.619 996.041 129.282 994.939 129.914 L 995.437 130.781 Z M 1001.782 126.527 L 1002.39 127.321 C 1003.426 126.528 1004.427 125.718 1005.402 124.899 L 1004.759 124.133 L 1004.116 123.367 C 1003.159 124.171 1002.182 124.962 1001.174 125.733 L 1001.782 126.527 Z M 1007.65 121.629 L 1008.314 122.376 C 1009.276 121.522 1010.225 120.664 1011.164 119.819 L 1010.494 119.076 L 1009.825 118.333 C 1008.882 119.182 1007.941 120.032 1006.986 120.881 L 1007.65 121.629 Z M 1013.348 116.532 L 1014.006 117.285 C 1014.963 116.448 1015.922 115.631 1016.897 114.841 L 1016.267 114.064 L 1015.638 113.287 C 1014.638 114.097 1013.658 114.932 1012.69 115.779 L 1013.348 116.532 Z M 1019.304 111.743 L 1019.885 112.557 C 1020.898 111.833 1021.936 111.146 1023.011 110.504 L 1022.499 109.646 L 1021.986 108.787 C 1020.859 109.46 1019.774 110.178 1018.722 110.929 L 1019.304 111.743 Z M 1025.866 107.848 L 1026.292 108.753 C 1027.393 108.234 1028.537 107.764 1029.734 107.349 L 1029.407 106.404 L 1029.08 105.459 C 1027.813 105.898 1026.603 106.396 1025.44 106.943 L 1025.866 107.848 Z M 1033.072 105.35 L 1033.297 106.324 C 1034.468 106.054 1035.691 105.833 1036.971 105.668 L 1036.844 104.677 L 1036.717 103.685 C 1035.371 103.858 1034.083 104.09 1032.847 104.376 L 1033.072 105.35 Z M 1040.636 104.361 L 1040.676 105.361 C 1041.294 105.336 1041.925 105.323 1042.569 105.323 L 1042.569 104.323 L 1042.569 103.323 C 1041.899 103.323 1041.241 103.336 1040.596 103.362 L 1040.636 104.361 Z"} fill="currentColor" fillRule="nonzero" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 174,
+                top: 264,
+                width: 18,
+                height: 18,
+                overflow: "hidden",
+              }}>
+                <svg width={18} height={18} viewBox="0 0 18 18" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 18,
+                  height: 18,
+                  filter: "drop-shadow(0px 2px 6px rgba(0,0,0,0.1271))",
+                  color: "rgb(255,255,255)",
+                }}>
+                  <path d={"M 9 18 C 13.971 18 18 13.971 18 9 C 18 4.029 13.971 0 9 0 C 4.029 0 0 4.029 0 9 C 0 13.971 4.029 18 9 18 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={18} height={18} viewBox="0 0 18 18" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 18,
+                  height: 18,
+                  opacity: 0.545,
+                  color: "rgb(150,152,214)",
+                }}>
+                  <path d={"M 9 18 C 13.971 18 18 13.971 18 9 C 18 4.029 13.971 0 9 0 C 4.029 0 0 4.029 0 9 C 0 13.971 4.029 18 9 18 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <svg width={10} height={10} viewBox="0 0 10 10" fill="none" style={{
+                  position: "absolute",
+                  left: 4,
+                  top: 4,
+                  width: 10,
+                  height: 10,
+                  color: "rgb(150,152,214)",
+                }}>
+                  <path d={"M 5 10 C 7.761 10 10 7.761 10 5 C 10 2.239 7.761 0 5 0 C 2.239 0 0 2.239 0 5 C 0 7.761 2.239 10 5 10 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 29.24,
+                top: 333,
+                width: 306.519,
+                height: 21,
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 21,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Jan</span>
+                <span style={{
+                  position: "absolute",
+                  left: 67.555,
+                  top: 0,
+                  width: 23,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Feb</span>
+                <span style={{
+                  position: "absolute",
+                  left: 142.169,
+                  top: 0,
+                  width: 25,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Mar</span>
+                <span style={{
+                  position: "absolute",
+                  left: 215.773,
+                  top: 0,
+                  width: 23,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Apr</span>
+                <span style={{
+                  position: "absolute",
+                  left: 284.337,
+                  top: 0,
+                  width: 22,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Jun</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 27.224,
+                top: 21,
+                width: 312.569,
+                height: 40,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 273,
+                  top: 0,
+                  width: 40,
+                  height: 40,
+                  overflow: "hidden",
+                }}>
+                  <div style={{
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    width: 40,
+                    height: 40,
+                    overflow: "hidden",
+                  }}>
+                    <div style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: 40,
+                      height: 40,
+                      opacity: 0.1,
+                      borderRadius: 6,
+                      backgroundColor: "rgb(129,129,165)",
+                    }} />
+                    <span style={{
+                      position: "absolute",
+                      left: 11,
+                      top: 11,
+                      width: 18,
+                      height: 18,
+                      fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                      fontWeight: 400,
+                      fontSize: 18,
+                      textAlign: "center",
+                      whiteSpace: "nowrap",
+                      lineHeight: "100%",
+                      color: "rgb(129,129,165)",
+                    }}></span>
+                  </div>
+                </div>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 7,
+                  width: 129,
+                  height: 27,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 18,
+                  whiteSpace: "nowrap",
+                  lineHeight: "27px",
+                  color: "rgb(28,29,33)",
+                }}>Planned Income</span>
+              </div>
+            </div>
+          </div>
+          <div style={{
+            position: "relative",
+            height: 375,
+            flexShrink: 0,
+            alignSelf: "stretch",
+          }}>
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: 1152,
+              height: 375,
+              borderRadius: 10,
+              backgroundColor: "rgb(255,255,255)",
+              boxShadow: "0 0 0 1px rgb(240,240,243)",
+            }} />
+            <div style={{
+              position: "absolute",
+              left: 0,
+              top: 80,
+              width: 1152,
+              height: 48,
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 1152,
+                height: 48,
+                backgroundColor: "rgba(245,245,250,0.4)",
+              }} />
+              <span style={{
+                position: "absolute",
+                left: 26,
+                top: 14,
+                width: 43,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Product</span>
+              <span style={{
+                position: "absolute",
+                left: 254,
+                top: 14,
+                width: 53,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Customer</span>
+              <span style={{
+                position: "absolute",
+                left: 482,
+                top: 14,
+                width: 45,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Delivery</span>
+              <span style={{
+                position: "absolute",
+                left: 955,
+                top: 14,
+                width: 27,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Total</span>
+              <span style={{
+                position: "absolute",
+                left: 828,
+                top: 14,
+                width: 47,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Shipping</span>
+              <span style={{
+                position: "absolute",
+                left: 1092,
+                top: 14,
+                width: 34,
+                height: 18,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                whiteSpace: "nowrap",
+                lineHeight: "18px",
+                color: "rgb(129,129,165)",
+              }}>Status</span>
+            </div>
+            <div style={{
+              position: "absolute",
+              left: 862,
+              top: 22,
+              width: 266,
+              height: 40,
+              overflow: "hidden",
+            }}>
+              <div style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 62,
+                height: 40,
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 62,
+                  height: 40,
+                  borderRadius: 8,
+                  backgroundColor: "rgb(255,255,255)",
+                  boxShadow: "inset 0 0 0 1px rgb(236,236,242)",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 17.5,
+                  top: 10,
+                  width: 26,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Day</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 226,
+                top: 0,
+                width: 40,
+                height: 40,
+                overflow: "hidden",
+              }}>
+                <div style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 40,
+                  height: 40,
+                  opacity: 0.1,
+                  borderRadius: 6,
+                  backgroundColor: "rgb(129,129,165)",
+                }} />
+                <span style={{
+                  position: "absolute",
+                  left: 11,
+                  top: 11,
+                  width: 18,
+                  height: 18,
+                  fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 18,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "100%",
+                  color: "rgb(129,129,165)",
+                }}></span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 70,
+                top: 0,
+                width: 64,
+                height: 40,
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 12.432,
+                  top: 10,
+                  width: 38,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Week</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 142,
+                top: 0,
+                width: 76,
+                height: 40,
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 16.514,
+                  top: 10,
+                  width: 43,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(129,129,165)",
+                }}>Month</span>
+              </div>
+            </div>
+            <span style={{
+              position: "absolute",
+              left: 24,
+              top: 29,
+              width: 93,
+              height: 27,
+              fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+              fontWeight: 700,
+              fontSize: 18,
+              whiteSpace: "nowrap",
+              lineHeight: "27px",
+              color: "rgb(28,29,33)",
+            }}>Latest sales</span>
+            <div style={{
+              position: "absolute",
+              left: 25.162,
+              top: 146.789,
+              width: 1103,
+              height: 52,
+              overflow: "hidden",
+            }}>
+              <span style={{
+                position: "absolute",
+                left: 904.777,
+                top: 16,
+                width: 53,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>$118.00</span>
+              <span style={{
+                position: "absolute",
+                left: 805.277,
+                top: 16,
+                width: 44,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>$18.00</span>
+              <div style={{
+                position: "absolute",
+                left: 996.681,
+                top: 8,
+                width: 106,
+                height: 36,
+              }}>
+                <svg width={106} height={36} viewBox="0 0 106 36" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 106,
+                  height: 36,
+                  borderRadius: 8,
+                }}>
+                  <path d={"M 0 8 C 0 3.582 3.582 0 8 0 L 98 0 C 102.418 0 106 3.582 106 8 L 106 28 C 106 32.418 102.418 36 98 36 L 8 36 C 3.582 36 0 32.418 0 28 L 0 8 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <span style={{
+                  position: "absolute",
+                  left: 28,
+                  top: 7,
+                  width: 51,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(124,231,172)",
+                }}>Shipped</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 457,
+                top: 4,
+                width: 211,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 102,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>United Kingdom</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 214,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>193 Cole Plains Suite 649, 891203</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 230,
+                top: 4,
+                width: 164,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 99,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Rodney Cannon</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 165,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>rodney.cannon@gmail.com</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 73,
+                top: 4,
+                width: 93,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 84,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Macbook Pro</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 94,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>ID 10-3290-08</span>
+              </div>
+              <div className="fig-asset-a4f26e91ad61c867" style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 52,
+                height: 52,
+                borderRadius: 8,
+              }} />
+            </div>
+            <div style={{
+              position: "absolute",
+              left: 25.162,
+              top: 221.789,
+              width: 1103,
+              height: 52,
+              overflow: "hidden",
+            }}>
+              <span style={{
+                position: "absolute",
+                left: 904.777,
+                top: 16,
+                width: 53,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>$208.00</span>
+              <span style={{
+                position: "absolute",
+                left: 805.277,
+                top: 16,
+                width: 44,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>$28.00</span>
+              <div style={{
+                position: "absolute",
+                left: 996.681,
+                top: 8,
+                width: 106,
+                height: 36,
+              }}>
+                <svg width={106} height={36} viewBox="0 0 106 36" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 106,
+                  height: 36,
+                  borderRadius: 8,
+                }}>
+                  <path d={"M 0 8 C 0 3.582 3.582 0 8 0 L 98 0 C 102.418 0 106 3.582 106 8 L 106 28 C 106 32.418 102.418 36 98 36 L 8 36 C 3.582 36 0 32.418 0 28 L 0 8 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <span style={{
+                  position: "absolute",
+                  left: 19,
+                  top: 7,
+                  width: 68,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(244,190,94)",
+                }}>Processing</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 457,
+                top: 4,
+                width: 181,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 84,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>United States</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 181,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>619 Jeffrey Freeway Apt. 273</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 230,
+                top: 4,
+                width: 153,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 85,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Mike Franklin</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 153,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>mike.franklin@gmail.com</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 73,
+                top: 4,
+                width: 93,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 72,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Dell Laptop</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 94,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>ID 10-3456-18</span>
+              </div>
+              <div className="fig-asset-c5390a1f8a4290df" style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 52,
+                height: 52,
+                borderRadius: 8,
+              }} />
+            </div>
+            <div style={{
+              position: "absolute",
+              left: 25.162,
+              top: 295.732,
+              width: 1103,
+              height: 52,
+              overflow: "hidden",
+            }}>
+              <span style={{
+                position: "absolute",
+                left: 904.777,
+                top: 16,
+                width: 53,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>$118.00</span>
+              <span style={{
+                position: "absolute",
+                left: 805.277,
+                top: 16,
+                width: 44,
+                height: 21,
+                fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                lineHeight: "21px",
+                color: "rgb(28,29,33)",
+              }}>$18.00</span>
+              <div style={{
+                position: "absolute",
+                left: 996.681,
+                top: 8,
+                width: 106,
+                height: 36,
+              }}>
+                <svg width={106} height={36} viewBox="0 0 106 36" fill="none" style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 106,
+                  height: 36,
+                  borderRadius: 8,
+                }}>
+                  <path d={"M 0 8 C 0 3.582 3.582 0 8 0 L 98 0 C 102.418 0 106 3.582 106 8 L 106 28 C 106 32.418 102.418 36 98 36 L 8 36 C 3.582 36 0 32.418 0 28 L 0 8 Z"} fill="currentColor" fillRule="nonzero" />
+                </svg>
+                <span style={{
+                  position: "absolute",
+                  left: 19,
+                  top: 7,
+                  width: 68,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(244,190,94)",
+                }}>Processing</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 457,
+                top: 4,
+                width: 171,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 57,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Germany</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 173,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>200 Davis Estates Suite 621</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 230,
+                top: 4,
+                width: 153,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 86,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Louis Franklin</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 152,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>louis.franklin@gmail.com</span>
+              </div>
+              <div style={{
+                position: "absolute",
+                left: 73,
+                top: 4,
+                width: 93,
+                height: 43,
+                overflow: "hidden",
+              }}>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: 80,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>Macbook Air</span>
+                <span style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 22,
+                  width: 94,
+                  height: 21,
+                  fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: 14,
+                  whiteSpace: "nowrap",
+                  lineHeight: "21px",
+                  color: "rgb(28,29,33)",
+                }}>ID 10-3786-23</span>
+              </div>
+              <div className="fig-asset-1699429068dbd30f" style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: 52,
+                height: 52,
+                borderRadius: 8,
+              }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+export default Dashboard03;

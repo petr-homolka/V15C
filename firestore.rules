@@ -1,0 +1,189 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // === POMOCNÉ BEZPEČNOSTNÍ FUNKCE ===
+
+    // Ověřuje, zda je uživatel přihlášen
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Získá data přihlášeného uživatele z kolekce users
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Ověřuje, zda je uživatel interním zaměstnancem doprovázející organizace
+    function isStaff() {
+      return isAuthenticated() && getUserData().isStaff == true;
+    }
+
+    // Ověřuje, zda je přihlášený uživatel Superadmin platformy
+    function isSuperadmin() {
+      return isAuthenticated() && getUserData().role == 'superadmin';
+    }
+
+    // Ověřuje, zda má uživatel roli org_admin
+    function isOrgAdmin() {
+      return isAuthenticated() && getUserData().role == 'org_admin';
+    }
+
+    // Získá ID organizace aktuálně přihlášeného zaměstnance
+    function getOrgId() {
+      return getUserData().organizationId;
+    }
+
+    // Ověřuje, zda se ID organizace dokumentu shoduje s organizací uživatele
+    function sameOrg(docOrgId) {
+      return getOrgId() == docOrgId;
+    }
+
+    // Ověřuje, zda pěstoun patří k dané rodině
+    function isFosterForFamily(familyId) {
+      return isAuthenticated() && getUserData().role == 'pestoun' && getUserData().fosterFamilyId == familyId;
+    }
+
+    // Ověřuje, zda má externí spolupracovník aktivní grant pro přístup k dítěti
+    function hasActiveEpGrant(childId, permission) {
+      // TODO: Implementace kontroly grantů z external_participants/{epId}/grants/{grantId}
+      // Pro MVP: kontrolujeme existenci platného dokumentu v access/grants
+      return isAuthenticated() && getUserData().role == 'external';
+    }
+
+
+    // === PRAVIDLA PRO KOLEKCE ===
+
+    // 1. Globální konfigurace a balíčky (Superadmin správa, ostatní čtení)
+    match /global_packages/{packageId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperadmin();
+    }
+
+    // 2. Čítače pro generování UID (TT OOOO SSSSSS C)
+    match /counters/{counterId} {
+      // Povoleno číst a zapisovat pouze zaměstnancům stejné organizace pro zachování unikátnosti
+      allow read, write: if isStaff() && counterId.startsWith(getOrgId() + "_");
+    }
+
+    // 3. Organizace (Správa branding, terminology, respitRates)
+    match /organizations/{orgId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperadmin() || (isOrgAdmin() && sameOrg(orgId));
+
+      match /events/{eventId} {
+        allow read, write: if isStaff() && sameOrg(orgId);
+      }
+
+      match /codelists/{codeId} {
+        allow read: if isAuthenticated();
+        allow write: if isOrgAdmin() && sameOrg(orgId);
+      }
+
+      match /spvpp/{year} {
+        allow read, write: if isStaff() && sameOrg(orgId);
+
+        match /expenses/{expenseId} {
+          allow read: if isStaff() && sameOrg(orgId);
+          allow create: if isStaff() && sameOrg(orgId);
+          allow update, delete: if false; // Append-only audit
+        }
+      }
+    }
+
+    // 4. Uživatelé a profily
+    match /users/{uid} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperadmin() || (request.auth.uid == uid);
+
+      match /notifications/{notifId} {
+        allow read, write: if request.auth.uid == uid;
+      }
+    }
+
+    // 5. Pěstouni (Top-level Foster Persons)
+    match /fosterPersons/{fosterId} {
+      allow read: if isStaff() || (isAuthenticated() && getUserData().fosterPersonRef == 'fosterPersons/' + fosterId);
+      allow write: if isStaff();
+
+      match /courses/{courseId} {
+        allow read: if isStaff() || (isAuthenticated() && getUserData().fosterPersonRef == 'fosterPersons/' + fosterId);
+        allow create: if isStaff();
+        allow update, delete: if false; // Zákaz mazání historie vzdělávání
+      }
+
+      match /benefitChecks/{checkId} {
+        allow read: if isStaff();
+        allow create: if isStaff();
+        allow update, delete: if false; // Append-only
+      }
+    }
+
+    // 6. Spis (Rodinná složka)
+    match /families/{familyId} {
+      // Spis je nezávislá entita, ale přístup k detailům mají pouze orgs s aktivní dohodou
+      allow read: if isStaff() || isFosterForFamily(familyId);
+      allow write: if isStaff();
+
+      // Dohody o doprovázení
+      match /agreements/{agreementId} {
+        allow read: if isStaff() || isFosterForFamily(familyId);
+        allow write: if isStaff() && sameOrg(request.resource.data.organizationId);
+      }
+
+      // Časová osa (Timeline)
+      match /timeline/{timelineId} {
+        // Vlastní záznamy čte organizace, co je vytvořila
+        allow read: if (isStaff() && sameOrg(resource.data.createdByOrgId)) 
+                    || (isFosterForFamily(familyId) && resource.data.sharingLevel == 'foster');
+        allow create: if isStaff() && sameOrg(request.resource.data.createdByOrgId);
+        allow update: if isStaff() && sameOrg(resource.data.createdByOrgId);
+        allow delete: if false; // Immutabilní osa (editace jdou do verze/historie)
+      }
+
+      // Redukovaná historie pro cizí organizace (Segmentace, §4.5)
+      match /historyDigest/{digestId} {
+        // Redukovaný digest mohou číst všechny organizace s dohodou o doprovázení rodiny
+        allow read: if isStaff();
+        allow create: if isStaff() && sameOrg(request.resource.data.createdByOrgId);
+        allow update, delete: if false; // Redukovaná historie se neupravuje ručně
+      }
+
+      // Dokumenty a schvalovací workflow
+      match /documents/{docId} {
+        allow read: if (isStaff() && sameOrg(resource.data.createdByOrgId))
+                    || (isFosterForFamily(familyId) && resource.data.visibleToFoster == true);
+        allow write: if isStaff() && sameOrg(request.resource.data.createdByOrgId);
+      }
+
+      // Chat zprávy
+      match /messages/{msgId} {
+        allow read: if (isStaff() && sameOrg(resource.data.createdByOrgId))
+                    || (isFosterForFamily(familyId) && resource.data.sharingLevel == 'foster');
+        allow create: if isStaff() || isFosterForFamily(familyId);
+        allow update, delete: if false; // Chat zprávy se nemažou
+      }
+
+      // Respitní události
+      match /respitEvents/{eventId} {
+        allow read, write: if isStaff();
+      }
+    }
+
+    // 7. Děti (Children)
+    match /children/{childId} {
+      allow read: if isStaff() || hasActiveEpGrant(childId, 'ViewTimeline');
+      allow write: if isStaff();
+
+      match /supportExpenses/{expenseId} {
+        allow read: if isStaff();
+        allow create: if isStaff();
+        allow update, delete: if false; // Účetní audit
+      }
+
+      match /supportServicePlans/{planId} {
+        allow read, write: if isStaff();
+      }
+    }
+  }
+}

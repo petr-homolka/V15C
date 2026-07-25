@@ -1,0 +1,305 @@
+// figma node: 12070:3649 Tables / Projects / Row 02 / Web
+export function TablesProjectsRow02Web(_p = {}) {
+  const props = _p;
+  return (
+    <div className={props.className} style={{
+      width: 1140,
+      height: 88,
+      position: "relative",
+      ...props.style,
+    }}>
+      <div style={{
+        position: "absolute",
+        left: 0,
+        top: 0,
+        width: 1140,
+        height: 88,
+        borderRadius: 12,
+        backgroundColor: "rgb(255,255,255)",
+        boxShadow: "inset 0 0 0 1px rgb(236,236,242)",
+      }} />
+      <div style={{
+        position: "absolute",
+        left: 578,
+        top: 20.965,
+        width: 60,
+        height: 43,
+        overflow: "hidden",
+      }}>
+        <span style={{
+          position: "absolute",
+          left: 0,
+          top: 22,
+          width: 34,
+          height: 21,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 400,
+          fontSize: 14,
+          whiteSpace: "nowrap",
+          lineHeight: "21px",
+          color: "rgb(129,129,165)",
+        }}>{props.text1 ?? "Tasks"}</span>
+        <span style={{
+          position: "absolute",
+          left: 23,
+          top: 2,
+          width: 37,
+          height: 19,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 400,
+          fontSize: 16,
+          whiteSpace: "nowrap",
+          lineHeight: "100%",
+          color: "rgb(28,29,33)",
+        }}>{props.text2 ?? "/ 148"}</span>
+        <span style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 19,
+          height: 24,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 700,
+          fontSize: 16,
+          whiteSpace: "nowrap",
+          lineHeight: "24px",
+          color: "rgb(28,29,33)",
+        }}>{props.text3 ?? "90"}</span>
+      </div>
+      <div style={{
+        position: "absolute",
+        left: 723,
+        top: 20.965,
+        width: 104,
+        height: 43,
+        overflow: "hidden",
+      }}>
+        <span style={{
+          position: "absolute",
+          left: 0,
+          top: 22,
+          width: 45,
+          height: 21,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 400,
+          fontSize: 14,
+          whiteSpace: "nowrap",
+          lineHeight: "21px",
+          color: "rgb(129,129,165)",
+        }}>{props.text4 ?? "Budget"}</span>
+        <span style={{
+          position: "absolute",
+          left: 46,
+          top: 2,
+          width: 58,
+          height: 19,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 400,
+          fontSize: 16,
+          whiteSpace: "nowrap",
+          lineHeight: "100%",
+          color: "rgb(28,29,33)",
+        }}>/ $12.0k</span>
+        <span style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 41,
+          height: 24,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 700,
+          fontSize: 16,
+          lineHeight: "24px",
+          color: "rgb(28,29,33)",
+        }}>$6.4k</span>
+      </div>
+      <div style={{
+        position: "absolute",
+        left: 385,
+        top: 26,
+        width: 156,
+        height: 36,
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute",
+          left: 80,
+          top: 0,
+          width: 36,
+          height: 36,
+          borderRadius: 6,
+        }} />
+        <div style={{
+          position: "absolute",
+          left: 40,
+          top: 0,
+          width: 36,
+          height: 36,
+          borderRadius: 6,
+        }} />
+        <div style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 36,
+          height: 36,
+          borderRadius: 6,
+        }} />
+        <div style={{
+          position: "absolute",
+          left: 120,
+          top: 0,
+          width: 36,
+          height: 36,
+          overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: 36,
+            height: 36,
+            borderRadius: 6,
+            backgroundColor: "rgb(245,245,250)",
+          }} />
+          <span style={{
+            position: "absolute",
+            left: 9,
+            top: 7,
+            width: 17,
+            height: 21,
+            fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+            fontWeight: 400,
+            fontSize: 14,
+            textAlign: "center",
+            lineHeight: "21px",
+            color: "rgb(129,129,165)",
+          }}>+5</span>
+        </div>
+      </div>
+      <span style={{
+        position: "absolute",
+        left: 96,
+        top: 20.744,
+        width: 53,
+        height: 24,
+        fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        fontWeight: 700,
+        fontSize: 16,
+        whiteSpace: "nowrap",
+        lineHeight: "24px",
+        color: "rgb(28,29,33)",
+      }}>Project</span>
+      <span style={{
+        position: "absolute",
+        left: 96,
+        top: 43.221,
+        width: 83,
+        height: 21,
+        fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+        fontWeight: 400,
+        fontSize: 14,
+        whiteSpace: "nowrap",
+        lineHeight: "21px",
+        color: "rgb(129,129,165)",
+      }}>Development</span>
+      <div style={{
+        position: "absolute",
+        left: 899,
+        top: 26,
+        width: 165,
+        height: 36,
+      }}>
+        <svg width={165} height={36} viewBox="0 0 165 36" fill="none" style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 165,
+          height: 36,
+          borderRadius: 8,
+          color: "rgb(245,245,250)",
+        }}>
+          <path d={"M 0 8 C 0 3.582 3.582 0 8 0 L 157 0 C 161.418 0 165 3.582 165 8 L 165 28 C 165 32.418 161.418 36 157 36 L 8 36 C 3.582 36 0 32.418 0 28 L 0 8 Z"} fill="currentColor" fillRule="nonzero" />
+        </svg>
+        <span style={{
+          position: "absolute",
+          left: 21,
+          top: 7,
+          width: 122,
+          height: 21,
+          fontFamily: "Lato, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 700,
+          fontSize: 14,
+          textAlign: "center",
+          whiteSpace: "nowrap",
+          lineHeight: "21px",
+          color: "rgb(129,129,165)",
+        }}>Due to 24 Feb 2019</span>
+      </div>
+      <div style={{
+        position: "absolute",
+        left: 24,
+        top: 20,
+        width: 48,
+        height: 48,
+      }}>
+        <div style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 48,
+          height: 48,
+          borderRadius: 6,
+          backgroundColor: "rgb(245,245,250)",
+        }} />
+        <span style={{
+          position: "absolute",
+          left: 12.8,
+          top: 13,
+          width: 22,
+          height: 22,
+          fontFamily: "\"la-brands-400\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 400,
+          fontSize: 22,
+          textAlign: "center",
+          whiteSpace: "nowrap",
+          lineHeight: "100%",
+          color: "rgb(255,128,139)",
+        }}></span>
+      </div>
+      <div style={{
+        position: "absolute",
+        left: 1080,
+        top: 26,
+        width: 36,
+        height: 36,
+      }}>
+        <div style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          width: 36,
+          height: 36,
+          borderRadius: 8,
+          backgroundColor: "rgb(255,255,255)",
+          boxShadow: "inset 0 0 0 1px rgb(236,236,242)",
+        }} />
+        <span style={{
+          position: "absolute",
+          left: 9,
+          top: 9,
+          width: 18,
+          height: 18,
+          fontFamily: "\"la-solid-900\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+          fontWeight: 400,
+          fontSize: 18,
+          textAlign: "center",
+          whiteSpace: "nowrap",
+          lineHeight: "100%",
+          color: "rgb(129,129,165)",
+        }}></span>
+      </div>
+    </div>
+  );
+}
+export default TablesProjectsRow02Web;
