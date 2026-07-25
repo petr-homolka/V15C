@@ -1308,30 +1308,6 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               >
                 <i className="las la-sliders-h" />
               </button>
-
-              {/* 5. NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN V KALENDÁŘI */}
-              <button
-                type="button"
-                onClick={() => setShowBirthdaySettingsModal(true)}
-                title="Nastavení sledování narozenin a jmenin"
-                style={{
-                  border: 'none',
-                  boxShadow: 'none',
-                  backgroundColor: showBirthdaySettingsModal ? '#FDF2F8' : '#F4F4F6',
-                  color: showBirthdaySettingsModal ? '#DB2777' : '#5E6774',
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '16px',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <i className="las la-cog" />
-              </button>
             </div>
           </div>
 
@@ -3386,105 +3362,6 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   Uložit změny
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* MODÁLNÍ OKNO PRO NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN */}
-      {showBirthdaySettingsModal && (
-        <div 
-          style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999
-          }}
-          onClick={() => setShowBirthdaySettingsModal(false)}
-        >
-          <div 
-            style={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: '16px',
-              width: '440px',
-              maxWidth: '90%',
-              padding: '24px',
-              boxShadow: '0 20px 45px rgba(0, 0, 0, 0.18)',
-              fontFamily: 'Inter, sans-serif'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#FDF2F8', color: '#DB2777', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                  <i className="las la-birthday-cake" />
-                </div>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 600, color: '#171B1F' }}>Sledování narozenin a jmenin</h3>
-                  <p style={{ margin: 0, fontSize: '11px', color: '#747F8F' }}>Nastavení zobrazování v kalendáři</p>
-                </div>
-              </div>
-              <i className="las la-times" onClick={() => setShowBirthdaySettingsModal(false)} style={{ fontSize: '20px', cursor: 'pointer', color: '#6B7280' }} />
-            </div>
-
-            <div style={{ backgroundColor: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '12px', marginBottom: '16px', fontSize: '12px', color: '#4B5563', lineHeight: 1.5 }}>
-              Zvolte skupiny osob, jejichž narozeniny a jmeniny se budou zobrazovat v kalendáři. <strong>Výchozí sledování platí pouze pro Děti v péči.</strong>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {[
-                { key: 'child', label: 'Děti v péči', desc: 'Narozeniny a jmeniny dětí (Výchozí)', icon: 'las la-smile', color: '#DB2777' },
-                { key: 'foster_parent', label: 'Pěstouni', desc: 'Narozeniny a jmeniny evidovaných pěstounů', icon: 'las la-heart', color: '#059669' },
-                { key: 'coworker', label: 'Klíčové osoby a pracovníci', desc: 'Narozeniny a jmeniny pracovníků organizace', icon: 'las la-user-tie', color: '#7C3AED' },
-                { key: 'other', label: 'Ostatní kontakty s datem narození', desc: 'Ostatní vymezené osoby v databázi', icon: 'las la-users', color: '#2563EB' }
-              ].map(item => (
-                <label key={item.key} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '10px 12px',
-                  borderRadius: '10px',
-                  border: '1px solid #E5E7EB',
-                  backgroundColor: birthdayTrackingSettings[item.key] ? '#FFFFFF' : '#FAFAFA',
-                  cursor: 'pointer'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <i className={item.icon} style={{ fontSize: '18px', color: item.color }} />
-                    <div>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#171B1F' }}>{item.label}</div>
-                      <div style={{ fontSize: '11px', color: '#6B7280' }}>{item.desc}</div>
-                    </div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={birthdayTrackingSettings[item.key]}
-                    onChange={(e) => setBirthdayTrackingSettings(prev => ({ ...prev, [item.key]: e.target.checked }))}
-                    style={{ width: '18px', height: '18px', accentColor: '#059669', cursor: 'pointer' }}
-                  />
-                </label>
-              ))}
-            </div>
-
-            <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                onClick={() => setShowBirthdaySettingsModal(false)}
-                style={{
-                  backgroundColor: '#FF4742',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '8px 18px',
-                  fontWeight: 600,
-                  fontSize: '13px',
-                  cursor: 'pointer'
-                }}
-              >
-                Uložit nastavení
-              </button>
             </div>
           </div>
         </div>
