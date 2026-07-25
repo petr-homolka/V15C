@@ -364,6 +364,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
   const [showSearchInput, setShowSearchInput] = useState(false);
+  const [showSegmentBar, setShowSegmentBar] = useState(false);
   const [leftColumnWidth, setLeftColumnWidth] = useState(48); // % šířky levého sloupce úkolů
   const [isResizingColumns, setIsResizingColumns] = useState(false);
 
