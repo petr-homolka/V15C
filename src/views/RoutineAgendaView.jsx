@@ -183,10 +183,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       dayOffset: 0,
       title: 'Narozeniny: Tomáš Dvořák (pěstoun) - 42 let',
       category: 'Narozeniny',
+      personId: 'ent_dvorak',
+      personName: 'Tomáš Dvořák',
+      personRole: 'Pěstoun',
       iconClass: 'las la-birthday-cake',
       color: '#EC4899',
-      bgColor: '#FDF2F8',
-      borderColor: '#FBCFE8',
       isAllDay: true
     },
     {
@@ -194,10 +195,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       dayOffset: 0,
       title: 'Jmeniny: Kristýna Nováková (dítě v péči)',
       category: 'Jmeniny',
+      personId: 'ent_novakova',
+      personName: 'Kristýna Nováková',
+      personRole: 'Dítě v péči',
       iconClass: 'las la-gift',
       color: '#A855F7',
-      bgColor: '#F3E8FF',
-      borderColor: '#E9D5FF',
       isAllDay: true
     },
     {
@@ -583,6 +585,24 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     }
   };
 
+  // KLIKNUTÍ NA CELODENNÍ AKCI (PŘESMĚROVÁNÍ NA PROFIL OSOBY U NAROZENIN A JMENIN)
+  const handleAllDayClick = (ev) => {
+    if (ev.category === 'Narozeniny' || ev.category === 'Jmeniny') {
+      if (onSelectEntity) {
+        onSelectEntity({
+          id: ev.personId || 'ent_dvorak',
+          name: ev.personName || 'Tomáš Dvořák',
+          type: 'person',
+          role: ev.personRole || (ev.category === 'Narozeniny' ? 'Pěstoun' : 'Dítě v péči')
+        });
+      } else if (onNavigate) {
+        onNavigate('entity-profile');
+      }
+    } else {
+      setActiveEventModal({ ...ev });
+    }
+  };
+
   return (
     <div className="routine-layout" style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
       
@@ -872,7 +892,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         onScroll={handleScrollTimeline}
         style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
       >
-        {/* HORNÍ SVOJE SLOGAN PRECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM VELKÝM DATUMEM */}
+        {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM VELKÝM DATUMEM */}
         <div style={{
           position: 'sticky',
           top: 0,
@@ -931,7 +951,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   marginTop: '16px'
                 }}
               >
-                {/* CENTROVANÁ HLAVIČKA DNE A SVÁTKU Z ČESKÉHO KALENDÁŘE (MÍSTO NADPISU ALL DAY) */}
+                {/* CENTROVANÁ HLAVIČKA DNE A SVÁTKU Z ČESKÉHO KALENDÁŘE */}
                 <div style={{
                   paddingLeft: '80px',
                   paddingRight: '32px',
@@ -966,7 +986,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   </div>
                 </div>
 
-                {/* CELODENNÍ AKCE (TINT BACKGROUND, BEZ "CELÝ DEN", STEJNĚ ŠIROKÉ POD SEBOU, VČETNĚ NAROZENIN A JMENIN) */}
+                {/* CELODENNÍ AKCE (NAROZENINY/JMENINY: BÍLÉ POZADÍ + BÍLÁ OUTLINE + BEZ BAREVNÉHO ODZNAKU + PROKLIK NA PROFIL) */}
                 {allDayEvents.length > 0 && (
                   <div style={{
                     paddingLeft: '80px',
@@ -978,54 +998,79 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     width: '100%',
                     boxSizing: 'border-box'
                   }}>
-                    {allDayEvents.map(ev => (
-                      <div 
-                        key={ev.id}
-                        onClick={() => setActiveEventModal({ ...ev })}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          width: '100%',
-                          backgroundColor: ev.bgColor || '#FFF5F5',
-                          border: `1px solid ${ev.borderColor || '#FECDD3'}`,
-                          borderRadius: '8px',
-                          padding: '9px 14px',
-                          fontSize: '13px',
-                          fontWeight: 500,
-                          color: '#171B1F',
-                          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
-                          boxSizing: 'border-box',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease'
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
-                          {/* ROUTINE INSET CAPSULE BAR */}
-                          <div style={{
-                            width: '3.5px',
-                            height: '16px',
-                            backgroundColor: ev.color || '#FF4742',
-                            borderRadius: '4px',
-                            flexShrink: 0
-                          }} />
+                    {allDayEvents.map(ev => {
+                      const isSpecial = ev.category === 'Narozeniny' || ev.category === 'Jmeniny';
 
-                          {/* VEKTOROVÁ IKONA AKCE POKUD EXISTUJE */}
-                          {ev.iconClass && (
-                            <i className={ev.iconClass} style={{ color: ev.color || '#FF4742', fontSize: '16px', flexShrink: 0 }}></i>
+                      return (
+                        <div 
+                          key={ev.id}
+                          onClick={() => handleAllDayClick(ev)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            backgroundColor: isSpecial ? '#FFFFFF' : (ev.bgColor || '#FFF5F5'),
+                            border: isSpecial ? '1px solid #FFFFFF' : `1px solid ${ev.borderColor || '#FECDD3'}`,
+                            borderRadius: '8px',
+                            padding: '9px 14px',
+                            fontSize: '13px',
+                            fontWeight: 500,
+                            color: '#171B1F',
+                            boxShadow: isSpecial ? '0 2px 8px rgba(0, 0, 0, 0.05)' : '0 1px 3px rgba(0,0,0,0.03)',
+                            boxSizing: 'border-box',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+                            {/* ŽÁDNÝ BAREVNÝ ODZNAK PRO NAROZENINY A JMENINY */}
+                            {!isSpecial && (
+                              <div style={{
+                                width: '3.5px',
+                                height: '16px',
+                                backgroundColor: ev.color || '#FF4742',
+                                borderRadius: '4px',
+                                flexShrink: 0
+                              }} />
+                            )}
+
+                            {/* STAČÍ JEN IKONA DORTU NEBO DÁRKU */}
+                            {ev.iconClass && (
+                              <i className={ev.iconClass} style={{ color: ev.color || '#FF4742', fontSize: '18px', flexShrink: 0 }}></i>
+                            )}
+
+                            <span style={{
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              fontWeight: isSpecial ? 600 : 500,
+                              color: isSpecial ? '#171B1F' : '#171B1F'
+                            }}>
+                              {ev.title}
+                            </span>
+                          </div>
+
+                          {/* ODHALITELNÝ PROKLIK NA PROFIL DANÉ OSOBY */}
+                          {isSpecial && (
+                            <span style={{
+                              fontSize: '11px',
+                              color: '#747F8F',
+                              fontWeight: 500,
+                              flexShrink: 0,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              backgroundColor: '#F4F4F6',
+                              padding: '3px 8px',
+                              borderRadius: '6px'
+                            }}>
+                              Zobrazit profil ➔
+                            </span>
                           )}
-
-                          <span style={{
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            fontWeight: 500
-                          }}>
-                            {ev.title}
-                          </span>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
 
@@ -1047,7 +1092,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     pointerEvents: 'none'
                   }} />
 
-                  {/* HOURLY LINES AND CZECH LABELS (BEZ HORIZONTÁLNÍCH HRANATÝCH PROUŽKŮ) */}
+                  {/* HOURLY LINES AND CZECH LABELS */}
                   {Array.from({ length: 24 }, (_, i) => i).map(hour => (
                     <div key={hour} style={{ position: 'absolute', top: `${hour * HOUR_HEIGHT}px`, left: 0, right: 0, height: `${HOUR_HEIGHT}px`, borderTop: '1px dashed #F4F4F6', pointerEvents: 'none' }}>
                       <span style={{
@@ -1228,7 +1273,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           </span>
                         </div>
 
-                        {/* POZNÁMKY POD NÁZVEM POKUD EXISTUJE */}
+                        {/* POZNÁMKY POD NÁZVEM POKUD EXISTUJÍ */}
                         {ev.notes && !isConflict && (
                           <div style={{ fontSize: '12px', color: '#8C8C9A', marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {ev.notes}
