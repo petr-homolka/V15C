@@ -31,20 +31,50 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   // Stavy pre interaktivní hover bubliny (onMouse) u kroužků u datumu
   const [hoveredBadgeType, setHoveredBadgeType] = useState(null); // 'allday' | 'birthday' | 'nameday' | null
 
-  // Stav pre editačné okno úkolu
   const [editingTask, setEditingTask] = useState(null);
+  const [isDeletingTaskModal, setIsDeletingTaskModal] = useState(false);
   const [assigneeSearchQuery, setAssigneeSearchQuery] = useState('');
   const [assignedEntitiesSearchQuery, setAssignedEntitiesSearchQuery] = useState('');
 
-  // NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN V KALENDÁŘI (DEFAULTNĚ SE SLEDUJÍ POUZE DĚTI V PÉČI)
-  const [birthdayTrackingSettings, setBirthdayTrackingSettings] = useState({
-    child: true,         // Děti v péči (VÝCHOZÍ: ZAPNUTO)
-    foster_parent: false, // Pěstouni (VÝCHOZÍ: VYPNUTO)
-    coworker: false,     // Pracovníci organizace (VÝCHOZÍ: VYPNUTO)
-    other: false         // Ostatní kontakty (VÝCHOZÍ: VYPNUTO)
+  // NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN V KALENDÁŘI (ČTE SE Z SYSTÉMOVÉHO NASTAVENÍ SYSTEM / LOCALSTORAGE)
+  const [birthdayTrackingSettings, setBirthdayTrackingSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('birthday_tracking_settings');
+      return saved ? JSON.parse(saved) : { child: true, foster_parent: false, coworker: false, other: false };
+    } catch (e) {
+      return { child: true, foster_parent: false, coworker: false, other: false };
+    }
   });
 
-  const [showBirthdaySettingsModal, setShowBirthdaySettingsModal] = useState(false);
+  useEffect(() => {
+    const handleStorageChange = () => {
+      try {
+        const saved = localStorage.getItem('birthday_tracking_settings');
+        if (saved) setBirthdayTrackingSettings(JSON.parse(saved));
+      } catch (e) {}
+    };
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('focus', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('focus', handleStorageChange);
+    };
+  }, []);
+
+  // POSLUCHAČ KLÁVES ESC A ENTER PRO SPOLULAHLIVÉ OVLÁDÁNÍ MODÁLNÍHO OKNA ÚPRAVY ÚKOLU
+  useEffect(() => {
+    if (!editingTask) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setEditingTask(null);
+      } else if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        setTasks(prev => prev.map(t => t.id === editingTask.id ? editingTask : t));
+        setEditingTask(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [editingTask]);
 
   // DYNAMICKÉ SVISLÉ SCROLOVÁNÍ NAPŘÍČ MĚSÍCI
   const [offsets, setOffsets] = useState(() => {
@@ -914,6 +944,26 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         }
         .anim-check-pop {
           animation: checkPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, checkPulse 0.6s ease-out;
+        }
+        @keyframes modalImplode {
+          0% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: blur(0px);
+          }
+          40% {
+            opacity: 0.7;
+            transform: scale(0.65) translateY(-15px) rotate(-3deg);
+            filter: blur(2px);
+          }
+          100% {
+            opacity: 0;
+            transform: scale(0.02) translateY(-40px) rotate(12deg);
+            filter: blur(10px);
+          }
+        }
+        .anim-modal-imploding {
+          animation: modalImplode 0.32s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
         }
         @keyframes taskImplode {
           0% {
@@ -2941,7 +2991,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         </div>
       )}
 
-      {/* MODÁLNÍ OKNO PRO ÚPRAVU ÚKOLU (TASK EDIT MODAL) */}
+      {/* MODÁLNÍ OKNO PRO ÚPRAVU ÚKOLU (TASK EDIT MODAL - ZAVÍRÁ SE POUZE EXPLICITNĚ) */}
       {editingTask && (
         <div 
           style={{
@@ -2954,9 +3004,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             justifyContent: 'center',
             zIndex: 9999
           }}
-          onClick={() => setEditingTask(null)}
         >
           <div 
+            className={isDeletingTaskModal ? 'anim-modal-imploding' : ''}
             style={{
               backgroundColor: '#FFFFFF',
               borderRadius: '16px',
@@ -2964,7 +3014,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               maxWidth: '92%',
               padding: '24px',
               boxShadow: '0 20px 45px rgba(0, 0, 0, 0.18)',
-              fontFamily: 'Inter, sans-serif'
+              fontFamily: 'Inter, sans-serif',
+              transition: 'transform 0.15s ease, opacity 0.15s ease'
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -3191,7 +3242,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               {/* 4. TERMÍN SPLNĚNÍ (DVĚ POLE: OD A DO) */}
               <div>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>
-                  Termín splnění (Vyplněné 1 pole = 1 den, Vyplněné obě = rozmezí)
+                  Termín splnění
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                   <div>
@@ -3272,13 +3323,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               </div>
             </div>
 
-            {/* TLAČÍTKA NA SPODU (PRESNĚ TAKTO VŽDY) */}
+            {/* TLAČÍTKA NA SPODU (S ANIMACÍ IMPLOZE PŘI SMAZÁNÍ) */}
             <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <button
                 type="button"
                 onClick={() => {
-                  setTasks(prev => prev.filter(t => t.id !== editingTask.id));
-                  setEditingTask(null);
+                  setIsDeletingTaskModal(true);
+                  setTimeout(() => {
+                    setTasks(prev => prev.filter(t => t.id !== editingTask.id));
+                    setEditingTask(null);
+                    setIsDeletingTaskModal(false);
+                  }, 320);
                 }}
                 style={{
                   backgroundColor: '#FFEBEB',

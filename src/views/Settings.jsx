@@ -34,6 +34,24 @@ export function Settings({ user, onNavigate, onUpdateUserBranding, isMobileView 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // Stavy pro Sledování narozenin a jmenin v kalendáři
+  const [birthdayTrackingSettings, setBirthdayTrackingSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('birthday_tracking_settings');
+      return saved ? JSON.parse(saved) : { child: true, foster_parent: false, coworker: false, other: false };
+    } catch (e) {
+      return { child: true, foster_parent: false, coworker: false, other: false };
+    }
+  });
+
+  const handleToggleBirthdayTracking = (key) => {
+    const updated = { ...birthdayTrackingSettings, [key]: !birthdayTrackingSettings[key] };
+    setBirthdayTrackingSettings(updated);
+    localStorage.setItem('birthday_tracking_settings', JSON.stringify(updated));
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 2000);
+  };
+
   // Uložení sekce Branding
   const handleSaveBranding = async (e) => {
     e.preventDefault();
@@ -194,7 +212,8 @@ export function Settings({ user, onNavigate, onUpdateUserBranding, isMobileView 
           {[
             { id: 'branding', label: 'Vzhled a písma', icon: 'las la-palette' },
             { id: 'terminology', label: 'Vlastní terminologie', icon: 'las la-language' },
-            { id: 'respit', label: 'Respitní sazebník', icon: 'las la-calculator' }
+            { id: 'respit', label: 'Respitní sazebník', icon: 'las la-calculator' },
+            { id: 'calendar', label: 'Kalendář a upozornění', icon: 'las la-calendar-check' }
           ].map(sec => {
             const isActive = activeSection === sec.id;
             return (
@@ -584,6 +603,97 @@ export function Settings({ user, onNavigate, onUpdateUserBranding, isMobileView 
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {/* SEKCE: KALENDÁŘ A UPOZORNĚNÍ (SLEDOVÁNÍ NAROZENIN A JMENIN SE ZAPÍNACÍMI POSUVNÍKY) */}
+          {activeSection === 'calendar' && (
+            <div style={{ maxWidth: '640px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, margin: '0 0 8px 0', color: 'rgb(28,29,33)' }}>
+                Kalendář a upozornění
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '14px' }}>
+                Správa zobrazování narozenin, jmenin a notifikací v kalendáři a časové ose.
+              </p>
+
+              <div style={{
+                backgroundColor: 'var(--surface-card)',
+                borderRadius: '12px',
+                padding: '24px',
+                border: '1px solid var(--border-default)',
+                boxShadow: 'var(--shadow-sm)'
+              }}>
+                <div style={{ marginBottom: '20px' }}>
+                  <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: 600, color: 'rgb(28,29,33)' }}>
+                    Sledování narozenin a jmenin
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    Zvolte skupiny osob, jejichž narozeniny a jmeniny chcete zobrazovat v kalendáři a časové ose. <strong>Výchozí sledování platí pouze pro Děti v péči.</strong>
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {[
+                    { key: 'child', label: 'Děti v péči', desc: 'Narozeniny a jmeniny dětí (Výchozí)', icon: 'las la-smile', color: '#DB2777' },
+                    { key: 'foster_parent', label: 'Pěstouni', desc: 'Narozeniny a jmeniny evidovaných pěstounů', icon: 'las la-heart', color: '#059669' },
+                    { key: 'coworker', label: 'Klíčové osoby a pracovníci', desc: 'Narozeniny a jmeniny pracovníků organizace', icon: 'las la-user-tie', color: '#7C3AED' },
+                    { key: 'other', label: 'Ostatní kontakty s datem narození', desc: 'Ostatní vymezené osoby v databázi', icon: 'las la-users', color: '#2563EB' }
+                  ].map(item => (
+                    <div 
+                      key={item.key} 
+                      onClick={() => handleToggleBirthdayTracking(item.key)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '14px 16px',
+                        borderRadius: '10px',
+                        border: '1px solid var(--border-default)',
+                        backgroundColor: birthdayTrackingSettings[item.key] ? 'rgba(16, 185, 129, 0.04)' : 'transparent',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{
+                          width: '38px', height: '38px', borderRadius: '10px',
+                          backgroundColor: `${item.color}15`, color: item.color,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px'
+                        }}>
+                          <i className={item.icon} />
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '14px', fontWeight: 600, color: 'rgb(28,29,33)' }}>{item.label}</div>
+                          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>{item.desc}</div>
+                        </div>
+                      </div>
+
+                      {/* ZAPÍNACÍ POSUVNÍK (TOGGLE SWITCH) */}
+                      <div style={{
+                        width: '46px',
+                        height: '24px',
+                        borderRadius: '12px',
+                        backgroundColor: birthdayTrackingSettings[item.key] ? '#10B981' : '#D1D5DB',
+                        position: 'relative',
+                        transition: 'background-color 0.2s ease',
+                        flexShrink: 0
+                      }}>
+                        <div style={{
+                          width: '20px',
+                          height: '20px',
+                          borderRadius: '50%',
+                          backgroundColor: '#FFFFFF',
+                          position: 'absolute',
+                          top: '2px',
+                          left: birthdayTrackingSettings[item.key] ? '24px' : '2px',
+                          transition: 'left 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                          boxShadow: '0 1px 4px rgba(0,0,0,0.2)'
+                        }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
