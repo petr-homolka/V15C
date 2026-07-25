@@ -33,6 +33,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
 
   // Stav pre editačné okno úkolu
   const [editingTask, setEditingTask] = useState(null);
+  const [assigneeSearchQuery, setAssigneeSearchQuery] = useState('');
+  const [assignedEntitiesSearchQuery, setAssignedEntitiesSearchQuery] = useState('');
 
   // NASTAVENÍ SLEDOVÁNÍ NAROZENIN A JMENIN V KALENDÁŘI (DEFAULTNĚ SE SLEDUJÍ POUZE DĚTI V PÉČI)
   const [birthdayTrackingSettings, setBirthdayTrackingSettings] = useState({
@@ -2958,29 +2960,25 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             style={{
               backgroundColor: '#FFFFFF',
               borderRadius: '16px',
-              width: '460px',
-              maxWidth: '90%',
+              width: '520px',
+              maxWidth: '92%',
               padding: '24px',
               boxShadow: '0 20px 45px rgba(0, 0, 0, 0.18)',
               fontFamily: 'Inter, sans-serif'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#EFF6FF', color: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
-                  <i className="las la-pen" />
-                </div>
-                <div>
-                  <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: '#171B1F' }}>Úprava úkolu</h3>
-                  <p style={{ margin: 0, fontSize: '12px', color: '#747F8F' }}>Upravte název, subjekt nebo termín splnění</p>
-                </div>
+            {/* HLAVIČKA BEZ MODRÉ IKONY */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '20px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#171B1F' }}>Úprava úkolu</h3>
+                <p style={{ margin: '3px 0 0 0', fontSize: '12px', color: '#747F8F' }}>Upravte název, přiřazené subjekty, vyřizující osobu a termín splnění</p>
               </div>
-              <i className="las la-times" onClick={() => setEditingTask(null)} style={{ fontSize: '20px', cursor: 'pointer', color: '#6B7280' }} />
+              <i className="las la-times" onClick={() => setEditingTask(null)} style={{ fontSize: '22px', cursor: 'pointer', color: '#6B7280' }} />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {/* NÁZEV ÚKOLU */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* 1. NÁZEV ÚKOLU */}
               <div>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Název úkolu</label>
                 <input
@@ -2999,71 +2997,282 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 />
               </div>
 
-              {/* SUBJEKT */}
+              {/* 2. PRIŘAZENO (MULTI-SELECT S NAŠEPTÁVAČEM PODLE JMÉNA, EMAILU A TELEFONU) */}
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Přiřazený subjekt</label>
-                <select
-                  value={editingTask.entityId || 'none'}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val === 'none') {
-                      setEditingTask(prev => ({ ...prev, entityType: null, entityId: null, entityName: null }));
-                    } else if (val === 'fam_dvorak') {
-                      setEditingTask(prev => ({ ...prev, entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' }));
-                    } else if (val === 'fam_novak') {
-                      setEditingTask(prev => ({ ...prev, entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' }));
-                    } else if (val === 'ent_dvorak') {
-                      setEditingTask(prev => ({ ...prev, entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' }));
-                    } else if (val === 'ent_adam') {
-                      setEditingTask(prev => ({ ...prev, entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' }));
-                    } else if (val === 'ent_kralova') {
-                      setEditingTask(prev => ({ ...prev, entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' }));
-                    } else if (val === 'ent_self') {
-                      setEditingTask(prev => ({ ...prev, entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' }));
-                    }
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    border: '1px solid #D1D5DB',
-                    fontSize: '13px',
-                    outline: 'none',
-                    boxSizing: 'border-box',
-                    backgroundColor: '#FFFFFF'
-                  }}
-                >
-                  <option value="none">Bez přiřazení k subjektu</option>
-                  <option value="fam_dvorak">Rodina Dvořákova (Rodina)</option>
-                  <option value="fam_novak">Rodina Novákova (Rodina)</option>
-                  <option value="ent_dvorak">Tomáš Dvořák (Pěstoun)</option>
-                  <option value="ent_adam">Adam Novák (Dítě)</option>
-                  <option value="ent_kralova">Mgr. Alena Králová (Spolupracovník)</option>
-                  <option value="ent_self">Jana Nováková (Já)</option>
-                </select>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Přiřazeno (možnost více subjektů)</label>
+                
+                {/* ZOBRAZENÍ VYBRANÝCH ENTIT (TAGY / PELLKY) */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
+                  {(editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : [])).map(ent => (
+                    <span key={ent.id || ent.name} style={{
+                      backgroundColor: ent.type === 'family' ? '#EFF6FF' : ent.type === 'foster_parent' ? '#ECFDF5' : ent.type === 'child' ? '#FDF2F8' : '#F3E8FF',
+                      color: ent.type === 'family' ? '#2563EB' : ent.type === 'foster_parent' ? '#059669' : ent.type === 'child' ? '#DB2777' : '#7C3AED',
+                      padding: '3px 10px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}>
+                      <i className={ent.type === 'family' ? 'las la-home' : ent.type === 'foster_parent' ? 'las la-heart' : ent.type === 'child' ? 'las la-smile' : 'las la-user-tie'} />
+                      <span>{ent.name}</span>
+                      <i 
+                        className="las la-times" 
+                        style={{ cursor: 'pointer', marginLeft: '3px', fontSize: '12px' }} 
+                        onClick={() => {
+                          const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
+                          const updated = currentArr.filter(item => item.id !== ent.id);
+                          setEditingTask(prev => ({
+                            ...prev,
+                            assignedEntities: updated,
+                            entityName: updated[0] ? updated[0].name : null,
+                            entityId: updated[0] ? updated[0].id : null,
+                            entityType: updated[0] ? updated[0].type : null
+                          }));
+                        }} 
+                      />
+                    </span>
+                  ))}
+                </div>
+
+                {/* NAŠEPTÁVACÍ VSTUP PRO PŘIŘAZENÍ SUBJEKTŮ */}
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="text"
+                    value={assignedEntitiesSearchQuery}
+                    onChange={(e) => setAssignedEntitiesSearchQuery(e.target.value)}
+                    placeholder="Vyhledat jméno, email nebo telefon subjektu..."
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #D1D5DB',
+                      fontSize: '12px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  {assignedEntitiesSearchQuery.trim() && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0, right: 0,
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
+                      maxHeight: '180px',
+                      overflowY: 'auto',
+                      zIndex: 100,
+                      marginTop: '4px'
+                    }}>
+                      {[
+                        { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
+                        { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
+                        { id: 'ent_dvorak', name: 'Tomáš Dvořák', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
+                        { id: 'ent_adam', name: 'Adam Novák', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
+                        { id: 'ent_kralova', name: 'Mgr. Alena Králová', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                        { id: 'ent_self', name: 'Jana Nováková', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' }
+                      ].filter(item => {
+                        const q = assignedEntitiesSearchQuery.toLowerCase();
+                        return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
+                      }).map(item => (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
+                            if (!currentArr.some(x => x.id === item.id)) {
+                              const updated = [...currentArr, { id: item.id, name: item.name, type: item.type }];
+                              setEditingTask(prev => ({
+                                ...prev,
+                                assignedEntities: updated,
+                                entityName: updated[0].name,
+                                entityId: updated[0].id,
+                                entityType: updated[0].type
+                              }));
+                            }
+                            setAssignedEntitiesSearchQuery('');
+                          }}
+                          style={{
+                            padding: '8px 12px',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            borderBottom: '1px solid #F3F4F6',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <div>
+                            <span style={{ fontWeight: 600, color: '#171B1F' }}>{item.name}</span>
+                            <span style={{ fontSize: '11px', color: '#6B7280', marginLeft: '6px' }}>({item.email})</span>
+                          </div>
+                          <span style={{ fontSize: '10px', color: '#9CA3AF' }}>{item.phone}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* TERMÍN */}
+              {/* 3. VYŘIZUJE (NAŠEPTÁVÁNÍ DLE JMÉNA, EMAILU NEBO TELEFONU) */}
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Termín splnění</label>
-                <input
-                  type="text"
-                  value={editingTask.dateRange || ''}
-                  onChange={(e) => setEditingTask(prev => ({ ...prev, dateRange: e.target.value }))}
-                  placeholder="např. Dnes, Zítra nebo 24. 8. → 2. 9."
-                  style={{
-                    width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    border: '1px solid #D1D5DB',
-                    fontSize: '13px',
-                    outline: 'none',
-                    boxSizing: 'border-box'
-                  }}
-                />
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>Vyřizuje (Odpovědná osoba)</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="text"
+                    value={assigneeSearchQuery || editingTask.assignee || 'Jana Nováková'}
+                    onChange={(e) => {
+                      setAssigneeSearchQuery(e.target.value);
+                      setEditingTask(prev => ({ ...prev, assignee: e.target.value }));
+                    }}
+                    placeholder="Zadejte nebo vyhledejte pracovníka..."
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid #D1D5DB',
+                      fontSize: '13px',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                  {assigneeSearchQuery.trim() && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0, right: 0,
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
+                      maxHeight: '160px',
+                      overflowY: 'auto',
+                      zIndex: 100,
+                      marginTop: '4px'
+                    }}>
+                      {[
+                        { id: 'ent_self', name: 'Jana Nováková', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
+                        { id: 'ent_kralova', name: 'Mgr. Alena Králová', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                        { id: 'ent_dvorak', name: 'Tomáš Dvořák', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' }
+                      ].filter(item => {
+                        const q = assigneeSearchQuery.toLowerCase();
+                        return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
+                      }).map(item => (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            setEditingTask(prev => ({ ...prev, assignee: item.name }));
+                            setAssigneeSearchQuery('');
+                          }}
+                          style={{
+                            padding: '8px 12px',
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            borderBottom: '1px solid #F3F4F6',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <div>
+                            <span style={{ fontWeight: 600, color: '#171B1F' }}>{item.name}</span>
+                            <span style={{ fontSize: '11px', color: '#6B7280', marginLeft: '6px' }}>({item.email})</span>
+                          </div>
+                          <span style={{ fontSize: '10px', color: '#9CA3AF' }}>{item.phone}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 4. TERMÍN SPLNĚNÍ (DVĚ POLE: OD A DO) */}
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#4B5563', marginBottom: '4px' }}>
+                  Termín splnění (Vyplněné 1 pole = 1 den, Vyplněné obě = rozmezí)
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#6B7280', display: 'block', marginBottom: '2px' }}>Od (Datum)</span>
+                    <input
+                      type="date"
+                      value={editingTask.startDate || ''}
+                      onChange={(e) => {
+                        const newStart = e.target.value;
+                        const newEnd = editingTask.endDate;
+                        
+                        let formattedRange = 'Dnes';
+                        if (newStart && newEnd) {
+                          const [y1, m1, d1] = newStart.split('-');
+                          const [y2, m2, d2] = newEnd.split('-');
+                          formattedRange = `${parseInt(d1,10)}.${parseInt(m1,10)}. → ${parseInt(d2,10)}.${parseInt(m2,10)}.`;
+                        } else if (newStart) {
+                          const [y1, m1, d1] = newStart.split('-');
+                          formattedRange = `${parseInt(d1,10)}.${parseInt(m1,10)}.`;
+                        }
+
+                        setEditingTask(prev => ({
+                          ...prev,
+                          startDate: newStart,
+                          dateRange: formattedRange
+                        }));
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '8px 10px',
+                        borderRadius: '8px',
+                        border: '1px solid #D1D5DB',
+                        fontSize: '12px',
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <span style={{ fontSize: '11px', color: '#6B7280', display: 'block', marginBottom: '2px' }}>Do (Datum - volitelné)</span>
+                    <input
+                      type="date"
+                      value={editingTask.endDate || ''}
+                      onChange={(e) => {
+                        const newEnd = e.target.value;
+                        const newStart = editingTask.startDate || '2026-08-24';
+                        
+                        let formattedRange = 'Dnes';
+                        if (newStart && newEnd) {
+                          const [y1, m1, d1] = newStart.split('-');
+                          const [y2, m2, d2] = newEnd.split('-');
+                          formattedRange = `${parseInt(d1,10)}.${parseInt(m1,10)}. → ${parseInt(d2,10)}.${parseInt(m2,10)}.`;
+                        } else if (newStart) {
+                          const [y1, m1, d1] = newStart.split('-');
+                          formattedRange = `${parseInt(d1,10)}.${parseInt(m1,10)}.`;
+                        }
+
+                        setEditingTask(prev => ({
+                          ...prev,
+                          startDate: newStart,
+                          endDate: newEnd,
+                          dateRange: formattedRange
+                        }));
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '8px 10px',
+                        borderRadius: '8px',
+                        border: '1px solid #D1D5DB',
+                        fontSize: '12px',
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
+            {/* TLAČÍTKA NA SPODU (PRESNĚ TAKTO VŽDY) */}
             <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <button
                 type="button"
