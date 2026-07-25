@@ -724,13 +724,14 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     const parsed = parseSmartTaskInput(newTaskText);
 
     let entityInfo = parsed.entityInfo;
-    if (!entityInfo.entityId) {
-      if (selectedEntityFilter === 'fam_dvorak') entityInfo = { entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' };
-      else if (selectedEntityFilter === 'fam_novak') entityInfo = { entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' };
-      else if (selectedEntityFilter === 'ent_dvorak') entityInfo = { entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' };
-      else if (selectedEntityFilter === 'ent_adam') entityInfo = { entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' };
-      else if (selectedEntityFilter === 'ent_kralova') entityInfo = { entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' };
-      else if (selectedEntityFilter === 'ent_self') entityInfo = { entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' };
+    if (!entityInfo.entityId && !selectedEntityFilters.includes('all') && selectedEntityFilters.length === 1) {
+      const activeFilterId = selectedEntityFilters[0];
+      if (activeFilterId === 'fam_dvorak') entityInfo = { entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' };
+      else if (activeFilterId === 'fam_novak') entityInfo = { entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' };
+      else if (activeFilterId === 'ent_dvorak') entityInfo = { entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' };
+      else if (activeFilterId === 'ent_adam') entityInfo = { entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' };
+      else if (activeFilterId === 'ent_kralova') entityInfo = { entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' };
+      else if (activeFilterId === 'ent_self') entityInfo = { entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' };
     }
 
     const newTask = {
@@ -1402,37 +1403,45 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             </div>
           )}
 
-          {/* CHIP AKTIVNÍHO FILTRU SUBJEKTU BEZ POPISU V ZÁVORCE */}
-          {selectedEntityFilter !== 'all' && (
-            <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: '#747F8F' }}>Zobrazeny úkoly pro:</span>
-              <span style={{
-                backgroundColor: '#EFF6FF',
-                color: '#2563EB',
-                border: '1px solid #BFDBFE',
-                borderRadius: '12px',
-                padding: '3px 10px',
-                fontSize: '11px',
-                fontWeight: 600,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px'
-              }}>
-                <i className="las la-user-check" style={{ fontSize: '14px' }} />
-                <span>{
-                  selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova' :
-                  selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova' :
-                  selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák' :
-                  selectedEntityFilter === 'ent_adam' ? 'Adam Novák' :
-                  selectedEntityFilter === 'ent_kralova' ? 'Mgr. Alena Králová' : 'Jana Nováková'
-                }</span>
-                <i 
-                  className="las la-times" 
-                  onClick={() => setSelectedEntityFilter('all')}
-                  style={{ cursor: 'pointer', marginLeft: '3px', fontSize: '13px' }} 
-                  title="Zrušit filtr"
-                />
-              </span>
+          {/* CHIP AKTIVNÍHO FILTRU SUBJEKTŮ / VAZBY BEZ POPISU V ZÁVORCE */}
+          {!selectedEntityFilters.includes('all') && (
+            <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '11px', color: '#747F8F' }}>Zobrazeny úkoly pro vazby:</span>
+              {selectedEntityFilters.map(filterId => {
+                const label = 
+                  filterId === 'fam_dvorak' ? 'Rodina Dvořákova' :
+                  filterId === 'fam_novak' ? 'Rodina Novákova' :
+                  filterId === 'ent_dvorak' ? 'Tomáš Dvořák' :
+                  filterId === 'ent_adam' ? 'Adam Novák' :
+                  filterId === 'ent_kralova' ? 'Mgr. Alena Králová' : 'Jana Nováková';
+
+                return (
+                  <span key={filterId} style={{
+                    backgroundColor: '#EFF6FF',
+                    color: '#2563EB',
+                    border: '1px solid #BFDBFE',
+                    borderRadius: '12px',
+                    padding: '3px 10px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px'
+                  }}>
+                    <i className="las la-user-check" style={{ fontSize: '14px' }} />
+                    <span>{label}</span>
+                    <i 
+                      className="las la-times" 
+                      onClick={() => {
+                        const updated = selectedEntityFilters.filter(id => id !== filterId);
+                        setSelectedEntityFilters(updated.length === 0 ? ['all'] : updated);
+                      }}
+                      style={{ cursor: 'pointer', marginLeft: '3px', fontSize: '13px' }} 
+                      title="Zrušit tento filtr"
+                    />
+                  </span>
+                );
+              })}
             </div>
           )}
 
