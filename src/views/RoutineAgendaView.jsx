@@ -1086,6 +1086,27 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           background-color: #E03833 !important;
           border-color: #E03833 !important;
         }
+
+        /* VŽDY VIDITELNÝ ELEGANTNÍ POSUVNÍK SEZNAMU SUBJEKTŮ */
+        .entity-scrollbar {
+          scrollbar-width: thin !important;
+          scrollbar-color: #CBD5E1 #F1F5F9 !important;
+        }
+        .entity-scrollbar::-webkit-scrollbar {
+          width: 6px !important;
+          height: 6px !important;
+        }
+        .entity-scrollbar::-webkit-scrollbar-track {
+          background: #F1F5F9 !important;
+          border-radius: 4px !important;
+        }
+        .entity-scrollbar::-webkit-scrollbar-thumb {
+          background: #CBD5E1 !important;
+          border-radius: 4px !important;
+        }
+        .entity-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94A3B8 !important;
+        }
       `}</style>
 
       {/* 1. Levá schovávací navigace Routine */}
@@ -3229,130 +3250,139 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   </div>
                 )}
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                  {/* LEVÁ ČÁST: NAŠEPTÁVAČ PODLE KONTAKTNÍCH ÚDAJŮ */}
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '4px' }}>Vyhledat v kontaktech</span>
-                    <div style={{ position: 'relative' }}>
-                      <input
-                        type="text"
-                        value={assignedEntitiesSearchQuery}
-                        onChange={(e) => setAssignedEntitiesSearchQuery(e.target.value)}
-                        placeholder="Jméno, email, telefon..."
-                        style={{
-                          width: '100%',
-                          padding: '8px 10px',
-                          borderRadius: '8px',
-                          border: '1px solid #D1D5DB',
-                          fontSize: '12px',
-                          outline: 'none',
-                          boxSizing: 'border-box'
-                        }}
-                      />
-                      {assignedEntitiesSearchQuery.trim() && (
-                        <div style={{
-                          position: 'absolute',
-                          top: '100%',
-                          left: 0, right: 0,
-                          backgroundColor: '#FFFFFF',
-                          border: '1px solid #E5E7EB',
-                          borderRadius: '8px',
-                          boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
-                          maxHeight: '160px',
-                          overflowY: 'auto',
-                          zIndex: 100,
-                          marginTop: '4px'
-                        }}>
-                          {[
-                            { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
-                            { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
-                            { id: 'ent_dvorak', name: 'Tomáš Dvořák', type: 'foster_parent', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
-                            { id: 'ent_adam', name: 'Adam Novák', type: 'child', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
-                            { id: 'ent_kralova', name: 'Mgr. Alena Králová', type: 'coworker', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
-                            { id: 'ent_self', name: 'Jana Nováková', type: 'coworker', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' }
-                          ].filter(item => {
-                            const q = assignedEntitiesSearchQuery.toLowerCase();
-                            return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
-                          }).map(item => (
-                            <div
-                              key={item.id}
-                              onClick={() => {
-                                const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
-                                if (!currentArr.some(x => x.id === item.id)) {
-                                  const updated = [...currentArr, { id: item.id, name: item.name, type: item.type }];
-                                  setEditingTask(prev => ({
-                                    ...prev,
-                                    assignedEntities: updated,
-                                    entityName: updated[0].name,
-                                    entityId: updated[0].id,
-                                    entityType: updated[0].type
-                                  }));
-                                }
-                                setAssignedEntitiesSearchQuery('');
-                              }}
-                              style={{
-                                padding: '8px 10px',
-                                cursor: 'pointer',
-                                fontSize: '11px',
-                                borderBottom: '1px solid #F3F4F6',
-                                display: 'flex',
-                                flexDirection: 'column'
-                              }}
-                            >
-                              <span style={{ fontWeight: 600, color: '#171B1F' }}>{item.name}</span>
-                              <span style={{ fontSize: '10px', color: '#6B7280' }}>{item.email} • {item.phone}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                <div style={{
+                  border: '1px solid #E2E8F0',
+                  borderRadius: '12px',
+                  backgroundColor: '#FFFFFF',
+                  padding: '12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#1E293B' }}>Vybrat ze seznamu</span>
+                    <span style={{ fontSize: '11px', color: '#64748B' }}>Multi-select</span>
                   </div>
 
-                  {/* PRAVÁ ČÁST: SEZNAM MOŽNÝCH SE ZATRHÁVÁTKY */}
-                  <div>
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: '#6B7280', display: 'block', marginBottom: '4px' }}>Seznam se zatrhávátky</span>
-                    <div style={{
-                      border: '1px solid #D1D5DB',
-                      borderRadius: '8px',
-                      padding: '6px 8px',
-                      maxHeight: '120px',
-                      overflowY: 'auto',
-                      backgroundColor: '#FAFAFA',
+                  {/* KATEGORIE ZÁLOŽKY: Vše | Rodiny | Pěstouni | Děti | Spolupracovníci | Ostatní */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    overflowX: 'auto',
+                    paddingBottom: '2px',
+                    scrollbarWidth: 'none'
+                  }}>
+                    {[
+                      { id: 'all', label: 'Vše' },
+                      { id: 'family', label: 'Rodiny' },
+                      { id: 'foster_parent', label: 'Pěstouni' },
+                      { id: 'child', label: 'Děti' },
+                      { id: 'coworker', label: 'Spolupracovníci' },
+                      { id: 'other', label: 'Ostatní' }
+                    ].map(tab => {
+                      const isActive = modalAssignedTab === tab.id;
+                      return (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => setModalAssignedTab(tab.id)}
+                          style={{
+                            border: 'none',
+                            backgroundColor: isActive ? '#EEF4FF' : '#F1F5F9',
+                            color: isActive ? '#2563EB' : '#64748B',
+                            fontWeight: isActive ? 600 : 500,
+                            fontSize: '11px',
+                            padding: '3px 8px',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap',
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          {tab.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* VYHLEDÁVAČ V KONTAKTECH */}
+                  <div style={{ position: 'relative' }}>
+                    <i className="las la-search" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8', fontSize: '14px' }} />
+                    <input
+                      type="text"
+                      value={assignedEntitiesSearchQuery}
+                      onChange={(e) => setAssignedEntitiesSearchQuery(e.target.value)}
+                      placeholder="Vyhledat jméno, email, telefon..."
+                      style={{
+                        width: '100%',
+                        padding: '7px 10px 7px 30px',
+                        borderRadius: '8px',
+                        border: '1px solid #CBD5E1',
+                        fontSize: '12px',
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+
+                  {/* SCROLLABLE SEZNAM ENTIT SE ZATRHÁVÁTKY A VŽDY VIDITELNÝM POSUVNÍKEM */}
+                  <div 
+                    className="entity-scrollbar"
+                    style={{
+                      maxHeight: '160px',
+                      overflowY: 'scroll',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '4px'
-                    }}>
-                      {[
-                        { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family' },
-                        { id: 'fam_novak', name: 'Rodina Novákova', type: 'family' },
-                        { id: 'ent_dvorak', name: 'Tomáš Dvořák (Pěstoun)', type: 'foster_parent', rawName: 'Tomáš Dvořák' },
-                        { id: 'ent_adam', name: 'Adam Novák (Dítě)', type: 'child', rawName: 'Adam Novák' },
-                        { id: 'ent_kralova', name: 'Mgr. Alena Králová (Pracovník)', type: 'coworker', rawName: 'Mgr. Alena Králová' },
-                        { id: 'ent_self', name: 'Jana Nováková (Já)', type: 'coworker', rawName: 'Jana Nováková' }
-                      ].map(item => {
-                        const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
-                        const isChecked = currentArr.some(x => x.id === item.id);
+                      gap: '4px',
+                      paddingRight: '6px'
+                    }}
+                  >
+                    {[
+                      { id: 'fam_dvorak', name: 'Rodina Dvořákova', type: 'family', role: 'Rodina', email: 'rodinadvorakova@gmail.com', phone: '+420 777 111 222' },
+                      { id: 'fam_novak', name: 'Rodina Novákova', type: 'family', role: 'Rodina', email: 'rodinanovakova@gmail.com', phone: '+420 777 333 444' },
+                      { id: 'ent_dvorak', name: 'Tomáš Dvořák', type: 'foster_parent', role: 'Pěstoun', email: 'tomasdvorak@gmail.com', phone: '+420 608 123 456' },
+                      { id: 'ent_adam', name: 'Adam Novák', type: 'child', role: 'Dítě', email: 'adamnovak@gmail.com', phone: '+420 720 987 654' },
+                      { id: 'ent_kralova', name: 'Mgr. Alena Králová', type: 'coworker', role: 'Pracovník', email: 'alenakralova@gmail.com', phone: '+420 602 555 888' },
+                      { id: 'ent_self', name: 'Jana Nováková', type: 'coworker', role: 'Pracovník (Já)', email: 'jananovakova@gmail.com', phone: '+420 603 444 333' },
+                      { id: 'ent_svoboda', name: 'PhDr. Martin Svoboda', type: 'other', role: 'OSPOD', email: 'svoboda@ospod.cz', phone: '+420 604 111 999' }
+                    ].filter(item => {
+                      if (modalAssignedTab !== 'all') {
+                        if (modalAssignedTab === 'coworker') {
+                          if (item.type !== 'coworker' && item.type !== 'employee' && item.type !== 'worker') return false;
+                        } else if (item.type !== modalAssignedTab) {
+                          return false;
+                        }
+                      }
+                      if (!assignedEntitiesSearchQuery.trim()) return true;
+                      const q = assignedEntitiesSearchQuery.toLowerCase();
+                      return item.name.toLowerCase().includes(q) || item.email.toLowerCase().includes(q) || item.phone.includes(q);
+                    }).map(item => {
+                      const currentArr = editingTask.assignedEntities || (editingTask.entityName ? [{ id: editingTask.entityId, name: editingTask.entityName, type: editingTask.entityType }] : []);
+                      const isChecked = currentArr.some(x => x.id === item.id);
 
-                        return (
-                          <label 
-                            key={item.id}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px',
-                              fontSize: '11px',
-                              cursor: 'pointer',
-                              padding: '2px 4px',
-                              borderRadius: '4px',
-                              backgroundColor: isChecked ? '#EFF6FF' : 'transparent'
-                            }}
-                          >
+                      return (
+                        <label 
+                          key={item.id}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '6px 8px',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            backgroundColor: isChecked ? '#EFF6FF' : '#FAFAFA',
+                            border: `1px solid ${isChecked ? '#BFDBFE' : '#F1F5F9'}`,
+                            transition: 'all 0.15s ease'
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
                             <input
                               type="checkbox"
                               checked={isChecked}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  const updated = [...currentArr, { id: item.id, name: item.rawName || item.name, type: item.type }];
+                                  const updated = [...currentArr, { id: item.id, name: item.name, type: item.type }];
                                   setEditingTask(prev => ({
                                     ...prev,
                                     assignedEntities: updated,
@@ -3373,13 +3403,21 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               }}
                               style={{ accentColor: '#2563EB', cursor: 'pointer' }}
                             />
-                            <span style={{ fontWeight: isChecked ? 600 : 400, color: isChecked ? '#2563EB' : '#171B1F' }}>
+                            <i className={item.type === 'family' ? 'las la-home' : item.type === 'foster_parent' ? 'las la-heart' : item.type === 'child' ? 'las la-smile' : item.type === 'coworker' ? 'las la-user-tie' : 'las la-address-card'} style={{ color: isChecked ? '#2563EB' : '#64748B', fontSize: '14px' }} />
+                            <span style={{ fontWeight: isChecked ? 600 : 500, fontSize: '12px', color: isChecked ? '#2563EB' : '#1E293B', whiteSpace: 'nowrap' }}>
                               {item.name}
                             </span>
-                          </label>
-                        );
-                      })}
-                    </div>
+                            <span style={{ fontSize: '10px', color: '#64748B', backgroundColor: '#E2E8F0', padding: '1px 6px', borderRadius: '4px' }}>
+                              {item.role}
+                            </span>
+                          </div>
+
+                          <span style={{ fontSize: '11px', color: '#64748B', whiteSpace: 'nowrap', marginLeft: '12px' }}>
+                            {item.email} • {item.phone}
+                          </span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
