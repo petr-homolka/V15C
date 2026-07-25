@@ -1077,20 +1077,10 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           border-color: #FF4742 !important;
           background-color: #FFF5F5 !important;
         }
-        .task-checkbox:hover::after {
-          content: '✓';
-          color: #FF4742;
-          font-size: 11px;
-          font-weight: 800;
-          line-height: 1;
-        }
         .task-checkbox.completed {
           background-color: #FF4742 !important;
           border-color: #FF4742 !important;
           color: #FFFFFF !important;
-        }
-        .task-checkbox.completed::after {
-          content: none !important;
         }
         .task-checkbox.completed:hover {
           background-color: #E03833 !important;
