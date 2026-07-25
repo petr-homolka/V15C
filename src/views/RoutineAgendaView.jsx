@@ -1199,7 +1199,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           </div>
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                            {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU */}
+                            {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU (VĚTŠÍ IKONY, BEZ OUTLINE, PROKLIK NA PROFIL) */}
                             {t.entityName && (
                               <span 
                                 onClick={(e) => {
@@ -1208,9 +1208,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                     onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
                                   }
                                 }}
-                                title={`Zobrazit profil (${t.entityName})`}
+                                title={`Otevřít profil (${t.entityName})`}
                                 style={{
-                                  fontSize: '10px',
+                                  fontSize: '12px',
                                   fontWeight: 500,
                                   color: t.entityType === 'family' ? '#2563EB' :
                                          t.entityType === 'foster_parent' ? '#059669' :
@@ -1218,25 +1218,22 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                   backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
                                                    t.entityType === 'foster_parent' ? '#ECFDF5' :
                                                    t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
-                                  border: `1px solid ${
-                                    t.entityType === 'family' ? '#BFDBFE' :
-                                    t.entityType === 'foster_parent' ? '#A7F3D0' :
-                                    t.entityType === 'child' ? '#FBCFE8' : '#DDD6FE'
-                                  }`,
-                                  padding: '2px 6px',
-                                  borderRadius: '6px',
+                                  border: 'none',
+                                  padding: '4px 10px',
+                                  borderRadius: '8px',
                                   cursor: 'pointer',
                                   display: 'inline-flex',
                                   alignItems: 'center',
-                                  gap: '3px',
-                                  whiteSpace: 'nowrap'
+                                  gap: '6px',
+                                  whiteSpace: 'nowrap',
+                                  transition: 'all 0.15s ease'
                                 }}
                               >
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
                                   t.entityType === 'foster_parent' ? 'las la-user-friends' :
                                   t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
-                                } style={{ fontSize: '11px' }} />
+                                } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
                               </span>
                             )}
@@ -1319,7 +1316,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           </div>
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                            {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU */}
+                            {/* ŠTÍTEK OSOBY / ENTITY U ÚKOLU (VĚTŠÍ IKONY, BEZ OUTLINE, PROKLIK NA PROFIL) */}
                             {t.entityName && (
                               <span 
                                 onClick={(e) => {
@@ -1328,9 +1325,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                     onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
                                   }
                                 }}
-                                title={`Zobrazit profil (${t.entityName})`}
+                                title={`Otevřít profil (${t.entityName})`}
                                 style={{
-                                  fontSize: '10px',
+                                  fontSize: '12px',
                                   fontWeight: 500,
                                   color: t.entityType === 'family' ? '#2563EB' :
                                          t.entityType === 'foster_parent' ? '#059669' :
@@ -1338,25 +1335,22 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                   backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
                                                    t.entityType === 'foster_parent' ? '#ECFDF5' :
                                                    t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
-                                  border: `1px solid ${
-                                    t.entityType === 'family' ? '#BFDBFE' :
-                                    t.entityType === 'foster_parent' ? '#A7F3D0' :
-                                    t.entityType === 'child' ? '#FBCFE8' : '#DDD6FE'
-                                  }`,
-                                  padding: '2px 6px',
-                                  borderRadius: '6px',
+                                  border: 'none',
+                                  padding: '4px 10px',
+                                  borderRadius: '8px',
                                   cursor: 'pointer',
                                   display: 'inline-flex',
                                   alignItems: 'center',
-                                  gap: '3px',
-                                  whiteSpace: 'nowrap'
+                                  gap: '6px',
+                                  whiteSpace: 'nowrap',
+                                  transition: 'all 0.15s ease'
                                 }}
                               >
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
                                   t.entityType === 'foster_parent' ? 'las la-user-friends' :
                                   t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
-                                } style={{ fontSize: '11px' }} />
+                                } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
                               </span>
                             )}
@@ -1432,8 +1426,38 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           </div>
 
                           {t.entityName && (
-                            <span style={{ fontSize: '10px', color: '#6B7280', backgroundColor: '#F3F4F6', padding: '2px 6px', borderRadius: '4px' }}>
-                              {t.entityName}
+                            <span 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (onSelectEntity) {
+                                  onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
+                                }
+                              }}
+                              title={`Otevřít profil (${t.entityName})`}
+                              style={{
+                                fontSize: '11px',
+                                fontWeight: 500,
+                                color: t.entityType === 'family' ? '#2563EB' :
+                                       t.entityType === 'foster_parent' ? '#059669' :
+                                       t.entityType === 'child' ? '#DB2777' : '#7C3AED',
+                                backgroundColor: t.entityType === 'family' ? '#EFF6FF' :
+                                                 t.entityType === 'foster_parent' ? '#ECFDF5' :
+                                                 t.entityType === 'child' ? '#FDF2F8' : '#F3E8FF',
+                                border: 'none',
+                                padding: '3px 8px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '5px'
+                              }}
+                            >
+                              <i className={
+                                t.entityType === 'family' ? 'las la-home' :
+                                t.entityType === 'foster_parent' ? 'las la-user-friends' :
+                                t.entityType === 'child' ? 'las la-child' : 'las la-user-tie'
+                              } style={{ fontSize: '14px' }} />
+                              <span>{t.entityName}</span>
                             </span>
                           )}
                         </div>
