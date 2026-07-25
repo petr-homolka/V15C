@@ -364,7 +364,36 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
   const [showSearchInput, setShowSearchInput] = useState(false);
-  const [showSegmentBar, setShowSegmentBar] = useState(false);
+  const [leftColumnWidth, setLeftColumnWidth] = useState(48); // % šířky levého sloupce úkolů
+  const [isResizingColumns, setIsResizingColumns] = useState(false);
+
+  // EFEKT PRO POSOUVÁNÍ ROZHRANÍ STLAČENÍM A TÁHNUTÍM MYŠI (FLEXIBILNÍ SVISLÉ ROZDELENÍ)
+  useEffect(() => {
+    if (!isResizingColumns) return;
+
+    const handleMouseMove = (e) => {
+      const sidebarWidth = 72; // Přibližná šířka levého menu RoutineSidebar
+      const availableWidth = window.innerWidth - sidebarWidth;
+      const mouseOffset = e.clientX - sidebarWidth;
+      
+      let newPercent = (mouseOffset / availableWidth) * 100;
+      if (newPercent < 20) newPercent = 20; // Minimální šířka 20%
+      if (newPercent > 80) newPercent = 80; // Maximální šířka 80%
+
+      setLeftColumnWidth(newPercent);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizingColumns(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizingColumns]);
 
   // Úkoly se přiřazenými subjekty pro přesnou segmentaci
   const [tasks, setTasks] = useState([
@@ -1016,15 +1045,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         user={user}
       />
 
-      {/* 2. LEVÁ PŮLKA: ÚKOLY (EXAKTNĚ 50% PŮLKA STRÁNKY, FIXNÍ HLAVIČKA A NEZÁVISLÝ SCROLL POUZE V SEZNAMU) */}
+      {/* 2. LEVÁ ČÁST: ÚKOLY (FLEXIBILNÍ POUŠTĚNÍ A POSOUVÁNÍ ŠÍŘKY SLUPCE) */}
       <div style={{
-        flex: 1,
+        width: `${leftColumnWidth}%`,
+        flexShrink: 0,
         height: '100vh',
         borderRight: 'none',
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#FFFFFF',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        userSelect: isResizingColumns ? 'none' : 'auto'
       }}>
         {/* FIXNÍ HLAVIČKA SLOUPCE ÚKOLŮ S TITULEM, IKONOVOU LIŠTOU BEZ STÍNU, SEGMENTACÍ, VYHLEDÁVAČEM A DROPDOWNEM */}
         <div style={{ padding: '24px 28px 16px 28px', flexShrink: 0, backgroundColor: '#FFFFFF', zIndex: 20 }}>
@@ -2161,11 +2192,51 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         </div>
       </div>
 
-      {/* 3. PRAVÁ PŮLKA: ČASOVÁ OSA AGENDY S HORNÍM PŘECHODEM A DYNAMICKÝM DATUMEM */}
+      {/* SVISLÁ POSUVNÁ LIŠTA PRO DYNAMICKÉ NASTAVENÍ ŠÍŘKY SLOUPCŮ (RESIZER DIVIDER BAR) */}
+      <div
+        onMouseDown={(e) => {
+          e.preventDefault();
+          setIsResizingColumns(true);
+        }}
+        title="Táhnutím upravíte rozdělení obrazovky (šířku sloupců)"
+        style={{
+          width: '7px',
+          height: '100vh',
+          cursor: 'col-resize',
+          backgroundColor: isResizingColumns ? '#2563EB' : '#F1F3F5',
+          borderLeft: '1px solid #E2E8F0',
+          borderRight: '1px solid #E2E8F0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 90,
+          userSelect: 'none',
+          transition: 'background-color 0.15s ease',
+          flexShrink: 0
+        }}
+        onMouseEnter={(e) => !isResizingColumns && (e.currentTarget.style.backgroundColor = '#CBD5E1')}
+        onMouseLeave={(e) => !isResizingColumns && (e.currentTarget.style.backgroundColor = '#F1F3F5')}
+      >
+        <div style={{
+          width: '3px',
+          height: '24px',
+          borderRadius: '2px',
+          backgroundColor: isResizingColumns ? '#FFFFFF' : '#94A3B8'
+        }} />
+      </div>
+
+      {/* 3. PRAVÁ ČÁST: ČASOVÁ OSA AGENDY */}
       <div 
         ref={timelineScrollRef}
         onScroll={handleScrollTimeline}
-        style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
+        style={{ 
+          flex: 1, 
+          height: '100vh', 
+          overflowY: 'auto', 
+          backgroundColor: '#FFFFFF', 
+          position: 'relative',
+          userSelect: isResizingColumns ? 'none' : 'auto'
+        }}
       >
         {/* HORNÍ PŘECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM DATUMOVÝM BANNEREM A SAMOSTATNÝMI KROUŽKY VPRAVO */}
         <div style={{
