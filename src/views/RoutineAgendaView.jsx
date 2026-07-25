@@ -2593,10 +2593,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     color: '#747F8F',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '6px'
+                    gap: '4px'
                   }}>
-                    <i className="las la-calendar-day" style={{ color: '#F59E0B', fontSize: '13px' }}></i>
-                    <span>Svátek má: <strong>{nameDayPerson}</strong></span>
+                    <span>Svátek má <strong>{nameDayPerson}</strong></span>
                   </div>
                 </div>
 
