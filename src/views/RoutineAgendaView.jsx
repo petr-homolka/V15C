@@ -9,7 +9,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [activeDatePickerTask, setActiveDatePickerTask] = useState(null);
   const [taskPickerMonth, setTaskPickerMonth] = useState(new Date(2026, 6, 1));
   
-  // Drag & Drop live target state s presnym uchopenim a trvanim udalosti
+  // Drag & Drop live target state s přesným uchopením a trváním události
   const [draggedTaskId, setDraggedTaskId] = useState(null);
   const [draggedEventId, setDraggedEventId] = useState(null);
   const [dragGrabOffsetHours, setDragGrabOffsetHours] = useState(0);
@@ -18,7 +18,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [draggedColor, setDraggedColor] = useState('#FF4742');
 
   const [dragOverGroup, setDragOverGroup] = useState(null);
-  const [dropTargetInfo, setDropTargetInfo] = useState(null); // { dayOffset, startHour, topPx, timeStr, durationHours, title, color }
+  const [dropTargetInfo, setDropTargetInfo] = useState(null);
 
   // Animované ID právě zaškrtnutého úkolu pro efekt
   const [recentlyCheckedId, setRecentlyCheckedId] = useState(null);
@@ -39,7 +39,40 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [activeEventModal, setActiveEventModal] = useState(null);
 
   const HOUR_HEIGHT = 70;
-  const SINGLE_DAY_HEIGHT = 24 * HOUR_HEIGHT + 100;
+  const SINGLE_DAY_HEIGHT = 24 * HOUR_HEIGHT + 140;
+
+  // POMOCNÝ ČESKÝ KALENDÁŘ SVÁTKŮ (NAMESDAYS)
+  const getCzechNameDay = (dateObj) => {
+    const m = dateObj.getMonth() + 1;
+    const d = dateObj.getDate();
+    const key = `${m}-${d}`;
+
+    const dict = {
+      '7-23': 'Libor',
+      '7-24': 'Kristýna',
+      '7-25': 'Jakub',
+      '7-26': 'Anna',
+      '7-27': 'Věroslav',
+      '7-28': 'Viktor',
+      '7-29': 'Marta',
+      '7-30': 'Bořivoj',
+      '7-31': 'Ignác',
+      '8-1': 'Oskar',
+      '8-2': 'Gustav',
+      '8-3': 'Miluše',
+      '8-4': 'Dominik',
+      '8-5': 'Kristián',
+      '8-6': 'Oldřiška',
+      '8-7': 'Lada',
+      '8-8': 'Soběslav',
+      '8-9': 'Roman',
+      '8-10': 'Vavřinec',
+      '8-11': 'Zuzana',
+      '8-12': 'Klára'
+    };
+
+    return dict[key] || 'Všichni svatí';
+  };
 
   // Detail dne bez jakýchkoliv "uší" - 100% čistá typografie Routine.com
   const getDayDetails = (offset) => {
@@ -104,7 +137,6 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     const el = timelineScrollRef.current;
     if (!el || isPrependingRef.current) return;
 
-    // Aktualizace viditelného data pro horní přechod na základě scrollu
     const scrollPos = el.scrollTop;
     const estimatedOffsetIndex = Math.floor((scrollPos + 100) / SINGLE_DAY_HEIGHT);
     const clampedIndex = Math.max(0, Math.min(offsets.length - 1, estimatedOffsetIndex));
@@ -134,7 +166,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     }
   };
 
-  // SEED DATA: Události
+  // SEED DATA: Události a celodenní akce (včetně Narozenin a Jmenin)
   const [events, setEvents] = useState([
     {
       id: 'e_allday_1',
@@ -143,6 +175,29 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       category: 'Absence',
       color: '#FF4742',
       bgColor: '#FFF5F5',
+      borderColor: '#FECDD3',
+      isAllDay: true
+    },
+    {
+      id: 'e_allday_bday',
+      dayOffset: 0,
+      title: 'Narozeniny: Tomáš Dvořák (pěstoun) - 42 let',
+      category: 'Narozeniny',
+      iconClass: 'las la-birthday-cake',
+      color: '#EC4899',
+      bgColor: '#FDF2F8',
+      borderColor: '#FBCFE8',
+      isAllDay: true
+    },
+    {
+      id: 'e_allday_nameday',
+      dayOffset: 0,
+      title: 'Jmeniny: Kristýna Nováková (dítě v péči)',
+      category: 'Jmeniny',
+      iconClass: 'las la-gift',
+      color: '#A855F7',
+      bgColor: '#F3E8FF',
+      borderColor: '#E9D5FF',
       isAllDay: true
     },
     {
@@ -152,15 +207,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
       category: 'Vzdělávání',
       color: '#F59E0B',
       bgColor: '#FEF3C7',
-      isAllDay: true
-    },
-    {
-      id: 'e_allday_3',
-      dayOffset: 0,
-      title: 'Přezkoumání výročních zpráv doprovázení rodin',
-      category: 'Metodika',
-      color: '#3B82F6',
-      bgColor: '#EFF6FF',
+      borderColor: '#FDE68A',
       isAllDay: true
     },
     {
@@ -376,7 +423,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     setDraggedTaskId(task.id);
     setDraggedEventId(null);
     setDragGrabOffsetHours(0);
-    setDraggedEventDuration(0.5); // Úkol výchozí 30 min
+    setDraggedEventDuration(0.5);
     setDraggedTitle(task.title);
     setDraggedColor('#3B82F6');
     e.dataTransfer.setData('task-id', task.id);
@@ -406,12 +453,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     setDragOverGroup(null);
   };
 
-  // ZACHYCENÍ PŘESNÉHO MÍSTA UCHOPENÍ KARTY MYŠÍ PRO 100% PŘESNÝ NÁHLED PŘETAŽENÍ
+  // ZACHYCENÍ PŘESNÉHO MÍSTA UCHOPENÍ KARTY MYŠÍ
   const handleEventDragStart = (e, ev) => {
     setDraggedEventId(ev.id);
     setDraggedTaskId(null);
     
-    // Zjistit přesný vertikální offset myši uvnitř kartičky
     const rect = e.currentTarget.getBoundingClientRect();
     const offsetY = e.clientY - rect.top;
     const grabOffsetHours = Math.max(0, offsetY / HOUR_HEIGHT);
@@ -430,10 +476,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     const rect = e.currentTarget.getBoundingClientRect();
     const cursorOffsetY = e.clientY - rect.top;
     
-    // Odečteme přesný offset uchopení mysi, aby se horní hrana karty neskákala
     const rawStartHour = (cursorOffsetY / HOUR_HEIGHT) - dragGrabOffsetHours;
     const startHour = Math.max(0, Math.min(23.75, rawStartHour));
-    const roundedHour = Math.round(startHour * 4) / 4; // Krok po 15 minutách
+    const roundedHour = Math.round(startHour * 4) / 4;
     
     const startH = Math.floor(roundedHour);
     const startM = Math.round((roundedHour - startH) * 60);
@@ -827,7 +872,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         onScroll={handleScrollTimeline}
         style={{ flex: 1, height: '100vh', overflowY: 'auto', backgroundColor: '#FFFFFF', position: 'relative' }}
       >
-        {/* HORNÍ SVOJE SLOGAN PRECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM VELKÝM DATUMEM (BEZ ČÁR A UŠÍ!) */}
+        {/* HORNÍ SVOJE SLOGAN PRECHOD (GRADIENT FADE OVERLAY) S CENTROVANÝM VELKÝM DATUMEM */}
         <div style={{
           position: 'sticky',
           top: 0,
@@ -863,7 +908,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           </div>
         </div>
 
-        {/* DYNAMICKÝ NEKONEČNÝ STREAM DNŮ (ZRUŠENY JAKÉKOLIV HORIZONTÁLNÍ ČÁRY A UŠI) */}
+        {/* DYNAMICKÝ NEKONEČNÝ STREAM DNŮ */}
         <div style={{ marginTop: '-40px' }}>
           {offsets.map(offset => {
             const dayObj = getDayDetails(offset);
@@ -873,6 +918,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             
             // VÝPOČET SOUBĚŽNÝCH UDÁLOSTÍ PRO ZOBRAZENÍ VEDLE SEBE (KONFLIKTY)
             const layoutedEvents = computeEventLayout(rawEvents);
+            const nameDayPerson = getCzechNameDay(dayObj.dateObj);
 
             return (
               <div 
@@ -882,66 +928,104 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   position: 'relative',
                   backgroundColor: '#FFFFFF',
                   border: 'none',
-                  marginTop: '12px'
+                  marginTop: '16px'
                 }}
               >
-                {/* ALL DAY SEKCE (ŘAZENÉ POD SEBE, STEJNĚ ŠIROKÉ PODLE ROUTINE STANDARDU) */}
+                {/* CENTROVANÁ HLAVIČKA DNE A SVÁTKU Z ČESKÉHO KALENDÁŘE (MÍSTO NADPISU ALL DAY) */}
+                <div style={{
+                  paddingLeft: '80px',
+                  paddingRight: '32px',
+                  marginTop: '20px',
+                  marginBottom: '12px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '2px'
+                }}>
+                  <h2 style={{
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    color: dayObj.isToday ? '#FF4742' : '#171B1F',
+                    margin: 0,
+                    letterSpacing: '-0.3px'
+                  }}>
+                    {dayObj.subLabel ? `${dayObj.subLabel} – ${dayObj.fullDateStr}` : dayObj.fullDateStr}
+                  </h2>
+                  <div style={{
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    color: '#747F8F',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <i className="las la-calendar-day" style={{ color: '#F59E0B', fontSize: '13px' }}></i>
+                    <span>Svátek má: <strong>{nameDayPerson}</strong></span>
+                  </div>
+                </div>
+
+                {/* CELODENNÍ AKCE (TINT BACKGROUND, BEZ "CELÝ DEN", STEJNĚ ŠIROKÉ POD SEBOU, VČETNĚ NAROZENIN A JMENIN) */}
                 {allDayEvents.length > 0 && (
                   <div style={{
                     paddingLeft: '80px',
                     paddingRight: '32px',
-                    marginTop: '12px',
                     marginBottom: '14px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '6px'
+                    gap: '8px',
+                    width: '100%',
+                    boxSizing: 'border-box'
                   }}>
-                    <div style={{ fontSize: '10px', fontWeight: 600, color: '#8896A9', letterSpacing: '0.6px', textTransform: 'uppercase', marginBottom: '2px' }}>
-                      ALL DAY
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-                      {allDayEvents.map(ev => (
-                        <div 
-                          key={ev.id}
-                          onClick={() => setActiveEventModal({ ...ev })}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            width: '100%',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #EAEAEA',
-                            borderRadius: '8px',
-                            padding: '8px 12px',
-                            fontSize: '13px',
-                            fontWeight: 500,
-                            color: '#171B1F',
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
-                            boxSizing: 'border-box',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
-                            {/* ROUTINE CAPSULE INDICATOR */}
-                            <div style={{
-                              width: '3.5px',
-                              height: '14px',
-                              backgroundColor: ev.color || '#FF4742',
-                              borderRadius: '4px',
-                              flexShrink: 0
-                            }} />
-                            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {ev.title}
-                            </span>
-                          </div>
+                    {allDayEvents.map(ev => (
+                      <div 
+                        key={ev.id}
+                        onClick={() => setActiveEventModal({ ...ev })}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                          backgroundColor: ev.bgColor || '#FFF5F5',
+                          border: `1px solid ${ev.borderColor || '#FECDD3'}`,
+                          borderRadius: '8px',
+                          padding: '9px 14px',
+                          fontSize: '13px',
+                          fontWeight: 500,
+                          color: '#171B1F',
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+                          boxSizing: 'border-box',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden' }}>
+                          {/* ROUTINE INSET CAPSULE BAR */}
+                          <div style={{
+                            width: '3.5px',
+                            height: '16px',
+                            backgroundColor: ev.color || '#FF4742',
+                            borderRadius: '4px',
+                            flexShrink: 0
+                          }} />
 
-                          <span style={{ fontSize: '11px', fontWeight: 500, color: '#8C8C9A', backgroundColor: '#F4F4F6', padding: '2px 8px', borderRadius: '4px', flexShrink: 0 }}>
-                            Celý den
+                          {/* VEKTOROVÁ IKONA AKCE POKUD EXISTUJE */}
+                          {ev.iconClass && (
+                            <i className={ev.iconClass} style={{ color: ev.color || '#FF4742', fontSize: '16px', flexShrink: 0 }}></i>
+                          )}
+
+                          <span style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            fontWeight: 500
+                          }}>
+                            {ev.title}
                           </span>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 )}
 
@@ -1009,7 +1093,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                     </div>
                   )}
 
-                  {/* ZVÝRAZNĚNÍ CÍLOVÉHO ČASU PŘI PŘETAHOVÁNÍ S PŘESNOU DÉLKOU A NÁZVEM AKTUÁLNĚ TAŽENÉ UDÁLOSTI */}
+                  {/* ZVÝRAZNĚNÍ CÍLOVÉHO ČASU PŘI PŘETAHOVÁNÍ */}
                   {isTargetDay && dropTargetInfo && (
                     <div style={{
                       position: 'absolute',
@@ -1144,7 +1228,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                           </span>
                         </div>
 
-                        {/* POZNÁMKY POD NÁZVEM POKUD EXISTUJÍ */}
+                        {/* POZNÁMKY POD NÁZVEM POKUD EXISTUJE */}
                         {ev.notes && !isConflict && (
                           <div style={{ fontSize: '12px', color: '#8C8C9A', marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {ev.notes}
