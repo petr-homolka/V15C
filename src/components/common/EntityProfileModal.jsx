@@ -143,7 +143,7 @@ export function EntityProfileModal({ entity, onClose, onNavigateToFamily }) {
                 fontSize: '24px',
                 fontWeight: 800
               }}>
-                <i className="las la-hand-holding-heart"></i>
+                <i className="las la-heart"></i>
               </div>
               <div>
                 <span style={{ fontSize: '11px', fontWeight: 800, color: '#27B973', textTransform: 'uppercase' }}>PROFIL PĚSTOUNSKÉ RODINY</span>

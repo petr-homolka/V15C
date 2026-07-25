@@ -4,7 +4,7 @@ export function Sidebar({ activePage, onNavigate, isMobileOpen, onCloseMobile, i
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'las la-chart-pie' },
     { id: 'family-list', label: 'Rodiny', icon: 'las la-users' },
-    { id: 'foster-parents', label: 'Pěstouni', icon: 'las la-hand-holding-heart' },
+    { id: 'foster-parents', label: 'Pěstouni', icon: 'las la-heart' },
     { id: 'children', label: 'Děti', icon: 'las la-smile' },
     { id: 'team', label: 'Tým', icon: 'las la-id-badge' },
     { id: 'calendar', label: 'Kalendář', icon: 'las la-calendar-alt' },

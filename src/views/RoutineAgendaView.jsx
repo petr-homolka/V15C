@@ -316,6 +316,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
   const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
   const [disappearingTaskIds, setDisappearingTaskIds] = useState([]);
+  const [showSearchInput, setShowSearchInput] = useState(true);
+  const [showSegmentBar, setShowSegmentBar] = useState(true);
 
   // Úkoly se přiřazenými subjekty pro přesnou segmentaci
   const [tasks, setTasks] = useState([
@@ -826,70 +828,320 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         backgroundColor: '#FFFFFF',
         overflow: 'hidden'
       }}>
-        {/* FIXNÍ HLAVIČKA SLOUPCE ÚKOLŮ S TITULEM, TLAČÍTKEM SESKUPENÍ, SEGMENTACÍ, VYHLEDÁVAČEM A DROPDOWNEM */}
+        {/* FIXNÍ HLAVIČKA SLOUPCE ÚKOLŮ S TITULEM, IKONOVOU LIŠTOU BEZ STÍNU, SEGMENTACÍ, VYHLEDÁVAČEM A DROPDOWNEM */}
         <div style={{ padding: '24px 28px 16px 28px', flexShrink: 0, backgroundColor: '#FFFFFF', zIndex: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <h1 style={{ fontSize: '22px', fontWeight: 500, color: '#171b1f', margin: 0, letterSpacing: '-0.5px' }}>Úkoly</h1>
-              <div style={{ fontSize: '13px', color: '#747f8f', marginTop: '4px', fontWeight: 400 }}>Červenec 2026</div>
             </div>
 
-            {/* TLAČÍTKO SESKUPIT PODLE SUBJEKTU */}
-            <button
-              onClick={() => setGroupByEntity(!groupByEntity)}
-              title="Přepnout seskupení úkolů podle subjektu / termínu"
-              style={{
-                border: '1px solid #E5E7EB',
-                backgroundColor: groupByEntity ? '#EEF4FF' : '#FFFFFF',
-                color: groupByEntity ? '#3B82F6' : '#5E6774',
-                fontWeight: 500,
-                fontSize: '11px',
-                padding: '5px 10px',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '5px',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <i className="las la-layer-group" style={{ fontSize: '13px' }} />
-              <span>{groupByEntity ? 'Seskupeno dle subjektu' : 'Seskupit dle subjektu'}</span>
-            </button>
-          </div>
-
-          {/* SEGMENTAČNÍ PŘEPÍNAČ (KAPSLOVÉ TLAČÍTKA FILTERU PODLE TYPU SUBJEKTU) */}
-          <div style={{
-            marginTop: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            backgroundColor: '#F4F4F6',
-            padding: '3px',
-            borderRadius: '10px',
-            overflowX: 'auto'
-          }}>
-            {[
-              { id: 'all', label: 'Vše', icon: 'las la-list', count: tasks.filter(t => !t.completed).length },
-              { id: 'family', label: 'Rodiny', icon: 'las la-home', count: tasks.filter(t => t.entityType === 'family' && !t.completed).length },
-              { id: 'foster_parent', label: 'Pěstouni', icon: 'las la-hand-holding-heart', count: tasks.filter(t => t.entityType === 'foster_parent' && !t.completed).length },
-              { id: 'child', label: 'Děti', icon: 'las la-smile', count: tasks.filter(t => t.entityType === 'child' && !t.completed).length },
-              { id: 'coworker', label: 'Spolupracovníci', icon: 'las la-user-tie', count: tasks.filter(t => t.entityType === 'coworker' && !t.completed).length }
-            ].map(seg => (
+            {/* IKONOVÉ NÁSTROJE BEZ STÍNU MÍSTO STARÉHO TLAČÍTKA SESKUPIT */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {/* 1. HLEDÁNÍ */}
               <button
-                key={seg.id}
-                onClick={() => setSelectedSegment(seg.id)}
+                type="button"
+                onClick={() => setShowSearchInput(!showSearchInput)}
+                title="Zobrazit / skrýt vyhledávání"
                 style={{
                   border: 'none',
-                  backgroundColor: selectedSegment === seg.id ? '#FFFFFF' : 'transparent',
-                  color: selectedSegment === seg.id ? '#171B1F' : '#747F8F',
-                  fontWeight: selectedSegment === seg.id ? 600 : 500,
+                  boxShadow: 'none',
+                  backgroundColor: (showSearchInput || searchQuery) ? '#FFEBEB' : '#F4F4F6',
+                  color: (showSearchInput || searchQuery) ? '#FF4742' : '#5E6774',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <i className="las la-search" />
+              </button>
+
+              {/* 2. FILTROVÁNÍ SUBJEKTU */}
+              <div style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsEntityDropdownOpen(!isEntityDropdownOpen)}
+                  title="Filtrovat konkrétní subjekt"
+                  style={{
+                    border: 'none',
+                    boxShadow: 'none',
+                    backgroundColor: (isEntityDropdownOpen || selectedEntityFilter !== 'all') ? '#EEF4FF' : '#F4F4F6',
+                    color: (isEntityDropdownOpen || selectedEntityFilter !== 'all') ? '#2563EB' : '#5E6774',
+                    padding: '0 10px',
+                    height: '34px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <i className="las la-filter" style={{ fontSize: '15px' }} />
+                  <span>
+                    {selectedEntityFilter === 'all'
+                      ? 'Filtrovat'
+                      : selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova'
+                      : selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova'
+                      : selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák'
+                      : selectedEntityFilter === 'ent_adam' ? 'Adam Novák'
+                      : selectedEntityFilter === 'ent_kralova' ? 'Alena Králová'
+                      : 'Jana Nováková'
+                    }
+                  </span>
+                  <i className={`las la-angle-${isEntityDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '11px', marginLeft: '2px' }} />
+                </button>
+
+                {/* FLOATING CUSTOM POPOVER PANEL */}
+                {isEntityDropdownOpen && (
+                  <>
+                    <div 
+                      onClick={() => setIsEntityDropdownOpen(false)}
+                      style={{ position: 'fixed', inset: 0, zIndex: 999 }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 6px)',
+                      right: 0,
+                      zIndex: 1000,
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '12px',
+                      boxShadow: '0 12px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06)',
+                      border: '1px solid #EAEAEE',
+                      width: '220px',
+                      padding: '6px 0',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px'
+                    }}>
+                      {/* POLOŽKA: VŠECHNY SUBJEKTY */}
+                      <div
+                        onClick={() => { setSelectedEntityFilter('all'); setIsEntityDropdownOpen(false); }}
+                        style={{
+                          padding: '8px 14px',
+                          fontSize: '12px',
+                          fontWeight: selectedEntityFilter === 'all' ? 600 : 400,
+                          color: selectedEntityFilter === 'all' ? '#FF4742' : '#171B1F',
+                          backgroundColor: selectedEntityFilter === 'all' ? '#FFF5F5' : 'transparent',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          transition: 'background-color 0.15s'
+                        }}
+                        onMouseEnter={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                        onMouseLeave={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <i className="las la-list" style={{ fontSize: '15px', color: '#747F8F' }} />
+                        <span>Všechny subjekty</span>
+                      </div>
+
+                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                      {/* SKUPINA: RODINY */}
+                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <i className="las la-home" style={{ fontSize: '12px' }} />
+                        <span>Rodiny</span>
+                      </div>
+                      {[
+                        { id: 'fam_dvorak', label: 'Rodina Dvořákova' },
+                        { id: 'fam_novak', label: 'Rodina Novákova' }
+                      ].map(item => (
+                        <div
+                          key={item.id}
+                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                          style={{
+                            padding: '6px 14px 6px 26px',
+                            fontSize: '12px',
+                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                            color: selectedEntityFilter === item.id ? '#2563EB' : '#171B1F',
+                            backgroundColor: selectedEntityFilter === item.id ? '#EFF6FF' : 'transparent',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.15s'
+                          }}
+                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                        >
+                          {item.label}
+                        </div>
+                      ))}
+
+                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                      {/* SKUPINA: PĚSTOUNI */}
+                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <i className="las la-heart" style={{ fontSize: '12px' }} />
+                        <span>Pěstouni</span>
+                      </div>
+                      {[
+                        { id: 'ent_dvorak', label: 'Tomáš Dvořák' }
+                      ].map(item => (
+                        <div
+                          key={item.id}
+                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                          style={{
+                            padding: '6px 14px 6px 26px',
+                            fontSize: '12px',
+                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                            color: selectedEntityFilter === item.id ? '#059669' : '#171B1F',
+                            backgroundColor: selectedEntityFilter === item.id ? '#ECFDF5' : 'transparent',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.15s'
+                          }}
+                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                        >
+                          {item.label}
+                        </div>
+                      ))}
+
+                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                      {/* SKUPINA: DĚTI V PÉČI */}
+                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#DB2777', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <i className="las la-smile" style={{ fontSize: '12px' }} />
+                        <span>Děti v péči</span>
+                      </div>
+                      {[
+                        { id: 'ent_adam', label: 'Adam Novák' }
+                      ].map(item => (
+                        <div
+                          key={item.id}
+                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                          style={{
+                            padding: '6px 14px 6px 26px',
+                            fontSize: '12px',
+                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                            color: selectedEntityFilter === item.id ? '#DB2777' : '#171B1F',
+                            backgroundColor: selectedEntityFilter === item.id ? '#FDF2F8' : 'transparent',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.15s'
+                          }}
+                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                        >
+                          {item.label}
+                        </div>
+                      ))}
+
+                      <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                      {/* SKUPINA: SPOLUPRACOVNÍCI */}
+                      <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <i className="las la-user-tie" style={{ fontSize: '12px' }} />
+                        <span>Spolupracovníci</span>
+                      </div>
+                      {[
+                        { id: 'ent_kralova', label: 'Mgr. Alena Králová' },
+                        { id: 'ent_self', label: 'Jana Nováková' }
+                      ].map(item => (
+                        <div
+                          key={item.id}
+                          onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                          style={{
+                            padding: '6px 14px 6px 26px',
+                            fontSize: '12px',
+                            fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                            color: selectedEntityFilter === item.id ? '#7C3AED' : '#171B1F',
+                            backgroundColor: selectedEntityFilter === item.id ? '#F3E8FF' : 'transparent',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.15s'
+                          }}
+                          onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                          onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                        >
+                          {item.label}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* 3. SESKUPENÍ DLE SUBJEKTU */}
+              <button
+                type="button"
+                onClick={() => setGroupByEntity(!groupByEntity)}
+                title={groupByEntity ? "Seskupeno dle subjektu" : "Seskupit dle subjektu"}
+                style={{
+                  border: 'none',
+                  boxShadow: 'none',
+                  backgroundColor: groupByEntity ? '#ECFDF5' : '#F4F4F6',
+                  color: groupByEntity ? '#059669' : '#5E6774',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <i className="las la-layer-group" />
+              </button>
+
+              {/* 4. ZOBRAZIT / SKRÝT LIŠTU SEGMENTACE */}
+              <button
+                type="button"
+                onClick={() => setShowSegmentBar(!showSegmentBar)}
+                title="Zobrazit / skrýt lištu kategórií"
+                style={{
+                  border: 'none',
+                  boxShadow: 'none',
+                  backgroundColor: showSegmentBar ? '#F3E8FF' : '#F4F4F6',
+                  color: showSegmentBar ? '#7C3AED' : '#5E6774',
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '16px',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <i className="las la-sliders-h" />
+              </button>
+            </div>
+          </div>
+
+          {/* SEGMENTAČNÍ PŘEPÍNAČ (KAPSLOVÉ TLAČÍTKA FILTERU PODLE TYPU SUBJEKTU + TLAČÍTKO SESKUPIT PŘED "VŠE") */}
+          {showSegmentBar && (
+            <div style={{
+              marginTop: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              backgroundColor: '#F4F4F6',
+              padding: '3px',
+              borderRadius: '10px',
+              overflowX: 'auto'
+            }}>
+              {/* TLAČÍTKO SESKUPIT UMÍSTĚNÉ V LIŠTĚ PŘED "VŠE" */}
+              <button
+                type="button"
+                onClick={() => setGroupByEntity(!groupByEntity)}
+                title="Přepnout seskupení úkolů podle subjektu"
+                style={{
+                  border: 'none',
+                  backgroundColor: groupByEntity ? '#FFFFFF' : 'transparent',
+                  color: groupByEntity ? '#059669' : '#747F8F',
+                  fontWeight: groupByEntity ? 600 : 500,
                   fontSize: '11px',
                   padding: '6px 12px',
                   borderRadius: '7px',
                   cursor: 'pointer',
-                  boxShadow: selectedSegment === seg.id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
+                  boxShadow: groupByEntity ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '5px',
@@ -897,272 +1149,100 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   transition: 'all 0.15s ease'
                 }}
               >
-                <i className={seg.icon} style={{ fontSize: '15px', color: selectedSegment === seg.id ? '#FF4742' : '#747F8F' }} />
-                <span>{seg.label}</span>
-                {seg.count > 0 && (
-                  <span style={{
-                    fontSize: '9px',
-                    backgroundColor: selectedSegment === seg.id ? '#FFEBEB' : '#E5E7EB',
-                    color: selectedSegment === seg.id ? '#FF4742' : '#5E6774',
-                    padding: '1px 5px',
-                    borderRadius: '8px',
-                    marginLeft: '2px'
-                  }}>
-                    {seg.count}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* VYHLEDÁVACÍ POLE A SHRNUTÍ A CUSTOM ELEGANTNÍ ROZBALOVACÍ VÝBĚR SUBJEKTU */}
-          <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap' }}>
-            {/* INTERAKTIVNÍ VYHLEDÁVAČ V ÚKOLECH S FOCUS EFEKTEM JAKO POLE PŘIDAT ÚKOL */}
-            <div style={{
-              flex: 1,
-              backgroundColor: isSearchInputFocused ? '#FFFFFF' : '#F4F4F6',
-              borderRadius: '10px',
-              padding: '8px 12px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              border: isSearchInputFocused ? '1.5px solid #FF4742' : (searchQuery ? '1px solid #3B82F6' : '1px solid transparent'),
-              boxShadow: isSearchInputFocused ? '0 4px 12px rgba(255,71,66,0.1)' : (searchQuery ? '0 2px 8px rgba(59,130,246,0.1)' : 'none'),
-              transition: 'all 0.2s ease'
-            }}>
-              <i className="las la-search" style={{ color: isSearchInputFocused ? '#FF4742' : (searchQuery ? '#3B82F6' : '#8896A9'), fontSize: '16px', transition: 'color 0.2s ease' }} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setIsSearchInputFocused(true)}
-                onBlur={() => setIsSearchInputFocused(false)}
-                placeholder="Hledat úkol, subjekt..."
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  outline: 'none',
-                  fontSize: '13px',
-                  color: '#171B1F',
-                  width: '100%',
-                  fontFamily: 'Inter, sans-serif'
-                }}
-              />
-              {searchQuery && (
-                <i 
-                  className="las la-times" 
-                  onClick={() => setSearchQuery('')}
-                  style={{ color: '#8896A9', fontSize: '15px', cursor: 'pointer' }} 
-                  title="Vymazat hledání"
-                />
-              )}
-            </div>
-
-            {/* CUSTOM PRÉMIOVÉ VÝBĚROVÉ MENU SUBJEKTU (ŽÁDNÝ NATIVNÍ PROHLÍŽEČOVÝ SELECT) */}
-            <div style={{ position: 'relative' }}>
-              <button
-                type="button"
-                onClick={() => setIsEntityDropdownOpen(!isEntityDropdownOpen)}
-                style={{
-                  backgroundColor: selectedEntityFilter !== 'all' ? '#EEF4FF' : '#FFFFFF',
-                  color: selectedEntityFilter !== 'all' ? '#2563EB' : '#5E6774',
-                  border: selectedEntityFilter !== 'all' ? '1px solid #BFDBFE' : '1px solid #EAEAEA',
-                  borderRadius: '8px',
-                  padding: '6px 10px',
-                  fontSize: '12px',
-                  fontWeight: selectedEntityFilter !== 'all' ? 600 : 500,
-                  outline: 'none',
-                  cursor: 'pointer',
-                  fontFamily: 'Inter, sans-serif',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                  whiteSpace: 'nowrap',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <i className="las la-user-check" style={{ fontSize: '15px', color: selectedEntityFilter !== 'all' ? '#2563EB' : '#8896A9' }} />
-                <span>
-                  {selectedEntityFilter === 'all'
-                    ? 'Filtrovat subjekt...'
-                    : selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova'
-                    : selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova'
-                    : selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák'
-                    : selectedEntityFilter === 'ent_adam' ? 'Adam Novák'
-                    : selectedEntityFilter === 'ent_kralova' ? 'Mgr. Alena Králová'
-                    : 'Jana Nováková'
-                  }
-                </span>
-                <i className={`las la-angle-${isEntityDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '12px', marginLeft: '2px', color: '#8896A9' }} />
+                <i className="las la-layer-group" style={{ fontSize: '15px', color: groupByEntity ? '#059669' : '#747F8F' }} />
+                <span>Seskupit</span>
               </button>
 
-              {/* FLOATING CUSTOM POPOVER PANEL */}
-              {isEntityDropdownOpen && (
-                <>
-                  <div 
-                    onClick={() => setIsEntityDropdownOpen(false)}
-                    style={{ position: 'fixed', inset: 0, zIndex: 999 }}
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 6px)',
-                    right: 0,
-                    zIndex: 1000,
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '12px',
-                    boxShadow: '0 12px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06)',
-                    border: '1px solid #EAEAEE',
-                    width: '220px',
-                    padding: '6px 0',
+              {[
+                { id: 'all', label: 'Vše', icon: 'las la-list', count: tasks.filter(t => !t.completed).length },
+                { id: 'family', label: 'Rodiny', icon: 'las la-home', count: tasks.filter(t => t.entityType === 'family' && !t.completed).length },
+                { id: 'foster_parent', label: 'Pěstouni', icon: 'las la-heart', count: tasks.filter(t => t.entityType === 'foster_parent' && !t.completed).length },
+                { id: 'child', label: 'Děti', icon: 'las la-smile', count: tasks.filter(t => t.entityType === 'child' && !t.completed).length },
+                { id: 'coworker', label: 'Spolupracovníci', icon: 'las la-user-tie', count: tasks.filter(t => t.entityType === 'coworker' && !t.completed).length }
+              ].map(seg => (
+                <button
+                  key={seg.id}
+                  onClick={() => setSelectedSegment(seg.id)}
+                  style={{
+                    border: 'none',
+                    backgroundColor: selectedSegment === seg.id ? '#FFFFFF' : 'transparent',
+                    color: selectedSegment === seg.id ? '#171B1F' : '#747F8F',
+                    fontWeight: selectedSegment === seg.id ? 600 : 500,
+                    fontSize: '11px',
+                    padding: '6px 12px',
+                    borderRadius: '7px',
+                    cursor: 'pointer',
+                    boxShadow: selectedSegment === seg.id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
                     display: 'flex',
-                    flexDirection: 'column',
-                    gap: '2px'
-                  }}>
-                    {/* POLOŽKA: VŠECHNY SUBJEKTY */}
-                    <div
-                      onClick={() => { setSelectedEntityFilter('all'); setIsEntityDropdownOpen(false); }}
-                      style={{
-                        padding: '8px 14px',
-                        fontSize: '12px',
-                        fontWeight: selectedEntityFilter === 'all' ? 600 : 400,
-                        color: selectedEntityFilter === 'all' ? '#FF4742' : '#171B1F',
-                        backgroundColor: selectedEntityFilter === 'all' ? '#FFF5F5' : 'transparent',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        transition: 'background-color 0.15s'
-                      }}
-                      onMouseEnter={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                      onMouseLeave={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = 'transparent')}
-                    >
-                      <i className="las la-list" style={{ fontSize: '15px', color: '#747F8F' }} />
-                      <span>Všechny subjekty</span>
-                    </div>
-
-                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                    {/* SKUPINA: RODINY */}
-                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i className="las la-home" style={{ fontSize: '12px' }} />
-                      <span>Rodiny</span>
-                    </div>
-                    {[
-                      { id: 'fam_dvorak', label: 'Rodina Dvořákova' },
-                      { id: 'fam_novak', label: 'Rodina Novákova' }
-                    ].map(item => (
-                      <div
-                        key={item.id}
-                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                        style={{
-                          padding: '6px 14px 6px 26px',
-                          fontSize: '12px',
-                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                          color: selectedEntityFilter === item.id ? '#2563EB' : '#171B1F',
-                          backgroundColor: selectedEntityFilter === item.id ? '#EFF6FF' : 'transparent',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.15s'
-                        }}
-                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        {item.label}
-                      </div>
-                    ))}
-
-                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                    {/* SKUPINA: PĚSTOUNI */}
-                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i className="las la-hand-holding-heart" style={{ fontSize: '12px' }} />
-                      <span>Pěstouni</span>
-                    </div>
-                    {[
-                      { id: 'ent_dvorak', label: 'Tomáš Dvořák' }
-                    ].map(item => (
-                      <div
-                        key={item.id}
-                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                        style={{
-                          padding: '6px 14px 6px 26px',
-                          fontSize: '12px',
-                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                          color: selectedEntityFilter === item.id ? '#059669' : '#171B1F',
-                          backgroundColor: selectedEntityFilter === item.id ? '#ECFDF5' : 'transparent',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.15s'
-                        }}
-                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        {item.label}
-                      </div>
-                    ))}
-
-                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                    {/* SKUPINA: DĚTI V PÉČI */}
-                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#DB2777', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i className="las la-smile" style={{ fontSize: '12px' }} />
-                      <span>Děti v péči</span>
-                    </div>
-                    {[
-                      { id: 'ent_adam', label: 'Adam Novák' }
-                    ].map(item => (
-                      <div
-                        key={item.id}
-                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                        style={{
-                          padding: '6px 14px 6px 26px',
-                          fontSize: '12px',
-                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                          color: selectedEntityFilter === item.id ? '#DB2777' : '#171B1F',
-                          backgroundColor: selectedEntityFilter === item.id ? '#FDF2F8' : 'transparent',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.15s'
-                        }}
-                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        {item.label}
-                      </div>
-                    ))}
-
-                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
-
-                    {/* SKUPINA: SPOLUPRACOVNÍCI */}
-                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <i className="las la-user-tie" style={{ fontSize: '12px' }} />
-                      <span>Spolupracovníci</span>
-                    </div>
-                    {[
-                      { id: 'ent_kralova', label: 'Mgr. Alena Králová' },
-                      { id: 'ent_self', label: 'Jana Nováková' }
-                    ].map(item => (
-                      <div
-                        key={item.id}
-                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
-                        style={{
-                          padding: '6px 14px 6px 26px',
-                          fontSize: '12px',
-                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
-                          color: selectedEntityFilter === item.id ? '#7C3AED' : '#171B1F',
-                          backgroundColor: selectedEntityFilter === item.id ? '#F3E8FF' : 'transparent',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.15s'
-                        }}
-                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
-                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        {item.label}
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
+                    alignItems: 'center',
+                    gap: '5px',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  <i className={seg.icon} style={{ fontSize: '15px', color: selectedSegment === seg.id ? '#FF4742' : '#747F8F' }} />
+                  <span>{seg.label}</span>
+                  {seg.count > 0 && (
+                    <span style={{
+                      fontSize: '9px',
+                      backgroundColor: selectedSegment === seg.id ? '#FFEBEB' : '#E5E7EB',
+                      color: selectedSegment === seg.id ? '#FF4742' : '#5E6774',
+                      padding: '1px 5px',
+                      borderRadius: '8px',
+                      marginLeft: '2px'
+                    }}>
+                      {seg.count}
+                    </span>
+                  )}
+                </button>
+              ))}
             </div>
-          </div>
+          )}
+
+          {/* VYHLEDÁVACÍ POLE (POKUD JE ZOBRAZENO PŘES IKONU NÁSTROJE) */}
+          {showSearchInput && (
+            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{
+                flex: 1,
+                backgroundColor: isSearchInputFocused ? '#FFFFFF' : '#F4F4F6',
+                borderRadius: '10px',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                border: isSearchInputFocused ? '1.5px solid #FF4742' : (searchQuery ? '1px solid #3B82F6' : '1px solid transparent'),
+                boxShadow: isSearchInputFocused ? '0 4px 12px rgba(255,71,66,0.1)' : (searchQuery ? '0 2px 8px rgba(59,130,246,0.1)' : 'none'),
+                transition: 'all 0.2s ease'
+              }}>
+                <i className="las la-search" style={{ color: isSearchInputFocused ? '#FF4742' : (searchQuery ? '#3B82F6' : '#8896A9'), fontSize: '16px', transition: 'color 0.2s ease' }} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchInputFocused(true)}
+                  onBlur={() => setIsSearchInputFocused(false)}
+                  placeholder="Hledat úkol, subjekt..."
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    outline: 'none',
+                    fontSize: '13px',
+                    color: '#171B1F',
+                    width: '100%',
+                    fontFamily: 'Inter, sans-serif'
+                  }}
+                />
+                {searchQuery && (
+                  <i 
+                    className="las la-times" 
+                    onClick={() => setSearchQuery('')}
+                    style={{ color: '#8896A9', fontSize: '15px', cursor: 'pointer' }} 
+                    title="Vymazat hledání"
+                  />
+                )}
+              </div>
+            </div>
+          )}
 
           {/* CHIP AKTIVNÍHO FILTRU SUBJEKTU BEZ POPISU V ZÁVORCE */}
           {selectedEntityFilter !== 'all' && (
@@ -1297,7 +1377,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <i className={
                             sampleTask.entityType === 'family' ? 'las la-home' :
-                            sampleTask.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
+                            sampleTask.entityType === 'foster_parent' ? 'las la-heart' :
                             sampleTask.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                           } style={{ fontSize: '15px' }} />
                           <span>{entityName}</span>
@@ -1439,7 +1519,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               <i className={
                                 t.entityType === 'family' ? 'las la-home' :
-                                t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
+                                t.entityType === 'foster_parent' ? 'las la-heart' :
                                 t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                               } style={{ fontSize: '14px' }} />
                               <span>{t.entityName}</span>
@@ -1550,7 +1630,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               >
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
-                                  t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
+                                  t.entityType === 'foster_parent' ? 'las la-heart' :
                                   t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                                 } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
@@ -1668,7 +1748,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               >
                                 <i className={
                                   t.entityType === 'family' ? 'las la-home' :
-                                  t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
+                                  t.entityType === 'foster_parent' ? 'las la-heart' :
                                   t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                                 } style={{ fontSize: '15px' }} />
                                 <span>{t.entityName}</span>
@@ -1774,7 +1854,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                             >
                               <i className={
                                 t.entityType === 'family' ? 'las la-home' :
-                                t.entityType === 'foster_parent' ? 'las la-hand-holding-heart' :
+                                t.entityType === 'foster_parent' ? 'las la-heart' :
                                 t.entityType === 'child' ? 'las la-smile' : 'las la-user-tie'
                               } style={{ fontSize: '14px' }} />
                               <span>{t.entityName}</span>
