@@ -6,6 +6,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [currentTopPx, setCurrentTopPx] = useState(840);
   const [newTaskText, setNewTaskText] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const [activeDatePickerTask, setActiveDatePickerTask] = useState(null);
   const [taskPickerMonth, setTaskPickerMonth] = useState(new Date(2026, 6, 1));
   
@@ -566,24 +567,124 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
     }
   };
 
+  // CHYTRÉ ROZPOZNÁVÁNÍ SUBJEKTŮ, EMAILŮ A DATUMOVÝCH ROZSAHŮ Z TEXTU NEBO DIKTÁTU
+  const parseSmartTaskInput = (rawText) => {
+    if (!rawText) return { cleanTitle: '', entityInfo: { entityType: null, entityId: null, entityName: null }, parsedDateRange: null };
+
+    let text = rawText;
+    let entityInfo = { entityType: null, entityId: null, entityName: null };
+    let parsedDateRange = null;
+
+    // 1. ROZPOZNÁNÍ SUBJEKTŮ (EMAIL A JMÉNO / ALIAS)
+    const entityRules = [
+      { regex: /\b(tomasdvorak@gmail\.com|tomáš dvořák|tomaš dvořak|tomášovi dvořákovi|tomas dvorak|@tomasdvorak|@tomas)\b/gi, type: 'foster_parent', id: 'ent_dvorak', name: 'Tomáš Dvořák' },
+      { regex: /\b(adamnovak@gmail\.com|adam novák|adamovi novákovi|adam novak|@adamnovak|@adam)\b/gi, type: 'child', id: 'ent_adam', name: 'Adam Novák' },
+      { regex: /\b(rodinadvorakova@gmail\.com|rodina dvořákova|dvořákovi|dvořákovým|rodina dvorakova|@dvorakovi)\b/gi, type: 'family', id: 'fam_dvorak', name: 'Rodina Dvořákova' },
+      { regex: /\b(rodinanovakova@gmail\.com|rodina novákova|novákovi|novákovým|rodina novakova|@novakovi)\b/gi, type: 'family', id: 'fam_novak', name: 'Rodina Novákova' },
+      { regex: /\b(alenakralova@gmail\.com|alena králová|aleno králová|aleně králové|alena kralova|@alenakralova)\b/gi, type: 'coworker', id: 'ent_kralova', name: 'Mgr. Alena Králová' },
+      { regex: /\b(jananovakova@gmail\.com|jana nováková|janě novákové|jana novakova|@jananovakova)\b/gi, type: 'coworker', id: 'ent_self', name: 'Jana Nováková' }
+    ];
+
+    for (const rule of entityRules) {
+      if (rule.regex.test(text)) {
+        entityInfo = { entityType: rule.type, entityId: rule.id, entityName: rule.name };
+        text = text.replace(rule.regex, '').trim();
+        break;
+      }
+    }
+
+    // 2. ROZPOZNÁNÍ DATUMOVÝCH ROZSAHŮ (např. "24/8 až 2/9", "24.8. - 2.9.", "od 24. srpna do 2. září")
+    const dateRangeRegex = /\b(?:od\s+)?(\d{1,2})[\.\/](\d{1,2})\.?(?:\s*(?:až|do|-|–|to)\s*(\d{1,2})[\.\/](\d{1,2})\.?)?\b/i;
+    const matchRange = text.match(dateRangeRegex);
+
+    if (matchRange) {
+      const d1 = matchRange[1];
+      const m1 = matchRange[2];
+      const d2 = matchRange[3];
+      const m2 = matchRange[4];
+
+      if (d1 && m1 && d2 && m2) {
+        parsedDateRange = `${d1}.${m1}. → ${d2}.${m2}.`;
+      } else if (d1 && m1) {
+        parsedDateRange = `${d1}.${m1}.`;
+      }
+      text = text.replace(matchRange[0], '').trim();
+    } else {
+      // Slovní datumy (dnes, zítra)
+      if (/\b(dnes|dnešek)\b/i.test(text)) {
+        parsedDateRange = 'Dnes';
+        text = text.replace(/\b(dnes|dnešek)\b/i, '').trim();
+      } else if (/\b(zítra|zajtra)\b/i.test(text)) {
+        parsedDateRange = 'Zítra';
+        text = text.replace(/\b(zítra|zajtra)\b/i, '').trim();
+      }
+    }
+
+    // Vyčištění zbytků spojek jako "mezi", "od", "do", "až"
+    let cleanTitle = text
+      .replace(/\s+(mezi|od|do|až)\s+$/gi, '')
+      .replace(/^\s*(mezi|od|do|až)\s+/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+
+    if (!cleanTitle) cleanTitle = rawText;
+
+    return { cleanTitle, entityInfo, parsedDateRange };
+  };
+
+  // HLASOVÉ DIKTOVÁNÍ (WEB SPEECH API)
+  const handleStartListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Hlasové diktování není v tomto prohlížeči podporováno. Zkuste Google Chrome nebo Microsoft Edge.');
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'cs-CZ';
+      recognition.interimResults = true;
+      recognition.continuous = false;
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onerror = () => setIsListening(false);
+
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        setNewTaskText(transcript);
+      };
+
+      recognition.start();
+    } catch (err) {
+      setIsListening(false);
+    }
+  };
+
   const handleAddTask = () => {
     if (!newTaskText.trim()) return;
 
-    let entityInfo = { entityType: null, entityId: null, entityName: null };
-    if (selectedEntityFilter === 'fam_dvorak') entityInfo = { entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' };
-    else if (selectedEntityFilter === 'fam_novak') entityInfo = { entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' };
-    else if (selectedEntityFilter === 'ent_dvorak') entityInfo = { entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' };
-    else if (selectedEntityFilter === 'ent_adam') entityInfo = { entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' };
-    else if (selectedEntityFilter === 'ent_kralova') entityInfo = { entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' };
-    else if (selectedEntityFilter === 'ent_self') entityInfo = { entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' };
+    const parsed = parseSmartTaskInput(newTaskText);
+
+    let entityInfo = parsed.entityInfo;
+    if (!entityInfo.entityId) {
+      if (selectedEntityFilter === 'fam_dvorak') entityInfo = { entityType: 'family', entityId: 'fam_dvorak', entityName: 'Rodina Dvořákova' };
+      else if (selectedEntityFilter === 'fam_novak') entityInfo = { entityType: 'family', entityId: 'fam_novak', entityName: 'Rodina Novákova' };
+      else if (selectedEntityFilter === 'ent_dvorak') entityInfo = { entityType: 'foster_parent', entityId: 'ent_dvorak', entityName: 'Tomáš Dvořák' };
+      else if (selectedEntityFilter === 'ent_adam') entityInfo = { entityType: 'child', entityId: 'ent_adam', entityName: 'Adam Novák' };
+      else if (selectedEntityFilter === 'ent_kralova') entityInfo = { entityType: 'coworker', entityId: 'ent_kralova', entityName: 'Mgr. Alena Králová' };
+      else if (selectedEntityFilter === 'ent_self') entityInfo = { entityType: 'coworker', entityId: 'ent_self', entityName: 'Jana Nováková' };
+    }
 
     const newTask = {
       id: `t_${Date.now()}`,
-      title: newTaskText.trim(),
+      title: parsed.cleanTitle || newTaskText.trim(),
       group: 'today',
       completed: false,
       starred: false,
-      dateRange: 'Dnes',
+      dateRange: parsed.parsedDateRange || 'Dnes',
       ...entityInfo
     };
     setTasks(prev => [...prev, newTask]);
@@ -1299,39 +1400,110 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             </div>
           )}
 
-          {/* Vstup pro přidání úkolu */}
-          <div style={{
-            marginTop: '14px',
-            backgroundColor: isInputFocused ? '#FFFFFF' : '#F4F4F6',
-            borderRadius: '10px',
-            padding: '8px 12px',
-            border: isInputFocused ? '1.5px solid #FF4742' : '1px solid transparent',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: isInputFocused ? '0 4px 12px rgba(255,71,66,0.1)' : 'none',
-            transition: 'all 0.2s ease'
-          }}>
-            <span style={{ color: '#8896a9', fontSize: '16px' }}>+</span>
-            <input
-              type="text"
-              value={newTaskText}
-              onChange={(e) => setNewTaskText(e.target.value)}
-              onFocus={() => setIsInputFocused(true)}
-              onBlur={() => setIsInputFocused(false)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
-              placeholder="Přidat nový úkol..."
-              style={{
-                border: 'none',
-                background: 'transparent',
-                outline: 'none',
-                fontSize: '13px',
-                color: '#171b1f',
-                width: '100%',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            />
-          </div>
+          {/* Vstup pro přidání úkolu S HLASOVÝM DIKTOVÁNÍM a CHYTRÝM ROZPOZNÁNÍM */}
+          {(() => {
+            const currentParsed = parseSmartTaskInput(newTaskText);
+            const hasSmartDetections = Boolean(currentParsed.entityInfo.entityName || currentParsed.parsedDateRange);
+
+            return (
+              <div style={{ marginTop: '14px' }}>
+                <div style={{
+                  backgroundColor: isInputFocused || isListening ? '#FFFFFF' : '#F4F4F6',
+                  borderRadius: '10px',
+                  padding: '8px 12px',
+                  border: isListening ? '1.5px solid #EF4444' : isInputFocused ? '1.5px solid #FF4742' : '1px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: isListening ? '0 0 12px rgba(239,68,68,0.25)' : isInputFocused ? '0 4px 12px rgba(255,71,66,0.1)' : 'none',
+                  transition: 'all 0.2s ease'
+                }}>
+                  <span style={{ color: '#8896a9', fontSize: '16px' }}>+</span>
+                  <input
+                    type="text"
+                    value={newTaskText}
+                    onChange={(e) => setNewTaskText(e.target.value)}
+                    onFocus={() => setIsInputFocused(true)}
+                    onBlur={() => setIsInputFocused(false)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddTask()}
+                    placeholder={isListening ? "Poslouchám... Mluvte prosím" : "Přidat nový úkol (napište nebo nadiktujte)..."}
+                    style={{
+                      border: 'none',
+                      background: 'transparent',
+                      outline: 'none',
+                      fontSize: '13px',
+                      color: '#171b1f',
+                      width: '100%',
+                      fontFamily: 'Inter, sans-serif'
+                    }}
+                  />
+
+                  {/* TLAČÍTKO PRO HLASOVÉ DIKTOVÁNÍ */}
+                  <button
+                    type="button"
+                    onClick={handleStartListening}
+                    title={isListening ? "Poslouchám..." : "Nadiktovat úkol hlasem"}
+                    style={{
+                      border: 'none',
+                      backgroundColor: isListening ? '#EF4444' : 'transparent',
+                      color: isListening ? '#FFFFFF' : '#6B7280',
+                      borderRadius: '50%',
+                      width: '28px',
+                      height: '28px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      transition: 'all 0.2s ease',
+                      boxShadow: 'none',
+                      flexShrink: 0
+                    }}
+                  >
+                    <i className="las la-microphone" style={{ animation: isListening ? 'pulse 1.2s infinite' : 'none' }} />
+                  </button>
+                </div>
+
+                {/* CHYTRÝ ŽIVÝ NÁHLED DETEKOVANÉHO SUBJEKTU A DATUMU */}
+                {hasSmartDetections && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', fontSize: '11px', flexWrap: 'wrap' }}>
+                    <span style={{ fontWeight: 600, color: '#10B981', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.3px' }}>Chytrý náhled:</span>
+                    <span style={{ color: '#171B1F', fontWeight: 500 }}>"{currentParsed.cleanTitle}"</span>
+                    {currentParsed.entityInfo.entityName && (
+                      <span style={{
+                        backgroundColor: '#ECFDF5',
+                        color: '#059669',
+                        border: '1px solid #A7F3D0',
+                        padding: '1px 7px',
+                        borderRadius: '10px',
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '3px'
+                      }}>
+                        <i className="las la-user" style={{ fontSize: '12px' }} /> [{currentParsed.entityInfo.entityName}]
+                      </span>
+                    )}
+                    {currentParsed.parsedDateRange && (
+                      <span style={{
+                        backgroundColor: '#EFF6FF',
+                        color: '#2563EB',
+                        border: '1px solid #BFDBFE',
+                        padding: '1px 7px',
+                        borderRadius: '10px',
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '3px'
+                      }}>
+                        <i className="las la-calendar" style={{ fontSize: '12px' }} /> [{currentParsed.parsedDateRange}]
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         {/* Seznam Úkolů s efektem zaškrtnutí, segmentací, vyhledáváním a NEZÁVISLÝM SCROLLOVÁNÍM */}
@@ -1960,7 +2132,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                   onMouseLeave={() => setHoveredBadgeType(null)}
                   style={{
                     backgroundColor: hoveredBadgeType === 'allday' ? '#EFF6FF' : 'transparent',
-                    color: '#2563EB',
+                    color: hoveredBadgeType === 'allday' ? '#2563EB' : '#171B1F',
                     border: 'none',
                     fontSize: '12px',
                     fontWeight: 700,
@@ -2028,7 +2200,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
                   backgroundColor: hoveredBadgeType === 'birthday' ? '#FDF2F8' : 'transparent',
-                  color: '#DB2777',
+                  color: hoveredBadgeType === 'birthday' ? '#DB2777' : '#171B1F',
                   border: 'none',
                   borderRadius: '50%',
                   width: '26px',
@@ -2084,7 +2256,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 onMouseLeave={() => setHoveredBadgeType(null)}
                 style={{
                   backgroundColor: hoveredBadgeType === 'nameday' ? '#F3E8FF' : 'transparent',
-                  color: '#7C3AED',
+                  color: hoveredBadgeType === 'nameday' ? '#7C3AED' : '#171B1F',
                   border: 'none',
                   borderRadius: '50%',
                   width: '26px',
@@ -2198,7 +2370,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                         title={`${allDayEvents.length} celodenní akce`}
                         style={{
                           backgroundColor: 'transparent',
-                          color: '#2563EB',
+                          color: '#171B1F',
                           border: 'none',
                           fontSize: '12px',
                           fontWeight: 700,
@@ -2222,7 +2394,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                         title="Dítě v péči má dnes narozeniny!" 
                         style={{
                           backgroundColor: 'transparent',
-                          color: '#DB2777',
+                          color: '#171B1F',
                           border: 'none',
                           borderRadius: '50%',
                           width: '24px',
@@ -2245,7 +2417,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                         title="Dítě v péči má dnes jmeniny!" 
                         style={{
                           backgroundColor: 'transparent',
-                          color: '#7C3AED',
+                          color: '#171B1F',
                           border: 'none',
                           borderRadius: '50%',
                           width: '24px',
