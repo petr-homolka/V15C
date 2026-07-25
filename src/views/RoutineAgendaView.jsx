@@ -313,6 +313,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   const [groupByEntity, setGroupByEntity] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEntityFilter, setSelectedEntityFilter] = useState('all'); // 'all' | entityId
+  const [isEntityDropdownOpen, setIsEntityDropdownOpen] = useState(false);
 
   // Úkoly se přiřazenými subjekty pro přesnou segmentaci
   const [tasks, setTasks] = useState([
@@ -757,7 +758,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         user={user}
       />
 
-      {/* 2. LEVÁ PŮLKA: ÚKOLY (EXAKTNĚ 50% PŮLKA STRÁNKY) */}
+      {/* 2. LEVÁ PŮLKA: ÚKOLY (EXAKTNĚ 50% PŮLKA STRÁNKY, FIXNÍ HLAVIČKA A NEZÁVISLÝ SCROLL POUZE V SEZNAMU) */}
       <div style={{
         flex: 1,
         height: '100vh',
@@ -765,10 +766,10 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#FFFFFF',
-        overflowY: 'auto'
+        overflow: 'hidden'
       }}>
-        {/* Hlavička sloupce Úkolů s titulom, tlačítkom seskupení a segmentačným prepínačom */}
-        <div style={{ padding: '24px 28px 16px 28px' }}>
+        {/* FIXNÍ HLAVIČKA SLOUPCE ÚKOLŮ S TITULEM, TLAČÍTKEM SESKUPENÍ, SEGMENTACÍ, VYHLEDÁVAČEM A DROPDOWNEM */}
+        <div style={{ padding: '24px 28px 16px 28px', flexShrink: 0, backgroundColor: '#FFFFFF', zIndex: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <h1 style={{ fontSize: '22px', fontWeight: 500, color: '#171b1f', margin: 0, letterSpacing: '-0.5px' }}>Úkoly</h1>
@@ -856,12 +857,11 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
             ))}
           </div>
 
-          {/* VYHLEDÁVACÍ POLE A ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU */}
-          <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* VYHLEDÁVACÍ POLE A SHRNUTÍ A CUSTOM ELEGANTNÍ ROZBALOVACÍ VÝBĚR SUBJEKTU */}
+          <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap' }}>
             {/* INTERAKTIVNÍ VYHLEDÁVAČ V ÚKOLECH */}
             <div style={{
               flex: 1,
-              minWidth: '180px',
               backgroundColor: '#F4F4F6',
               borderRadius: '8px',
               padding: '6px 10px',
@@ -877,7 +877,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Hledat úkol, subjekt nebo klíčové slovo..."
+                placeholder="Hledat úkol, subjekt..."
                 style={{
                   border: 'none',
                   background: 'transparent',
@@ -898,40 +898,210 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
               )}
             </div>
 
-            {/* ROZBALOVACÍ VÝBĚR KONKRÉTNÍHO SUBJEKTU BEZ POPISŮ V ZÁVORKÁCH */}
-            <select
-              value={selectedEntityFilter}
-              onChange={(e) => setSelectedEntityFilter(e.target.value)}
-              style={{
-                backgroundColor: selectedEntityFilter !== 'all' ? '#EEF4FF' : '#FFFFFF',
-                color: selectedEntityFilter !== 'all' ? '#2563EB' : '#5E6774',
-                border: selectedEntityFilter !== 'all' ? '1px solid #BFDBFE' : '1px solid #EAEAEA',
-                borderRadius: '8px',
-                padding: '6px 10px',
-                fontSize: '12px',
-                fontWeight: selectedEntityFilter !== 'all' ? 600 : 400,
-                outline: 'none',
-                cursor: 'pointer',
-                fontFamily: 'Inter, sans-serif',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
-              }}
-            >
-              <option value="all">Filtrovat konkrétní subjekt...</option>
-              <optgroup label="Rodiny">
-                <option value="fam_dvorak">Rodina Dvořákova</option>
-                <option value="fam_novak">Rodina Novákova</option>
-              </optgroup>
-              <optgroup label="Pěstouni">
-                <option value="ent_dvorak">Tomáš Dvořák</option>
-              </optgroup>
-              <optgroup label="Děti v péči">
-                <option value="ent_adam">Adam Novák</option>
-              </optgroup>
-              <optgroup label="Spolupracovníci">
-                <option value="ent_kralova">Mgr. Alena Králová</option>
-                <option value="ent_self">Jana Nováková</option>
-              </optgroup>
-            </select>
+            {/* CUSTOM PRÉMIOVÉ VÝBĚROVÉ MENU SUBJEKTU (ŽÁDNÝ NATIVNÍ PROHLÍŽEČOVÝ SELECT) */}
+            <div style={{ position: 'relative' }}>
+              <button
+                type="button"
+                onClick={() => setIsEntityDropdownOpen(!isEntityDropdownOpen)}
+                style={{
+                  backgroundColor: selectedEntityFilter !== 'all' ? '#EEF4FF' : '#FFFFFF',
+                  color: selectedEntityFilter !== 'all' ? '#2563EB' : '#5E6774',
+                  border: selectedEntityFilter !== 'all' ? '1px solid #BFDBFE' : '1px solid #EAEAEA',
+                  borderRadius: '8px',
+                  padding: '6px 10px',
+                  fontSize: '12px',
+                  fontWeight: selectedEntityFilter !== 'all' ? 600 : 500,
+                  outline: 'none',
+                  cursor: 'pointer',
+                  fontFamily: 'Inter, sans-serif',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <i className="las la-user-check" style={{ fontSize: '15px', color: selectedEntityFilter !== 'all' ? '#2563EB' : '#8896A9' }} />
+                <span>
+                  {selectedEntityFilter === 'all'
+                    ? 'Filtrovat subjekt...'
+                    : selectedEntityFilter === 'fam_dvorak' ? 'Rodina Dvořákova'
+                    : selectedEntityFilter === 'fam_novak' ? 'Rodina Novákova'
+                    : selectedEntityFilter === 'ent_dvorak' ? 'Tomáš Dvořák'
+                    : selectedEntityFilter === 'ent_adam' ? 'Adam Novák'
+                    : selectedEntityFilter === 'ent_kralova' ? 'Mgr. Alena Králová'
+                    : 'Jana Nováková'
+                  }
+                </span>
+                <i className={`las la-angle-${isEntityDropdownOpen ? 'up' : 'down'}`} style={{ fontSize: '12px', marginLeft: '2px', color: '#8896A9' }} />
+              </button>
+
+              {/* FLOATING CUSTOM POPOVER PANEL */}
+              {isEntityDropdownOpen && (
+                <>
+                  <div 
+                    onClick={() => setIsEntityDropdownOpen(false)}
+                    style={{ position: 'fixed', inset: 0, zIndex: 999 }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    right: 0,
+                    zIndex: 1000,
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '12px',
+                    boxShadow: '0 12px 36px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.06)',
+                    border: '1px solid #EAEAEE',
+                    width: '220px',
+                    padding: '6px 0',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '2px'
+                  }}>
+                    {/* POLOŽKA: VŠECHNY SUBJEKTY */}
+                    <div
+                      onClick={() => { setSelectedEntityFilter('all'); setIsEntityDropdownOpen(false); }}
+                      style={{
+                        padding: '8px 14px',
+                        fontSize: '12px',
+                        fontWeight: selectedEntityFilter === 'all' ? 600 : 400,
+                        color: selectedEntityFilter === 'all' ? '#FF4742' : '#171B1F',
+                        backgroundColor: selectedEntityFilter === 'all' ? '#FFF5F5' : 'transparent',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        transition: 'background-color 0.15s'
+                      }}
+                      onMouseEnter={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                      onMouseLeave={(e) => selectedEntityFilter !== 'all' && (e.currentTarget.style.backgroundColor = 'transparent')}
+                    >
+                      <i className="las la-list" style={{ fontSize: '15px', color: '#747F8F' }} />
+                      <span>Všechny subjekty</span>
+                    </div>
+
+                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                    {/* SKUPINA: RODINY */}
+                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="las la-home" style={{ fontSize: '12px' }} />
+                      <span>Rodiny</span>
+                    </div>
+                    {[
+                      { id: 'fam_dvorak', label: 'Rodina Dvořákova' },
+                      { id: 'fam_novak', label: 'Rodina Novákova' }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                        style={{
+                          padding: '6px 14px 6px 26px',
+                          fontSize: '12px',
+                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                          color: selectedEntityFilter === item.id ? '#2563EB' : '#171B1F',
+                          backgroundColor: selectedEntityFilter === item.id ? '#EFF6FF' : 'transparent',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s'
+                        }}
+                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        {item.label}
+                      </div>
+                    ))}
+
+                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                    {/* SKUPINA: PĚSTOUNI */}
+                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="las la-user-friends" style={{ fontSize: '12px' }} />
+                      <span>Pěstouni</span>
+                    </div>
+                    {[
+                      { id: 'ent_dvorak', label: 'Tomáš Dvořák' }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                        style={{
+                          padding: '6px 14px 6px 26px',
+                          fontSize: '12px',
+                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                          color: selectedEntityFilter === item.id ? '#059669' : '#171B1F',
+                          backgroundColor: selectedEntityFilter === item.id ? '#ECFDF5' : 'transparent',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s'
+                        }}
+                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        {item.label}
+                      </div>
+                    ))}
+
+                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                    {/* SKUPINA: DĚTI V PÉČI */}
+                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#DB2777', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="las la-child" style={{ fontSize: '12px' }} />
+                      <span>Děti v péči</span>
+                    </div>
+                    {[
+                      { id: 'ent_adam', label: 'Adam Novák' }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                        style={{
+                          padding: '6px 14px 6px 26px',
+                          fontSize: '12px',
+                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                          color: selectedEntityFilter === item.id ? '#DB2777' : '#171B1F',
+                          backgroundColor: selectedEntityFilter === item.id ? '#FDF2F8' : 'transparent',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s'
+                        }}
+                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        {item.label}
+                      </div>
+                    ))}
+
+                    <div style={{ height: '1px', backgroundColor: '#F0F0F4', margin: '4px 0' }} />
+
+                    {/* SKUPINA: SPOLUPRACOVNÍCI */}
+                    <div style={{ padding: '4px 14px 2px 14px', fontSize: '10px', fontWeight: 700, color: '#7C3AED', textTransform: 'uppercase', letterSpacing: '0.4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="las la-user-tie" style={{ fontSize: '12px' }} />
+                      <span>Spolupracovníci</span>
+                    </div>
+                    {[
+                      { id: 'ent_kralova', label: 'Mgr. Alena Králová' },
+                      { id: 'ent_self', label: 'Jana Nováková' }
+                    ].map(item => (
+                      <div
+                        key={item.id}
+                        onClick={() => { setSelectedEntityFilter(item.id); setIsEntityDropdownOpen(false); }}
+                        style={{
+                          padding: '6px 14px 6px 26px',
+                          fontSize: '12px',
+                          fontWeight: selectedEntityFilter === item.id ? 600 : 400,
+                          color: selectedEntityFilter === item.id ? '#7C3AED' : '#171B1F',
+                          backgroundColor: selectedEntityFilter === item.id ? '#F3E8FF' : 'transparent',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s'
+                        }}
+                        onMouseEnter={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = '#F4F4F6')}
+                        onMouseLeave={(e) => selectedEntityFilter !== item.id && (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        {item.label}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
           {/* CHIP AKTIVNÍHO FILTRU SUBJEKTU BEZ POPISU V ZÁVORCE */}
@@ -1003,8 +1173,8 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           </div>
         </div>
 
-        {/* Seznam Úkolů s efektem zaškrtnutí, segmentací a vyhledáváním */}
-        <div style={{ padding: '20px 28px', flexGrow: 1 }}>
+        {/* Seznam Úkolů s efektem zaškrtnutí, segmentací, vyhledáváním a NEZÁVISLÝM SCROLLOVÁNÍM */}
+        <div style={{ padding: '20px 28px', flex: 1, overflowY: 'auto' }}>
           
           {/* POMOCNÁ PŘEDFILTROVANÁ SADA ÚKOLŮ S VYHLEDÁVÁNÍM A FILTREM SUBJEKTU */}
           {(() => {
@@ -1046,7 +1216,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                       <div 
                         onClick={() => {
                           if (sampleTask.entityId && onSelectEntity) {
-                            onSelectEntity({ id: sampleTask.entityId, name: sampleTask.entityName, type: sampleTask.entityType });
+                            onSelectEntity({ id: sampleTask.entityId, name: sampleTask.entityName, type: sampleTask.entityType, activeTab: 'tasks', initialTab: 'tasks' });
                           }
                         }}
                         style={{
@@ -1205,7 +1375,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   if (onSelectEntity) {
-                                    onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
+                                    onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType, activeTab: 'tasks', initialTab: 'tasks' });
                                   }
                                 }}
                                 title={`Otevřít profil (${t.entityName})`}
@@ -1322,7 +1492,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   if (onSelectEntity) {
-                                    onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
+                                    onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType, activeTab: 'tasks', initialTab: 'tasks' });
                                   }
                                 }}
                                 title={`Otevřít profil (${t.entityName})`}
@@ -1430,7 +1600,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
                               onClick={(e) => {
                                 e.stopPropagation();
                                 if (onSelectEntity) {
-                                  onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType });
+                                  onSelectEntity({ id: t.entityId, name: t.entityName, type: t.entityType, activeTab: 'tasks', initialTab: 'tasks' });
                                 }
                               }}
                               title={`Otevřít profil (${t.entityName})`}

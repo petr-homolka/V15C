@@ -4,7 +4,7 @@ import { TopBar } from '../components/navigation/TopBar.jsx';
 import { formatUid, validateUid, getDocumentQrVerificationUrl } from '../services/identityService.js';
 
 export function EntityProfileView({ entity, user, onNavigate, isMobileView }) {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(entity.activeTab || entity.initialTab || 'tasks');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   if (!entity) {
@@ -23,6 +23,7 @@ export function EntityProfileView({ entity, user, onNavigate, isMobileView }) {
 
   // Seznam kapitol / záložek podle typu entity
   const tabs = [
+    { id: 'tasks', label: 'Úkoly & Agendy', icon: 'las la-check-circle' },
     { id: 'overview', label: 'Přehled & Údaje', icon: 'las la-user' },
     { id: 'timeline', label: 'Časová osa událostí', icon: 'las la-history' },
     { id: 'documents', label: 'Dokumenty & QR Ověření', icon: 'las la-qrcode' },
@@ -185,6 +186,65 @@ export function EntityProfileView({ entity, user, onNavigate, isMobileView }) {
             padding: '32px',
             boxShadow: '0 2px 12px rgba(154,160,185,0.08)'
           }}>
+
+            {/* KAPITOLA 0: Úkoly & Agendy */}
+            {activeTab === 'tasks' && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1C1D21', margin: 0 }}>
+                      Přiřazené úkoly a agendy subjektu
+                    </h3>
+                    <p style={{ fontSize: '13px', color: '#8181A5', margin: '4px 0 0 0' }}>
+                      Seznam všech aktivních i dokončených úkolů navázaných na {entity.name || entity.fosterParents || 'tuto entitu'}.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => onNavigate('agenda')} 
+                    style={{ backgroundColor: '#4A85F6', color: '#FFFFFF', border: 'none', padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <i className="las la-calendar-check" />
+                    <span>Otevřít celkovou agendu</span>
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#FFF5F5', border: '1px solid #FFEBEB', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '5px', border: '2px solid #FF4742', backgroundColor: '#FFFFFF' }} />
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#1C1D21' }}>Pravidelná 2M návštěva a vyhodnocení cílů</div>
+                        <div style={{ fontSize: '12px', color: '#FF4742', fontWeight: 600, marginTop: '2px' }}>Termín: 23. 3. – 29. 3. (Po termínu)</div>
+                      </div>
+                    </div>
+                    <span style={{ backgroundColor: '#FFEBEB', color: '#FF4742', fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>OSPOD</span>
+                  </div>
+
+                  <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#F7F9FC', border: '1px solid #ECECF2', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '5px', border: '2px solid #A0A0B0', backgroundColor: '#FFFFFF' }} />
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#1C1D21' }}>Zkontrolovat plnění cílů IPOD u pěstounů</div>
+                        <div style={{ fontSize: '12px', color: '#8181A5', fontWeight: 500, marginTop: '2px' }}>Termín: Dnes do 17:00</div>
+                      </div>
+                    </div>
+                    <span style={{ backgroundColor: '#EEF4FF', color: '#4A85F6', fontSize: '11px', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>Pěstounská péče</span>
+                  </div>
+
+                  <div style={{ padding: '16px', borderRadius: '12px', backgroundColor: '#FAFAFA', border: '1px solid #ECECF2', display: 'flex', alignItems: 'center', justifyContent: 'space-between', opacity: 0.75 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '5px', backgroundColor: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', fontSize: '12px' }}>
+                        <i className="las la-check" />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#8181A5', textDecoration: 'line-through' }}>Příprava podkladů pro výroční zprávu OSPOD</div>
+                        <div style={{ fontSize: '12px', color: '#10B981', fontWeight: 600, marginTop: '2px' }}>Dokončeno včera</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* KAPITOLA 1: Přehled & Údaje */}
             {activeTab === 'overview' && (
