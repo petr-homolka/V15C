@@ -965,7 +965,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
   };
 
   return (
-    <div className="routine-layout" style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
+    <div className="routine-layout" style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden', fontFamily: 'Inter, sans-serif', backgroundColor: '#FAF8F5' }}>
       
       {/* ANIMACE ZAŠKRTNUTÍ PRO ZATRHÁVÁTKO */}
       <style>{`
@@ -1041,16 +1041,17 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           transform-origin: center center !important;
         }
 
-        /* 1. ŘÁDEK ÚKOLU - NEBARVIT POZADÍ (ZŮSTÁVÁ ČISTĚ BÍLÉ #FFFFFF) */
+        /* 1. ŘÁDEK ÚKOLU - MISTRAL AI KARTA (ČISTĚ BÍLÁ NA KRÉMOVÉM PLÁTNĚ #FAF8F5) */
         .task-item-row {
           transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
-          border: 1px solid #F0F0F4 !important;
+          border: 1px solid #E6E3DC !important;
           background-color: #FFFFFF !important;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02) !important;
         }
         .task-item-row:hover {
-          background-color: #FFFFFF !important; /* Řádek nebarvit */
-          border-color: #E2E8F0 !important;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+          background-color: #FFFFFF !important;
+          border-color: #FA520F !important;
+          box-shadow: 0 3px 12px rgba(250, 82, 15, 0.08) !important;
         }
         .task-item-row:hover .task-edit-pen {
           color: #2563EB !important;
@@ -1128,13 +1129,13 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           borderRight: 'none',
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#FAF8F5',
           overflow: 'hidden',
           userSelect: isResizingColumns ? 'none' : 'auto'
         }}
       >
         {/* FIXNÍ HLAVIČKA SLOUPCE ÚKOLŮ S TITULEM, IKONOVOU LIŠTOU BEZ STÍNU, SEGMENTACÍ, VYHLEDÁVAČEM A DROPDOWNEM */}
-        <div style={{ padding: '24px 28px 16px 28px', flexShrink: 0, backgroundColor: '#FFFFFF', zIndex: 20 }}>
+        <div style={{ padding: '24px 28px 16px 28px', flexShrink: 0, backgroundColor: '#FAF8F5', zIndex: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <h1 style={{ fontSize: '22px', fontWeight: 500, color: '#171b1f', margin: 0, letterSpacing: '-0.5px' }}>Úkoly</h1>
@@ -2350,9 +2351,9 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           width: '7px',
           height: '100vh',
           cursor: 'col-resize',
-          backgroundColor: isResizingColumns ? '#2563EB' : '#F1F3F5',
-          borderLeft: '1px solid #E2E8F0',
-          borderRight: '1px solid #E2E8F0',
+          backgroundColor: isResizingColumns ? '#FA520F' : '#E6E3DC',
+          borderLeft: '1px solid #DFDCD5',
+          borderRight: '1px solid #DFDCD5',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -2361,14 +2362,14 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           transition: 'background-color 0.15s ease',
           flexShrink: 0
         }}
-        onMouseEnter={(e) => !isResizingColumns && (e.currentTarget.style.backgroundColor = '#CBD5E1')}
-        onMouseLeave={(e) => !isResizingColumns && (e.currentTarget.style.backgroundColor = '#F1F3F5')}
+        onMouseEnter={(e) => !isResizingColumns && (e.currentTarget.style.backgroundColor = '#FA520F')}
+        onMouseLeave={(e) => !isResizingColumns && (e.currentTarget.style.backgroundColor = '#E6E3DC')}
       >
         <div style={{
           width: '3px',
           height: '24px',
           borderRadius: '2px',
-          backgroundColor: isResizingColumns ? '#FFFFFF' : '#94A3B8'
+          backgroundColor: isResizingColumns ? '#FFFFFF' : '#B8B4AA'
         }} />
       </div>
 
@@ -2380,7 +2381,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           flex: 1, 
           height: '100vh', 
           overflowY: 'auto', 
-          backgroundColor: '#FFFFFF', 
+          backgroundColor: '#FAF8F5', 
           position: 'relative',
           userSelect: isResizingColumns ? 'none' : 'auto'
         }}
@@ -2392,7 +2393,7 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
           left: 0,
           right: 0,
           height: '74px',
-          background: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.94) 65%, rgba(255,255,255,0) 100%)',
+          background: 'linear-gradient(180deg, rgba(250,248,245,1) 0%, rgba(250,248,245,0.94) 65%, rgba(250,248,245,0) 100%)',
           zIndex: 100,
           pointerEvents: 'none',
           display: 'flex',
