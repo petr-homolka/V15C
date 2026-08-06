@@ -249,7 +249,7 @@ Proto do modelu přidávám kontrolu: při publikaci nové verze `orgPolicy` sys
    s § 655 odst. 2 (povinnost manžela/partnera pečovat), protože na něm stojí pravidlo,
    komu **nelze** proplatit hlídání.
 2. **Standardy kvality** (příloha č. 1 a 2 vyhlášky 473/2012) — vzor se na ně
-   v čl. VIII odvolává a podléhají inspekci. Ve dodaném textu vyhlášky přílohy nejsou.
+   v čl. VIII odvolává a podléhají inspekci. **OPRAVENO v dok. 07:** přílohy v dodaném souboru jsou, jen jsem je přehlédl.
    Standardy 10c (plán průběhu pobytu), 10d (plán vzdělávání) a 13a (spisová
    dokumentace) mají přímý dopad na model plánů a spisu.
 3. **Směrnice č. 1** organizace ze vzoru — jako reálný příklad `orgPolicy` by pomohla

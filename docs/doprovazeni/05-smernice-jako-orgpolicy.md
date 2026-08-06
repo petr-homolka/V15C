@@ -334,7 +334,7 @@ ne rozpočet organizace.
 | Instrukce VŘ2 3/2025 | ✓ |
 | Vzor Dohody | ✓ |
 | Směrnice č. 1 (vnitřní pravidla) | ✓ |
-| **Standardy kvality** (přílohy č. 1 a 2 vyhlášky) | **chybí** — 10c plán pobytu, 10d plán vzdělávání, 13a spisová dokumentace |
+| **Standardy kvality** (přílohy č. 1 a 2 vyhlášky) | ✓ **byly v souboru** — mylně jsem je označil za chybějící, viz dok. 07 sekce 0 |
 
 Standardy kvality jsou poslední chybějící kus a jsou potřeba pro model plánů a spisu.
 Vzor Dohody se na ně v čl. VIII odvolává a podléhají inspekci SPOD.

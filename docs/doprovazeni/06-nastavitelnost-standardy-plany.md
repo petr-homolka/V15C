@@ -267,9 +267,10 @@ předstírat kontrolu, která neexistuje.
 
 ### Co ještě nemám
 
-Text **příloh č. 1 a 2 vyhlášky 473/2012 Sb.** stále chybí — v dodaném znění vyhlášky
-přílohy nejsou. Mohu tedy postavit **mechanismus** (šablona, adopce, vazby, verzování),
-ale **seznam kapitol nemohu vyplnit**, aniž bych si ho vymyslel. Z metodik mám ověřeně
+> **OPRAVENO.** Tvrdil jsem zde, že text příloh č. 1 a 2 vyhlášky chybí. **Byl v dodaném
+> souboru** — přehlédl jsem ho, protože jsem vyhlášku prohledával jen po `§`. Generátor je
+> naplněn v [dok. 07 sekce 3](./07-flexibilita-standardy-editor-podpisy.md): příloha č. 2
+> obsahuje **16 standardů a 30 kritérií** pro pověřené osoby. Z metodik mám ověřeně
 jen kódy: **10c** plán průběhu pobytu, **10d** plán vzdělávání, **13a** spisová
 dokumentace pro pověřené osoby, a **15c / 15d** jako jejich obdoby pro OSPOD.
 Zbytek doplním, až přílohy dodáš.
@@ -395,7 +396,7 @@ Nové skupiny:
 | --- | --- |
 | ZSPOD, vyhláška 473/2012 (bez příloh), OZ 89/2012, Instrukce 3/2025 | ✓ |
 | Vzor Dohody, Směrnice č. 1, vzdělávací plán, plán pobytu | ✓ |
-| **Přílohy č. 1 a 2 vyhlášky** (standardy kvality) | **chybí** — blokuje naplnění generátoru kapitolami |
+| **Přílohy č. 1 a 2 vyhlášky** (standardy kvality) | ✓ **byly v souboru** — generátor naplněn v dok. 07 sekce 3 |
 
 Otevřené k potvrzení:
 1. **Tříúrovňový přístup** z dok. 03 sekce 0 (org-wide čtení + výchozí filtr na vlastní
