@@ -291,6 +291,9 @@ MPSV nebo krajský úřad. Do té doby: **období restartovat podle doslovného 
 čítač splněných hodin z předchozího období přenést a zobrazit**, aby Klíčová osoba
 viděla celý obrázek a mohla se rozhodnout.
 
+> **ROZHODNUTO (dok. 10 sekce 2): hodiny se přenášejí, období se nerestartuje.**
+> Tato sekce je tím překonaná; ponechána pro záznam úvahy.
+
 **2. Kdo dělá závěrečnou zprávu, když stará organizace nespolupracuje?**
 Zprávu při zániku dohody má zpracovat ta organizace, u níž dohoda zanikla (§ 47b odst. 5).
 Pokud to neudělá, nová organizace nemá vstupní informace a povinnost není její. Systém
@@ -317,8 +320,9 @@ Standardy se generují **všechny** (16), bez vynechání.
 
 ## 8. Otevřené
 
-1. **Vzdělávací období při přechodu** — restart, nebo pokračování? (sekce 6) Doporučuji
-   dotaz na MPSV; návrh mezitím výše.
+1. ~~**Vzdělávací období při přechodu** — restart, nebo pokračování?~~
+   **ROZHODNUTO: hodiny se přenášejí, období pokračuje.** Viz
+   [dok. 10 sekce 2](./10-prenos-vzdelavani-kniha-zivota-nemazani.md).
 2. **Kniha života** v aplikaci pro rodiče — má tam být, nebo je to na později?
 3. **Skupinová vlákna** — má existovat vlákno pěstoun + Klíčová osoba + vedoucí, nebo
    stačí dvoustranná? Skupinové vlákno komplikuje `visibleTo`.
