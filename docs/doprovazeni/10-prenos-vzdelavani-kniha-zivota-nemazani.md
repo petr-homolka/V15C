@@ -115,18 +115,49 @@ u nástroje na identitu dítěte špatně nastavené. Souhlas dítěte navíc po
 
 Proto: kdokoli ze tří může přístup odvolat, s uvedením důvodu. Odvolání je okamžité.
 
-### Co s knihou při odchodu z péče
+### Kniha po odchodu z péče — potvrzeno: zůstává trvale
 
-Kniha je **dítěte**. Při zletilosti nebo odchodu z náhradní péče musí být
-**exportovatelná pro dítě** — je to jeho životní materiál, ne dokumentace organizace.
-Zůstává přitom v systému (viz sekce 6), jen se mění, kdo k ní má přístup.
+Kniha je **dítěte** a **zůstává v systému trvale**, i po zletilosti. Dítě k ní má
+**trvalý přístup**; export je navíc, ne náhrada.
 
-### Otevřené
+Dva důsledky, které je nutné podchytit:
 
-Přispívání rodiče: navrhuji `scope: 'read'` jako výchozí a `'read_and_propose'` jako
-volbu — rodičův příspěvek by šel do schvalování, ne přímo do knihy. Fotky dítěte
-z doby před umístěním jsou často to nejcennější, co může přinést; ale kniha nesmí být
-kanál pro nevhodné vzkazy.
+1. **Účet dítěte musí přežít konec umístění.** Přístup se nesmí odvozovat od aktivního
+   `Placement` ani od dohody — jinak by kniha zletilému zmizela právě v okamžiku, kdy ji
+   potřebuje nejvíc. Je to stejná lekce jako u pěstouna (sekce 5): **přístup plyne
+   z toho, že je subjektem těch dat.**
+2. **Po zletilosti je to dospělý s plnými právy subjektu údajů** — může žádat i o další
+   údaje ze svého spisu, nejen o knihu. To je nad rámec knihy života, ale model s tím
+   musí počítat, protože ta osoba v systému zůstane.
+
+### Dítě vidí, kdo do knihy vidí — potvrzeno
+
+V dětské aplikaci je přehled: kdo má ke knize přístup, od kdy a v jakém rozsahu.
+Dítě odtud může přístup rovnou **odvolat** — samo, bez souhlasu ostatních
+(asymetrické pravidlo výše).
+
+### Přispívání rodiče — potvrzeno
+
+`scope: 'read'` je výchozí, `'read_and_propose'` volitelný. Rodičův příspěvek **nejde
+do knihy přímo**, ale do schvalování. Fotky dítěte z doby před umístěním jsou často to
+nejcennější, co může přinést; kniha ale nesmí být kanál pro nevhodné vzkazy.
+
+```ts
+interface LifeBookEntry {
+  // …
+  status: 'draft' | 'proposed' | 'approved' | 'rejected'
+  proposedByPersonId: string | null
+  reviewedByPersonId: string | null
+  reviewedAt: string | null
+  rejectionReason: string | null
+}
+```
+
+**Kdo schvaluje jednotlivý příspěvek:** navrhuji **Klíčovou osobu** — je to profesionál
+odpovědný za nejlepší zájem dítěte a vyžadovat u každé fotky znovu shodu tří lidí by
+knihu zadusilo. Dítě pak může kterýkoli příspěvek ze své knihy **nechat odebrat**, což
+odpovídá tomu, že kniha je jeho, i asymetrickému pravidlu výše. Odebraný příspěvek se
+nemaže, jen přestane být součástí knihy (sekce 6).
 
 ---
 
@@ -253,11 +284,14 @@ odložené (dok. 08), ale model už nese `retentionBasis`, aby se dalo doplnit b
 
 ---
 
-## 8. Otevřené
+## 8. Uzavřená rozhodnutí ke knize života
 
-1. **Přispívání rodiče do knihy života** — jen čtení, nebo návrhy ke schválení?
-   (sekce 3)
-2. **Kdo vlastní knihu života po zletilosti** — zůstává v systému a dítě má trvalý
-   přístup, nebo si ji vyexportuje a přístup skončí?
-3. **Vidí dítě, že rodič má schválený přístup** ke své knize? Navrhuji ano — je to
-   jeho kniha a mělo by vědět, kdo do ní vidí.
+| Otázka | Rozhodnutí |
+| --- | --- |
+| Přispívání rodiče | **jen čtení jako výchozí**; návrhy ke schválení jako volba |
+| Kniha po zletilosti | **zůstává v systému trvale**, dítě má trvalý přístup |
+| Vidí dítě, kdo má přístup | **ano**, a může ho samo odvolat |
+
+Zbývá jen jedno, a je to návrh, ne otevřená otázka: **schvalovatelem jednotlivého
+příspěvku rodiče navrhuji Klíčovou osobu** (sekce 3). Pokud chceš místo toho vyžadovat
+shodu více lidí, řekni — je to jednořádková změna v konfiguraci, ne v modelu.
