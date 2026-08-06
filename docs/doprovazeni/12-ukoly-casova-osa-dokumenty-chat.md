@@ -59,7 +59,7 @@ interface TimelineEntry {
   refType: 'monitoring_contact' | 'contact_event' | 'note' | 'dictation'
          | 'document' | 'plan' | 'report' | 'education_record' | 'care_episode'
          | 'message_thread' | 'signature' | 'obligation' | 'handover' | 'transfer'
-         | 'life_book_entry' | 'expense'
+         | 'life_book_entry'          // výdaje ZÁMĚRNĚ nejsou — viz sekce 9
   refId: string
 
   actorPersonId: string             // autorství se nikdy neanonymizuje (dok. 03)
@@ -194,10 +194,22 @@ interface CaseFileLending {              // ZAPŮJČENÍ spisu
   purpose: string
 }
 
-interface DocumentAccessLog {            // NAHLÍŽENÍ — i pouhé zobrazení
+// NAHLÍŽENÍ — agregovaně: jeden záznam za spis, osobu a den
+interface CaseFileViewLog {
+  caseFileId: string
+  personId: string
+  day: string                          // YYYY-MM-DD
+  viewCount: number                    // inkrementuje se během dne
+  firstAt: string
+  lastAt: string
+  crossCaseAccess: boolean             // nepřidělený spis — dok. 03 sekce 0
+}
+
+// ODNESENÍ KOPIE — jednotlivě, protože to je ten podstatný úkon
+interface DocumentExportLog {
   documentId: string
   personId: string
-  action: 'view' | 'download' | 'copy' | 'print'
+  action: 'download' | 'copy' | 'print'
   at: string
 }
 
@@ -212,9 +224,12 @@ interface InspectionRequest {            // ŽÁDOST O NAHLÉDNUTÍ, včetně od
 }
 ```
 
-**Logování pouhého zobrazení** je nepříjemné na objem dat, ale plyne to ze dvou stran
-zároveň: 13a žádá pravidla pro nahlížení a původní zadání (M5) chtělo audit i pro
-**zobrazení** citlivých údajů dětí. Bez toho nejde dokázat, kdo se komu do spisu díval.
+**Granularita je rozhodnutá dvoustupňově.** Běžné prohlížení se loguje **agregovaně
+za spis, osobu a den**; stažení, kopie a tisk **jednotlivě**. Důvod je věcný, nejen
+objemový: prohlížení je vysokoobjemové a samo o sobě málo vypovídá, ale **odnesení kopie
+ze systému** je právě ten úkon, na který míří 13a i GDPR. Zároveň zůstává splněný
+požadavek původního zadání (M5) na audit zobrazení citlivých údajů dětí — jen se
+neukládá řádek za každé kliknutí.
 
 ---
 
@@ -255,7 +270,7 @@ interface PinnedMessage {
 | **Zpráva o průběhu PP** | ✓ | ✓ z revize | ✓ PDF + doručenky | ✓ **plní** 6 měsíců, 15 dnů |
 | **Vzdělávací záznam** | ✓ | — | ✓ certifikát | ✓ **plní** hodiny |
 | **Respitní epizoda** | ✓ | — | ✓ doklad | ✓ čerpání dnů |
-| **Výdaj / žádost** | ✓ (nízká priorita) | ✓ ke schválení | ✓ doklad | — |
+| **Výdaj / žádost** | ✗ *(rozhodnuto — zašumělo by osu)* | ✓ ke schválení | ✓ doklad | — |
 | **Chat** | ✓ na úrovni vlákna | ✓ ze zprávy | ✓ z přílohy | — |
 | **Podpisový obřad** | ✓ | ✓ čeká na podpis | ✓ podepsaná verze | — |
 | **Přechod pěstouna** | ✓ | ✓ příprava dohody | ✓ závěrečná zpráva | ✓ okno kódu |
@@ -323,12 +338,13 @@ Nic nového do MVP nepřidávám — všechny čtyři už v seznamu byly (dok. 0
 
 ---
 
-## 9. Otevřené
+## 9. Uzavřená rozhodnutí
 
-1. **Objem logu zobrazení.** Logovat každé otevření dokumentu je hodně zápisů. Navrhuji
-   logovat na úrovni **spisu a dne** pro běžné prohlížení a **jednotlivě** pro stažení,
-   kopii a tisk. Stačí to, nebo chceš každé zobrazení samostatně?
-2. **Výdaje v časové ose** — mají tam být vůbec? Jsou to desítky položek ročně a osu to
-   zašumí. Navrhuji je do osy nedávat a nechat je jen ve své agendě.
-3. **Kanban úkolů** — zadání ho chce. Na mobilu je kanban nepohodlný; navrhuji na mobilu
-   seznam s filtry a kanban jen na desktopu.
+| Otázka | Rozhodnutí |
+| --- | --- |
+| Granularita logu nahlížení | **prohlížení agregovaně za spis a den, stažení/kopie/tisk jednotlivě** |
+| Výdaje v časové ose | **nejsou** — zůstávají jen ve své agendě |
+| Kanban úkolů | **jen na desktopu**; na mobilu seznam s filtry |
+
+Tím jsou uzavřené i dvě místa, kde by dokument sám sobě odporoval: `expense` vypadl
+z `TimelineEntry.refType` a odpovídající řádek v propojovací tabulce (sekce 5).
