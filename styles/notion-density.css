@@ -1,0 +1,655 @@
+/*
+ * notion-density.css — a Notion-like document surface built on Geist tokens.
+ *
+ * Values are derived from splitbee/react-notion@0.10.0 (`src/styles.css`, MIT),
+ * which is a faithful reimplementation of Notion's own CSS. Every hard-coded
+ * colour, shadow and radius from that file has been replaced with a Geist token,
+ * so this layer works in light and dark mode. See
+ * docs/react-notion-adoption.md for the full mapping and rationale.
+ *
+ * Layer this AFTER design-system/geist.css (or tokens/theme.css).
+ *
+ * Scope: the *document* surface — note bodies, meeting notes, long-form content.
+ * Deliberately NOT the planner chrome (calendar rows, task lists, Console),
+ * which wants a tighter rhythm. Set --nd-preset-compact on a container to pull
+ * the scale in for embedded/preview contexts.
+ *
+ * Non-upstream custom properties are namespaced --nd-* to keep the --ds-*
+ * namespace clean, matching the convention used by --pwa-* in the PWA layer.
+ */
+
+.nd-doc {
+  /* --- density knobs ------------------------------------------------------ */
+  /* Notion's own values. Override these rather than the rules below. */
+  --nd-font-size: 16px;
+  --nd-line-height: 1.5;
+  --nd-content-width: 708px;
+
+  /* Notion's signature block rhythm: 3px vertical, 2px horizontal. This is
+     what makes blocks feel individually clickable without visible chrome. */
+  --nd-block-pad-y: 3px;
+  --nd-block-pad-x: 2px;
+
+  /* Notion uses a 3px radius almost universally. Geist has no 3px step, so
+     round to --radius-sm (4px); --radius-xs (2px) reads slightly too sharp. */
+  --nd-radius: var(--radius-sm, 4px);
+
+  /* Notion's hover/press feedback is a 120ms background fade. */
+  --nd-transition: background 120ms ease-in 0s;
+
+  font-family: var(--font-geist-sans);
+  font-size: var(--nd-font-size);
+  line-height: var(--nd-line-height);
+  color: var(--ds-gray-1000);
+  caret-color: var(--ds-gray-1000);
+}
+
+/* Compact preset — for note previews inside a dense planner surface. */
+.nd-doc.nd-compact,
+.nd-compact .nd-doc {
+  --nd-font-size: 14px;
+  --nd-line-height: 1.45;
+  --nd-content-width: 100%;
+  --nd-block-pad-y: 1px;
+}
+
+.nd-doc * {
+  box-sizing: border-box;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.nd-doc > *,
+.nd-page > *,
+.nd-column > * {
+  padding: var(--nd-block-pad-y) 0;
+}
+
+.nd-page {
+  width: 100%;
+  max-width: var(--nd-content-width);
+  margin: 0 auto;
+  padding: 0;
+}
+
+@media only screen and (max-width: 730px) {
+  .nd-page {
+    padding: 0 2vw;
+  }
+}
+
+.nd-full-width {
+  max-width: 100%;
+  padding: 0 40px;
+}
+
+/* --- type scale ---------------------------------------------------------- */
+/* em-based, so the whole ramp follows --nd-font-size. */
+
+.nd-title {
+  font-size: 2.5em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 0.75em;
+  margin-bottom: 0.25em;
+  letter-spacing: -0.02em;
+}
+
+.nd-h1,
+.nd-h2,
+.nd-h3 {
+  font-weight: 600;
+  line-height: 1.3;
+  padding: var(--nd-block-pad-y) var(--nd-block-pad-x);
+}
+
+.nd-h1 {
+  font-size: 1.875em;
+  margin-top: 1.4em;
+  letter-spacing: -0.015em;
+}
+
+.nd-h1:first-child,
+.nd-h2:first-child,
+.nd-h3:first-child {
+  margin-top: 0;
+}
+
+.nd-h2 {
+  font-size: 1.5em;
+  margin-top: 1.1em;
+  letter-spacing: -0.01em;
+}
+
+.nd-h3 {
+  font-size: 1.25em;
+  margin-top: 1em;
+}
+
+.nd-text,
+.nd-block {
+  padding: var(--nd-block-pad-y) var(--nd-block-pad-x);
+  white-space: pre-wrap;
+}
+
+.nd-text {
+  caret-color: var(--ds-gray-1000);
+}
+
+.nd-small-text {
+  font-size: 0.875em;
+}
+
+.nd-doc b,
+.nd-doc strong {
+  font-weight: 600;
+}
+
+.nd-blank {
+  min-height: 1rem;
+  padding: var(--nd-block-pad-y) var(--nd-block-pad-x);
+  margin: 1px 0;
+}
+
+/* --- links, rules, quotes ------------------------------------------------ */
+
+.nd-link {
+  color: inherit;
+  word-break: break-word;
+  text-decoration: underline;
+  text-decoration-color: var(--ds-gray-alpha-500);
+  text-underline-offset: 2px;
+}
+
+.nd-link:focus-visible {
+  outline: var(--ds-focus-ring);
+  border-radius: var(--nd-radius);
+}
+
+.nd-hr {
+  margin: 6px 0;
+  padding: 0;
+  border-top: 1px solid var(--ds-gray-alpha-400);
+  border-bottom: 0;
+}
+
+.nd-quote {
+  margin: 0;
+  padding: 0.2em 0.9em;
+  border-left: 3px solid var(--ds-gray-alpha-600);
+  font-size: 1.2em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- lists --------------------------------------------------------------- */
+
+.nd-list {
+  margin: 0;
+  margin-block-start: 0.6em;
+  margin-block-end: 0.6em;
+}
+
+.nd-list-disc {
+  list-style-type: disc;
+  padding-inline-start: 1.6em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nd-list-numbered {
+  list-style-type: decimal;
+  padding-inline-start: 1.6em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nd-list-disc li {
+  padding-left: 0.1em;
+}
+
+.nd-list-numbered li {
+  padding-left: 0.2em;
+}
+
+.nd-list li {
+  padding: 4px 0;
+  white-space: pre-wrap;
+}
+
+.nd-list > .nd-text {
+  margin-left: -1.6em;
+  padding-left: 0;
+}
+
+/* --- code ---------------------------------------------------------------- */
+
+.nd-inline-code {
+  padding: 0.2em 0.4em;
+  border-radius: var(--nd-radius);
+  background: var(--ds-gray-alpha-200);
+  color: var(--ds-red-900);
+  font-family: var(--font-geist-mono);
+  font-size: 0.85em;
+}
+
+.nd-code {
+  display: block;
+  box-sizing: border-box;
+  margin: 4px 0;
+  padding: 30px 16px 30px 20px;
+  border-radius: var(--nd-radius);
+  background: var(--ds-background-200);
+  box-shadow: var(--ds-shadow-border-small);
+  font-family: var(--font-geist-mono);
+  font-size: 0.85em;
+  tab-size: 2;
+  /* auto, not scroll — Notion's `scroll` shows a permanent gutter on
+     platforms with classic scrollbars. */
+  overflow-x: auto;
+}
+
+/* --- callout, toggle ----------------------------------------------------- */
+
+.nd-callout {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 4px 0;
+  padding: 16px 16px 16px 12px;
+  border-radius: var(--nd-radius);
+  background: var(--ds-background-200);
+  box-shadow: var(--ds-shadow-border-small);
+}
+
+.nd-callout-text {
+  margin-left: 8px;
+  white-space: pre-line;
+}
+
+.nd-toggle {
+  padding: var(--nd-block-pad-y) var(--nd-block-pad-x);
+}
+
+.nd-toggle > summary {
+  cursor: pointer;
+  outline: none;
+  border-radius: var(--nd-radius);
+}
+
+.nd-toggle > summary:focus-visible {
+  outline: var(--ds-focus-ring);
+}
+
+.nd-toggle > div {
+  margin-left: 1.1em;
+}
+
+/* --- page links & icons -------------------------------------------------- */
+
+.nd-page-link {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin: 1px 0;
+  padding: 0 4px;
+  border-radius: var(--nd-radius);
+  color: var(--ds-gray-1000);
+  text-decoration: none;
+  transition: var(--nd-transition);
+}
+
+.nd-page-link:hover {
+  background: var(--ds-gray-alpha-200);
+}
+
+.nd-page-link:active {
+  background: var(--ds-gray-alpha-300);
+}
+
+.nd-page-link:focus-visible {
+  outline: var(--ds-focus-ring);
+}
+
+.nd-page-icon {
+  margin-right: 4px;
+  margin-left: 2px;
+  line-height: 1.4;
+}
+
+img.nd-page-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--nd-radius);
+  object-fit: cover;
+}
+
+.nd-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  color: var(--ds-gray-900);
+}
+
+.nd-page-text {
+  margin: 1px 0;
+  border-bottom: 1px solid var(--ds-gray-alpha-500);
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- assets -------------------------------------------------------------- */
+
+.nd-asset-wrapper {
+  max-width: 100%;
+  margin: 0.5rem auto;
+}
+
+.nd-asset-wrapper > img {
+  max-width: 100%;
+  border-radius: var(--nd-radius);
+}
+
+.nd-asset-wrapper iframe {
+  border: none;
+  border-radius: var(--nd-radius);
+}
+
+.nd-image-caption {
+  padding: 6px 0;
+  color: var(--ds-gray-900);
+  font-size: 0.875em;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- tables -------------------------------------------------------------- */
+
+.nd-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-top: 1px solid var(--ds-gray-alpha-400);
+  border-bottom: 1px solid var(--ds-gray-alpha-400);
+  white-space: nowrap;
+  /* Wide tables scroll inside their own container, never the page. */
+  display: block;
+  overflow-x: auto;
+}
+
+.nd-th,
+.nd-td {
+  min-height: 1.5em;
+  padding: 0.25em 0.5em;
+  border: 1px solid var(--ds-gray-alpha-400);
+  font-size: 0.875em;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.nd-th {
+  color: var(--ds-gray-900);
+}
+
+.nd-td.nd-bold {
+  font-weight: 500;
+}
+
+.nd-td:first-child,
+.nd-th:first-child {
+  border-left: 0;
+}
+
+.nd-td:last-child,
+.nd-th:last-child {
+  border-right: 0;
+}
+
+/* --- bookmark ------------------------------------------------------------ */
+
+.nd-bookmark {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 4px 0;
+  border-radius: var(--nd-radius);
+  box-shadow: var(--ds-shadow-border-small);
+  overflow: hidden;
+  text-decoration: none;
+  user-select: none;
+  transition: var(--nd-transition);
+}
+
+.nd-bookmark:hover {
+  background: var(--ds-gray-alpha-100);
+}
+
+.nd-bookmark:focus-visible {
+  outline: var(--ds-focus-ring);
+}
+
+.nd-bookmark > div:first-child {
+  flex: 4 1 180px;
+  padding: 12px 14px 14px;
+  color: var(--ds-gray-1000);
+  text-align: left;
+  overflow: hidden;
+}
+
+.nd-bookmark-title {
+  min-height: 24px;
+  margin-bottom: 2px;
+  font-size: 0.875em;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nd-bookmark-description {
+  height: 32px;
+  color: var(--ds-gray-900);
+  font-size: 0.75em;
+  line-height: 16px;
+  overflow: hidden;
+}
+
+.nd-bookmark-link {
+  display: flex;
+  margin-top: 6px;
+}
+
+.nd-bookmark-link > img {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  margin-right: 6px;
+}
+
+.nd-bookmark-link > div {
+  color: var(--ds-gray-900);
+  font-size: 0.75em;
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nd-bookmark-image {
+  position: relative;
+  flex: 1 1 180px;
+}
+
+.nd-bookmark-image img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- gallery ------------------------------------------------------------- */
+
+.nd-gallery {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 4px;
+  border-top: 1px solid var(--ds-gray-alpha-400);
+}
+
+.nd-gallery-card {
+  position: static;
+  display: block;
+  height: 100%;
+  border-radius: var(--nd-radius);
+  background: var(--ds-background-100);
+  /* Notion hand-rolls a 1px ring plus a soft drop shadow; that is exactly
+     what --ds-shadow-border-small encodes. */
+  box-shadow: var(--ds-shadow-border-small);
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  transition: background 100ms ease-out 0s;
+}
+
+.nd-gallery-card:hover {
+  background: var(--ds-background-200);
+}
+
+.nd-gallery-card:focus-visible {
+  outline: var(--ds-focus-ring);
+}
+
+.nd-gallery-content {
+  padding: 8px 10px 6px;
+  font-size: 0.75em;
+  white-space: nowrap;
+}
+
+.nd-gallery-data.is-first {
+  min-height: 21px;
+  font-size: 0.875em;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- columns ------------------------------------------------------------- */
+
+.nd-row {
+  display: flex;
+  overflow: hidden;
+}
+
+.nd-column {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.nd-column > *:first-child {
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.nd-column > *:last-child {
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.nd-column .nd-bookmark-image {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .nd-bookmark-image {
+    display: none;
+  }
+
+  .nd-row {
+    flex-direction: column;
+  }
+
+  .nd-row > *,
+  .nd-column > * {
+    width: 100% !important;
+  }
+}
+
+.nd-spacer:last-child {
+  display: none;
+}
+
+/* --- inline colour & highlight ------------------------------------------- */
+/*
+ * Notion's nine annotation hues mapped onto Geist steps, so they invert
+ * correctly in dark mode. Notion's `orange` and `brown` have no Geist hue;
+ * orange folds into amber and brown into gray. Step 900 is the readable text
+ * role; step 200 is the quiet surface role.
+ */
+
+.nd-red        { color: var(--ds-red-900); }
+.nd-pink       { color: var(--ds-pink-900); }
+.nd-blue       { color: var(--ds-blue-900); }
+.nd-purple     { color: var(--ds-purple-900); }
+.nd-teal       { color: var(--ds-teal-900); }
+.nd-green      { color: var(--ds-green-900); }
+.nd-yellow     { color: var(--ds-amber-900); }
+.nd-orange     { color: var(--ds-amber-900); }
+.nd-brown      { color: var(--ds-gray-900); }
+.nd-gray       { color: var(--ds-gray-900); }
+
+.nd-red_background        { background-color: var(--ds-red-200); }
+.nd-pink_background       { background-color: var(--ds-pink-200); }
+.nd-blue_background       { background-color: var(--ds-blue-200); }
+.nd-purple_background     { background-color: var(--ds-purple-200); }
+.nd-teal_background       { background-color: var(--ds-teal-200); }
+.nd-green_background      { background-color: var(--ds-green-200); }
+.nd-yellow_background     { background-color: var(--ds-amber-200); }
+.nd-orange_background     { background-color: var(--ds-amber-200); }
+.nd-brown_background      { background-color: var(--ds-gray-200); }
+.nd-gray_background       { background-color: var(--ds-gray-200); }
+
+/* Notion's "_co" variants are the same hue at reduced strength; step 100 is
+   the quieter surface role, which survives dark mode better than an alpha. */
+.nd-red_background_co     { background-color: var(--ds-red-100); }
+.nd-pink_background_co    { background-color: var(--ds-pink-100); }
+.nd-blue_background_co    { background-color: var(--ds-blue-100); }
+.nd-purple_background_co  { background-color: var(--ds-purple-100); }
+.nd-teal_background_co    { background-color: var(--ds-teal-100); }
+.nd-green_background_co   { background-color: var(--ds-green-100); }
+.nd-yellow_background_co  { background-color: var(--ds-amber-100); }
+.nd-orange_background_co  { background-color: var(--ds-amber-100); }
+.nd-brown_background_co   { background-color: var(--ds-gray-100); }
+.nd-gray_background_co    { background-color: var(--ds-gray-100); }
+
+/* --- checkbox / to-do ---------------------------------------------------- */
+
+.nd-checkbox {
+  accent-color: var(--ds-blue-700);
+}
+
+/* --- reduced motion ------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .nd-doc *,
+  .nd-page-link,
+  .nd-bookmark,
+  .nd-gallery-card {
+    transition: none;
+  }
+}
