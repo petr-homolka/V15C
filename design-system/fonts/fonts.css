@@ -1,0 +1,116 @@
+/* Geist Sans, Geist Mono and Geist Pixel — @font-face declarations.
+ *
+ * Font files taken from the `geist` npm package v1.7.2.
+ * Copyright (c) 2023 Vercel, in collaboration with basement.studio.
+ * Licensed under the SIL Open Font License 1.1 — see ./LICENSE.txt.
+ *
+ * Only the variable (`[wght]` 100–900) faces are vendored; they cover every
+ * static weight the package also ships, at a fraction of the bytes.
+ *
+ * `font-display: swap` matches what next/font emits for these families.
+ */
+
+/* ── Geist Sans ─────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Geist Sans";
+  src: url("./geist-sans/Geist-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  src: url("./geist-sans/Geist-Italic-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Geist Mono ─────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("./geist-mono/GeistMono-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("./geist-mono/GeistMono-Italic-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Geist Pixel ────────────────────────────────────────────────────────────
+ * Five display faces, each a distinct pixel shape. Single weight (500).
+ * Not part of the core UI stack — opt in per element.
+ */
+
+@font-face {
+  font-family: "Geist Pixel Square";
+  src: url("./geist-pixel/GeistPixel-Square.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Pixel Grid";
+  src: url("./geist-pixel/GeistPixel-Grid.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Pixel Circle";
+  src: url("./geist-pixel/GeistPixel-Circle.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Pixel Triangle";
+  src: url("./geist-pixel/GeistPixel-Triangle.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Pixel Line";
+  src: url("./geist-pixel/GeistPixel-Line.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Family variables ───────────────────────────────────────────────────────
+ * Named to match what the `geist` npm package exposes via next/font, so code
+ * written against either source resolves the same way.
+ *
+ * The mono and pixel fallback lists are copied from the package's own
+ * `fallback` arrays. The package declares none for sans — next/font synthesises
+ * one there — so the sans list below is a conventional system stack.
+ */
+
+:root {
+  --font-geist-sans:
+    "Geist Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono:
+    "Geist Mono", ui-monospace, SFMono-Regular, "Roboto Mono", Menlo, Monaco,
+    "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace;
+
+  --font-geist-pixel-square: "Geist Pixel Square", var(--font-geist-mono);
+  --font-geist-pixel-grid: "Geist Pixel Grid", var(--font-geist-mono);
+  --font-geist-pixel-circle: "Geist Pixel Circle", var(--font-geist-mono);
+  --font-geist-pixel-triangle: "Geist Pixel Triangle", var(--font-geist-mono);
+  --font-geist-pixel-line: "Geist Pixel Line", var(--font-geist-mono);
+}

@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geist Design System — preview</title>
+<link rel="stylesheet" href="./geist.css">
+<style>
+  body { margin: 0; padding: 0 0 8rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  header {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 24px; margin-bottom: 40px;
+    background: var(--ds-background-100);
+    border-bottom: 1px solid var(--ds-gray-alpha-400);
+  }
+  header h1 { margin: 0; font-size: 20px; font-weight: 450; letter-spacing: -0.4px; }
+  header .meta { color: var(--ds-gray-900); font-size: 13px; font-family: var(--font-geist-mono); }
+  header button {
+    margin-left: auto; font: inherit; font-size: 14px; font-weight: 500;
+    padding: 6px 12px; border: 0; border-radius: 6px; cursor: pointer;
+    background: var(--ds-gray-1000); color: var(--ds-background-100);
+  }
+  header button:focus-visible { outline: 0; box-shadow: var(--ds-focus-ring); }
+  h2 {
+    font-size: 24px; font-weight: 450; letter-spacing: -0.96px;
+    margin: 56px 0 8px; padding-top: 24px;
+    border-top: 1px solid var(--ds-gray-alpha-400);
+  }
+  h2:first-of-type { border-top: 0; margin-top: 0; }
+  h3 { font-size: 13px; font-weight: 500; color: var(--ds-gray-900); margin: 28px 0 10px;
+       font-family: var(--font-geist-mono); }
+  p.lede { color: var(--ds-gray-900); font-size: 14px; line-height: 20px; margin: 0 0 8px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+  .sw { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .chip {
+    width: 34px; height: 34px; flex: none; border-radius: 6px;
+    box-shadow: var(--ds-shadow-border-base);
+  }
+  .sw .txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .sw code { font-size: 12px; font-family: var(--font-geist-mono); }
+  .sw .val {
+    font-size: 10px; font-family: var(--font-geist-mono); color: var(--ds-gray-900);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .shgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 24px; }
+  .shcard { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .shcard .box {
+    width: 100%; height: 68px; border-radius: 8px;
+    background: var(--ds-background-100);
+  }
+  .shcard code, .rcard code { font-size: 12px; font-family: var(--font-geist-mono);
+                              color: var(--ds-gray-900); }
+  .rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; }
+  .rcard { display: flex; flex-direction: column; gap: 8px; }
+  .rcard .box { height: 56px; background: var(--ds-gray-100);
+                box-shadow: var(--ds-shadow-border-base); }
+  .typerow {
+    display: grid; grid-template-columns: 150px 1fr; gap: 20px;
+    align-items: baseline; padding: 10px 0;
+    border-top: 1px solid var(--ds-gray-alpha-200);
+  }
+  .typerow > code { font-size: 12px; font-family: var(--font-geist-mono);
+                    color: var(--ds-gray-900); }
+  .typerow > div { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+  .mat { padding: 20px; background: var(--ds-background-100);
+         font-size: 13px; font-family: var(--font-geist-mono); color: var(--ds-gray-900); }
+  .pixrow { display: grid; grid-template-columns: 150px 1fr; gap: 20px;
+            align-items: center; padding: 10px 0;
+            border-top: 1px solid var(--ds-gray-alpha-200); }
+  .pixrow > code { font-size: 12px; font-family: var(--font-geist-mono);
+                   color: var(--ds-gray-900); }
+  .pixrow > div { font-size: 26px; }
+  .weights { display: flex; flex-wrap: wrap; gap: 20px; align-items: baseline; }
+  .weights div { font-size: 28px; letter-spacing: -0.5px; }
+  .weights small { display: block; font-size: 11px; font-family: var(--font-geist-mono);
+                   color: var(--ds-gray-900); letter-spacing: 0; }
+  section.ramp { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Geist Design System</h1>
+  <span class="meta">@vercel/geistdocs@1.19.5 · geist@1.7.2</span>
+  <button type="button" id="t">Toggle theme</button>
+</header>
+
+<div class="wrap">
+
+<h2>Colour</h2>
+<p class="lede">95 colour tokens. Step numbers are roles, not lightness — the same step means the same thing in both themes.</p>
+<section class="ramp">
+  <h3>base</h3>
+  <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-background-100)"></div>
+        <div class="txt">
+          <code>background-100</code>
+          <span class="val" data-light="oklch(1 0 0)" data-dark="oklch(0 0 0)">oklch(1 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-background-200)"></div>
+        <div class="txt">
+          <code>background-200</code>
+          <span class="val" data-light="oklch(0.984 0 0)" data-dark="oklch(0.027 0 0)">oklch(0.984 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-black)"></div>
+        <div class="txt">
+          <code>black</code>
+          <span class="val" data-light="oklch(0 0 0)" data-dark="oklch(0 0 0)">oklch(0 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-white)"></div>
+        <div class="txt">
+          <code>white</code>
+          <span class="val" data-light="oklch(1 0 0)" data-dark="oklch(1 0 0)">oklch(1 0 0)</span>
+        </div>
+      </div>
+  </div>
+</section>
+    <section class="ramp">
+      <h3>gray</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-100)"></div>
+        <div class="txt">
+          <code>gray-100</code>
+          <span class="val" data-light="oklch(0.961 0 0)" data-dark="oklch(0.218 0 0)">oklch(0.961 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-200)"></div>
+        <div class="txt">
+          <code>gray-200</code>
+          <span class="val" data-light="oklch(0.94 0 0)" data-dark="oklch(0.239 0 0)">oklch(0.94 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-300)"></div>
+        <div class="txt">
+          <code>gray-300</code>
+          <span class="val" data-light="oklch(0.925 0 0)" data-dark="oklch(0.281 0 0)">oklch(0.925 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-400)"></div>
+        <div class="txt">
+          <code>gray-400</code>
+          <span class="val" data-light="oklch(0.937 0 0)" data-dark="oklch(0.301 0 0)">oklch(0.937 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-500)"></div>
+        <div class="txt">
+          <code>gray-500</code>
+          <span class="val" data-light="oklch(0.836 0 0)" data-dark="oklch(0.39 0 0)">oklch(0.836 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-600)"></div>
+        <div class="txt">
+          <code>gray-600</code>
+          <span class="val" data-light="oklch(0.732 0 0)" data-dark="oklch(0.623 0 0)">oklch(0.732 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-700)"></div>
+        <div class="txt">
+          <code>gray-700</code>
+          <span class="val" data-light="oklch(0.65 0 0)" data-dark="oklch(0.65 0 0)">oklch(0.65 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-800)"></div>
+        <div class="txt">
+          <code>gray-800</code>
+          <span class="val" data-light="oklch(0.59 0 0)" data-dark="oklch(0.59 0 0)">oklch(0.59 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-900)"></div>
+        <div class="txt">
+          <code>gray-900</code>
+          <span class="val" data-light="oklch(0.42 0 0)" data-dark="oklch(0.706 0 0)">oklch(0.42 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-950)"></div>
+        <div class="txt">
+          <code>gray-950</code>
+          <span class="val" data-light="oklch(0.3 0 0)" data-dark="oklch(0.85 0 0)">oklch(0.3 0 0)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-1000)"></div>
+        <div class="txt">
+          <code>gray-1000</code>
+          <span class="val" data-light="oklch(0.205 0 0)" data-dark="oklch(0.946 0 0)">oklch(0.205 0 0)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>gray-alpha</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-100)"></div>
+        <div class="txt">
+          <code>gray-alpha-100</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.05)" data-dark="oklch(1 0 0 / 0.07)">oklch(0 0 0 / 0.05)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-200)"></div>
+        <div class="txt">
+          <code>gray-alpha-200</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.081)" data-dark="oklch(1 0 0 / 0.09)">oklch(0 0 0 / 0.081)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-300)"></div>
+        <div class="txt">
+          <code>gray-alpha-300</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.1)" data-dark="oklch(1 0 0 / 0.13)">oklch(0 0 0 / 0.1)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-400)"></div>
+        <div class="txt">
+          <code>gray-alpha-400</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.08)" data-dark="oklch(1 0 0 / 0.14)">oklch(0 0 0 / 0.08)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-500)"></div>
+        <div class="txt">
+          <code>gray-alpha-500</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.21)" data-dark="oklch(1 0 0 / 0.24)">oklch(0 0 0 / 0.21)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-600)"></div>
+        <div class="txt">
+          <code>gray-alpha-600</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.24)" data-dark="oklch(1 0 0 / 0.51)">oklch(0 0 0 / 0.24)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-700)"></div>
+        <div class="txt">
+          <code>gray-alpha-700</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.44)" data-dark="oklch(1 0 0 / 0.54)">oklch(0 0 0 / 0.44)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-800)"></div>
+        <div class="txt">
+          <code>gray-alpha-800</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.51)" data-dark="oklch(1 0 0 / 0.47)">oklch(0 0 0 / 0.51)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-900)"></div>
+        <div class="txt">
+          <code>gray-alpha-900</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.7)" data-dark="oklch(1 0 0 / 0.61)">oklch(0 0 0 / 0.7)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-gray-alpha-1000)"></div>
+        <div class="txt">
+          <code>gray-alpha-1000</code>
+          <span class="val" data-light="oklch(0 0 0 / 0.91)" data-dark="oklch(1 0 0 / 0.92)">oklch(0 0 0 / 0.91)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>blue</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-100)"></div>
+        <div class="txt">
+          <code>blue-100</code>
+          <span class="val" data-light="oklch(97.32% 0.0141 251.56)" data-dark="oklch(22.17% 0.069 259.89)">oklch(97.32% 0.0141 251.56)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-200)"></div>
+        <div class="txt">
+          <code>blue-200</code>
+          <span class="val" data-light="oklch(96.29% 0.0195 250.59)" data-dark="oklch(25.45% 0.0811 255.8)">oklch(96.29% 0.0195 250.59)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-300)"></div>
+        <div class="txt">
+          <code>blue-300</code>
+          <span class="val" data-light="oklch(94.58% 0.0293 249.85)" data-dark="oklch(30.86% 0.1022 255.21)">oklch(94.58% 0.0293 249.85)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-400)"></div>
+        <div class="txt">
+          <code>blue-400</code>
+          <span class="val" data-light="oklch(91.58% 0.0473 245.12)" data-dark="oklch(34.1% 0.121 254.74)">oklch(91.58% 0.0473 245.12)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-500)"></div>
+        <div class="txt">
+          <code>blue-500</code>
+          <span class="val" data-light="oklch(82.75% 0.0979 248.48)" data-dark="oklch(38.5% 0.1403 254.4)">oklch(82.75% 0.0979 248.48)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-600)"></div>
+        <div class="txt">
+          <code>blue-600</code>
+          <span class="val" data-light="oklch(73.08% 0.1583 248.13)" data-dark="oklch(64.94% 0.1982 251.81)">oklch(73.08% 0.1583 248.13)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-700)"></div>
+        <div class="txt">
+          <code>blue-700</code>
+          <span class="val" data-light="oklch(57.61% 0.2508 258.23)" data-dark="oklch(57.61% 0.2321 258.23)">oklch(57.61% 0.2508 258.23)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-800)"></div>
+        <div class="txt">
+          <code>blue-800</code>
+          <span class="val" data-light="oklch(51.51% 0.2399 257.85)" data-dark="oklch(51.51% 0.2307 257.85)">oklch(51.51% 0.2399 257.85)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-900)"></div>
+        <div class="txt">
+          <code>blue-900</code>
+          <span class="val" data-light="oklch(53.18% 0.2399 256.99)" data-dark="oklch(71.7% 0.1648 250.79)">oklch(53.18% 0.2399 256.99)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-blue-1000)"></div>
+        <div class="txt">
+          <code>blue-1000</code>
+          <span class="val" data-light="oklch(26.67% 0.1099 254.34)" data-dark="oklch(96.75% 0.0179 242.42)">oklch(26.67% 0.1099 254.34)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>red</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-100)"></div>
+        <div class="txt">
+          <code>red-100</code>
+          <span class="val" data-light="oklch(96.5% 0.0223 13.09)" data-dark="oklch(22.1% 0.0657 15.11)">oklch(96.5% 0.0223 13.09)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-200)"></div>
+        <div class="txt">
+          <code>red-200</code>
+          <span class="val" data-light="oklch(95.41% 0.0299 14.25)" data-dark="oklch(25.93% 0.0834 19.02)">oklch(95.41% 0.0299 14.25)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-300)"></div>
+        <div class="txt">
+          <code>red-300</code>
+          <span class="val" data-light="oklch(94.33% 0.0369 15.01)" data-dark="oklch(31.47% 0.1105 20.96)">oklch(94.33% 0.0369 15.01)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-400)"></div>
+        <div class="txt">
+          <code>red-400</code>
+          <span class="val" data-light="oklch(91.51% 0.0471 19.8)" data-dark="oklch(35.27% 0.1273 21.23)">oklch(91.51% 0.0471 19.8)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-500)"></div>
+        <div class="txt">
+          <code>red-500</code>
+          <span class="val" data-light="oklch(84.47% 0.1018 17.71)" data-dark="oklch(40.68% 0.1479 23.16)">oklch(84.47% 0.1018 17.71)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-600)"></div>
+        <div class="txt">
+          <code>red-600</code>
+          <span class="val" data-light="oklch(71.12% 0.1881 21.22)" data-dark="oklch(62.56% 0.2277 23.03)">oklch(71.12% 0.1881 21.22)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-700)"></div>
+        <div class="txt">
+          <code>red-700</code>
+          <span class="val" data-light="oklch(62.56% 0.2524 23.03)" data-dark="oklch(62.56% 0.2234 23.03)">oklch(62.56% 0.2524 23.03)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-800)"></div>
+        <div class="txt">
+          <code>red-800</code>
+          <span class="val" data-light="oklch(58.19% 0.2482 25.15)" data-dark="oklch(58.01% 0.227 25.12)">oklch(58.19% 0.2482 25.15)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-900)"></div>
+        <div class="txt">
+          <code>red-900</code>
+          <span class="val" data-light="oklch(54.99% 0.232 25.29)" data-dark="oklch(69.96% 0.2136 22.03)">oklch(54.99% 0.232 25.29)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-red-1000)"></div>
+        <div class="txt">
+          <code>red-1000</code>
+          <span class="val" data-light="oklch(24.8% 0.1041 18.86)" data-dark="oklch(95.6% 0.0293 6.61)">oklch(24.8% 0.1041 18.86)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>amber</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-100)"></div>
+        <div class="txt">
+          <code>amber-100</code>
+          <span class="val" data-light="oklch(97.48% 0.0331 85.79)" data-dark="oklch(22.46% 0.0538 76.04)">oklch(97.48% 0.0331 85.79)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-200)"></div>
+        <div class="txt">
+          <code>amber-200</code>
+          <span class="val" data-light="oklch(96.81% 0.0495 90.24)" data-dark="oklch(24.95% 0.0642 64.78)">oklch(96.81% 0.0495 90.24)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-300)"></div>
+        <div class="txt">
+          <code>amber-300</code>
+          <span class="val" data-light="oklch(95.93% 0.0636 90.52)" data-dark="oklch(32.34% 0.0837 63.83)">oklch(95.93% 0.0636 90.52)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-400)"></div>
+        <div class="txt">
+          <code>amber-400</code>
+          <span class="val" data-light="oklch(91.02% 0.1322 88.25)" data-dark="oklch(35.53% 0.0903 66.3)">oklch(91.02% 0.1322 88.25)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-500)"></div>
+        <div class="txt">
+          <code>amber-500</code>
+          <span class="val" data-light="oklch(86.55% 0.1583 79.63)" data-dark="oklch(41.55% 0.1044 67.98)">oklch(86.55% 0.1583 79.63)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-600)"></div>
+        <div class="txt">
+          <code>amber-600</code>
+          <span class="val" data-light="oklch(80.25% 0.1953 73.59)" data-dark="oklch(75.04% 0.1737 74.49)">oklch(80.25% 0.1953 73.59)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-700)"></div>
+        <div class="txt">
+          <code>amber-700</code>
+          <span class="val" data-light="oklch(81.87% 0.1969 76.46)" data-dark="oklch(81.87% 0.1969 76.46)">oklch(81.87% 0.1969 76.46)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-800)"></div>
+        <div class="txt">
+          <code>amber-800</code>
+          <span class="val" data-light="oklch(77.21% 0.1991 64.28)" data-dark="oklch(77.21% 0.1991 64.28)">oklch(77.21% 0.1991 64.28)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-900)"></div>
+        <div class="txt">
+          <code>amber-900</code>
+          <span class="val" data-light="oklch(52.79% 0.1496 54.65)" data-dark="oklch(77.21% 0.1991 64.28)">oklch(52.79% 0.1496 54.65)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-amber-1000)"></div>
+        <div class="txt">
+          <code>amber-1000</code>
+          <span class="val" data-light="oklch(30.83% 0.099 45.48)" data-dark="oklch(96.7% 0.0418 84.59)">oklch(30.83% 0.099 45.48)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>green</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-100)"></div>
+        <div class="txt">
+          <code>green-100</code>
+          <span class="val" data-light="oklch(97.59% 0.0289 145.42)" data-dark="oklch(23.09% 0.0716 149.68)">oklch(97.59% 0.0289 145.42)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-200)"></div>
+        <div class="txt">
+          <code>green-200</code>
+          <span class="val" data-light="oklch(96.92% 0.037 147.15)" data-dark="oklch(27.12% 0.0895 150.09)">oklch(96.92% 0.037 147.15)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-300)"></div>
+        <div class="txt">
+          <code>green-300</code>
+          <span class="val" data-light="oklch(94.6% 0.0674 144.23)" data-dark="oklch(29.84% 0.096 149.25)">oklch(94.6% 0.0674 144.23)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-400)"></div>
+        <div class="txt">
+          <code>green-400</code>
+          <span class="val" data-light="oklch(91.49% 0.0976 146.24)" data-dark="oklch(34.39% 0.1039 147.78)">oklch(91.49% 0.0976 146.24)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-500)"></div>
+        <div class="txt">
+          <code>green-500</code>
+          <span class="val" data-light="oklch(85.45% 0.1627 146.3)" data-dark="oklch(44.19% 0.1484 147.2)">oklch(85.45% 0.1627 146.3)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-600)"></div>
+        <div class="txt">
+          <code>green-600</code>
+          <span class="val" data-light="oklch(80.25% 0.214 145.18)" data-dark="oklch(58.11% 0.1815 146.55)">oklch(80.25% 0.214 145.18)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-700)"></div>
+        <div class="txt">
+          <code>green-700</code>
+          <span class="val" data-light="oklch(64.58% 0.1746 147.27)" data-dark="oklch(64.58% 0.199 147.27)">oklch(64.58% 0.1746 147.27)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-800)"></div>
+        <div class="txt">
+          <code>green-800</code>
+          <span class="val" data-light="oklch(57.81% 0.1507 147.5)" data-dark="oklch(57.81% 0.1776 147.5)">oklch(57.81% 0.1507 147.5)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-900)"></div>
+        <div class="txt">
+          <code>green-900</code>
+          <span class="val" data-light="oklch(51.75% 0.1453 147.65)" data-dark="oklch(73.1% 0.2158 148.29)">oklch(51.75% 0.1453 147.65)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-green-1000)"></div>
+        <div class="txt">
+          <code>green-1000</code>
+          <span class="val" data-light="oklch(29.15% 0.1197 147.38)" data-dark="oklch(96.76% 0.056 154.18)">oklch(29.15% 0.1197 147.38)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>teal</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-100)"></div>
+        <div class="txt">
+          <code>teal-100</code>
+          <span class="val" data-light="oklch(97.72% 0.0359 186.7)" data-dark="oklch(22.1% 0.0544 178.74)">oklch(97.72% 0.0359 186.7)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-200)"></div>
+        <div class="txt">
+          <code>teal-200</code>
+          <span class="val" data-light="oklch(97.06% 0.0347 180.66)" data-dark="oklch(25.06% 0.062 178.76)">oklch(97.06% 0.0347 180.66)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-300)"></div>
+        <div class="txt">
+          <code>teal-300</code>
+          <span class="val" data-light="oklch(94.92% 0.0478 182.07)" data-dark="oklch(31.5% 0.0767 180.99)">oklch(94.92% 0.0478 182.07)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-400)"></div>
+        <div class="txt">
+          <code>teal-400</code>
+          <span class="val" data-light="oklch(92.76% 0.0718 183.78)" data-dark="oklch(32.43% 0.0763 180.13)">oklch(92.76% 0.0718 183.78)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-500)"></div>
+        <div class="txt">
+          <code>teal-500</code>
+          <span class="val" data-light="oklch(86.88% 0.1344 182.42)" data-dark="oklch(43.35% 0.1055 180.97)">oklch(86.88% 0.1344 182.42)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-600)"></div>
+        <div class="txt">
+          <code>teal-600</code>
+          <span class="val" data-light="oklch(81.5% 0.161 178.96)" data-dark="oklch(60.71% 0.1485 180.24)">oklch(81.5% 0.161 178.96)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-700)"></div>
+        <div class="txt">
+          <code>teal-700</code>
+          <span class="val" data-light="oklch(64.92% 0.1572 181.95)" data-dark="oklch(64.92% 0.1403 181.95)">oklch(64.92% 0.1572 181.95)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-800)"></div>
+        <div class="txt">
+          <code>teal-800</code>
+          <span class="val" data-light="oklch(57.53% 0.1392 181.66)" data-dark="oklch(57.53% 0.1392 181.66)">oklch(57.53% 0.1392 181.66)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-900)"></div>
+        <div class="txt">
+          <code>teal-900</code>
+          <span class="val" data-light="oklch(52.08% 0.1251 182.93)" data-dark="oklch(74.56% 0.1765 182.8)">oklch(52.08% 0.1251 182.93)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-teal-1000)"></div>
+        <div class="txt">
+          <code>teal-1000</code>
+          <span class="val" data-light="oklch(32.11% 0.0788 179.82)" data-dark="oklch(96.46% 0.056 180.29)">oklch(32.11% 0.0788 179.82)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>purple</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-100)"></div>
+        <div class="txt">
+          <code>purple-100</code>
+          <span class="val" data-light="oklch(96.65% 0.0244 312.19)" data-dark="oklch(22.34% 0.0779 316.87)">oklch(96.65% 0.0244 312.19)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-200)"></div>
+        <div class="txt">
+          <code>purple-200</code>
+          <span class="val" data-light="oklch(96.73% 0.0228 309.8)" data-dark="oklch(25.91% 0.0921 314.41)">oklch(96.73% 0.0228 309.8)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-300)"></div>
+        <div class="txt">
+          <code>purple-300</code>
+          <span class="val" data-light="oklch(94.85% 0.0364 310.15)" data-dark="oklch(31.98% 0.1219 312.41)">oklch(94.85% 0.0364 310.15)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-400)"></div>
+        <div class="txt">
+          <code>purple-400</code>
+          <span class="val" data-light="oklch(91.77% 0.0614 312.82)" data-dark="oklch(35.93% 0.1504 309.78)">oklch(91.77% 0.0614 312.82)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-500)"></div>
+        <div class="txt">
+          <code>purple-500</code>
+          <span class="val" data-light="oklch(81.26% 0.1409 310.8)" data-dark="oklch(40.99% 0.1721 307.92)">oklch(81.26% 0.1409 310.8)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-600)"></div>
+        <div class="txt">
+          <code>purple-600</code>
+          <span class="val" data-light="oklch(72.07% 0.2083 308.19)" data-dark="oklch(55.5% 0.2191 306.12)">oklch(72.07% 0.2083 308.19)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-700)"></div>
+        <div class="txt">
+          <code>purple-700</code>
+          <span class="val" data-light="oklch(55.5% 0.3008 306.12)" data-dark="oklch(55.5% 0.2186 306.12)">oklch(55.5% 0.3008 306.12)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-800)"></div>
+        <div class="txt">
+          <code>purple-800</code>
+          <span class="val" data-light="oklch(48.58% 0.2638 305.73)" data-dark="oklch(48.58% 0.2102 305.73)">oklch(48.58% 0.2638 305.73)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-900)"></div>
+        <div class="txt">
+          <code>purple-900</code>
+          <span class="val" data-light="oklch(47.18% 0.2579 304)" data-dark="oklch(69.87% 0.2037 309.51)">oklch(47.18% 0.2579 304)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-purple-1000)"></div>
+        <div class="txt">
+          <code>purple-1000</code>
+          <span class="val" data-light="oklch(23.96% 0.13 305.66)" data-dark="oklch(96.1% 0.0304 316.46)">oklch(23.96% 0.13 305.66)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>pink</h3>
+      <div class="grid">
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-100)"></div>
+        <div class="txt">
+          <code>pink-100</code>
+          <span class="val" data-light="oklch(95.69% 0.0359 344.62)" data-dark="oklch(22.67% 0.0628 354.73)">oklch(95.69% 0.0359 344.62)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-200)"></div>
+        <div class="txt">
+          <code>pink-200</code>
+          <span class="val" data-light="oklch(95.71% 0.0321 353.14)" data-dark="oklch(26.2% 0.0859 356.68)">oklch(95.71% 0.0321 353.14)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-300)"></div>
+        <div class="txt">
+          <code>pink-300</code>
+          <span class="val" data-light="oklch(93.83% 0.0451 356.29)" data-dark="oklch(31.15% 0.1067 355.93)">oklch(93.83% 0.0451 356.29)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-400)"></div>
+        <div class="txt">
+          <code>pink-400</code>
+          <span class="val" data-light="oklch(91.12% 0.0573 358.82)" data-dark="oklch(32.13% 0.1174 356.71)">oklch(91.12% 0.0573 358.82)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-500)"></div>
+        <div class="txt">
+          <code>pink-500</code>
+          <span class="val" data-light="oklch(84.28% 0.0915 356.99)" data-dark="oklch(37.01% 0.1453 358.39)">oklch(84.28% 0.0915 356.99)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-600)"></div>
+        <div class="txt">
+          <code>pink-600</code>
+          <span class="val" data-light="oklch(74.33% 0.1547 0.24)" data-dark="oklch(50.33% 0.2089 4.33)">oklch(74.33% 0.1547 0.24)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-700)"></div>
+        <div class="txt">
+          <code>pink-700</code>
+          <span class="val" data-light="oklch(63.52% 0.238 1.01)" data-dark="oklch(63.52% 0.2346 1.01)">oklch(63.52% 0.238 1.01)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-800)"></div>
+        <div class="txt">
+          <code>pink-800</code>
+          <span class="val" data-light="oklch(59.51% 0.2339 4.21)" data-dark="oklch(59.51% 0.2429 4.21)">oklch(59.51% 0.2339 4.21)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-900)"></div>
+        <div class="txt">
+          <code>pink-900</code>
+          <span class="val" data-light="oklch(53.5% 0.2058 2.84)" data-dark="oklch(69.36% 0.2223 3.91)">oklch(53.5% 0.2058 2.84)</span>
+        </div>
+      </div>
+      <div class="sw">
+        <div class="chip" style="background:var(--ds-pink-1000)"></div>
+        <div class="txt">
+          <code>pink-1000</code>
+          <span class="val" data-light="oklch(26% 0.0977 359)" data-dark="oklch(95.74% 0.0326 350.08)">oklch(26% 0.0977 359)</span>
+        </div>
+      </div>
+      </div>
+    </section>
+
+<h2>Shadows</h2>
+<p class="lede">Elevation is composed from a hairline border plus blur layers. Dark mode raises opacity rather than merely tinting.</p>
+<div class="shgrid">
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-border-inset)"></div>
+        <code>shadow-border-inset</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-border)"></div>
+        <code>shadow-border</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-2xs)"></div>
+        <code>shadow-2xs</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-xs)"></div>
+        <code>shadow-xs</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-small)"></div>
+        <code>shadow-small</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-border-small)"></div>
+        <code>shadow-border-small</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-medium)"></div>
+        <code>shadow-medium</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-border-medium)"></div>
+        <code>shadow-border-medium</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-large)"></div>
+        <code>shadow-large</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-border-large)"></div>
+        <code>shadow-border-large</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-tooltip)"></div>
+        <code>shadow-tooltip</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-xl)"></div>
+        <code>shadow-xl</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-2xl)"></div>
+        <code>shadow-2xl</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-menu)"></div>
+        <code>shadow-menu</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-modal)"></div>
+        <code>shadow-modal</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-focus-ring)"></div>
+        <code>focus-ring</code>
+      </div>
+      <div class="shcard">
+        <div class="box" style="box-shadow:var(--ds-shadow-fullscreen)"></div>
+        <code>shadow-fullscreen</code>
+      </div>
+</div>
+
+<h2>Radii</h2>
+<div class="rgrid">
+  <div class="rcard">
+    <div class="box" style="border-radius:2px"></div>
+    <code>radius-xs · 2px</code>
+  </div>
+  <div class="rcard">
+    <div class="box" style="border-radius:4px"></div>
+    <code>radius-sm · 4px</code>
+  </div>
+  <div class="rcard">
+    <div class="box" style="border-radius:6px"></div>
+    <code>radius-md · 6px</code>
+  </div>
+  <div class="rcard">
+    <div class="box" style="border-radius:8px"></div>
+    <code>radius-lg · 8px</code>
+  </div>
+  <div class="rcard">
+    <div class="box" style="border-radius:12px"></div>
+    <code>radius-xl · 12px</code>
+  </div>
+  <div class="rcard">
+    <div class="box" style="border-radius:16px"></div>
+    <code>radius-2xl · 16px</code>
+  </div>
+</div>
+
+<h2>Typography</h2>
+<p class="lede">Geist Sans, variable 100–900, with <code>"rlig" 1, "calt" 0, "ss11" 1</code> applied on &lt;html&gt;.</p>
+<section class="ramp">
+  <h3>weights</h3>
+  <div class="weights">
+    <div style="font-weight:100">Geist<small>100</small></div>
+    <div style="font-weight:200">Geist<small>200</small></div>
+    <div style="font-weight:300">Geist<small>300</small></div>
+    <div style="font-weight:400">Geist<small>400</small></div>
+    <div style="font-weight:450">Geist<small>450</small></div>
+    <div style="font-weight:500">Geist<small>500</small></div>
+    <div style="font-weight:600">Geist<small>600</small></div>
+    <div style="font-weight:700">Geist<small>700</small></div>
+    <div style="font-weight:800">Geist<small>800</small></div>
+    <div style="font-weight:900">Geist<small>900</small></div>
+  </div>
+</section>
+    <section class="ramp">
+      <h3>heading</h3>
+      <div class="typerow">
+        <code>text-heading-72</code>
+        <div style="font-weight:450;font-size:72px;line-height:72px;letter-spacing:-4.32px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-64</code>
+        <div style="font-weight:450;font-size:64px;line-height:64px;letter-spacing:-3.84px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-56</code>
+        <div style="font-weight:450;font-size:56px;line-height:56px;letter-spacing:-3.36px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-48</code>
+        <div style="font-weight:450;font-size:48px;line-height:56px;letter-spacing:-2.88px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-40</code>
+        <div style="font-weight:450;font-size:40px;line-height:48px;letter-spacing:-2.4px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-32</code>
+        <div style="font-weight:450;font-size:32px;line-height:40px;letter-spacing:-1.28px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-24</code>
+        <div style="font-weight:450;font-size:24px;line-height:32px;letter-spacing:-0.96px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-20</code>
+        <div style="font-weight:450;font-size:20px;line-height:26px;letter-spacing:-0.4px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-16</code>
+        <div style="font-weight:450;font-size:16px;line-height:24px;letter-spacing:-0.32px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-heading-14</code>
+        <div style="font-weight:450;font-size:14px;line-height:20px;letter-spacing:-0.28px">Sphinx of black quartz, judge my vow</div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>copy</h3>
+      <div class="typerow">
+        <code>text-copy-24</code>
+        <div style="font-size:24px;line-height:36px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-20</code>
+        <div style="font-size:20px;line-height:36px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-18</code>
+        <div style="font-size:18px;line-height:28px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-16</code>
+        <div style="font-size:16px;line-height:24px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-14</code>
+        <div style="font-size:14px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-13</code>
+        <div style="font-size:13px;line-height:18px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-14-mono</code>
+        <div style="font-family:var(--font-geist-mono);font-size:14px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-copy-13-mono</code>
+        <div style="font-family:var(--font-geist-mono);font-size:13px;line-height:18px">Sphinx of black quartz, judge my vow</div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>label</h3>
+      <div class="typerow">
+        <code>text-label-20</code>
+        <div style="font-size:20px;line-height:32px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-18</code>
+        <div style="font-size:18px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-16</code>
+        <div style="font-size:16px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-14</code>
+        <div style="font-size:14px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-13</code>
+        <div style="font-size:13px;line-height:16px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-12</code>
+        <div style="font-size:12px;line-height:16px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-16-mono</code>
+        <div style="font-family:var(--font-geist-mono);font-size:16px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-14-mono</code>
+        <div style="font-family:var(--font-geist-mono);font-size:14px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-13-mono</code>
+        <div style="font-family:var(--font-geist-mono);font-size:13px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-label-12-mono</code>
+        <div style="font-family:var(--font-geist-mono);font-size:12px;line-height:16px">Sphinx of black quartz, judge my vow</div>
+      </div>
+    </section>
+    <section class="ramp">
+      <h3>button</h3>
+      <div class="typerow">
+        <code>text-button-16</code>
+        <div style="font-weight:500;font-size:16px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-button-14</code>
+        <div style="font-weight:500;font-size:14px;line-height:20px">Sphinx of black quartz, judge my vow</div>
+      </div>
+      <div class="typerow">
+        <code>text-button-12</code>
+        <div style="font-weight:500;font-size:12px;line-height:16px">Sphinx of black quartz, judge my vow</div>
+      </div>
+    </section>
+<section class="ramp">
+  <h3>geist pixel</h3>
+  <div class="pixrow">
+    <code>pixel-square</code>
+    <div style="font-family:var(--font-geist-pixel-square)">Geist Pixel 0123</div>
+  </div>
+  <div class="pixrow">
+    <code>pixel-grid</code>
+    <div style="font-family:var(--font-geist-pixel-grid)">Geist Pixel 0123</div>
+  </div>
+  <div class="pixrow">
+    <code>pixel-circle</code>
+    <div style="font-family:var(--font-geist-pixel-circle)">Geist Pixel 0123</div>
+  </div>
+  <div class="pixrow">
+    <code>pixel-triangle</code>
+    <div style="font-family:var(--font-geist-pixel-triangle)">Geist Pixel 0123</div>
+  </div>
+  <div class="pixrow">
+    <code>pixel-line</code>
+    <div style="font-family:var(--font-geist-pixel-line)">Geist Pixel 0123</div>
+  </div>
+</section>
+
+<h2>Materials</h2>
+<p class="lede">Surface + radius + shadow, bundled so elevation and rounding stay in step.</p>
+<div class="mats">
+  <div class="mat" style="box-shadow:var(--ds-shadow-border);border-radius:6px">material-base</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-border-small);border-radius:6px">material-small</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-border-medium);border-radius:12px">material-medium</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-border-large);border-radius:12px">material-large</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-tooltip);border-radius:6px">material-tooltip</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-menu);border-radius:12px">material-menu</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-modal);border-radius:12px">material-modal</div>
+  <div class="mat" style="box-shadow:var(--ds-shadow-fullscreen);border-radius:16px">material-fullscreen</div>
+</div>
+
+</div>
+
+<script>
+  const root = document.documentElement;
+  document.getElementById("t").addEventListener("click", () => {
+    root.classList.toggle("dark");
+    const dark = root.classList.contains("dark");
+    for (const el of document.querySelectorAll(".val")) {
+      el.textContent = dark ? el.dataset.dark : el.dataset.light;
+    }
+  });
+</script>
+</body>
+</html>
