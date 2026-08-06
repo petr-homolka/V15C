@@ -131,7 +131,7 @@ interface MonitoringContact {
   agreementId: string
   occurredAt: string
   place: 'home' | 'organization' | 'other'
-  placeNote: string | null          // povinné u 'other' — viz otevřené otázky
+  placeNote: string | null          // volitelné; 'other' se počítá stejně
 
   // KDO BYL SKUTEČNĚ PŘÍTOMEN — z toho se počítá plnění
   presentPersonIds: string[]        // pěstoun(i)
@@ -155,21 +155,20 @@ každé dítě** s vlastním „naposledy viděn / zbývá“.
 ```ts
 interface CalendarEvent {
   kind: 'monitoring_visit' | 'contact_event' | 'education' | 'respite'
-      | 'meeting' | 'deadline' | 'admin' | 'personal'
+      | 'meeting' | 'deadline' | 'travel' | 'admin' | 'personal'
   startIso: string; endIso: string; allDay: boolean
   assignedPersonIds: string[]
   subjectRefs: Array<{ type: 'family'|'caregiver'|'child'; id: string }>
   recurrenceRule: string | null       // RRULE — „každý druhý čtvrtek“
   location: string | null
-  // volitelně, kvůli cestovním náhradám — NE kvůli měření času
-  journey: { km: number; mode: 'car' | 'public' } | null
 }
 ```
 
 - **Události se zadávají, ne navrhují.** Klíčová osoba zapíše, co si domluvila.
-- **`journey.km`** je tam jen proto, že cestovní náhrady jsou uznatelný výdaj
-  a kilometry se stejně někam zapsat musí (dok. 05 sekce 5, sazba PHM z datované řady).
-  Není to podklad pro sledování času.
+- **Výchozí délka události je 1 hodina.**
+- **Cesta je jen plánovací blok** (`kind: 'travel'`) — pomůcka, aby si den šel rozvrhnout.
+  **Nenese kilometry ani nic nevykazuje.** Chce-li někdo cestovní náhradu, je to **výdaj**
+  (`Expense`), ne položka kalendáře. Kalendář není účetní kniha.
 - **Periodické události** (RRULE) — zadání zmiňuje „každý druhý čtvrtek v měsíci“.
 
 ### Přehled zátěže pro vedoucího — v povinnostech, ne v hodinách
@@ -186,6 +185,9 @@ Počítají se **povinnosti, ne hodiny**. Kapacita „18–23 rodin na FTE“ (d
 metrika — dva pěstouni s pěti dětmi generují víc povinných styků než pět pěstounů
 s jedním dítětem, a to počet rodin neukáže.
 
+**Kdo to vidí:** vedoucí a `org_admin` plně za všechny pracovníky, **Klíčová osoba jen
+svůj vlastní**. Jinak by z toho bylo srovnávání lidí mezi sebou.
+
 ### Mezery v pokrytí při nepřítomnosti
 
 Když je Klíčová osoba nemocná nebo na dovolené, **lhůty jejích rodin běží dál**.
@@ -196,17 +198,39 @@ Kalendář proto ukáže, které lhůty spadají do doby nepřítomnosti a kdo j
 
 ## 5. Pohledy a izolovaný scroll
 
-Zadání (M2): měsíční mřížka, týdenní rozvrh, 3denní, denní, chronologická agenda;
-svislé rolování kolečkem posouvá **výhradně hodiny uvnitř mřížky** v rozsahu
-**7:00–20:00**, při načtení autoscroll na 7:00.
+Zadavatel žádá, aby se kalendář **vypadal a chovat jako Google Calendar**. To zdánlivě
+naráží na požadavek zadání (M2) na „izolovaný scroll 7:00–20:00 s autoscrollem“ —
+ale ve skutečnosti je to totéž: **Google Calendar má právě takovou mřížku.** Drží celý
+den a otevírá se na pracovním okně.
 
-- **Na mobilu je to důležitější než na desktopu** — svislé gesto koliduje s rolováním
-  stránky. Mřížka musí gesto zachytit v sobě (`overscroll-behavior: contain`,
-  `touch-action` na kontejneru) a stránka pod ní se nesmí hýbat.
-- Rozsah 7:00–20:00 patří do nastavení organizace i uživatele; terénní pracovník
-  s ranními návštěvami má jiný den než kancelář.
+> Mřížka nese **celých 24 hodin**, výchozí viditelné okno je **7:00–20:00**.
+> Ranní předání i večerní kontakt jsou tedy dosažitelné odrolováním, ne nedostupné.
+
+### Co „jako Google Calendar“ konkrétně znamená
+
+- **výchozí délka události 1 hodina**
+- **tažením v mřížce** vytvořit událost, **tažením** přesunout, **tažením za okraj**
+  změnit délku
+- **klik → rychlé vytvoření v popoveru**, ne odskok na celou stránku
+- pohledy **den / 3 dny / týden / měsíc / agenda** + tlačítko **dnes**
+- **mini měsíční navigátor** pro rychlý skok
+- **barevné odlišení podle typu** události (z Geist tokenů, ne vlastních barev)
+- **souběžné události vedle sebe**, ne přes sebe
+- **linka aktuálního času**
+- **celodenní pás** nahoře, oddělený od mřížky
+- **klávesové zkratky** — `d` / `w` / `m` / `a` pro pohledy, `n` / `p` pro další a předchozí
+
+### Kde se mobil chová jinak
+
+- **Svislé gesto koliduje s rolováním stránky.** Mřížka musí gesto zachytit v sobě
+  (`overscroll-behavior: contain`, `touch-action` na kontejneru) a stránka pod ní se
+  nesmí hýbat. Na desktopu totéž pro kolečko.
+- **Tažením vytvořit událost na dotyku** vyžaduje **dlouhý stisk** jako spouštěč —
+  jinak nejde odlišit od rolování.
 - **Výchozí pohled na mobilu je den nebo agenda**, ne měsíc — v terénu se člověk dívá
   na „co mám teď a co dál“.
+- Viditelné okno (7:00–20:00) patří do nastavení organizace i uživatele; terénní
+  pracovník s ranními návštěvami má jiný den než kancelář.
 - Přes pohled se vrství **lhůty** (sekce 2) — nejzazší termín je vidět v týdnu stejně
   jako schůzka, i když to není událost s časem.
 
@@ -257,22 +281,32 @@ Zadání žádá iCal odkaz pro Outlook a Google Calendar.
 | `AgendaAllocation` na členství i organizaci | poměr úvazku jako verzovaný parametr |
 | `Obligation` jako dopočítaná entita | anotace lhůt, ne připomínky ani plánovač |
 | `MonitoringContact.presentChildIds` + `absentChildren` | plnění per dítě, sekce 3 |
-| `CalendarEvent.journey.km` | kvůli cestovním náhradám |
-| Přehled zátěže v povinnostech | pro vedoucí |
+| `CalendarEvent.kind: 'travel'` | plánovací blok, bez vykazování |
+| Chování a vzhled jako Google Calendar, výchozí délka 1 h | sekce 5 |
+| Přehled zátěže v povinnostech, viditelný podle role | pro vedoucí a `org_admin` |
 | iCal export s režimy anonymizace | sekce 6 |
 
 **Odstraněno proti první verzi:** přiřazování času k událostem, `actualMinutes`,
 odvozování poměru uznatelných nákladů z evidence času, návrh dne podle lhůt
-a geografické blízkosti.
+a geografické blízkosti, `journey.km` na události (kilometry patří na `Expense`).
 
 ---
 
-## 9. Otevřené
+## 9. Uzavřená rozhodnutí
 
-1. **Osobní styk mimo domácnost.** Metodika ho připouští (herna, prostory organizace),
-   ale *nesmí být formální* — účast na vzdělávací akci se za styk nepočítá. Navrhuji
-   `place: 'other'` s povinným `placeNote`, aby z toho nebyla klička.
-2. **Kdo vidí přehled zátěže?** Navrhuji vedoucí a `org_admin` plně, Klíčová osoba jen
-   svůj — jinak to sklouzne ke srovnávání lidí mezi sebou.
-3. **Poměr úvazku u vedoucí** — má vedoucí, která také doprovází rodiny, jeden poměr
-   za celou svou roli, nebo se rozpadá dál? Zatím počítám s jedním.
+| Otázka | Rozhodnutí |
+| --- | --- |
+| Počítá se styk mimo domácnost? | **ano** — `place: 'other'` se počítá stejně, `placeNote` je volitelné |
+| Předpokládaná délka návštěvy | **1 hodina** |
+| Chování kalendáře | **jako Google Calendar** (sekce 5) |
+| Kdo vidí přehled zátěže | **vedoucí a `org_admin` plně, Klíčová osoba jen svůj** |
+| Čas na cestě | **jen pro plánování** — nevykazuje se, kilometry patří na `Expense` |
+
+Jedna věc zůstává jako předpoklad, ne otázka: **vedoucí, která také doprovází rodiny,
+má jeden poměr úvazku za celou svou roli** (sekce 1). Kdyby se měl rozpadat dál, je to
+změna konfigurace, ne modelu.
+
+Metodická poznámka k prvnímu bodu: styk *„nemůže probíhat formálně“* — metodika výslovně
+neuznává případ, kdy se pracovník s pěstounem jen sešel na vzdělávací akci. Systém to
+nehlídá a hlídat nemá; `placeNote` je tam proto, aby si to Klíčová osoba mohla
+zaznamenat sama, když je to potřeba doložit.
