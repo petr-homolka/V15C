@@ -1,16 +1,42 @@
-# React + Vite
+# Doprovázení.com — CRM Portál Pěstounské Péče (v10G HLAVNÍ VERZE)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Tento repozitář obsahuje **hlavní produkční verzi** CRM/SaaS systému **Doprovázení.com** pro doprovázející organizace pěstounské péče v ČR (zákon č. 359/1999 Sb.).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Hlavní modul: Titulní Denní Agenda & Úkoly
 
-## React Compiler
+Hlavním výchozím rozhraním pro klíčové osoby a administrátory je **`RoutineAgendaView`**:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **1denní Časová Osa (Timeline Kalendář)**:
+   - 24hodinový denní kalendář s ukazatelem aktuálního času v reálném čase.
+   - Integrovaný kalendář svátků (jmenin) a narozenin sledovaných dětí, pěstounů a pracovníků.
+   - Celodenní události a podpora Drag & Drop přetahování schůzek.
 
-## Expanding the Oxlint configuration
+2. **Panel Úkolů & Rychlý Zápisník**:
+   - Rychlé přidávání úkolů (včetně klávesové zkratky Ctrl+K / Cmd+K).
+   - Členění podle priorit, termínů a klientských spisů.
+   - Přímé propojení úkolů s entitami rodin a dětí.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+---
+
+## Architektura a Datové Služby
+
+- **UID Model**: Jedinečné generování identifikátorů spisů a dohod (`src/services/uid.js`).
+- **Data & Firestore**: Podpora Firebase Firestore a offline simulovaných dat pro vývoj (`src/services/seedDataService.js`).
+- **PWA Podpora**: Automatická registrace Service Workeru (`vite-plugin-pwa`) s offline kešováním.
+
+---
+
+## Spuštění v lokálním prostředí
+
+```bash
+# Instalace závislostí
+npm install
+
+# Spuštění vývojového serveru
+npm run dev
+
+# Sestavení produkčního balíčku
+npm run build
+```
