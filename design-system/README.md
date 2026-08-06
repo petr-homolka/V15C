@@ -33,8 +33,14 @@ design-system/
 │   ├── geist-mono/            ← GeistMono-Variable, GeistMono-Italic-Variable
 │   ├── geist-pixel/           ← Square, Grid, Circle, Triangle, Line
 │   └── LICENSE.txt            ← SIL OFL 1.1
+├── pwa/                       ← installed-app layer: safe areas, theme-color,
+│   │                            no-flash, service worker, manifest, icons
+│   └── README.md              ← see this if you are shipping a PWA
 ├── scripts/
-│   └── extract-tokens.mjs     ← regenerates the three generated files from theme.css
+│   ├── extract-tokens.mjs     ← regenerates the generated files under tokens/
+│   ├── build-preview.mjs      ← regenerates preview.html
+│   ├── build-pwa.mjs          ← regenerates the generated files under pwa/
+│   └── rasterize-icons.mjs    ← re-renders the icon PNGs (needs playwright)
 └── preview.html               ← open in a browser: every token and type style rendered
 ```
 
@@ -258,6 +264,21 @@ All of them set `background: var(--ds-background-100)`.
 
 ---
 
+---
+
+## Installed apps (PWA)
+
+If this is going to be installed to a home screen, see
+[`pwa/README.md`](./pwa/README.md). Three things already work in your favour —
+no external requests (so the whole visual layer is precacheable), a ~285 KB type
+budget, and `100dvh` rather than `100vh`.
+
+Four do not, and the `pwa/` layer covers them: the OS status-bar colour cannot
+read `var()` and desynchronises from class-based dark mode; the safe-area insets
+in `theme.css` are locked to fumadocs selectors; the theme class is applied too
+late to avoid a flash on cold start; and `font-display: swap` shows fallback
+text on first paint.
+
 ## Preview
 
 Open [`preview.html`](./preview.html) directly in a browser — no server, no build.
@@ -269,17 +290,25 @@ doubles as a visual regression check after an upstream sync.
 ```bash
 npm pack @vercel/geistdocs@<version>   # → theme.css
 npm pack geist@<version>               # → dist/fonts/**
+
 node design-system/scripts/extract-tokens.mjs
+node design-system/scripts/build-preview.mjs
+node design-system/scripts/build-pwa.mjs
 ```
 
 1. Replace `tokens/theme.css` with the new `theme.css`, unmodified.
-2. Re-run the extract script — it regenerates `ds-tokens.css`, `dark-auto.css`
-   and `tokens.json`, and throws if the `:root` / `.dark` blocks it depends on
-   have moved or stopped carrying `--ds-*` declarations.
+2. Re-run the three scripts above. `extract-tokens.mjs` throws if the `:root` /
+   `.dark` blocks it depends on have moved or stopped carrying `--ds-*`
+   declarations, so a breaking upstream restructure fails loudly rather than
+   silently emitting an empty token set.
 3. Refresh the font `.woff2` files only if the `geist` version changed. Note the
    rename: upstream's `Geist-Italic[wght].woff2` is vendored as
    `Geist-Italic-Variable.woff2` — square brackets in a filename are awkward in
    CSS `url()` and on some toolchains.
 4. Open `preview.html` and eyeball both themes.
-5. Bump the versions in this README, `NOTICE.md`, and the header of
+5. **If you ship the PWA layer:** check whether `pwa/colors.json` changed, and
+   bump `VERSION` in `pwa/sw.js` if any precached asset did. The font filenames
+   carry no content hash, so new bytes arrive behind an unchanged URL — without
+   a bump, installed clients keep serving the old faces indefinitely.
+6. Bump the versions in this README, `NOTICE.md`, and the header of
    `scripts/extract-tokens.mjs`.

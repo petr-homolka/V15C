@@ -1,0 +1,138 @@
+/* Geist PWA layer — what an installed, standalone app needs on top of the
+ * design system. Import after geist.css.
+ *
+ * Everything here is additive: in a normal browser tab the display-mode rules
+ * simply do not match, and the safe-area values resolve to 0.
+ *
+ * Custom properties are namespaced --pwa-*, deliberately not --ds-*. That
+ * namespace belongs to upstream, and a future geistdocs sync must not be able
+ * to collide with names invented here.
+ */
+
+/* ── Safe areas ─────────────────────────────────────────────────────────────
+ * tokens/theme.css does use env(safe-area-inset-*), but only inside fumadocs'
+ * own selectors ([data-geistdocs-mobile-sidebar], [data-mobile-docs-bar]), so
+ * an app that is not a docs site gets nothing from it. These are the general
+ * equivalents.
+ *
+ * All of this is inert unless the document sets viewport-fit=cover — see
+ * head.html. Without it every inset is 0 and content clips under the notch.
+ */
+:root {
+  --pwa-safe-top: env(safe-area-inset-top, 0px);
+  --pwa-safe-right: env(safe-area-inset-right, 0px);
+  --pwa-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --pwa-safe-left: env(safe-area-inset-left, 0px);
+
+  /* The gutter an edge-to-edge surface should use: never less than the app's
+   * own padding, but grown to clear the inset when there is one. */
+  --pwa-gutter: 1rem;
+  --pwa-gutter-right: max(var(--pwa-gutter), var(--pwa-safe-right));
+  --pwa-gutter-left: max(var(--pwa-gutter), var(--pwa-safe-left));
+}
+
+.pwa-safe-top { padding-top: var(--pwa-safe-top); }
+.pwa-safe-bottom { padding-bottom: var(--pwa-safe-bottom); }
+.pwa-safe-x {
+  padding-right: var(--pwa-gutter-right);
+  padding-left: var(--pwa-gutter-left);
+}
+.pwa-safe-inset {
+  padding-top: var(--pwa-safe-top);
+  padding-bottom: var(--pwa-safe-bottom);
+  padding-right: var(--pwa-gutter-right);
+  padding-left: var(--pwa-gutter-left);
+}
+
+/* A bar pinned to the top of the app: its background must extend up behind the
+ * status bar, while its content stays below it. */
+.pwa-topbar {
+  padding-top: var(--pwa-safe-top);
+  padding-right: var(--pwa-gutter-right);
+  padding-left: var(--pwa-gutter-left);
+  background: var(--ds-background-100);
+  border-bottom: 1px solid var(--ds-gray-alpha-400);
+}
+
+.pwa-bottombar {
+  padding-bottom: var(--pwa-safe-bottom);
+  padding-right: var(--pwa-gutter-right);
+  padding-left: var(--pwa-gutter-left);
+  background: var(--ds-background-100);
+  border-top: 1px solid var(--ds-gray-alpha-400);
+}
+
+/* ── Standalone mode ────────────────────────────────────────────────────────
+ * Only applies when actually launched from the home screen / dock, so a plain
+ * browser tab keeps normal web behaviour.
+ */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  html {
+    /* Kill the rubber-band scroll past the document edge, which in standalone
+     * mode exposes the page background behind the app and reads as a bug. */
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    /* No pull-to-refresh: there is no address bar to reload from, and the
+     * gesture usually collides with in-app scrollable panes. */
+    overscroll-behavior: none;
+  }
+}
+
+/* ── App-like affordances ───────────────────────────────────────────────────
+ * Opt-in per element. Applied globally these break ordinary web expectations
+ * (selecting text, long-press menus), so they are a class rather than a
+ * blanket rule.
+ */
+.pwa-app-chrome {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.pwa-app-chrome input,
+.pwa-app-chrome textarea,
+.pwa-app-chrome [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* The grey flash Android paints on tap. Removing it is only safe because the
+ * design system supplies a real focus ring — never drop one without the other.
+ */
+.pwa-app-chrome :where(a, button, [role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pwa-app-chrome :where(a, button, [role="button"]):focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+/* ── Viewport ───────────────────────────────────────────────────────────────
+ * dvh tracks the retracting browser chrome on mobile; in standalone mode there
+ * is none, so it equals the full height. geist.css already sets min-height on
+ * body — this is for a full-height app shell that must not scroll as a whole.
+ */
+.pwa-viewport {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pwa-viewport > .pwa-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Offline ────────────────────────────────────────────────────────────────
+ * sw.js does not fabricate an offline UI. Toggle [data-offline] on <html> from
+ * the online/offline events and style it here.
+ */
+.pwa-offline-only { display: none; }
+[data-offline] .pwa-offline-only { display: revert; }
+[data-offline] .pwa-online-only { display: none; }

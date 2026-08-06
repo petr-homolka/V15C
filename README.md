@@ -31,6 +31,9 @@ Dark mode is a `.dark` class on `<html>`.
   typography families, materials, and how to sync with upstream.
 - **[`design-system/preview.html`](./design-system/preview.html)** — open it in a
   browser (no server needed) to see every token rendered in both themes.
+- **[`design-system/pwa/README.md`](./design-system/pwa/README.md)** — the
+  installed-app layer: safe areas, status-bar colour that tracks the theme, no
+  flash on cold start, and a service worker that precaches the visual layer.
 - **[`design-system/NOTICE.md`](./design-system/NOTICE.md)** — licences.
   Tokens are Apache-2.0, fonts are SIL OFL 1.1.
 

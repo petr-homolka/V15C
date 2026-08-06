@@ -27,6 +27,20 @@ Dark mode is class-based: `.dark` on `<html>`. Do not add `prefers-color-scheme`
 queries of your own — `design-system/tokens/dark-auto.css` already covers that
 case and is opt-in.
 
+### Installed app (PWA)
+
+`design-system/pwa/` holds the standalone-app layer; read `pwa/README.md` before
+touching it. Two rules that are easy to get wrong:
+
+- `no-flash.js` **must be inlined** into `<head>`, never linked. An external
+  script resolves after the first frame and the theme flash comes back.
+- `theme.js` owns `<meta name="theme-color">` once it loads. Do not add your own
+  media-scoped tags — the browser honours the first matching one, so a stray tag
+  silently wins over the correct value.
+
+Safe-area properties are namespaced `--pwa-*`, not `--ds-*`, to keep upstream's
+namespace clean. Keep it that way when adding more.
+
 ### Which stylesheet to import
 
 - Plain CSS, any framework → `design-system/geist.css` (fonts + tokens + base).
