@@ -334,15 +334,27 @@ kvůli které v ní nejsou výdaje (dok. 12 sekce 9).
 
 ---
 
-## 9. Co je potřeba rozhodnout
+## 9. Uzavřená rozhodnutí
 
-1. **Smí asistent při dotazu sáhnout i do nepřidělených spisů?** Podle dok. 03 je
-   hranicí organizace a nepřidělený spis je dostupný se stopou. U asistenta to ale
-   znamená, že se do kontextu dostanou rodiny, které tazatel neřeší, aniž by o to
-   výslovně požádal. Navrhuji **výchozí rozsah = moje spisy**, s vědomým přepnutím
-   „hledat v celé organizaci“, které se loguje.
-2. **Má se koncept generovat sám, jakmile se blíží lhůta zprávy, nebo až na vyžádání?**
-   Navrhuji **až na vyžádání** — automatické generování by vyrobilo hromadu textu,
-   který nikdo nečetl, a to je přesně to, co koncept nemá být.
-3. **Jak dlouho se drží `proposedText`?** Navrhuji **stejně jako dokument** — je to
-   součást doložení autorství, ne provozní mezivýsledek.
+| Otázka | Rozhodnutí |
+| --- | --- |
+| Rozsah vyhledávání asistenta | **celá organizace vždy**, ne „moje spisy“ — hranicí je organizace (dok. 03 sekce 0) |
+| Automatické generování konceptu | **ne** — jen na vyžádání; navíc **anotace o blížící se lhůtě s nabídkou koncept vytvořit** |
+| Retence `proposedText` | **stejná jako u dokumentu** — je to součást doložení autorství |
+
+Dva důsledky, které z prvního rozhodnutí plynou a mění text výše:
+
+- `AssistantQuery.scope.caseFileIds` je **všechny spisy organizace**, ne výběr.
+  Filtrace před vyhledáním zůstává — ale filtruje se podle **třídy viditelnosti**
+  (`metadata` / `content`, dok. 04), ne podle přidělení.
+- **`CROSS_CASE_ACCESS` se loguje podle skutečně použitých spisů, ne podle rozsahu.**
+  Kdyby se zapisoval rozsah, měl by každý dotaz příznak cross-case a log by ztratil
+  smysl. Zapisují se proto jen ty spisy, jejichž obsah se do odpovědi opravdu dostal,
+  a z nich se označí ty nepřidělené. Řazení výsledků staví moje spisy první — to je
+  ergonomie, ne hranice.
+
+Anotace s nabídkou konceptu je popsaná v dok. 15 sekce 6; motor lhůt z dok. 11 tím
+dostává vedle textu i akci, ale pořád **nic negeneruje sám**.
+
+Zbytek tématu — chat jako ústřední pracovní nástroj, který nejen odpovídá, ale i zapisuje
+— pokračuje v [dok. 15](./15-chat-jako-ustredni-nastroj.md).
