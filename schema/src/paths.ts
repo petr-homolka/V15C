@@ -75,9 +75,11 @@ export const marketplace = {
   services: (providerId: Id) => `providers/${providerId}/services`,
   service: (providerId: Id, serviceId: Id) => `providers/${providerId}/services/${serviceId}`,
 
-  /** VEŘEJNÉ — čitelné bez přihlášení, proto bez osobních údajů. */
+  /** VEŘEJNÉ — čitelné bez přihlášení, proto bez osobních údajů A BEZ CEN. */
   listings: () => 'listings',
   listing: (id: Id) => `listings/${id}`,
+  /** Cena je oddělená, protože pravidla neumí skrýt pole (marketplace.ts). */
+  listingPricing: (id: Id) => `listings/${id}/pricing/current`,
 
   orders: () => 'orders',
   order: (id: Id) => `orders/${id}`,
@@ -87,6 +89,9 @@ export const marketplace = {
   /** Potvrzení služby — protějšek certifikátu, potvrzuje DNY. */
   confirmations: () => 'confirmations',
   confirmation: (id: Id) => `confirmations/${id}`,
+  /** Účty registrované na veřejném webu — mimo doprovázející organizace. */
+  publicProfiles: () => 'publicProfiles',
+  publicProfile: (uid: string) => `publicProfiles/${uid}`,
 } as const
 
 /**

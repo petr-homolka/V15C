@@ -126,6 +126,19 @@ service cloud.firestore {
     /* Marketplace vzdělávání                                        */
     /* ============================================================ */
 
+    // Je členem JAKÉKOLI organizace? U ceny nezáleží které — pracovnice
+    // doprovázející organizace ceník vidět má.
+    function isMember2() {
+      return signedIn() && request.auth.token.orgs != null
+             && request.auth.token.orgs.keys().size() > 0;
+    }
+
+    // Ověřený pěstoun z veřejného webu. Příznak je v tokenu, ne v databázi,
+    // aby čtení ceny nestálo další čtení (README sekce 1.2).
+    function isVerifiedCarer() {
+      return signedIn() && request.auth.token.carer == true;
+    }
+
     function providerRole(providerId) {
       return signedIn() && request.auth.token.providers != null
         ? request.auth.token.providers[providerId]
@@ -176,10 +189,37 @@ service cloud.firestore {
 
     // Veřejná výkladní skříň. Čitelná BEZ přihlášení, aby se nabídka dala
     // najít na internetu a koupit i mimo systém — a právě proto v ní nesmí
-    // být nic osobního (marketplace.ts).
+    // být nic osobního ANI CENA (marketplace.ts).
     match /listings/{listingId} {
       allow get, list: if resource.data.visibility == 'public' || signedIn();
-      allow write: if false;   // píše Function při vylistování kurzu
+      allow write: if false;   // píše Function při vylistování nabídky
+
+      // CENA. Kdyby byla polem nabídky, skrytá by nebyla — pravidla neumí
+      // skrýt pole (dok. 04, 19). Proto je to vlastní dokument s vlastním
+      // pravidlem.
+      //
+      // Vidí ji: člen doprovázející organizace, ověřený pěstoun z veřejného
+      // webu, a zaměstnanec poskytovatele u vlastní nabídky.
+      match /pricing/{docId} {
+        allow get: if isMember2() || isVerifiedCarer() || isProviderStaff(resource.data.providerId);
+        allow list: if false;
+        allow write: if false;
+      }
+    }
+
+    // Účet registrovaný na veřejném webu. Existuje jen kvůli tomu, aby
+    // člověk uviděl ceny a mohl objednat — do CRM se s ním nedostane,
+    // protože nemá roli v žádné organizaci.
+    match /publicProfiles/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isSuperadmin());
+      allow list: if isSuperadmin();
+      // Registrovat se smí každý, ale ověření si nastavit nemůže — to je
+      // rozhodnutí systému, ne přání uživatele.
+      allow create: if signedIn() && request.auth.uid == uid
+                    && request.resource.data.verification.status == 'none';
+      allow update: if signedIn() && request.auth.uid == uid
+                    && request.resource.data.verification == resource.data.verification;
+      allow delete: if false;
     }
 
     // Objednávka. Vidí ji kupující a pořadatel — nikdo jiný.

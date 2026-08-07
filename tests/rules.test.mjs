@@ -36,6 +36,14 @@ await env.withSecurityRulesDisabled(async (ctx) => {
   await setDoc(doc(db, 'providers/prov1/courses/c-draft'), { title: 'Rozpracovaný', status: 'draft', hours: 4 })
   await setDoc(doc(db, 'listings/l1'), { courseId: 'c-listed', providerId: 'prov1', visibility: 'public', title: 'Attachment', hours: 8 })
   await setDoc(doc(db, 'listings/l2'), { courseId: 'c-x', providerId: 'prov1', visibility: 'system_only', title: 'Jen v systému', hours: 4 })
+  await setDoc(doc(db, 'listings/l1/pricing/current'), {
+    listingId: 'l1', providerId: 'prov1',
+    priceFrom: { amountMinor: 180000, currency: 'CZK' }, items: [],
+  })
+  await setDoc(doc(db, 'publicProfiles/uid-verified'), {
+    uid: 'uid-verified', displayName: 'Marie Horáková', email: 'm@priklad.test',
+    role: 'carer', verification: { status: 'verified', basis: 'organization_confirmation' },
+  })
   await setDoc(doc(db, 'orders/ord1'), {
     providerId: 'prov1', courseId: 'c-listed',
     buyer: { kind: 'organization', organizationId: 'o1', organizationName: 'Test' },
@@ -128,6 +136,27 @@ await check('cizí objednávku organizace nevidí', assertFails(getDoc(doc(worke
 await check('pořadatel vidí objednávku na svůj kurz', assertSucceeds(getDoc(doc(provider, 'orders/ord1'))))
 await check('objednávku nezaloží klient', assertFails(setDoc(doc(worker, 'orders/ord3'), { providerId: 'prov1' })))
 await check('certifikát se nedá upravit z klienta', assertFails(setDoc(doc(provider, 'certificates/cert1'), { hours: 40 })))
+
+// CENY: veřejně nedostupné, protože nejsou polem nabídky (marketplace.ts)
+const carer = env.authenticatedContext('uid-verified', { pid: 'p-carer', carer: true }).firestore()
+const strangerIn = env.authenticatedContext('uid-x', { pid: 'p-x' }).firestore()
+await check('nabídku vidí nepřihlášený', assertSucceeds(getDoc(doc(anonMk, 'listings/l1'))))
+await check('CENU nepřihlášený NEVIDÍ', assertFails(getDoc(doc(anonMk, 'listings/l1/pricing/current'))))
+await check('cenu nevidí ani přihlášený bez role a bez ověření', assertFails(getDoc(doc(strangerIn, 'listings/l1/pricing/current'))))
+await check('cenu vidí pracovnice organizace', assertSucceeds(getDoc(doc(worker, 'listings/l1/pricing/current'))))
+await check('cenu vidí ověřený pěstoun', assertSucceeds(getDoc(doc(carer, 'listings/l1/pricing/current'))))
+await check('cenu vidí poskytovatel u své nabídky', assertSucceeds(getDoc(doc(provider, 'listings/l1/pricing/current'))))
+await check('cenu nezapíše klient', assertFails(setDoc(doc(provider, 'listings/l1/pricing/current'), { priceFrom: null })))
+
+// veřejný účet: registrace ano, ověření si nenastaví sám
+await check('vlastní veřejný profil si člověk přečte', assertSucceeds(getDoc(doc(carer, 'publicProfiles/uid-verified'))))
+await check('cizí veřejný profil nepřečte', assertFails(getDoc(doc(strangerIn, 'publicProfiles/uid-verified'))))
+await check('registrace veřejného účtu projde', assertSucceeds(setDoc(doc(strangerIn, 'publicProfiles/uid-x'), {
+  uid: 'uid-x', displayName: 'Nový', email: 'n@priklad.test', role: 'carer',
+  verification: { status: 'none', basis: null } })))
+await check('ověření si uživatel NENASTAVÍ sám', assertFails(setDoc(doc(strangerIn, 'publicProfiles/uid-x2'), {
+  uid: 'uid-x2', displayName: 'Chytrák', email: 'c@priklad.test', role: 'carer',
+  verification: { status: 'verified', basis: 'manual_review' } })))
 
 // respit: nabídka služby, potvrzení se jménem dítěte, interní péče
 await check('vylistovaná služba je veřejná', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1/services/s-listed'))))

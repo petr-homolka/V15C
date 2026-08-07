@@ -287,8 +287,18 @@ export type OfferStatus = 'draft' | 'listed' | 'unlisted' | 'archived'
  * Kořenová kolekce **čitelná bez přihlášení**, aby se nabídka dala najít
  * na internetu a koupit i mimo systém.
  *
- * Proto v ní **nesmí být nic osobního**. Je to výkladní skříň. Objednávky,
- * děti a potvrzení žijí jinde a jsou chráněné.
+ * ┌─────────────────────────────────────────────────────────────────────┐
+ * │ CENA TADY NENÍ, A NENÍ TO KOSMETIKA                                 │
+ * │                                                                     │
+ * │ Zadání: ceny vidí jen přihlášený. Kdyby cena zůstala polem téhle    │
+ * │ nabídky, **skrytá by nebyla** — bezpečnostní pravidla neumí skrýt   │
+ * │ pole (dok. 04, 19). Kdokoli by si dokument přečetl přes SDK i bez   │
+ * │ ohledu na to, co ukazuje stránka.                                   │
+ * │                                                                     │
+ * │ Cena proto žije v `listings/{id}/pricing/current`, který se čte     │
+ * │ jinými pravidly. Je to potřetí totéž rozdělení, které v tomhle      │
+ * │ modelu vynucuje Firestore: metadata veřejně, obsah zvlášť.          │
+ * └─────────────────────────────────────────────────────────────────────┘
  */
 export interface Listing {
   id: Id
@@ -304,20 +314,52 @@ export interface Listing {
 
   title: string
   perex: string
-  /** U kurzu hodiny, u služby počet dnů nebo jednotka. */
+  /** Popis a fotky jsou veřejné — na nich se nabídka prodává. */
+  descriptionPublic: string
+  photoUrls: string[]
+
+  /** U kurzu hodiny, u služby jednotka. Rozsah není cena. */
   hours: number | null
   unitLabel: string | null
-  priceFrom: Money | null
-  priceNote: string | null
 
   serviceAreas: string[]
   language: string
   nextDateAt: IsoDateTime | null
 
+  /** Jen příznak, že cena existuje — samotné číslo je jinde. */
+  hasPrice: boolean
+  /** Co se ukáže místo ceny nepřihlášenému. */
+  priceHiddenNote: string
+
   visibility: 'public' | 'system_only'
   publishedAt: IsoDateTime
   unlistedAt: IsoDateTime | null
   popularity: number
+}
+
+/**
+ * `listings/{listingId}/pricing/current` — čte jen ověřený přihlášený.
+ *
+ * Kdo cenu uvidí:
+ *   – člen doprovázející organizace (má roli v tokenu);
+ *   – pěstoun v systému;
+ *   – **ověřený pěstoun mimo systém** (`CarerVerification` níže);
+ *   – zaměstnanec poskytovatele u vlastní nabídky.
+ */
+export interface ListingPricing {
+  listingId: Id
+  priceFrom: Money | null
+  priceNote: string | null
+  vatIncluded: boolean
+  /** Rozpis položek u položkové nabídky. */
+  items: Array<{
+    code: string
+    label: string
+    unit: ServiceUnit
+    unitPrice: Money
+    respiteDays: number | null
+  }>
+  updatedAt: IsoDateTime
 }
 
 /* ------------------------------------------------------------------ */
@@ -614,3 +656,129 @@ export const MARKETPLACE_BOUNDARIES = [
   'hours_and_days_are_provider_claim',
   'eligibility_is_shown_not_enforced',
 ] as const
+
+/* ------------------------------------------------------------------ */
+/* Ověřený pěstoun mimo systém                                         */
+/* ------------------------------------------------------------------ */
+
+/**
+ * `publicProfiles/{uid}` — člověk, který se registroval na veřejném webu
+ * a v žádné doprovázející organizaci ho nevedeme.
+ *
+ * Existuje kvůli jediné věci: **aby uviděl ceny a mohl objednat.** Nic víc
+ * o něm nevedeme a k ničemu jinému mu ten účet neslouží — do CRM se
+ * nedostane, protože nemá roli v žádné organizaci.
+ */
+export interface PublicProfile extends AuditFields {
+  uid: string
+  displayName: string
+  email: string
+  phone: string | null
+  address: { street: string; city: string; zip: string; country: string } | null
+  /** Fakturační údaje, když objednává jako organizace nebo OSVČ. */
+  ico: string | null
+
+  role: 'carer' | 'organization_staff' | 'other'
+  verification: CarerVerification
+  createdVia: 'marketplace'
+}
+
+/**
+ * ┌─────────────────────────────────────────────────────────────────────┐
+ * │ JAK OVĚŘIT, ŽE NĚKDO JE PĚSTOUN, A NESEBRAT PŘITOM ÚDAJE O DÍTĚTI   │
+ * │                                                                     │
+ * │ Nejjednodušší cesta by byla „nahrajte rozhodnutí soudu o svěření“.  │
+ * │ Jenže to je listina plná údajů o dítěti podle čl. 9 GDPR — a my ji  │
+ * │ chceme jen proto, abychom někomu ukázali ceník. To je nepřiměřené.  │
+ * │                                                                     │
+ * │ Přiměřené jsou tři cesty, seřazené od nejlepší:                     │
+ * │                                                                     │
+ * │  1. JE V SYSTÉMU. Pěstoun doprovázené organizace se přihlásí a je   │
+ * │     ověřený tím, že má dohodu. Nula dalších údajů.                  │
+ * │  2. POTVRDÍ HO ORGANIZACE. Zadá kód od své doprovázející            │
+ * │     organizace, nebo ho organizace potvrdí na vyžádání. Doklad      │
+ * │     nikam nenahrává.                                                │
+ * │  3. RUČNÍ POSOUZENÍ. Doloží potvrzení své organizace nebo ORP —     │
+ * │     **ne rozhodnutí o svěření dítěte**. Posoudí superadmin.         │
+ * │                                                                     │
+ * │ A hlavně: **doklad se po rozhodnutí smaže.** Zůstane jen fakt, že   │
+ * │ ověření proběhlo, kdy, na jakém základě a kdo ho udělal. Držet      │
+ * │ potvrzení navždy kvůli zobrazení ceny nemá žádný důvod.             │
+ * └─────────────────────────────────────────────────────────────────────┘
+ */
+export interface CarerVerification {
+  status: 'none' | 'pending' | 'verified' | 'rejected'
+  basis: 'system_membership' | 'organization_code' | 'organization_confirmation'
+       | 'manual_review' | null
+
+  requestedOn: IsoDate | null
+  decidedOn: IsoDate | null
+  decidedByPersonId: Id | null
+  rejectionNote: string | null
+
+  /** Která organizace za něj ručí, když ho potvrdila. */
+  confirmedByOrganizationId: Id | null
+
+  /**
+   * Doklad k posouzení. Po rozhodnutí ho úklidová funkce smaže a tohle
+   * pole zůstane `null` — proto je vedle něj `evidenceDeletedOn`.
+   */
+  evidenceDocumentId: Id | null
+  evidenceDeletedOn: IsoDate | null
+
+  /** Ověření nemá důvod platit věčně; pěstounem být člověk přestane. */
+  validUntil: IsoDate | null
+}
+
+/**
+ * Nepřihlášený ani neověřený **není odmítnut** — jen nevidí ceny (dok. 16).
+ * Text je faktický a říká, co s tím.
+ */
+export const PRICE_HIDDEN_NOTE =
+  'Ceny se zobrazují po přihlášení. Pěstouni a doprovázející organizace se přihlásí; ' +
+  'ostatní se mohou registrovat a nechat si ověřit, že jsou pěstouny.'
+
+/* ------------------------------------------------------------------ */
+/* Domény                                                              */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Dvě domény, jeden projekt, jedna databáze.
+ *
+ *   doprovazeni.com — CRM. Bez role v organizaci tam není co dělat.
+ *   pestouni.com    — marketplace. Veřejný katalog a účty pěstounů.
+ *
+ * **Hranicí nejsou domény, ale pravidla.** Doména rozhoduje o tom, co se
+ * vykreslí; o tom, co jde přečíst, rozhoduje token. Kdo přijde na
+ * doprovazeni.com bez role, neuvidí nic — a to je správně, protože jinak
+ * by stačilo znát adresu.
+ *
+ * Přihlášení se mezi doménami **nepřenáší** (Firebase Auth drží relaci
+ * per origin). Není to chyba k opravě: pěstoun se přihlašuje na svém webu
+ * a pracovnice na svém, což je čitelnější než jedna relace na obojím.
+ */
+export const DOMAINS = {
+  crm: 'doprovazeni.com',
+  marketplace: 'pestouni.com',
+  /** Ověřovací stránky QR kódů — podle toho, kdo dokument vydal. */
+  verification: {
+    document: 'doprovazeni.com/overeni',
+    certificate: 'pestouni.com/overeni',
+    serviceConfirmation: 'pestouni.com/overeni',
+  },
+} as const
+
+/**
+ * Veřejný katalog musí být k nalezení vyhledávači, takže se **předrenderuje
+ * na serveru** — klientská aplikace, která si data dotáhne až v prohlížeči,
+ * se indexuje špatně.
+ *
+ * Do předrenderovaného HTML se ale **cena nedostane**. Kdyby tam byla,
+ * byla by ve zdroji stránky i ve výsledcích vyhledávání, a celé skrývání
+ * by nemělo smysl.
+ */
+export const PUBLIC_CATALOGUE_RENDERING = {
+  mode: 'prerendered',
+  includesPrices: false,
+  robotsIndexable: true,
+} as const

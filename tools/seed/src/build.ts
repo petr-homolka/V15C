@@ -27,11 +27,11 @@ import type {
   AiEntitlement, OrgBranding, LetterheadTemplate, ReferenceNumberSeries,
   MarketplaceProvider, Course, Listing, Order, Enrolment, CourseCertificate,
   MarketplaceTerms, ScanTranscript, ServiceOffer, ServiceConfirmation,
-  InternalServiceDelivery, MarketplaceDomain,
+  InternalServiceDelivery, MarketplaceDomain, Money,
 } from '../../../schema/src/index'
 import {
   org as orgPaths, platform as platformPaths, marketplace as mkPaths,
-  CODEBOOKS, DEFAULT_LETTERHEADS, DOMAIN_RIGHT_CODE,
+  CODEBOOKS, DEFAULT_LETTERHEADS, DOMAIN_RIGHT_CODE, PRICE_HIDDEN_NOTE,
 } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
@@ -521,15 +521,19 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           providerEligible: null,        // u vzdělávání se § 49 odst. 4 neuplatní
           title: c.title,
           perex: c.perex,
+          descriptionPublic: c.description,
+          photoUrls: [],
           hours: c.hours,
           unitLabel: null,
-          priceFrom: c.price,
-          priceNote: null,
           serviceAreas: [],
           language: c.language,
           nextDateAt: c.delivery.kind === 'self_paced'
             ? null
             : isoDateTime(addDays(opt.today, rng.int(10, 70))),
+          // CENA TADY NENÍ — je v podřízeném dokumentu, protože pravidla
+          // neumí skrýt pole (marketplace.ts).
+          hasPrice: true,
+          priceHiddenNote: PRICE_HIDDEN_NOTE,
           // Část nabídky je veřejná (jde koupit i mimo systém), část jen v systému.
           visibility: rng.bool(0.8) ? 'public' : 'system_only',
           publishedAt: now,
@@ -537,6 +541,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           popularity: rng.int(0, 40),
         }
         push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
+        pushPricing(l.id, prov.id, c.price, null, [])
       })
     })
 
@@ -602,19 +607,56 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         providerEligible: prov.eligibility === 'not_applicable' ? null : prov.eligibilityComplete,
         title: offer.title,
         perex: offer.perex,
+        descriptionPublic: offer.description,
+        photoUrls: [],
         hours: null,
         unitLabel: cheapest ? cheapest.unit : 'hour',
-        priceFrom: cheapest ? cheapest.unitPrice : null,
-        priceNote: offer.general?.priceNote ?? null,
         serviceAreas: offer.serviceAreas,
         language: offer.language,
         nextDateAt: cheapest?.from ? `${cheapest.from}T08:00:00Z` : null,
+        hasPrice: true,
+        priceHiddenNote: PRICE_HIDDEN_NOTE,
         visibility: 'public',
         publishedAt: now,
         unlistedAt: null,
         popularity: rng.int(0, 30),
       }
       push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
+      pushPricing(
+        l.id, prov.id,
+        cheapest ? cheapest.unitPrice : null,
+        offer.general?.priceNote ?? null,
+        offer.items.map((i) => ({
+          code: i.code, label: i.label, unit: i.unit,
+          unitPrice: i.unitPrice, respiteDays: i.respiteDays,
+        })),
+      )
+    }
+
+    /**
+     * Cena jako samostatný dokument. `providerId` je v něm proto, aby si
+     * ho pravidla mohla přečíst bez sahání na nabídku — poskytovatel musí
+     * vidět ceník své vlastní nabídky.
+     */
+    function pushPricing(
+      listingId: string, providerId: string,
+      priceFrom: Money | null,
+      priceNote: string | null,
+      items: Array<{
+        code: string; label: string; unit: string
+        unitPrice: Money
+        respiteDays: number | null
+      }>,
+    ): void {
+      push(mkPaths.listingPricing(listingId), {
+        listingId,
+        providerId,
+        priceFrom,
+        priceNote,
+        vatIncluded: true,
+        items,
+        updatedAt: now,
+      }, 'listingPricing')
     }
 
     function buildItems(providerId: string) {
