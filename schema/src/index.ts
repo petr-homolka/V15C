@@ -6,6 +6,7 @@
  */
 
 export * from './common'
+export * from './uid'
 export * from './entities'
 export * from './platform'
 export * from './codebooks'

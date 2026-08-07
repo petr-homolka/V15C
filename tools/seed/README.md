@@ -71,6 +71,13 @@ otestovat konkrétní místo, kde je návrh choulostivý.
 
 ## Tři vlastnosti, na kterých záleží při testování
 
+**0. Id jsou skutečná UID.** Šestimístné kódy z 31znakové abecedy bez `o`,
+`0`, `i`, `l` a `1` (`schema/src/uid.ts`), generované s kontrolou jedinečnosti
+— stejným sítem, jakým v aplikaci prochází zápis do registru entit. Nejsou to
+čitelné popisky: testovat na `demo-org-1-ag-3` by skrylo právě ty chyby, které
+se objeví, až když někdo z id něco vyčte. Orientace v datech je přes
+`entities/{uid}`, kde je u každého UID druh a název.
+
 **1. Sada je deterministická.** Stejné semínko dá stejná data — jinak by se nedala
 reprodukovat chyba, kterou někdo viděl. Jiná sada: `--seed=neco-jineho`.
 

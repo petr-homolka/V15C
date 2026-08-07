@@ -7,6 +7,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p schema/tsconfig.json && tsc --noEmit -p tools/seed/tsconfig.json",
     "emulator": "firebase emulators:start --only firestore,auth --project demo-v15c",
+    "test:schema": "tsx tests/schema.test.mjs",
+    "test": "npm run test:schema && npm run test:rules",
     "test:rules": "firebase emulators:exec --only firestore --project demo-rules \"node tests/rules.test.mjs\"",
     "seed": "cd tools/seed && npm run seed",
     "seed:clear": "cd tools/seed && npm run seed -- clear",
@@ -19,6 +21,7 @@
     "@types/node": "^22.0.0",
     "firebase": "^11.0.0",
     "firebase-tools": "^13.0.0",
+    "tsx": "^4.23.11",
     "typescript": "^5.6.0"
   }
 }

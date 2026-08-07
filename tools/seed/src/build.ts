@@ -34,6 +34,7 @@ import {
   org as orgPaths, platform as platformPaths, marketplace as mkPaths,
   CODEBOOKS, DEFAULT_LETTERHEADS, DOMAIN_RIGHT_CODE, PRICE_HIDDEN_NOTE,
   entities as entityPaths, ENTITY_SERVICES, deriveAgreementName,
+  generateUid, hasProfile,
 } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
@@ -102,6 +103,23 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
   }
 
   /**
+   * Šestimístné UID, deterministické podle semínka a **jedinečné** —
+   * `used` je ta kontrola, kterou v aplikaci dělá `create` do registru
+   * (uid.ts). Testovací data tím prochází stejným sítem jako produkce.
+   */
+  const usedUids = new Set<string>()
+  const newUid = (): string => {
+    for (let attempt = 0; attempt < 50; attempt++) {
+      const uid = generateUid((max) => rng.int(0, max - 1))
+      if (!usedUids.has(uid)) {
+        usedUids.add(uid)
+        return uid
+      }
+    }
+    throw new Error('UID se nepodařilo vygenerovat — příliš mnoho střetů')
+  }
+
+  /**
    * Zápis do registru entit. Každá věc s profilem tam musí být, jinak ji
    * nejde dohledat podle UID (entities.ts).
    */
@@ -123,6 +141,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       displayName,
       subtitle,
       services: [...ENTITY_SERVICES[kind]],
+      hasProfile: hasProfile(kind),
       status,
       archivedOn: status === 'archived' ? isoDate(opt.today) : null,
     }
@@ -513,7 +532,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const listed = ci > 0 || pi === 0
         const c: Course = {
           ...sys('superadmin'),
-          id: `${prov.id}-${slug}`,
+          id: newUid(),
           providerId: prov.id,
           slug,
           title,
@@ -592,7 +611,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
       const offer: ServiceOffer = {
         ...sys('superadmin'),
-        id: `${prov.id}-nabidka`,
+        id: newUid(),
         providerId: prov.id,
         slug: 'nabidka',
         domain,
@@ -734,7 +753,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
   function buildOrganization(orgIndex: number): void {
     const meta = ORG_NAMES[orgIndex % ORG_NAMES.length]!
-    const orgId = `demo-org-${orgIndex + 1}`
+    const orgId = newUid()
     const p = orgPaths(orgId)
     const orgTown = pickTown(rng)
     const ku = KU_LIST.find((k) => k.code === meta.ku)!
@@ -743,11 +762,11 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
     const managerGender: Gender = rng.bool() ? 'f' : 'm'
     const managerName = makeName(rng, managerGender)
-    const managerId = `${orgId}-p-manager`
+    const managerId = newUid()
 
     const keyWorkers = Array.from({ length: opt.keyWorkersPerOrg }, (_, k) => {
       const gender: Gender = rng.bool(0.8) ? 'f' : 'm'   // v praxi převažují ženy
-      return { id: `${orgId}-p-kw${k + 1}`, name: makeName(rng, gender) }
+      return { id: newUid(), name: makeName(rng, gender) }
     })
 
     const organization: Organization = {
@@ -802,12 +821,13 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     /* --- nastavení, směrnice, předplatné -------------------------- */
 
     pushSettings(orgId, managerId)
-    pushPolicy(orgId, managerId, orgIndex)
+    const policyUid = pushPolicy(orgId, managerId, orgIndex)
     pushSubscriptionAndWallet(orgId, managerId, orgIndex)
     pushMandateObligations(orgId, managerId, ku.code)
     pushInquiries(orgId, managerId)
     pushOrgMemory(orgId, keyWorkers[0]!.id, keyWorkers[0]!.name.givenName)
     pushOwnCodebookItems(orgId, keyWorkers[0]!.id, orgIndex)
+    const internalProviderUid = pushInternalProvider(orgId, managerId, meta.display)
     pushBranding(orgId, managerId, meta, orgTown)
     pushLetterheads(orgId, managerId)
     pushReferenceSeries(orgId, managerId)
@@ -913,8 +933,8 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       special: string | null,
     ): void {
       const ref = `ROD-2026-${String(seq).padStart(3, '0')}`
-      const agreementId = `${orgId}-ag-${seq}`
-      const caseFileId = `${orgId}-cf-${seq}`
+      const agreementId = newUid()
+      const caseFileId = newUid()
 
       // Datum uzavření se počítá PŘED pěstouny — profil pečující osoby
       // z něj bere počátek `custodyBasisHistory`.
@@ -938,7 +958,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           ? pickSurnameIndex(rng, [carerSurname])
           : carerSurname
         const name = makeName(rng, gender, surnameIndex)
-        const id = `${agreementId}-carer${c + 1}`
+        const id = newUid()
         pushPerson(id, name, ['caregiver'], carerTown)
         pushCarerProfile(id, special)
         carerIds.push(id)
@@ -984,7 +1004,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           ? lastChildTown
           : rng.bool(0.45) ? pickTownInOtherOrp(rng, carerTown.orpCode) : carerTown
         lastChildTown = childTown
-        const childId = `${agreementId}-child${ch + 1}`
+        const childId = newUid()
 
         const child: Child = {
           ...sys(keyWorkerId),
@@ -1102,7 +1122,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       // Souhlas ORP — bez něj nelze vyplatit státní příspěvek (dok. 01).
       const consent: OrpConsent = {
         ...sys(keyWorkerId),
-        id: `${agreementId}-consent`,
+        id: newUid(),
         orpId: carerTown.orpCode,
         requestedOn: isoDate(addDays(concluded, -20)),
         decision: special === 'awaiting_orp_consent' ? null : 'granted',
@@ -1116,7 +1136,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       if (custodyBasis === 'care_953' && children[0]) {
         push(`${p.orpStatements(agreementId)}/${agreementId}-stmt`, {
           ...sys(keyWorkerId),
-          id: `${agreementId}-stmt`,
+          id: newUid(),
           personId: carerIds[0]!,
           childId: children[0].id,
           basis: 'pending_on_motion',
@@ -1134,7 +1154,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const ended = special === 'archived' && i === 0
         const placement: Placement = {
           ...sys(keyWorkerId),
-          id: `${agreementId}-pl${i + 1}`,
+          id: newUid(),
           childId: child.id,
           childDisplayName: child.name.displayName,
           agreementId,
@@ -1155,12 +1175,13 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       })
 
       /* --- vzdělávací období: klouzavých 12 měsíců od dohody (dok. 01) --- */
+      const educationPeriodUids = new Map<string, string>()
       carerIds.forEach((carerId, i) => {
         const required = mediatedCare ? 24 : 18
         const done = rng.int(0, required + 6)
         const period: EducationPeriod = {
           ...sys(keyWorkerId),
-          id: `${agreementId}-edu${i + 1}`,
+          id: newUid(),
           agreementId,
           personId: carerId,
           periodFrom: isoDate(concluded),
@@ -1173,11 +1194,12 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           computedFrom: {
             legalRulesetId: 'cz-2026-01',
             legalRegime: 'CZ-2026-01',
-            orgPolicyIds: [`${orgId}-policy-1`],
+            orgPolicyIds: [policyUid],
             computedAt: now,
           },
           closed: false,
         }
+        educationPeriodUids.set(carerId, period.id)
         push(
           `${p.educationPeriods(agreementId)}/${period.id}`,
           period as unknown as Record<string, unknown>,
@@ -1221,7 +1243,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       }
       push(p.caseFile(caseFileId), caseFile as unknown as Record<string, unknown>, 'caseFiles')
 
-      buildEntries(caseFileId, agreementId, keyWorkerId, carerIds, children, lastContact)
+      buildEntries(
+        caseFileId, agreementId, keyWorkerId, carerIds, children,
+        lastContact, educationPeriodUids,
+      )
       buildDocuments(caseFileId, agreementId, keyWorkerId, ref)
       buildObligations(caseFileId, agreementId, ref, keyWorkerId, carerIds, carerNames, children, lastContact)
       buildReport(caseFileId, agreementId, keyWorkerId, carerTown.orpCode, children)
@@ -1251,7 +1276,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
         const d: Dictation = {
           ...sys(keyWorkerId),
-          id: `${caseFileId}-dic1`,
+          id: newUid(),
           caseFileId,
           recordedByPersonId: keyWorkerId,
           startedAt: isoDateTime(recorded),
@@ -1333,7 +1358,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const pick = rng.pick(courseIds)
         const [providerId, courseId, title, hours, formCode, priceMinor] = pick
 
-        const orderId = `${caseFileId}-ord1`
+        const orderId = newUid()
         const placed = addMonths(opt.today, -rng.int(1, 6))
         // Část objednávek vzejde z žádosti pěstouna, část vybere Klíčová osoba.
         const requestedByCarer = rng.bool(0.5)
@@ -1359,7 +1384,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
             personId: carerIds[0]!,
             displayName: carerNames[0]!,
             email: `${slugify(carerNames[0]!)}@priklad.test`,
-            educationPeriodId: `${agreementId}-edu1`,
+            educationPeriodId: educationPeriodUids.get(carerIds[0]!) ?? null,
           }],
           bookings: [],
           seatCount: 1,
@@ -1396,7 +1421,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
         const enrolment: Enrolment = {
           ...sys(keyWorkerId),
-          id: `${orderId}-enr1`,
+          id: newUid(),
           orderId,
           offerId: courseId,
           providerId,
@@ -1421,7 +1446,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         if (!completed) return
         const cert: CourseCertificate = {
           ...sys('superadmin'),
-          id: `${orderId}-cert1`,
+          id: newUid(),
           enrolmentId: enrolment.id,
           orderId,
           offerId: courseId,
@@ -1473,7 +1498,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const to = addDays(from, respiteDays - 1)
         const confirmed = rng.bool(0.75)
 
-        const orderId = `${caseFileId}-resp1`
+        const orderId = newUid()
         const order: Order = {
           ...sys(keyWorkerId),
           id: orderId,
@@ -1537,7 +1562,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         if (!confirmed) return
         const conf: ServiceConfirmation = {
           ...sys('superadmin'),
-          id: `${orderId}-conf1`,
+          id: newUid(),
           orderId,
           offerId,
           providerId,
@@ -1581,9 +1606,9 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const days = tutoring ? 0 : rng.int(1, 2)
         const d: InternalServiceDelivery = {
           ...sys(keyWorkerId),
-          id: `${caseFileId}-int1`,
+          id: newUid(),
           organizationId: orgId,
-          providerId: `${orgId}-internal`,
+          providerId: internalProviderUid,
           performedByPersonId: keyWorkers[1]?.id ?? keyWorkerId,
           domain: tutoring ? 'tutoring' : 'respite',
           childId: child.id,
@@ -1639,13 +1664,14 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       carerIds: string[],
       children: Array<{ id: string; name: ReturnType<typeof makeName> }>,
       lastContact: Date,
+      educationPeriodUids: Map<string, string>,
     ): void {
       // Osobní styky za posledních 12 měsíců, přibližně každých 6–9 týdnů.
       let when = addMonths(lastContact, -12)
       let n = 0
       while (when <= lastContact) {
         n++
-        const entryId = `${caseFileId}-mc${n}`
+        const entryId = newUid()
         // Část dětí občas chybí — a lhůta jim tím neběží od nuly (dok. 11).
         const absent = children.filter(() => rng.bool(0.18))
         const present = children.filter((c) => !absent.includes(c))
@@ -1681,7 +1707,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           computedFrom: {
             legalRulesetId: 'cz-2026-01',
             legalRegime: 'CZ-2026-01',
-            orgPolicyIds: [`${orgId}-policy-1`],
+            orgPolicyIds: [policyUid],
             computedAt: now,
           },
         }
@@ -1694,7 +1720,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
       // Poznámky a diktáty
       for (let i = 0; i < rng.int(1, 4); i++) {
-        const id = `${caseFileId}-note${i + 1}`
+        const id = newUid()
         const at = rng.dateBetween(addMonths(opt.today, -10), opt.today)
         push(p.entry(caseFileId, id), {
           ...sys(keyWorkerId),
@@ -1721,7 +1747,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
       // Výdaje — v časové ose ZÁMĚRNĚ nejsou (dok. 12)
       for (let i = 0; i < rng.int(2, 8); i++) {
-        const id = `${caseFileId}-exp${i + 1}`
+        const id = newUid()
         const at = rng.dateBetween(addMonths(opt.today, -11), opt.today)
         const child = children.length > 0 && rng.bool(0.6) ? rng.pick(children) : null
         push(p.entry(caseFileId, id), {
@@ -1750,7 +1776,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       // Vzdělávání
       carerIds.forEach((carerId, ci) => {
         for (let i = 0; i < rng.int(1, 4); i++) {
-          const id = `${caseFileId}-edu${ci + 1}-${i + 1}`
+          const id = newUid()
           const at = rng.dateBetween(addMonths(opt.today, -11), opt.today)
           push(p.entry(caseFileId, id), {
             ...sys(keyWorkerId),
@@ -1764,7 +1790,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
             voidedByPersonId: null,
             voidReason: null,
             personId: carerId,
-            educationPeriodId: `${agreementId}-edu${ci + 1}`,
+            educationPeriodId: educationPeriodUids.get(carerId) ?? null,
             title: rng.pick([
               'Attachment a vztahová vazba v náhradní rodině',
               'Komunikace s biologickou rodinou',
@@ -1785,7 +1811,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       children.forEach((child, i) => {
         if (ageYears(new Date(child.name ? '2020-01-01' : '2020-01-01')) < 0) return
         if (!rng.bool(0.55)) return
-        const id = `${caseFileId}-resp${i + 1}`
+        const id = newUid()
         const from = rng.dateBetween(addMonths(opt.today, -10), addMonths(opt.today, -1))
         const days = rng.int(1, 7)
         push(p.entry(caseFileId, id), {
@@ -1823,7 +1849,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       summary: string,
     ): void {
       const t: TimelineEntry = {
-        id: `${refId}-tl`,
+        id: newUid(),
         caseFileId,
         occurredAt: isoDateTime(at),
         recordedAt: isoDateTime(addDays(at, rng.int(0, 2))),
@@ -1854,7 +1880,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       const selected = rng.sample(kinds, rng.int(4, kinds.length))
 
       selected.forEach(([category, title], i) => {
-        const id = `${caseFileId}-doc${i + 1}`
+        const id = newUid()
         const at = rng.dateBetween(addMonths(opt.today, -14), opt.today)
         const doc: Document = {
           ...sys(keyWorkerId),
@@ -1970,7 +1996,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       ) => {
         const overdue = dueOn < opt.today
         const ob: Obligation = {
-          id: `${caseFileId}-ob-${idSuffix}`,
+          id: newUid(),
           kind,
           agreementId,
           caseFileId,
@@ -1991,7 +2017,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           computedFrom: {
             legalRulesetId: 'cz-2026-01',
             legalRegime: 'CZ-2026-01',
-            orgPolicyIds: [`${orgId}-policy-1`],
+            orgPolicyIds: [policyUid],
             computedAt: now,
           },
           recomputedAt: now,
@@ -2026,7 +2052,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       const childOrp = children[0]?.orp ?? carerOrp
       const r: Report = {
         ...sys(keyWorkerId),
-        id: `${caseFileId}-rep1`,
+        id: newUid(),
         caseFileId,
         agreementId,
         kind: 'periodic_6m',
@@ -2062,7 +2088,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       if (rng.bool(0.5)) {
         const t: Task = {
           ...sys(keyWorkerId),
-          id: `${caseFileId}-task1`,
+          id: newUid(),
           title: rng.pick([
             'Dodat certifikát ze vzdělávání',
             'Ověřit u školy termín schůzky',
@@ -2091,7 +2117,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       start.setUTCHours(rng.int(8, 16), rng.pick([0, 30]), 0, 0)
       const e: CalendarEvent = {
         ...sys(keyWorkerId),
-        id: `${caseFileId}-ev1`,
+        id: newUid(),
         ownerPersonId: keyWorkerId,
         title: `Návštěva · ${carerLabel}`,
         kind: 'visit',
@@ -2114,7 +2140,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
     function buildSubmission(caseFileId: string, keyWorkerId: string, ref: string): void {
       const received = addDays(opt.today, -rng.int(1, 12))
-      const docId = `${caseFileId}-inbox1`
+      const docId = newUid()
       push(p.document(caseFileId, docId), {
         ...sys(keyWorkerId),
         id: docId,
@@ -2145,7 +2171,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
       const s: IncomingSubmission = {
         ...sys(keyWorkerId),
-        id: `${caseFileId}-sub1`,
+        id: newUid(),
         documentId: docId,
         receivedOn: isoDate(received),
         postedByPersonId: keyWorkerId,
@@ -2171,7 +2197,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       if (s.status === 'confirmed') {
         const ar: AuthorityRequest = {
           ...sys(keyWorkerId),
-          id: `${caseFileId}-ar1`,
+          id: newUid(),
           caseFileId,
           requester: {
             kind: 'court',
@@ -2201,7 +2227,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     function buildDraft(caseFileId: string, keyWorkerId: string, carerLabel: string): void {
       const d: DocumentDraft = {
         ...sys(keyWorkerId),
-        id: `${caseFileId}-draft1`,
+        id: newUid(),
         caseFileId,
         purpose: 'report_6m',
         status: 'in_edit',
@@ -2255,7 +2281,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       if (!rng.bool(0.4)) return
       const e: LifeBookEntry = {
         ...sys(keyWorkerId),
-        id: `${childId}-lb1`,
+        id: newUid(),
         childId,
         occurredOn: isoDate(rng.dateBetween(addMonths(opt.today, -12), opt.today)),
         title: rng.pick(['První den ve škole', 'Výlet na Milešovku', 'Vánoce', 'Vysvědčení']),
@@ -2294,11 +2320,11 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       push(p.settings('assistant'), s as unknown as Record<string, unknown>, 'settings')
     }
 
-    function pushPolicy(orgId: string, managerId: string, orgIndex: number): void {
+    function pushPolicy(orgId: string, managerId: string, orgIndex: number): string {
       const p = orgPaths(orgId)
       const pol: OrgPolicy = {
         ...sys(managerId),
-        id: `${orgId}-policy-1`,
+        id: newUid(),
         code: 'smernice-1',
         title: 'Směrnice č. 1 — poskytování pomoci a podpory',
         version: '2026.1',
@@ -2336,6 +2362,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         },
       }
       push(p.policy(pol.id), pol as unknown as Record<string, unknown>, 'policies')
+      return pol.id
     }
 
     function pushSubscriptionAndWallet(orgId: string, managerId: string, orgIndex: number): void {
@@ -2373,7 +2400,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       items.forEach(([kind, dueOn, fromAuthority], i) => {
         const m: MandateObligation = {
           ...sys(managerId),
-          id: `${orgId}-mob${i + 1}`,
+          id: newUid(),
           kind,
           triggerEvent: kind === 'insurance_copy' ? 'obnovení pojistné smlouvy' : 'kalendář',
           triggeredOn: isoDate(addDays(dueOn, -15)),
@@ -2406,7 +2433,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const received = rng.dateBetween(addMonths(opt.today, -10), opt.today)
         const inq: ServiceInquiry = {
           ...sys(managerId),
-          id: `${orgId}-inq${i + 1}`,
+          id: newUid(),
           receivedOn: isoDate(received),
           channel: rng.pick(['phone', 'email', 'in_person', 'referral_ospod']),
           inquirer: { displayName: name.displayName, note: null },
@@ -2435,7 +2462,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       own.forEach(([codebookCode, code, label, behavior, status, proposeAdoption], i) => {
         const item: CodebookItem = {
           ...sys(personId),
-          id: `${orgId}-cb${i + 1}`,
+          id: newUid(),
           codebookCode,
           code,
           label,
@@ -2462,6 +2489,52 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         }
         push(p.codebookItem(item.id), item as unknown as Record<string, unknown>, 'ownCodebookItems')
       })
+    }
+
+    /**
+     * Interní poskytovatel: hlídání a doučování zaměstnancem organizace.
+     * Nikde se nelistuje a nefakturuje se (marketplace.ts) — ale existuje
+     * jako entita, aby na něj šlo odkázat.
+     */
+    function pushInternalProvider(
+      orgId: string, managerId: string, orgLabel: string,
+    ): string {
+      const uid = newUid()
+      const prov: MarketplaceProvider = {
+        ...sys(managerId),
+        id: uid,
+        slug: `interni-${uid}`,
+        legalName: orgLabel,
+        displayName: `${orgLabel} — vlastní pracovníci`,
+        ico: null,
+        dic: null,
+        domains: ['respite', 'tutoring'],
+        kind: 'internal',
+        organizationId: orgId,
+        contact: { email: `interni@${uid}.priklad.test`, phone: null, web: null, address: null },
+        about: 'Hlídání a doučování zajišťují vlastní pracovníci organizace.',
+        logoDocumentId: null,
+        serviceAreas: [],
+        verification: {
+          status: 'verified', verifiedOn: '2026-01-02',
+          verifiedByPersonId: managerId, note: 'vlastní pracovníci', accreditation: null,
+        },
+        // Způsobilost podle § 49 odst. 4 platí i pro zaměstnance.
+        eligibility: {
+          basis: 'natural_person_vetted',
+          criminalRecord: { checkedOn: '2026-01-02', documentId: null },
+          medicalFitness: { checkedOn: '2026-01-02', documentId: null },
+          personalPrerequisites: { assessedOn: '2026-01-02', note: 'zaměstnanecký poměr', documentId: null },
+          recreationEventNote: null,
+          complete: true,
+          validUntil: '2029-01-02',
+        },
+        billing: { bankAccount: null, invoiceNote: null },
+        status: 'active',
+      }
+      push(mkPaths.provider(uid), prov as unknown as Record<string, unknown>, 'providers')
+      registerEntity(uid, 'provider', orgId, mkPaths.provider(uid), prov.displayName, 'interní', managerId)
+      return uid
     }
 
     function pushBranding(
@@ -2502,7 +2575,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       DEFAULT_LETTERHEADS.forEach((tpl, i) => {
         const l: LetterheadTemplate = {
           ...sys(managerId),
-          id: `${orgId}-lh-${tpl.code}`,
+          id: newUid(),
           code: tpl.code,
           label: tpl.label,
           version: '2026.1',
@@ -2531,7 +2604,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       series.forEach(([code, label, prefix], i) => {
         const r: ReferenceNumberSeries = {
           ...sys(managerId),
-          id: `${orgId}-rs-${code}`,
+          id: newUid(),
           code,
           label,
           pattern: '{PREFIX}-{ROK}/{SEQ}',
@@ -2584,7 +2657,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       items.forEach((m, i) => {
         push(`${p.memory()}/${orgId}-mem${i + 1}`, {
           ...sys(personId),
-          id: `${orgId}-mem${i + 1}`,
+          id: newUid(),
           ...m,
           ownerId: m.scope === 'person' ? personId : orgId,
           evidenceCount: m.origin === 'learned' ? rng.int(3, 14) : 1,

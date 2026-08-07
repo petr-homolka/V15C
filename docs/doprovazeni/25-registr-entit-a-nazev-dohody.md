@@ -56,14 +56,63 @@ Ta hranice je užitečná právě proto, že se dá porušit: dokument by profil
 *mohl*, ale pak by se u něj řešila práva zvlášť od spisu, ve kterém leží — a
 oprávnění by se rozdvojila.
 
-### 1.3 UID s předponou
+### 1.3 Tvar UID: šest znaků, bez předpony
 
-`per_`, `chi_`, `agr_`, `org_`, `prv_`, `aut_`, `dev_`, `veh_`, `off_`.
+**Rozhodnuto:** šestimístný kód z malých písmen a číslic, bez předpony.
+Příklad: `u6t4f3`. UID dostává i **každý dokument a sken**, ne jen věci
+s profilem — prostor je proto jeden pro všechno a kód nikdy neznamená dvě věci.
 
-Předpona **není nositelem významu** — druh je v registru. Je to pomůcka pro
-člověka, který se dívá do logu, aby nemusel hádat, na co se kouká, a aby se
-nedalo zaměnit id dítěte za id dohody. (Testovací data používají čitelná id
-záměrně, aby se v nich dalo orientovat.)
+**Abeceda má 31 znaků.** Vynechané jsou `o` a `0` (zadání) a k nim `i`, `l`
+a `1` ze stejného důvodu: v běžném fontu jsou k nerozeznání a UID se diktuje
+po telefonu a opisuje z papíru. Jen malá písmena, takže nevzniká ani otázka,
+jestli se rozlišují velká.
+
+#### Šest znaků stačí — ale jen s kontrolou při vzniku
+
+31⁶ je **887 503 681** kombinací. To vypadá dost, ale kolize se neřídí
+velikostí prostoru, nýbrž narozeninovým paradoxem:
+
+| záznamů | čekaných kolizí bez kontroly | šance, že se kód vygeneruje podruhé |
+| --- | --- | --- |
+| 10 000 | 0,1 | 0,001 % |
+| 100 000 | 5,6 | 0,011 % |
+| 1 000 000 | 563 | 0,113 % |
+| 10 000 000 | 56 338 | 1,127 % |
+
+Milion záznamů **překročíme** — 300 organizací × 40 dohod × 30 dokumentů ročně
+je ~360 tisíc dokumentů za rok a nic se nemaže (dok. 10). Slepé generování by
+tedy vyrobilo stovky kódů, které znamenají dvě věci.
+
+Kontrola je ale skoro zdarma a **už ji máme**: zápis do registru se dělá
+`create`, ne `set` — a `create` na existující dokument selže sám. Kolize se
+nehledá, ona se ohlásí, a v jednom případě z tisíce se kód vygeneruje znovu.
+
+To je celá podmínka: **UID se nesmí přiřadit bez zápisu do registru.**
+Vznik entity je proto vždy dvojice zápisů v jedné dávce — profil a registr —
+nikdy dva samostatné.
+
+#### Co se vzdáním předpony ztrácí
+
+Z `u6t4f3` nepoznáš, jestli je to dítě nebo dokument. Náhrada je jedno čtení
+registru, který to řekne — a v UI je druh vidět vedle kódu. Za čitelnost
+šestimístného kódu, který se dá nadiktovat po telefonu, to je dobrá výměna.
+
+#### Kde šest znaků NESTAČÍ
+
+| Krátké | Dlouhé |
+| --- | --- |
+| UID entity, dokumentu, skenu | **ověřovací token QR kódu** (dok. 21) |
+| | **Předávací kód** (dok. 02) |
+| | **kód organizace** pro ověření pěstouna (dok. 24) |
+
+UID je bezpečné mít krátké, protože **samo nic neotevírá** — přístup rozhoduje
+token přihlášeného a pravidla, takže kdo uhodne cizí UID, nedozví se nic.
+
+Ověřovací stránka QR kódu je ale **čitelná bez přihlášení** a ukazuje
+vydavatele, druh dokumentu a jednací číslo. Šestimístný token by šel zkoušet
+hrubou silou a z odpovědí by se dal sestavit přehled, kdo komu co posílá.
+Tokeny a kódy jsou **klíče, ne identifikátory**, a klíč se nesmí dát uhodnout —
+zůstávají dlouhé (24 znaků).
 
 ### 1.4 Profil je způsob, jak se na entitu kouká
 
@@ -151,11 +200,13 @@ záleží.
 
 | Věc | Soubor |
 | --- | --- |
-| `EntityRecord`, `EntityKind`, UID předpony, `ENTITY_SERVICES`, `ProfileView`, `AgreementNaming`, `familyPlural` | `schema/src/entities.ts` |
+| Tvar UID, abeceda, generátor, normalizace opsaného kódu, dlouhé tokeny | `schema/src/uid.ts` |
+| `EntityRecord`, `EntityKind`, `KINDS_WITH_PROFILE`, `ENTITY_SERVICES`, `ProfileView`, `AgreementNaming`, `familyPlural` | `schema/src/entities.ts` |
 | `Agreement.naming` | `schema/src/agreements.ts` |
 | Cesta `entities/{uid}` | `schema/src/paths.ts` |
 | Pravidla: čtení podle organizace v záznamu, `list` zakázaný | `firestore.rules` |
-| Testy (70, všechny prochází) | `tests/rules.test.mjs` |
+| Testy pravidel (70) | `tests/rules.test.mjs` |
+| Testy funkcí schématu (23) — abeceda, kolize, skloňování, název dohody | `tests/schema.test.mjs` |
 
 Testovací data mají **329 entit** v registru: 2 organizace, 93 osob, 172 dětí,
 56 dohod, 6 poskytovatelů. Z 56 dohod má **21 dva pěstouny s různým příjmením**

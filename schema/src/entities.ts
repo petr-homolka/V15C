@@ -16,7 +16,13 @@
  * │ v textu, v auditu a v paměti Eli. Bez registru by každé z těch míst │
  * │ muselo vědět, ve které kolekci hledat — a při přidání nového druhu  │
  * │ entity by se opravovalo pět míst.                                   │
+ * │                                                                     │
+ * │ UID dostává i **dokument a sken**, ne jen věci s profilem. Prostor  │
+ * │ UID je proto JEDEN pro všechno — kód nikdy neznamená dvě věci —     │
+ * │ a registr odliší, co profil má (`hasProfile`).                      │
  * └─────────────────────────────────────────────────────────────────────┘
+ *
+ * Tvar UID a proč je šestimístný: `uid.ts`.
  */
 
 import type { AuditFields, Id, IsoDate, IsoDateTime } from './common'
@@ -32,10 +38,10 @@ import type { AuditFields, Id, IsoDate, IsoDateTime } from './common'
  * Ty mají id, ale nemají profil ani vlastní práva; patří někomu jinému.
  */
 export type EntityKind =
-  /* --- živé --- */
+  /* --- živé, s profilem --- */
   | 'person'          // člověk obecně: pěstoun, rodič, zaměstnanec, příbuzný
   | 'child'           // dítě má vlastní profil i vlastní aplikaci (dok. 08)
-  /* --- neživé --- */
+  /* --- neživé, s profilem --- */
   | 'agreement'       // dohoda = karta rodiny; jmenuje se po pěstounovi
   | 'organization'    // doprovázející organizace
   | 'provider'        // pořadatel nebo poskytovatel z marketplace
@@ -43,35 +49,29 @@ export type EntityKind =
   | 'device'          // zařízení, na kterém se podepisuje (dok. 19)
   | 'vehicle'         // auto organizace — leasing a cestovní náhrady (dok. 07)
   | 'offer'           // kurz nebo nabídka služby
-
-/** Předpony UID. Čitelné v logu a nedají se zaměnit napříč druhy. */
-export const UID_PREFIX: Record<EntityKind, string> = {
-  person: 'per',
-  child: 'chi',
-  agreement: 'agr',
-  organization: 'org',
-  provider: 'prv',
-  authority: 'aut',
-  device: 'dev',
-  vehicle: 'veh',
-  offer: 'off',
-}
+  /* --- předměty: UID mají, profil ne --- */
+  | 'document'        // dokument včetně všech verzí
+  | 'scan'            // vyfocený doklad s přepisem (dok. 22)
+  | 'dictation'       // diktát s přepisem a souhrnem (dok. 20)
+  | 'report'          // zpráva o průběhu PP
+  | 'certificate'     // certifikát z kurzu
+  | 'confirmation'    // potvrzení služby
+  | 'order'           // objednávka z marketplace
 
 /**
- * UID nově vznikající entity: `per_k3m9x2…`.
+ * Které druhy mají profil, tedy vlastní obrazovku, karty a práva.
  *
- * Předpona **není nositelem významu** — druh je v registru. Je to jen
- * pomůcka pro člověka, který se dívá do konzole nebo do logu, aby nemusel
- * hádat, na co se kouká.
+ * Předmět profil nemá — patří tam, kde leží, a práva se řeší přes něj.
+ * Kdyby měl dokument vlastní profil s vlastními právy, rozdvojilo by se
+ * oprávnění od spisu, ve kterém je (dok. 25).
  */
-export function makeUid(kind: EntityKind, randomPart: string): string {
-  return `${UID_PREFIX[kind]}_${randomPart}`
-}
+export const KINDS_WITH_PROFILE: readonly EntityKind[] = [
+  'person', 'child', 'agreement', 'organization',
+  'provider', 'authority', 'device', 'vehicle', 'offer',
+]
 
-export function uidKind(uid: string): EntityKind | null {
-  const prefix = uid.split('_')[0]
-  const found = Object.entries(UID_PREFIX).find(([, p]) => p === prefix)
-  return (found?.[0] as EntityKind) ?? null
+export function hasProfile(kind: EntityKind): boolean {
+  return KINDS_WITH_PROFILE.includes(kind)
 }
 
 /* ------------------------------------------------------------------ */
@@ -99,6 +99,9 @@ export interface EntityRecord extends AuditFields {
 
   /** Které služby jsou u té entity zapnuté (`ENTITY_SERVICES` níže). */
   services: EntityService[]
+
+  /** Má vlastní obrazovku a práva, nebo je to předmět ve spisu? */
+  hasProfile: boolean
 
   /**
    * Stav. Entita se **nikdy nemaže** (dok. 10) — přechází do `archived`
@@ -155,6 +158,14 @@ export const ENTITY_SERVICES: Record<EntityKind, readonly EntityService[]> = {
   device: ['signatures'],
   vehicle: ['documents', 'expenses'],
   offer: ['documents', 'marketplace'],
+  // Předměty nemají karty — mají místo, kde leží.
+  document: [],
+  scan: [],
+  dictation: [],
+  report: [],
+  certificate: [],
+  confirmation: [],
+  order: [],
 }
 
 /** Má u téhle entity ta služba smysl? */

@@ -126,9 +126,15 @@ async function clearDemo(db: Firestore): Promise<number> {
     }
   }
 
+  // Organizace se poznají PODLE ZNAČKY, ne podle id. Id jsou od té doby,
+  // co se generují skutečná UID (uid.ts), náhodná šestimístná — hledat
+  // podle prefixu by nenašlo nic a `clear` by mlčky nechal data ležet.
+  // (Tuhle chybu odhalilo právě to, že testovací data přestala mít
+  // čitelná id.)
   const orgs = await db.collection('orgs').listDocuments()
   for (const orgRef of orgs) {
-    if (!orgRef.id.startsWith('demo-org-')) continue
+    const snap = await orgRef.get()
+    if (snap.get('demo') !== true) continue
     await deleteRecursive(orgRef.path)
   }
 
@@ -154,16 +160,21 @@ async function clearDemo(db: Firestore): Promise<number> {
 
 async function stats(db: Firestore): Promise<void> {
   const orgs = await db.collection('orgs').listDocuments()
-  const demoOrgs = orgs.filter((o: { id: string }) => o.id.startsWith('demo-org-'))
+  const demoOrgs: Array<{ ref: (typeof orgs)[number]; name: string }> = []
+  for (const ref of orgs) {
+    const snap = await ref.get()
+    if (snap.get('demo') === true) {
+      demoOrgs.push({ ref, name: String(snap.get('displayName') ?? '?') })
+    }
+  }
   console.log(`Testovací organizace: ${demoOrgs.length}`)
 
-  for (const orgRef of demoOrgs) {
-    const snap = await orgRef.get()
-    console.log(`\n  ${orgRef.id} — ${snap.get('displayName') ?? '?'}`)
-    for (const name of ['members', 'persons', 'children', 'agreements', 'caseFiles',
-                        'obligations', 'tasks', 'events', 'inquiries', 'submissions']) {
-      const count = (await orgRef.collection(name).count().get()).data().count
-      if (count > 0) console.log(`    ${name.padEnd(16)} ${count}`)
+  for (const { ref: orgRef, name } of demoOrgs) {
+    console.log(`\n  ${orgRef.id} — ${name}`)
+    for (const col of ['members', 'persons', 'children', 'agreements', 'caseFiles',
+                       'obligations', 'tasks', 'events', 'inquiries', 'submissions']) {
+      const count = (await orgRef.collection(col).count().get()).data().count
+      if (count > 0) console.log(`    ${col.padEnd(16)} ${count}`)
     }
   }
 }
