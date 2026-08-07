@@ -12,15 +12,31 @@ import type { Id, IsoDate } from './common'
 /* platform/* — číselníky, čte každý přihlášený, zapisuje superadmin */
 /* ---------------------------------------------------------------- */
 
+/**
+ * Číselníky visí pod jedním dokumentem `platform/registry`, ne přímo v korenu.
+ *
+ * Důvod je tvrdý: cesta k dokumentu musí mít SUDÝ počet částí, takže
+ * `platform/authorities/ORP-TEPLICE` je cesta ke KOLEKCI, ne k dokumentu.
+ * Kontejner navíc drží celý `platform/**` pod jedním pravidlem a nezanáší
+ * korenový jmenný prostor — v něm zůstávají jen `platform`, `orgs`
+ * a `transfers`.
+ */
+export const PLATFORM_ROOT = 'platform/registry'
+
 export const platform = {
-  legalRulesets: () => 'platform/legalRulesets',
-  legalRuleset: (id: Id) => `platform/legalRulesets/${id}`,
-  standardTemplates: () => 'platform/standardTemplates',
-  sentenceTemplates: () => 'platform/sentenceTemplates',
-  documentTemplates: () => 'platform/documentTemplates',
-  pricingRulesets: () => 'platform/pricingRulesets',
-  countries: () => 'platform/countries',
-  country: (code: string) => `platform/countries/${code}`,
+  root: () => PLATFORM_ROOT,
+  legalRulesets: () => `${PLATFORM_ROOT}/legalRulesets`,
+  legalRuleset: (id: Id) => `${PLATFORM_ROOT}/legalRulesets/${id}`,
+  standardTemplates: () => `${PLATFORM_ROOT}/standardTemplates`,
+  standardTemplate: (id: Id) => `${PLATFORM_ROOT}/standardTemplates/${id}`,
+  sentenceTemplates: () => `${PLATFORM_ROOT}/sentenceTemplates`,
+  documentTemplates: () => `${PLATFORM_ROOT}/documentTemplates`,
+  pricingRulesets: () => `${PLATFORM_ROOT}/pricingRulesets`,
+  pricingRuleset: (id: Id) => `${PLATFORM_ROOT}/pricingRulesets/${id}`,
+  countries: () => `${PLATFORM_ROOT}/countries`,
+  country: (code: string) => `${PLATFORM_ROOT}/countries/${code}`,
+  authorities: () => `${PLATFORM_ROOT}/authorities`,
+  authority: (code: string) => `${PLATFORM_ROOT}/authorities/${code}`,
 } as const
 
 /** Jediná mezi-organizační kolekce. Zapisuje POUZE Cloud Function. */

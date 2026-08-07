@@ -88,13 +88,14 @@ a ruší dokument **i jeho index** (dok. 17).
 ## 2. Strom kolekcí
 
 ```
-platform/
-  legalRulesets/{rulesetId}            ZSPOD a vyhláška v datech, verzované
-  standardTemplates/{templateId}       Příloha 2 — 16 standardů, 30 kritérií
-  sentenceTemplates/{id}               výchozí knihovna vět
-  documentTemplates/{id}               vzory zpráv, plánů, dohody
-  pricingRulesets/{id}                 ceník jako datovaná série
-  countries/{code}                     příprava na jiné státy (dok. 00 C2)
+platform/registry                      kontejner — cesta k dokumentu musí mít
+  ├─ legalRulesets/{rulesetId}         sudý počet částí, proto ten mezistupeň
+  ├─ standardTemplates/{templateId}    Příloha 2 — 16 standardů, 30 kritérií
+  ├─ authorities/{code}                ORP, krajské úřady, soudy — společné všem
+  ├─ sentenceTemplates/{id}            výchozí knihovna vět
+  ├─ documentTemplates/{id}            vzory zpráv, plánů, dohody
+  ├─ pricingRulesets/{id}              ceník jako datovaná série
+  └─ countries/{code}                  příprava na jiné státy (dok. 00 C2)
 
 transfers/{transferCode}               Předávací kód — jediná mezi-org kolekce
                                        zapisuje pouze Cloud Function

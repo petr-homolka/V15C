@@ -138,6 +138,32 @@ export interface StandardTemplate {
 }
 
 /* ------------------------------------------------------------------ */
+/* Úřady — platform/authorities/{code}                                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * ORP, krajské úřady, soudy, Úřad práce.
+ *
+ * Patří na platformní úroveň, protože jsou to tytéž úřady pro všechny
+ * organizace a jsou stabilní. Kdyby si je každá organizace vedla sama,
+ * rozešly by se — a přitom `authorityId` se objevuje na zprávách,
+ * doručenkách a žádostech, kde na jednoznačnosti záleží (dok. 05, 13).
+ */
+export interface Authority {
+  code: string                      // 'ORP-TEPLICE'
+  kind: 'orp' | 'kraj_ku' | 'court' | 'labour_office' | 'ministry' | 'other'
+  name: string
+  /** Nadřízený kraj u ORP — pro směrování výkazů (dok. 13). */
+  parentCode: string | null
+  address: {
+    street: string; city: string; zip: string; country: string
+  } | null
+  isds: string | null               // ID datové schránky
+  email: string | null
+  active: boolean
+}
+
+/* ------------------------------------------------------------------ */
 /* Knihovna vět a vzory                                                */
 /* ------------------------------------------------------------------ */
 

@@ -1,0 +1,24 @@
+{
+  "name": "v15c",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Systém doprovázení pěstounských rodin — návrh, datový model, testovací data",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p schema/tsconfig.json && tsc --noEmit -p tools/seed/tsconfig.json",
+    "emulator": "firebase emulators:start --only firestore,auth --project demo-v15c",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-rules \"node tests/rules.test.mjs\"",
+    "seed": "cd tools/seed && npm run seed",
+    "seed:clear": "cd tools/seed && npm run seed -- clear",
+    "seed:reseed": "cd tools/seed && npm run seed -- reseed",
+    "seed:stats": "cd tools/seed && npm run seed -- stats",
+    "seed:dump": "cd tools/seed && npm run seed -- dump"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^4.0.1",
+    "@types/node": "^22.0.0",
+    "firebase": "^11.0.0",
+    "firebase-tools": "^13.0.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -160,7 +160,7 @@ pravidlo modelu.
 | **Google** | zabudovaný ve Firebase Auth |
 | **Apple** | zabudovaný |
 | **Microsoft** | zabudovaný |
-| **Seznam.cz** | **není zabudovaný**; jen jako obecný OIDC (vyžaduje Identity Platform) a **jen pokud Seznam OIDC discovery poskytuje** — ověřit. Když ne, zbývá e-mailový odkaz. |
+| ~~Seznam.cz~~ | **zrušeno rozhodnutím zadavatele** — nebyl zabudovaný a šel by jen jako obecný OIDC s Identity Platform. Kdo má Seznam a nic jiného, přihlásí se e-mailovým odkazem. |
 | **E-mailový odkaz (bez hesla)** | **záložní pro všechny** — nic se nespravuje, poslední záchrana pro toho, kdo nemá nic z výše uvedeného |
 | SMS | **ne** — platí se za zprávu a nic to nepřináší |
 
@@ -265,6 +265,65 @@ interface CreditWallet {                // AI se platí zvlášť
 Klíčová osoba může být sama doprovázejícím subjektem). Odpověď: tentýž model, jen
 organizace o jednom členovi. Ale ceník musí mít rozumný spodní stupeň, jinak jednomu
 pěstounskému doprovázeči vyjde cena za dohodu absurdně.
+
+### 6.1 Prostor v gigabajtech jako součást tarifu
+
+Dotaz: 10 GB zdarma, každých dalších 10 GB za 100 Kč měsíčně — vyplatí se to?
+
+**Na provoz je to velmi levné, ale jako příjem to nebude fungovat.** Čísla:
+
+| | Naše cena | Tvoje cena |
+| --- | --- | --- |
+| 10 GB úložiště / měsíc | **~6 Kč** (Standard, `europe-west3`) | 100 Kč |
+| stažení 10 GB / měsíc | ~30 Kč | v ceně |
+| operace nad soubory | jednotky Kč | v ceně |
+
+Marže je tedy pohodlná. Problém je jinde — **10 GB nikdo nevyčerpá.** Odhad:
+
+```
+naskenovaná stránka po normalizaci   ~150 KB
+dokumentů na dohodu za rok           ~30 stran  →  ~4,5 MB / dohodu / rok
+organizace se 40 dohodami            ~180 MB / rok
+10 GB vydrží                         ~55 let
+```
+
+Takže druhý blok si nekoupí prakticky nikdo a z tarifu se stane **slib, ne příjem**.
+To není špatně — jako slib je 10 GB dobrý a zároveň to je **pojistka proti zneužití**
+(kdyby někdo začal nahrávat videa).
+
+**Co dělá tu cenu nízkou, není tarif, ale normalizace při nahrání.** Sken stránky
+z mobilu má běžně 1–3 MB; převod na PDF/A nebo JPEG s rozumnou kvalitou dá ~150 KB.
+Je to **pětinásobná až dvacetinásobná úspora** a navíc zrychlí OCR. To je jediná věc,
+kterou tady stojí za to opravdu naprogramovat.
+
+**Jedna past, kterou je potřeba obejít vědomě.** V systému se nikdy nic nemaže
+(dok. 10, 18) a archiv jen roste. Kdyby se platilo za celkový objem, **cena by tlačila
+organizaci k tomu, aby data mazala** — přímo proti tomu, na čem celý návrh stojí.
+Proto:
+
+> **Do kvóty se počítají jen dokumenty aktivních spisů. Archiv je zdarma.**
+
+A vychází to i technicky: archivní soubory se přesunou do třídy **Nearline nebo
+Coldline**, která nás stojí zhruba polovinu až pětinu. Archiv tedy nabídneme zdarma
+a ještě na tom vyděláme.
+
+```ts
+interface StorageQuota {
+  organizationId: Id
+  /** Inkrementuje se při nahrání, dekrementuje při archivaci. */
+  activeBytes: number
+  archivedBytes: number            // mimo kvótu
+  includedBytes: number            // 10 GB z tarifu
+  extraBlocksPurchased: number
+  measuredAt: IsoDateTime
+}
+```
+
+Měřit se to musí **počítadlem při zápisu** — Firestore ani Storage nedají objem za
+organizaci samy a projít všechny soubory by bylo drahé.
+
+**Doporučení:** 10 GB zdarma nechat jako slib s příplatkovými bloky pro pořádek,
+ale **nepočítat s tím jako s příjmem** — ten stojí na počtu dohod a na kreditu za AI.
 
 ---
 
