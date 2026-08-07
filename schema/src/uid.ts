@@ -1,27 +1,31 @@
 /**
- * UID — šestimístný kód, který dostane každá věc v systému.
+ * UID — sedmimístný kód, který dostane každá věc v systému.
  *
  * ┌─────────────────────────────────────────────────────────────────────┐
- * │ ŠEST ZNAKŮ STAČÍ, ALE JEN S KONTROLOU PŘI VZNIKU                    │
+ * │ SEDM ZNAKŮ, A JEN S KONTROLOU PŘI VZNIKU                            │
  * │                                                                     │
- * │ 31 znaků na 6 pozicích je 887 milionů kombinací. To vypadá dost,    │
- * │ ale kolize se neřídí velikostí prostoru, nýbrž **narozeninovým      │
- * │ paradoxem**: při milionu záznamů by při slepém generování vzniklo   │
- * │ přes pět set dvojic se stejným kódem.                               │
+ * │ Kolize se neřídí velikostí prostoru, nýbrž **narozeninovým          │
+ * │ paradoxem**. Proto sedm znaků, ne šest:                             │
  * │                                                                     │
- * │ A milion záznamů překročíme, protože UID dostává i každý dokument   │
- * │ a sken — 300 organizací × 40 dohod × 30 dokumentů ročně je          │
- * │ ~360 tisíc dokumentů za rok a nic se nemaže (dok. 10).              │
+ * │            kombinací   šance na střet při 10 mil. záznamů           │
+ * │   6 znaků   887 mil.   1,13 %   → jeden z 89                        │
+ * │   7 znaků  27,5 mld.   0,04 %   → jeden z 2 750                     │
  * │                                                                     │
- * │ Kontrola je ale skoro zdarma:                                       │
+ * │ Deset milionů záznamů dosáhneme, protože UID dostává i každý        │
+ * │ dokument a sken — 300 organizací × 40 dohod × 30 dokumentů ročně    │
+ * │ je ~360 tisíc za rok a nic se nemaže (dok. 10).                     │
  * │                                                                     │
- * │   při  1 mil. záznamů je šance na střet   0,11 %                    │
- * │   při 10 mil. záznamů                     1,13 %                    │
+ * │ Kontrola při vzniku je nutná v obou případech a je zdarma: registr  │
+ * │ entit už existuje, takže **zápis se dělá `create`, ne `set`** — a   │
+ * │ `create` na existující dokument selže sám. Kolize se nehledá, ona   │
+ * │ se ohlásí.                                                          │
  * │                                                                     │
- * │ Tedy v jednom případě z tisíce se kód vygeneruje podruhé. A protože │
- * │ registr entit už existuje, kontrola nic nestojí navíc: **zápis se   │
- * │ dělá `create`, ne `set`** — a `create` na existující dokument       │
- * │ selže sám. Kolize se tím nehledá, ona se ohlásí.                    │
+ * │ Sedmý znak je tu ale proto, že **správnost té kontroly závisí na    │
+ * │ disciplíně v celém kódu**. Kdo někdy přiřadí UID bez zápisu do      │
+ * │ registru, obejde jedinou pojistku, kterou máme — a při šesti        │
+ * │ znacích by z toho vznikl skutečný duplikát, protože střety se dějí  │
+ * │ běžně. Při sedmi je stejná chyba o dva řády méně škodlivá.          │
+ * │ Jeden znak navíc je za to nízká cena.                               │
  * └─────────────────────────────────────────────────────────────────────┘
  */
 
@@ -37,9 +41,9 @@
  */
 export const UID_ALPHABET = '23456789abcdefghjkmnpqrstuvwxyz'
 
-export const UID_LENGTH = 6
+export const UID_LENGTH = 7
 
-/** 31^6 = 887 503 681 */
+/** 31^7 = 27 512 614 111 */
 export const UID_SPACE = UID_ALPHABET.length ** UID_LENGTH
 
 /**
@@ -100,15 +104,19 @@ export function normalizeUidInput(input: string): string | null {
 }
 
 /**
- * Rozdělení na dvojice pro čtení: `u6t4f3` → `u6 t4 f3`.
+ * Rozdělení pro čtení a diktování: `u6t4f3k` → `u6t 4f3k`.
+ *
+ * Tři a čtyři, jako u telefonního čísla — sedm znaků na dvojice nejde
+ * rozdělit a `u6 t4 f3 k` s osamoceným znakem na konci se čte hůř.
  * Používá se jen při zobrazení, nikdy při ukládání.
  */
 export function formatUidForReading(uid: string): string {
-  return uid.replace(/(.{2})(?=.)/g, '$1 ')
+  if (uid.length !== UID_LENGTH) return uid
+  return `${uid.slice(0, 3)} ${uid.slice(3)}`
 }
 
 /* ------------------------------------------------------------------ */
-/* Kde šest znaků NESTAČÍ                                              */
+/* Kde krátký kód NESTAČÍ                                              */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -121,7 +129,7 @@ export function formatUidForReading(uid: string): string {
  * │                                                                     │
  * │ Ověřovací stránka QR kódu (dok. 21) je ale **čitelná bez            │
  * │ přihlášení** a ukazuje vydavatele, druh dokumentu a jednací číslo.  │
- * │ Šestimístný token by šel zkoušet hrubou silou a z odpovědí by se    │
+ * │ Sedmimístný token by šel zkoušet hrubou silou a z odpovědí by se    │
  * │ dal sestavit přehled, kdo komu co posílá.                           │
  * │                                                                     │
  * │ Ověřovací tokeny proto zůstávají dlouhé a náhodné.                  │

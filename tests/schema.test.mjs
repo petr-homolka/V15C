@@ -33,10 +33,10 @@ t('abeceda je jen malá písmena a číslice', () => {
   assert.match(UID_ALPHABET, /^[a-z2-9]+$/)
 })
 
-t('prostor odpovídá 31^6', () => {
+t('prostor odpovídá 31^7', () => {
   assert.equal(UID_ALPHABET.length, 31)
-  assert.equal(UID_SPACE, 31 ** 6)
-  assert.equal(UID_LENGTH, 6)
+  assert.equal(UID_SPACE, 31 ** 7)
+  assert.equal(UID_LENGTH, 7)
 })
 
 t('generovaný UID projde validací', () => {
@@ -44,28 +44,28 @@ t('generovaný UID projde validací', () => {
   const rnd = (max) => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed % max }
   for (let i = 0; i < 500; i++) {
     const uid = generateUid(rnd)
-    assert.equal(uid.length, 6)
+    assert.equal(uid.length, UID_LENGTH)
     assert.ok(isUid(uid), `neplatný UID: ${uid}`)
   }
 })
 
 t('normalizace opraví velká písmena, mezery a pomlčky', () => {
-  assert.equal(normalizeUidInput('U6T4F3'), 'u6t4f3')
-  assert.equal(normalizeUidInput(' u6 t4 f3 '), 'u6t4f3')
-  assert.equal(normalizeUidInput('u6-t4-f3'), 'u6t4f3')
+  assert.equal(normalizeUidInput('U6T4F3K'), 'u6t4f3k')
+  assert.equal(normalizeUidInput(' u6t 4f3k '), 'u6t4f3k')
+  assert.equal(normalizeUidInput('u6t-4f3k'), 'u6t4f3k')
 })
 
 t('normalizace NEHÁDÁ záměnu znaku', () => {
   // 'o' a '1' v abecedě nejsou; hádat, co tím člověk myslel, by mohlo
   // vrátit UID někoho jiného — proto null (uid.ts).
-  assert.equal(normalizeUidInput('o6t4f3'), null)
-  assert.equal(normalizeUidInput('u6t4f1'), null)
-  assert.equal(normalizeUidInput('u6t4f'), null)
-  assert.equal(normalizeUidInput('u6t4f33'), null)
+  assert.equal(normalizeUidInput('o6t4f3k'), null)
+  assert.equal(normalizeUidInput('u6t4f3l'), null)
+  assert.equal(normalizeUidInput('u6t4f3'), null)     // krátké
+  assert.equal(normalizeUidInput('u6t4f3kk'), null)   // dlouhé
 })
 
-t('formát pro čtení dělí po dvojicích', () => {
-  assert.equal(formatUidForReading('u6t4f3'), 'u6 t4 f3')
+t('formát pro čtení dělí na tři a čtyři', () => {
+  assert.equal(formatUidForReading('u6t4f3k'), 'u6t 4f3k')
 })
 
 /* ---------------------------------------------------------------- */
@@ -97,14 +97,14 @@ t('přídavná jména dostanou -í', () => {
 /* Název dohody                                                     */
 /* ---------------------------------------------------------------- */
 
-const carerA = { uid: 'aaa222', familyName: 'Nováková', familyLabel: 'Novákovi' }
-const carerB = { uid: 'bbb333', familyName: 'Novák', familyLabel: 'Novákovi' }
-const carerC = { uid: 'ccc444', familyName: 'Dvořák', familyLabel: 'Dvořákovi' }
+const carerA = { uid: 'aaa2222', familyName: 'Nováková', familyLabel: 'Novákovi' }
+const carerB = { uid: 'bbb3333', familyName: 'Novák', familyLabel: 'Novákovi' }
+const carerC = { uid: 'ccc4444', familyName: 'Dvořák', familyLabel: 'Dvořákovi' }
 
 t('jeden pěstoun → jeho rodinný tvar', () => {
   const n = deriveAgreementName([carerA])
   assert.equal(n.displayName, 'Novákovi')
-  assert.equal(n.derivedFromPersonUid, 'aaa222')
+  assert.equal(n.derivedFromPersonUid, 'aaa2222')
 })
 
 t('dva pěstouni se stejným příjmením → jeden tvar', () => {
@@ -114,7 +114,7 @@ t('dva pěstouni se stejným příjmením → jeden tvar', () => {
 t('dva pěstouni s různým příjmením → vybere se jedno', () => {
   const n = deriveAgreementName([carerA, carerC], 1)
   assert.ok(['Novákovi', 'Dvořákovi'].includes(n.displayName))
-  assert.ok(['aaa222', 'ccc444'].includes(n.derivedFromPersonUid))
+  assert.ok(['aaa2222', 'ccc4444'].includes(n.derivedFromPersonUid))
 })
 
 t('výběr je DETERMINISTICKÝ — jinak by se dohoda přejmenovala sama', () => {

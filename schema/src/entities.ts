@@ -22,7 +22,7 @@
  * │ a registr odliší, co profil má (`hasProfile`).                      │
  * └─────────────────────────────────────────────────────────────────────┘
  *
- * Tvar UID a proč je šestimístný: `uid.ts`.
+ * Tvar UID a proč je sedmimístný: `uid.ts`.
  */
 
 import type { AuditFields, Id, IsoDate, IsoDateTime } from './common'

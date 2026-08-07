@@ -34,7 +34,7 @@ import {
   org as orgPaths, platform as platformPaths, marketplace as mkPaths,
   CODEBOOKS, DEFAULT_LETTERHEADS, DOMAIN_RIGHT_CODE, PRICE_HIDDEN_NOTE,
   entities as entityPaths, ENTITY_SERVICES, deriveAgreementName,
-  generateUid, hasProfile,
+  generateUid, hasProfile, UID_ALPHABET, VERIFICATION_TOKEN_LENGTH,
 } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
@@ -103,7 +103,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
   }
 
   /**
-   * Šestimístné UID, deterministické podle semínka a **jedinečné** —
+   * Sedmimístné UID, deterministické podle semínka a **jedinečné** —
    * `used` je ta kontrola, kterou v aplikaci dělá `create` do registru
    * (uid.ts). Testovací data tím prochází stejným sítem jako produkce.
    */
@@ -117,6 +117,23 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       }
     }
     throw new Error('UID se nepodařilo vygenerovat — příliš mnoho střetů')
+  }
+
+  /**
+   * Ověřovací token, 24 znaků jako v aplikaci — a **neodvozený od UID**.
+   *
+   * Dřív se skládal z čísla objednávky (`cert-<uid>`). Ověřovací stránka je
+   * čitelná bez přihlášení (dok. 21, 24), takže odvozený token znamená, že
+   * kdo zná UID, dostane se na ni — a v testovacích datech by to nebylo
+   * vidět, protože ten odkaz v testech nikdo nezkouší. Token je klíč,
+   * ne identifikátor (uid.ts).
+   */
+  const newVerificationToken = (): string => {
+    let out = ''
+    for (let i = 0; i < VERIFICATION_TOKEN_LENGTH; i++) {
+      out += UID_ALPHABET[rng.int(0, UID_ALPHABET.length - 1)]
+    }
+    return out
   }
 
   /**
@@ -156,6 +173,27 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     updatedByPersonId: null,
     updatedAt: null,
   })
+
+  /**
+   * Co marketplace SKUTEČNĚ vytvořil. Objednávky si odkazy berou odsud.
+   *
+   * Dřív si `providerId` a `offerId` skládaly ze čtecích řetězců
+   * (`prov-akademie-attachment`) a ukazovaly na kurz, který v datech vůbec
+   * nebyl — pořadatel i kurz dostávají UID. Šablona odkazu přestala platit
+   * ve chvíli, kdy id přestala být čitelná; odkaz proto musí vzniknout
+   * z toho, co se opravdu zapsalo.
+   */
+  const providerUids = new Map<string, string>()
+  const serviceOfferUids = new Map<string, string>()
+  const courseCatalogue: Array<{
+    uid: string
+    providerUid: string
+    title: string
+    hours: number
+    formCode: string
+    priceMinor: number
+    accreditationNumber: string | null
+  }> = []
 
   buildPlatform()
   buildMarketplace()
@@ -422,36 +460,41 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       'marketplaceTerms',
     )
 
+    /**
+     * `key` je jen vnitřní drát v generátoru — v datech se neobjeví.
+     * Dokument pořadatele má UID jako všechno ostatní; kdyby měl čitelné
+     * id, testovala by se data, jaká v aplikaci nikdy nevzniknou.
+     */
     const PROVIDERS: Array<{
-      id: string; slug: string; legal: string; display: string; ico: string
+      key: string; slug: string; legal: string; display: string; ico: string
       verified: boolean; accred: string | null
       domains: MarketplaceDomain[]
       eligibility: 'natural_person_vetted' | 'recreation_event_organizer' | 'not_applicable'
       eligibilityComplete: boolean
     }> = [
-      { id: 'prov-akademie', slug: 'akademie-nrp', legal: 'Akademie NRP, z.ú.',
+      { key: 'akademie', slug: 'akademie-nrp', legal: 'Akademie NRP, z.ú.',
         display: 'Akademie NRP', ico: '28100011', verified: true, accred: '2024/1234-A',
         domains: ['education'], eligibility: 'not_applicable', eligibilityComplete: true },
-      { id: 'prov-most', slug: 'most-k-rodine', legal: 'Most k rodině, o.p.s.',
+      { key: 'most', slug: 'most-k-rodine', legal: 'Most k rodině, o.p.s.',
         display: 'Most k rodině', ico: '28100022', verified: false, accred: null,
         domains: ['education', 'counselling'], eligibility: 'not_applicable', eligibilityComplete: true },
       // Tábor je způsobilý tím, že je zotavovací akcí — § 49 odst. 4 písm. b).
-      { id: 'prov-tabory', slug: 'letni-tabory-slunce', legal: 'Tábory Slunce, s.r.o.',
+      { key: 'tabory', slug: 'letni-tabory-slunce', legal: 'Tábory Slunce, s.r.o.',
         display: 'Tábory Slunce', ico: '28100033', verified: true, accred: null,
         domains: ['respite'], eligibility: 'recreation_event_organizer', eligibilityComplete: true },
       // Chůva je fyzická osoba — musí doložit bezúhonnost a zdravotní
       // způsobilost podle § 49 odst. 4 písm. a). Tahle je má.
-      { id: 'prov-chuva', slug: 'hlidani-teplicko', legal: 'Jana Marková',
+      { key: 'chuva', slug: 'hlidani-teplicko', legal: 'Jana Marková',
         display: 'Hlídání Teplicko', ico: '88100044', verified: true, accred: null,
         domains: ['respite'], eligibility: 'natural_person_vetted', eligibilityComplete: true },
       // Psycholožka — péči o dítě podle písm. a)/b) neposkytuje, takže
       // způsobilost podle § 49 odst. 4 se jí netýká.
-      { id: 'prov-psycholog', slug: 'psychologicka-poradna-labe', legal: 'PhDr. Eva Dvořáková',
+      { key: 'psycholog', slug: 'psychologicka-poradna-labe', legal: 'PhDr. Eva Dvořáková',
         display: 'Psychologická poradna Labe', ico: '88100055', verified: false, accred: null,
         domains: ['therapy', 'counselling'], eligibility: 'not_applicable', eligibilityComplete: true },
       // Doučování — nedoložená způsobilost. V nabídce je to VIDĚT,
       // ale nikdo to neblokuje (dok. 16).
-      { id: 'prov-doucovani', slug: 'doucovani-most', legal: 'Doučování Most, z.s.',
+      { key: 'doucovani', slug: 'doucovani-most', legal: 'Doučování Most, z.s.',
         display: 'Doučování Most', ico: '28100066', verified: false, accred: null,
         domains: ['tutoring'], eligibility: 'natural_person_vetted', eligibilityComplete: false },
     ]
@@ -465,10 +508,12 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     ]
 
     PROVIDERS.forEach((prov, pi) => {
+      const providerUid = newUid()
+      providerUids.set(prov.key, providerUid)
       const caresForChildren = prov.eligibility !== 'not_applicable'
       const p: MarketplaceProvider = {
         ...sys('superadmin'),
-        id: prov.id,
+        id: providerUid,
         slug: prov.slug,
         legalName: prov.legal,
         displayName: prov.display,
@@ -521,7 +566,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       )
 
       if (!prov.domains.includes('education')) {
-        buildServiceOffers(prov)
+        buildServiceOffers(prov, providerUid)
         return
       }
 
@@ -533,7 +578,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const c: Course = {
           ...sys('superadmin'),
           id: newUid(),
-          providerId: prov.id,
+          providerId: providerUid,
           slug,
           title,
           perex: `${title} — ${hours} hodin, ${formLabel}.`,
@@ -556,18 +601,32 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           status: listed ? 'listed' : 'draft',
         }
         push(
-          mkPaths.course(prov.id, c.id),
+          mkPaths.course(providerUid, c.id),
           c as unknown as Record<string, unknown>,
           'courses',
         )
 
         if (!listed) return
+
+        // Do katalogu jde jen kurz, který je v nabídce — rozpracovaný si
+        // nikdo objednat nemůže, a objednávka na `draft` by byla stav,
+        // jaký v aplikaci nevznikne.
+        courseCatalogue.push({
+          uid: c.id,
+          providerUid,
+          title: c.title,
+          hours: c.hours,
+          formCode: c.formCode,
+          priceMinor: c.price.amountMinor,
+          accreditationNumber: p.verification.accreditation?.number ?? null,
+        })
+
         const l: Listing = {
           id: `lst-${c.id}`,
           domain: 'education',
           offerKind: 'course',
           offerId: c.id,
-          providerId: prov.id,
+          providerId: providerUid,
           providerSlug: prov.slug,
           providerDisplayName: prov.display,
           providerVerified: prov.verified,
@@ -594,7 +653,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           popularity: rng.int(0, 40),
         }
         push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
-        pushPricing(l.id, prov.id, c.price, null, [])
+        pushPricing(l.id, providerUid, c.price, null, [])
       })
     })
 
@@ -602,20 +661,25 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
      * Nabídka služby může být OBECNÁ nebo POLOŽKOVÁ. Psycholog termíny
      * nevypisuje, tábor bez termínu nedává smysl — obojí proto musí jít.
      */
-    function buildServiceOffers(prov: (typeof PROVIDERS)[number]): void {
+    function buildServiceOffers(
+      prov: (typeof PROVIDERS)[number], providerUid: string,
+    ): void {
       const OFFERS: Record<string, Array<Partial<ServiceOffer> & { itemsSpec?: unknown }>> = {}
       void OFFERS
 
       const domain = prov.domains[0]!
       const itemized = domain === 'respite'
 
+      const offerUid = newUid()
+      serviceOfferUids.set(prov.key, offerUid)
+
       const offer: ServiceOffer = {
         ...sys('superadmin'),
-        id: newUid(),
-        providerId: prov.id,
+        id: offerUid,
+        providerId: providerUid,
         slug: 'nabidka',
         domain,
-        title: domain === 'respite' && prov.id === 'prov-tabory'
+        title: domain === 'respite' && prov.key === 'tabory'
           ? 'Letní tábory pro děti v náhradní rodinné péči'
           : domain === 'respite' ? 'Hlídání a krátkodobá péče'
           : domain === 'therapy' ? 'Psychologická a terapeutická pomoc'
@@ -630,7 +694,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           availabilityNote: 'termíny po domluvě',
           contactFirst: true,
         },
-        items: itemized ? buildItems(prov.id) : [],
+        items: itemized ? buildItems(prov.key) : [],
         childAgeFrom: domain === 'respite' ? 2 : null,
         childAgeTo: 18,
         audience: ['dite', 'pestoun'],
@@ -639,7 +703,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         status: 'listed',
       }
       push(
-        mkPaths.service(prov.id, offer.id),
+        mkPaths.service(providerUid, offer.id),
         offer as unknown as Record<string, unknown>,
         'serviceOffers',
       )
@@ -652,7 +716,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         domain,
         offerKind: 'service',
         offerId: offer.id,
-        providerId: prov.id,
+        providerId: providerUid,
         providerSlug: prov.slug,
         providerDisplayName: prov.display,
         providerVerified: prov.verified,
@@ -676,7 +740,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       }
       push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
       pushPricing(
-        l.id, prov.id,
+        l.id, providerUid,
         cheapest ? cheapest.unitPrice : null,
         offer.general?.priceNote ?? null,
         offer.items.map((i) => ({
@@ -712,8 +776,8 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       }, 'listingPricing')
     }
 
-    function buildItems(providerId: string) {
-      if (providerId === 'prov-tabory') {
+    function buildItems(providerKey: string) {
+      if (providerKey === 'tabory') {
         return [
           {
             code: 'tabor-cerven', label: 'Příměstský tábor 22.–26. 6.',
@@ -1350,13 +1414,12 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         keyWorkerId: string, carerIds: string[], carerNames: string[],
       ): void {
         if (carerIds.length === 0) return
-        const courseIds = [
-          ['prov-akademie', 'prov-akademie-attachment', 'Attachment a vztahová vazba v náhradní rodině', 8, 'prezencne', 180000],
-          ['prov-akademie', 'prov-akademie-pravo', 'Právní minimum pro pěstouny', 4, 'elearning', 60000],
-          ['prov-most', 'prov-most-trauma', 'Trauma a jeho projevy u dětí školního věku', 6, 'online', 120000],
-        ] as const
-        const pick = rng.pick(courseIds)
-        const [providerId, courseId, title, hours, formCode, priceMinor] = pick
+        // Kurz se VYBERE z toho, co marketplace opravdu vypsal. Seznam
+        // opsaný ručně by ukazoval na UID, které nikde není — a chybějící
+        // kurz by se poznal až na obrazovce vzdělávání.
+        if (courseCatalogue.length === 0) return
+        const course = rng.pick(courseCatalogue)
+        const { providerUid: providerId, uid: courseId, title, hours, formCode, priceMinor } = course
 
         const orderId = newUid()
         const placed = addMonths(opt.today, -rng.int(1, 6))
@@ -1419,6 +1482,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           placedAt: order.placedAt, caseFileId,
         }, 'orgCourseOrders')
 
+        // UID certifikátu vzniká dřív než zápis, protože na něj zápis
+        // odkazuje. Dřív si ho skládal (`<orderId>-cert1`) a ukazoval na
+        // dokument, který se pod tím jménem nikdy nezapsal.
+        const certificateUid = completed ? newUid() : null
         const enrolment: Enrolment = {
           ...sys(keyWorkerId),
           id: newUid(),
@@ -1435,7 +1502,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           },
           status: completed ? 'completed' : 'enrolled',
           completedOn: completed ? isoDate(addDays(placed, 25)) : null,
-          certificateId: completed ? `${orderId}-cert1` : null,
+          certificateId: certificateUid,
         }
         push(
           `${mkPaths.enrolments(orderId)}/${enrolment.id}`,
@@ -1443,10 +1510,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           'enrolments',
         )
 
-        if (!completed) return
+        if (!completed || !certificateUid) return
         const cert: CourseCertificate = {
           ...sys('superadmin'),
-          id: newUid(),
+          id: certificateUid,
           enrolmentId: enrolment.id,
           orderId,
           offerId: courseId,
@@ -1459,9 +1526,9 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           completedOn: enrolment.completedOn!,
           issuedByPersonId: 'provider-staff',
           issuedAt: isoDateTime(addDays(placed, 26)),
-          accreditationNumber: providerId === 'prov-akademie' ? '2024/1234-A' : null,
+          accreditationNumber: course.accreditationNumber,
           documentId: null,
-          verificationToken: `cert-${orderId}`,
+          verificationToken: newVerificationToken(),
           // Vzdělávací záznam z certifikátu vznikne sám, s možností vrátit zpět.
           educationRecordId: null,
           revokedAt: null,
@@ -1489,8 +1556,12 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const child = rng.pick(eligible)
 
         const useCamp = rng.bool(0.6)
-        const providerId = useCamp ? 'prov-tabory' : 'prov-chuva'
-        const offerId = `${providerId}-nabidka`
+        const providerKey = useCamp ? 'tabory' : 'chuva'
+        // Totéž jako u kurzů: UID pořadatele i nabídky pochází z toho,
+        // co marketplace zapsal, ne ze skládaného řetězce.
+        const providerId = providerUids.get(providerKey)
+        const offerId = serviceOfferUids.get(providerKey)
+        if (!providerId || !offerId) return
         const itemCode = useCamp ? 'tabor-cervenec' : 'hlidani-vikend'
         const respiteDays = useCamp ? 8 : 3
         const unitPrice = useCamp ? 650000 : 180000
@@ -1578,7 +1649,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           issuedByPersonId: 'provider-staff',
           issuedAt: isoDateTime(addDays(to, 2)),
           documentId: null,
-          verificationToken: `conf-${orderId}`,
+          verificationToken: newVerificationToken(),
           note: null,
           careEpisodeId: null,
           revokedAt: null,

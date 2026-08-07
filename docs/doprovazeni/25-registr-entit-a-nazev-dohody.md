@@ -56,36 +56,41 @@ Ta hranice je užitečná právě proto, že se dá porušit: dokument by profil
 *mohl*, ale pak by se u něj řešila práva zvlášť od spisu, ve kterém leží — a
 oprávnění by se rozdvojila.
 
-### 1.3 Tvar UID: šest znaků, bez předpony
+### 1.3 Tvar UID: sedm znaků, bez předpony
 
-**Rozhodnuto:** šestimístný kód z malých písmen a číslic, bez předpony.
-Příklad: `u6t4f3`. UID dostává i **každý dokument a sken**, ne jen věci
-s profilem — prostor je proto jeden pro všechno a kód nikdy neznamená dvě věci.
+**Rozhodnuto:** sedmimístný kód z malých písmen a číslic, bez předpony.
+Příklad: `u6t4f3k`, pro čtení a diktování `u6t 4f3k`. UID dostává i **každý
+dokument a sken**, ne jen věci s profilem — prostor je proto jeden pro všechno
+a kód nikdy neznamená dvě věci.
 
 **Abeceda má 31 znaků.** Vynechané jsou `o` a `0` (zadání) a k nim `i`, `l`
 a `1` ze stejného důvodu: v běžném fontu jsou k nerozeznání a UID se diktuje
 po telefonu a opisuje z papíru. Jen malá písmena, takže nevzniká ani otázka,
 jestli se rozlišují velká.
 
-#### Šest znaků stačí — ale jen s kontrolou při vzniku
+#### Proč sedm a ne šest
 
-31⁶ je **887 503 681** kombinací. To vypadá dost, ale kolize se neřídí
-velikostí prostoru, nýbrž narozeninovým paradoxem:
+Kolize se neřídí velikostí prostoru, nýbrž **narozeninovým paradoxem** — tedy
+tím, kolik už záznamů existuje, ne tím, kolik kombinací je celkem:
 
-| záznamů | čekaných kolizí bez kontroly | šance, že se kód vygeneruje podruhé |
-| --- | --- | --- |
-| 10 000 | 0,1 | 0,001 % |
-| 100 000 | 5,6 | 0,011 % |
-| 1 000 000 | 563 | 0,113 % |
-| 10 000 000 | 56 338 | 1,127 % |
+| | kombinací | šance na střet při 10 mil. záznamů | první střet čekaný u |
+| --- | --- | --- | --- |
+| **6 znaků** | 887 503 681 | 1,13 % → jeden z 89 | ~37 tisíc záznamů |
+| **7 znaků** | 27 512 614 111 | 0,04 % → jeden z 2 750 | ~207 tisíc záznamů |
 
-Milion záznamů **překročíme** — 300 organizací × 40 dohod × 30 dokumentů ročně
-je ~360 tisíc dokumentů za rok a nic se nemaže (dok. 10). Slepé generování by
-tedy vyrobilo stovky kódů, které znamenají dvě věci.
+Deset milionů záznamů **dosáhneme**: 300 organizací × 40 dohod × 30 dokumentů
+ročně je ~360 tisíc za rok, UID dostává i každý sken a nic se nemaže (dok. 10).
 
-Kontrola je ale skoro zdarma a **už ji máme**: zápis do registru se dělá
-`create`, ne `set` — a `create` na existující dokument selže sám. Kolize se
-nehledá, ona se ohlásí, a v jednom případě z tisíce se kód vygeneruje znovu.
+Kontrola při vzniku je nutná v obou případech a je skoro zdarma — **už ji
+máme**: zápis do registru se dělá `create`, ne `set`, a `create` na existující
+dokument selže sám. Kolize se nehledá, ona se ohlásí, a kód se vygeneruje znovu.
+
+Sedmý znak je tu proto, že **správnost té kontroly závisí na disciplíně
+v celém kódu**. Kdo někdy přiřadí UID bez zápisu do registru, obejde jedinou
+pojistku, kterou máme. Při šesti znacích by z toho vznikl skutečný duplikát,
+protože střety se dějí běžně; při sedmi je stejná chyba o dva řády méně
+škodlivá. Jeden znak navíc je za to nízká cena — nadiktovat se dá pořád
+(`u6t 4f3k`, jako telefonní číslo).
 
 To je celá podmínka: **UID se nesmí přiřadit bez zápisu do registru.**
 Vznik entity je proto vždy dvojice zápisů v jedné dávce — profil a registr —
@@ -93,11 +98,11 @@ nikdy dva samostatné.
 
 #### Co se vzdáním předpony ztrácí
 
-Z `u6t4f3` nepoznáš, jestli je to dítě nebo dokument. Náhrada je jedno čtení
-registru, který to řekne — a v UI je druh vidět vedle kódu. Za čitelnost
-šestimístného kódu, který se dá nadiktovat po telefonu, to je dobrá výměna.
+Z `u6t4f3k` nepoznáš, jestli je to dítě nebo dokument. Náhrada je jedno čtení
+registru, který to řekne — a v UI je druh vidět vedle kódu. Za kód, který se dá
+nadiktovat po telefonu, to je dobrá výměna.
 
-#### Kde šest znaků NESTAČÍ
+#### Kde krátký kód NESTAČÍ
 
 | Krátké | Dlouhé |
 | --- | --- |
@@ -109,7 +114,7 @@ UID je bezpečné mít krátké, protože **samo nic neotevírá** — přístup
 token přihlášeného a pravidla, takže kdo uhodne cizí UID, nedozví se nic.
 
 Ověřovací stránka QR kódu je ale **čitelná bez přihlášení** a ukazuje
-vydavatele, druh dokumentu a jednací číslo. Šestimístný token by šel zkoušet
+vydavatele, druh dokumentu a jednací číslo. Sedmimístný token by šel zkoušet
 hrubou silou a z odpovědí by se dal sestavit přehled, kdo komu co posílá.
 Tokeny a kódy jsou **klíče, ne identifikátory**, a klíč se nesmí dát uhodnout —
 zůstávají dlouhé (24 znaků).
@@ -208,10 +213,18 @@ záleží.
 | Testy pravidel (70) | `tests/rules.test.mjs` |
 | Testy funkcí schématu (23) — abeceda, kolize, skloňování, název dohody | `tests/schema.test.mjs` |
 
-Testovací data mají **329 entit** v registru: 2 organizace, 93 osob, 172 dětí,
-56 dohod, 6 poskytovatelů. Z 56 dohod má **21 dva pěstouny s různým příjmením**
-a **6 je přejmenovaných** — obojí kvůli tomu, aby šlo otestovat výběr názvu
-i to, že přejmenování přepočet nepřepíše.
+Testovací data mají **~312 entit** v registru: 2 organizace, 89 osob, 158 dětí,
+55 dohod, 8 poskytovatelů. Z 55 dohod má **28 dva pěstouny** — z toho 17 se
+stejným příjmením a **11 s různým** — a **14 je přejmenovaných**. Obojí je tam
+kvůli tomu, aby šlo otestovat výběr názvu i to, že přejmenování přepočet
+nepřepíše. Počty se při změně generátoru posunou (deterministický proud), přesný
+stav řekne `npm run seed:dump`.
+
+Kontrola registru odhalila i to, co v něm být nemělo: pořadatelé v marketplace
+si drželi čitelná id místo UID a **objednávky kurzů si `offerId` skládaly ze
+šablony**, takže ukazovaly na kurz, který v datech nebyl. Odkaz musí vzniknout
+z toho, co se opravdu zapsalo — u UID se totiž, na rozdíl od čitelného id,
+nedá uhodnout, jak vypadá.
 
 ### Co to mění jinde
 

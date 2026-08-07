@@ -127,7 +127,7 @@ async function clearDemo(db: Firestore): Promise<number> {
   }
 
   // Organizace se poznají PODLE ZNAČKY, ne podle id. Id jsou od té doby,
-  // co se generují skutečná UID (uid.ts), náhodná šestimístná — hledat
+  // co se generují skutečná UID (uid.ts), náhodná sedmimístná — hledat
   // podle prefixu by nenašlo nic a `clear` by mlčky nechal data ležet.
   // (Tuhle chybu odhalilo právě to, že testovací data přestala mít
   // čitelná id.)
