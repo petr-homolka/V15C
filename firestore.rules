@@ -181,6 +181,32 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      // Vlastní položky číselníků — „+ Přidat nové“ v každé nabídce.
+      //
+      // PŘIDAT smí každý, kdo pracuje se spisem: kdyby na novou kategorii
+      // výdaje musel čekat na admina, přestane ji používat a napíše to
+      // do poznámky. To je horší než volná nabídka.
+      //
+      // VYŘADIT z nabídky smí vedení — je to změna pro celou organizaci.
+      //
+      // SMAZAT je JEDINÉ místo v celém modelu, kde `delete` existuje. Platí
+      // jen pro nepoužitou položku a rozhoduje o tom Cloud Function, která
+      // umí spočítat použití; klient tady delete nemá (viz codebooks.ts).
+      match /codebookItems/{id} {
+        allow read: if isMember(orgId);
+        allow create: if isMember(orgId) && authorIsCaller();
+        allow update: if isManagement(orgId)
+                      || (isMember(orgId) && resource.data.createdByPersonId == request.auth.token.pid);
+        allow delete: if false;
+      }
+
+      // Objem dat organizace. Počítadlo píše Function při nahrání a archivaci;
+      // do kvóty se počítají jen aktivní spisy, archiv je zdarma (dok. 19).
+      match /quota/{docId} {
+        allow read: if isManagement(orgId);
+        allow write: if false;
+      }
+
       /* ---------- osoby: metadata vs. kontakty ---------- */
 
       match /persons/{personId} {
@@ -335,6 +361,34 @@ service cloud.firestore {
 
           // Auditní stopa úprav. Append-only: rozdíl mezi navrženým
           // a uloženým textem je doklad o tom, kolik napsal člověk (dok. 14).
+          match /revisions/{revisionNo} {
+            allow read: if canReadContent(orgId);
+            allow create: if canReadContent(orgId);
+            allow update, delete: if false;
+          }
+        }
+
+        // Diktáty. Přepis se smí upravovat jen v OKNĚ — a to okno vynucuje
+        // databáze, ne klient, protože ho jinak jde obejít úpravou požadavku.
+        // `editableUntilMs` existuje právě proto: pravidla umí srovnat
+        // `request.time.toMillis()` s číslem, s ISO stringem ne (media.ts).
+        //
+        // Po zavření okna se nic nezakazuje — oprava je nový záznam ve spisu
+        // (dok. 10). Souhrn zůstává upravitelný trvale, protože to není
+        // záznam o řečeném, ale pracovní výstup.
+        match /dictations/{dictationId} {
+          allow read: if canReadContent(orgId);
+          allow create: if canReadContent(orgId) && authorIsCaller();
+          allow update: if canReadContent(orgId)
+                        && (
+                          // souhrn a stav — vždy
+                          request.resource.data.transcript.text == resource.data.transcript.text
+                          // přepis — jen v okně
+                          || (resource.data.transcript.editableUntilMs != null
+                              && request.time.toMillis() < resource.data.transcript.editableUntilMs)
+                        );
+          allow delete: if false;
+
           match /revisions/{revisionNo} {
             allow read: if canReadContent(orgId);
             allow create: if canReadContent(orgId);

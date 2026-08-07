@@ -7,6 +7,7 @@
  */
 
 import type { AuditFields, Id, IsoDate, IsoDateTime, Via } from './common'
+import type { RichText } from './richtext'
 
 /* ------------------------------------------------------------------ */
 /* orgs/{orgId}/caseFiles/{cid}/documents/{documentId}                 */
@@ -129,7 +130,17 @@ export interface DocumentDraft extends AuditFields {
   /** I zahození je informace — jiná situace než nenechat si navrhnout nic. */
   discardReason: string | null
 
-  proposedText: string              // PRVNÍ návrh, neměnný
+  /**
+   * Strukturovaný obsah z blokového editoru — TOHLE je pravda (richtext.ts).
+   * Kdyby se ukládal jen text, každé uložení by rozházelo strukturu.
+   */
+  content: RichText
+  /**
+   * Odvozený mirror pro diff, hledání a PDF. `proposedText` je PRVNÍ návrh
+   * a je neměnný — rozdíl proti `currentText` je odpověď na otázku „kolik
+   * z toho napsal člověk“ (dok. 14).
+   */
+  proposedText: string
   currentText: string
   /** '[DOPLNIT: počet osobních styků]' — mezera místo věrohodné věty (dok. 14). */
   gapMarkers: string[]

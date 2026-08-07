@@ -7,6 +7,9 @@
 
 export * from './common'
 export * from './platform'
+export * from './codebooks'
+export * from './richtext'
+export * from './media'
 export * from './org'
 export * from './people'
 export * from './agreements'

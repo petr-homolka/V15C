@@ -23,8 +23,9 @@ import type {
   Person, PersonContact, Placement, Report, ServiceInquiry, Task,
   CalendarEvent, OrgSettings, Subscription, CreditWallet, OrpConsent,
   TimelineEntry, AuthorityRequest, Authority, PricingRuleset,
+  CodebookDef, CodebookItem, UploadPolicy, Dictation,
 } from '../../../schema/src/index'
-import { org as orgPaths, platform as platformPaths } from '../../../schema/src/index'
+import { org as orgPaths, platform as platformPaths, CODEBOOKS } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
   makeEmail, makeFakeNationalId, makeName, makePhone, pickSurnameIndex,
@@ -159,6 +160,101 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       push(platformPaths.authority(a.code), a as unknown as Record<string, unknown>, 'authorities')
     }
 
+    // Definice číselníků a jejich výchozí položky. Nabídka nikdy nekončí —
+    // na konci je „+ Přidat nové“ (codebooks.ts).
+    for (const def of CODEBOOKS) {
+      push(platformPaths.codebook(def.code), def as unknown as Record<string, unknown>, 'codebookDefs')
+    }
+
+    const DEFAULT_ITEMS: Array<[string, string, string, Record<string, string> | null]> = [
+      ['expense.category', 'jizdne', 'Jízdné', { rightCode: 'a' }],
+      ['expense.category', 'terapie', 'Terapie a odborná pomoc', { rightCode: 'd' }],
+      ['expense.category', 'vzdelavani', 'Vzdělávání pěstouna', { rightCode: 'f' }],
+      ['expense.category', 'respit', 'Zajištěná péče', { rightCode: 'b' }],
+      ['expense.category', 'material', 'Materiál a pomůcky', { rightCode: 'none' }],
+      ['education.form', 'prezencne', 'Prezenčně', { countsAs: 'in_person' }],
+      ['education.form', 'online', 'Online živě', { countsAs: 'online_live' }],
+      ['education.form', 'elearning', 'E-learning', { countsAs: 'elearning' }],
+      ['education.topic', 'attachment', 'Attachment a vztahová vazba', null],
+      ['education.topic', 'trauma', 'Trauma u dětí', null],
+      ['education.topic', 'pravo', 'Právní minimum', null],
+      ['contact.place', 'domov', 'V domácnosti pěstouna', { countsAs: 'home' }],
+      ['contact.place', 'organizace', 'V organizaci', { countsAs: 'organization' }],
+      ['contact.absenceReason', 'skola', 'Ve škole', { justifiedByDefault: 'ask' }],
+      ['contact.absenceReason', 'hospitalizace', 'Hospitalizace', { justifiedByDefault: 'yes' }],
+      ['careEpisode.place', 'babicka', 'U prarodičů', null],
+      ['careEpisode.place', 'tabor', 'Tábor', null],
+      ['task.type', 'doklad', 'Doložit doklad', null],
+      ['agenda.code', 'doprovazeni', 'Doprovázení', null],
+      ['agenda.code', 'ostatni', 'Ostatní agendy', null],
+    ]
+    DEFAULT_ITEMS.forEach(([codebookCode, code, label, behavior], i) => {
+      const item: CodebookItem = {
+        ...sys('superadmin'),
+        id: `cb-${code}-${i}`,
+        codebookCode,
+        code,
+        label,
+        description: null,
+        origin: 'platform',
+        organizationId: null,
+        behavior,
+        order: i,
+        status: 'active',
+        retiredOn: null,
+        retiredByPersonId: null,
+        retiredReason: null,
+        adoption: null,
+      }
+      push(platformPaths.codebookItem(item.id), item as unknown as Record<string, unknown>, 'codebookItems')
+    })
+
+    // Video je zakázané; ukládání zvuku Premium. Normalizace obrázků je to,
+    // co dělá provoz levným (dok. 19 sekce 6.1).
+    const uploadPolicy: UploadPolicy = {
+      id: 'upload-2026-01',
+      effectiveFrom: '2026-01-01',
+      images: {
+        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/heic'],
+        maxBytes: 25 * 1024 * 1024,
+        normalize: {
+          enabled: true,
+          maxLongEdgePx: 2200,
+          jpegQuality: 72,
+          targetKbPerPage: 150,
+          convertToPdfA: true,
+        },
+      },
+      documents: {
+        allowedMimeTypes: ['application/pdf', 'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+        maxBytes: 40 * 1024 * 1024,
+      },
+      audio: {
+        captureAllowed: true,
+        storeAllowed: 'premium_only',
+        maxBytes: 60 * 1024 * 1024,
+        defaultRetentionDays: 90,
+      },
+      video: {
+        mode: 'forbidden',
+        maxBytes: 0,
+        maxDurationSeconds: 0,
+        refusalMessage: 'Video se do spisu nenahrává. Popis situace patří do zápisu, snímek jako fotografie.',
+      },
+      quota: {
+        includedActiveBytes: 10 * 1024 * 1024 * 1024,
+        extraBlockBytes: 10 * 1024 * 1024 * 1024,
+        extraBlockPrice: { amountMinor: 10000, currency: 'CZK' },
+        archiveCountsToQuota: false,
+      },
+    }
+    push(
+      platformPaths.uploadPolicy(uploadPolicy.id),
+      uploadPolicy as unknown as Record<string, unknown>,
+      'uploadPolicies',
+    )
+
     // Ceník jako datovaná série — model se bude měnit, tak není v kódu (dok. 19).
     const pricing: PricingRuleset = {
       id: 'pricing-2026-01',
@@ -257,6 +353,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     pushMandateObligations(orgId, managerId, ku.code)
     pushInquiries(orgId, managerId)
     pushOrgMemory(orgId, keyWorkers[0]!.id, keyWorkers[0]!.name.givenName)
+    pushOwnCodebookItems(orgId, keyWorkers[0]!.id, orgIndex)
 
     /* --- dohody --------------------------------------------------- */
 
@@ -617,8 +714,89 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       buildTasksAndEvents(caseFileId, keyWorkerId, ref, agreement.carerDisplayName, nextContactDue)
 
       // Podatelna a žádost úřadu jen u pár spisů, ať to není u každého.
+      if (seq % 4 === 0) buildDictation(caseFileId, keyWorkerId)
       if (seq % 7 === 0) buildSubmission(caseFileId, keyWorkerId, ref)
       if (seq % 9 === 0) buildDraft(caseFileId, keyWorkerId, agreement.carerDisplayName)
+
+      /**
+       * Diktáty ve třech stavech, aby šlo testovat okno na úpravu přepisu:
+       * jeden s otevřeným oknem, jeden zavřený, jeden zachycený offline
+       * a přepsaný až po připojení (okno mu běží od PŘEPISU, ne od nahrání).
+       */
+      function buildDictation(caseFileId: string, keyWorkerId: string): void {
+        const variant = rng.int(0, 2)
+        const recorded = addDays(opt.today, variant === 1 ? -9 : -rng.int(0, 2))
+        const capturedOffline = variant === 2
+        const transcribed = capturedOffline ? addDays(recorded, 1) : recorded
+        const windowDays = 3
+        const editableUntil = addDays(transcribed, windowDays)
+        const storeAudio = rng.bool(0.2)   // ukládání zvuku je Premium
+
+        const d: Dictation = {
+          ...sys(keyWorkerId),
+          id: `${caseFileId}-dic1`,
+          caseFileId,
+          recordedByPersonId: keyWorkerId,
+          startedAt: isoDateTime(recorded),
+          durationSeconds: rng.int(40, 420),
+          capturedOffline,
+          audio: storeAudio
+            ? {
+                retention: 'stored',
+                storagePath: `demo/${caseFileId}/dic1.m4a`,
+                byteSize: rng.int(300, 3000) * 1024,
+                mimeType: 'audio/mp4',
+                storedUnderPlan: 'premium',
+                retainUntil: isoDate(addDays(recorded, 90)),
+                deletedOn: null,
+              }
+            : {
+                retention: 'not_stored',
+                storagePath: null,
+                byteSize: null,
+                mimeType: null,
+                storedUnderPlan: null,
+                retainUntil: null,
+                deletedOn: null,
+              },
+          transcript: {
+            text: rng.pick([
+              'Byla jsem u Novákových, doma byla pěstounka a mladší dítě. Starší je na táboře. Probraly jsme přípravu na školu.',
+              'Návštěva proběhla v organizaci, pěstoun přijel sám. Řešili jsme kontakt s biologickou matkou a jeho průběh.',
+              'Krátká návštěva doma, obě děti přítomné. Pěstounka žádá o respit v září.',
+            ]),
+            engine: capturedOffline ? 'on_device' : rng.bool(0.6) ? 'on_device' : 'cloud_eu',
+            language: 'cs',
+            confidence: rng.bool(0.8) ? 0.94 : 0.71,
+            transcribedAt: isoDateTime(transcribed),
+            editableUntil: isoDateTime(editableUntil),
+            editableUntilMs: editableUntil.getTime(),
+            editWindowDays: windowDays,
+            lastEditedAt: rng.bool(0.4) ? isoDateTime(addDays(transcribed, 1)) : null,
+            lastEditedByPersonId: rng.bool(0.4) ? keyWorkerId : null,
+            editCount: rng.bool(0.4) ? 1 : 0,
+          },
+          summary: {
+            content: { format: 'blocks', version: 1, blocks: [], plainText: 'Souhrn návštěvy.' },
+            proposedPlainText: 'Souhrn návštěvy.',
+            modelId: 'demo-model',
+            promptVersion: 'demo-1',
+            generatedAt: isoDateTime(transcribed),
+            pseudonymized: true,
+            cost: { amountMinor: 12, currency: 'CZK' },
+            lastEditedAt: null,
+            lastEditedByPersonId: null,
+          },
+          resultEntryId: null,
+          status: 'ready',
+          failureReason: null,
+        }
+        push(
+          p.dictation(caseFileId, d.id),
+          d as unknown as Record<string, unknown>,
+          'dictations',
+        )
+      }
 
       function pushCarerProfile(personId: string, special: string | null): void {
         push(p.personCarer(personId), {
@@ -1153,6 +1331,19 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         status: 'in_edit',
         savedAsDocumentId: null,
         discardReason: null,
+        // Blokový obsah je pravda, plainText je odvozený mirror (richtext.ts).
+        content: {
+          format: 'blocks',
+          version: 1,
+          blocks: [
+            { id: 'b1', type: 'heading1', spans: [{ text: 'Zpráva o průběhu výkonu pěstounské péče' }], children: [], attrs: {} },
+            { id: 'b2', type: 'paragraph', spans: [{ text: `Pečující osoba: ${carerLabel}` }], children: [], attrs: {} },
+            { id: 'b3', type: 'sentence', spans: [{ text: 'Ve sledovaném období proběhly osobní styky v souladu s dohodou.' }], children: [], attrs: { sentenceTemplateId: 'st-contacts-ok' } },
+            { id: 'b4', type: 'gap', spans: [], children: [], attrs: { gapLabel: 'počet osobních styků za období' } },
+            { id: 'b5', type: 'gap', spans: [], children: [], attrs: { gapLabel: 'hodiny za období' } },
+          ],
+          plainText: `Zpráva o průběhu výkonu pěstounské péče\nPečující osoba: ${carerLabel}\n`,
+        },
         proposedText:
           `Zpráva o průběhu výkonu pěstounské péče\n\n` +
           `Pečující osoba: ${carerLabel}\n` +
@@ -1351,6 +1542,49 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           refusalCommunicatedOn: refusalReason ? isoDate(addDays(received, 4)) : null,
         }
         push(p.inquiry(inq.id), inq as unknown as Record<string, unknown>, 'inquiries')
+      })
+    }
+
+    /**
+     * Vlastní položky organizace — to, co vzniklo z „+ Přidat nové“.
+     * Jedna je navržená k adopci pro celý systém, jedna už vyřazená.
+     */
+    function pushOwnCodebookItems(orgId: string, personId: string, orgIndex: number): void {
+      const p = orgPaths(orgId)
+      const own: Array<[string, string, string, Record<string, string> | null, 'active' | 'retired', boolean]> = [
+        ['expense.category', 'krouzky', 'Zájmové kroužky', { rightCode: 'none' }, 'active', false],
+        ['education.topic', 'fasd', 'FASD a prenatální expozice', null, 'active', true],
+        ['careEpisode.place', 'chata-org', 'Chata organizace', null, orgIndex === 0 ? 'active' : 'retired', false],
+      ]
+      own.forEach(([codebookCode, code, label, behavior, status, proposeAdoption], i) => {
+        const item: CodebookItem = {
+          ...sys(personId),
+          id: `${orgId}-cb${i + 1}`,
+          codebookCode,
+          code,
+          label,
+          description: null,
+          origin: 'organization',
+          organizationId: orgId,
+          behavior,
+          order: 100 + i,
+          status,
+          retiredOn: status === 'retired' ? isoDate(addMonths(opt.today, -1)) : null,
+          retiredByPersonId: status === 'retired' ? managerId : null,
+          retiredReason: status === 'retired' ? 'chata se už nepoužívá' : null,
+          adoption: proposeAdoption
+            ? {
+                proposedByOrganizationId: orgId,
+                proposedOn: isoDate(addMonths(opt.today, -2)),
+                decision: orgIndex === 0 ? 'adopted' : null,
+                decidedOn: orgIndex === 0 ? isoDate(addMonths(opt.today, -1)) : null,
+                decidedByPersonId: orgIndex === 0 ? 'superadmin' : null,
+                platformItemCode: orgIndex === 0 ? code : null,
+                rejectionNote: null,
+              }
+            : null,
+        }
+        push(p.codebookItem(item.id), item as unknown as Record<string, unknown>, 'ownCodebookItems')
       })
     }
 

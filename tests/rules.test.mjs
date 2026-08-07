@@ -16,6 +16,24 @@ await env.withSecurityRulesDisabled(async (ctx) => {
   await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/entries/e1'), { kind: 'note', text: 'obsah' })
   await setDoc(doc(db, 'orgs/o1/persons/p1'), { displayName: 'Jan Novák' })
   await setDoc(doc(db, 'orgs/o1/persons/p1/private/contact'), { phone: '+420 601 000 111' })
+
+  // diktát s otevřeným a zavřeným oknem na úpravu přepisu
+  const open = Date.now() + 3 * 86400000
+  const closed = Date.now() - 86400000
+  await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/dictations/d-open'), {
+    recordedByPersonId: 'p-kw', status: 'ready',
+    transcript: { text: 'původní', editableUntilMs: open, editWindowDays: 3 },
+    summary: { proposedPlainText: 'souhrn' },
+  })
+  await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/dictations/d-closed'), {
+    recordedByPersonId: 'p-kw', status: 'ready',
+    transcript: { text: 'původní', editableUntilMs: closed, editWindowDays: 3 },
+    summary: { proposedPlainText: 'souhrn' },
+  })
+  await setDoc(doc(db, 'orgs/o1/codebookItems/ci-used'), {
+    codebookCode: 'expense.category', code: 'jizdne', label: 'Jízdné',
+    createdByPersonId: 'p-kw', status: 'active',
+  })
 })
 
 const outsider = env.authenticatedContext('u-out', { pid: 'p-out', orgs: {} }).firestore()
@@ -42,6 +60,32 @@ await check('autor zápisu musí být volající',       assertFails(setDoc(doc(
 await check('audit se nedá přepsat',                assertFails(setDoc(doc(worker, 'orgs/o1/audit/a1'), { personId: 'p-jiny', kind: 'case_file_view' })))
 await check('účetní nemění nastavení',              assertFails(setDoc(doc(accountant, 'orgs/o1/settings/general'), { scope: 'general' })))
 await check('admin mění nastavení',                 assertSucceeds(setDoc(doc(admin, 'orgs/o1/settings/general'), { scope: 'general' })))
+
+// číselníky: přidat smí každý člen, vyřadit vedení, mazat nikdo z klienta
+await check('klíčová osoba PŘIDÁ položku číselníku', assertSucceeds(setDoc(doc(worker, 'orgs/o1/codebookItems/ci-new'), {
+  codebookCode: 'expense.category', code: 'tabor', label: 'Tábor', createdByPersonId: 'p-kw', status: 'active' })))
+await check('cizí člověk položku nepřidá', assertFails(setDoc(doc(outsider, 'orgs/o1/codebookItems/ci-x'), {
+  codebookCode: 'expense.category', code: 'x', label: 'X', createdByPersonId: 'p-out', status: 'active' })))
+await check('vedení položku vyřadí', assertSucceeds(setDoc(doc(admin, 'orgs/o1/codebookItems/ci-used'), {
+  codebookCode: 'expense.category', code: 'jizdne', label: 'Jízdné',
+  createdByPersonId: 'p-kw', status: 'retired' })))
+await check('položku číselníku nemaže ani admin', assertFails(deleteDoc(doc(admin, 'orgs/o1/codebookItems/ci-used'))))
+
+// diktát: přepis jen v okně, souhrn vždy
+await check('přepis lze upravit v okně', assertSucceeds(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/dictations/d-open'), {
+  recordedByPersonId: 'p-kw', status: 'ready',
+  transcript: { text: 'opraveno', editableUntilMs: Date.now() + 3 * 86400000, editWindowDays: 3 },
+  summary: { proposedPlainText: 'souhrn' } })))
+await check('přepis NELZE upravit po okně', assertFails(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/dictations/d-closed'), {
+  recordedByPersonId: 'p-kw', status: 'ready',
+  transcript: { text: 'opraveno', editableUntilMs: Date.now() - 86400000, editWindowDays: 3 },
+  summary: { proposedPlainText: 'souhrn' } })))
+await check('souhrn lze upravit i po okně', assertSucceeds(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/dictations/d-closed'), {
+  recordedByPersonId: 'p-kw', status: 'ready',
+  transcript: { text: 'původní', editableUntilMs: Date.now() - 86400000, editWindowDays: 3 },
+  summary: { proposedPlainText: 'souhrn', editedText: 'jiný souhrn' } })))
+await check('diktát nemaže nikdo', assertFails(deleteDoc(doc(admin, 'orgs/o1/caseFiles/cf1/dictations/d-open'))))
+await check('účetní diktát nevidí', assertFails(getDoc(doc(accountant, 'orgs/o1/caseFiles/cf1/dictations/d-open'))))
 
 for (const [s, l] of t) console.log(s, l)
 console.log('\n' + (t.every(([s]) => s === 'OK  ') ? 'VŠE PROŠLO' : 'NĚCO SELHALO'))

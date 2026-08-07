@@ -37,6 +37,14 @@ export const platform = {
   country: (code: string) => `${PLATFORM_ROOT}/countries/${code}`,
   authorities: () => `${PLATFORM_ROOT}/authorities`,
   authority: (code: string) => `${PLATFORM_ROOT}/authorities/${code}`,
+  /** Definice číselníků — které nabídky jsou rozšiřitelné. */
+  codebooks: () => `${PLATFORM_ROOT}/codebooks`,
+  codebook: (code: string) => `${PLATFORM_ROOT}/codebooks/${code}`,
+  /** Výchozí a adoptované položky číselníků. */
+  codebookItems: () => `${PLATFORM_ROOT}/codebookItems`,
+  codebookItem: (id: Id) => `${PLATFORM_ROOT}/codebookItems/${id}`,
+  uploadPolicies: () => `${PLATFORM_ROOT}/uploadPolicies`,
+  uploadPolicy: (id: Id) => `${PLATFORM_ROOT}/uploadPolicies/${id}`,
 } as const
 
 /** Jediná mezi-organizační kolekce. Zapisuje POUZE Cloud Function. */
@@ -66,6 +74,10 @@ export function org(orgId: Id) {
     standard: (id: Id) => `${base}/standards/${id}`,
     sentences: () => `${base}/sentences`,
     checklists: () => `${base}/checklists`,
+    /** Vlastní položky číselníků organizace — sjednotí se s platformními. */
+    codebookItems: () => `${base}/codebookItems`,
+    codebookItem: (id: Id) => `${base}/codebookItems/${id}`,
+    storageQuota: () => `${base}/quota/current`,
 
     /* --- osoby a děti; kontakty jsou ODDĚLENĚ (dok. 04) --- */
     persons: () => `${base}/persons`,
@@ -112,6 +124,11 @@ export function org(orgId: Id) {
     draft: (caseFileId: Id, id: Id) => `${base}/caseFiles/${caseFileId}/drafts/${id}`,
     draftRevisions: (caseFileId: Id, draftId: Id) =>
       `${base}/caseFiles/${caseFileId}/drafts/${draftId}/revisions`,
+
+    dictations: (caseFileId: Id) => `${base}/caseFiles/${caseFileId}/dictations`,
+    dictation: (caseFileId: Id, id: Id) => `${base}/caseFiles/${caseFileId}/dictations/${id}`,
+    dictationRevisions: (caseFileId: Id, id: Id) =>
+      `${base}/caseFiles/${caseFileId}/dictations/${id}/revisions`,
 
     reports: (caseFileId: Id) => `${base}/caseFiles/${caseFileId}/reports`,
     report: (caseFileId: Id, id: Id) => `${base}/caseFiles/${caseFileId}/reports/${id}`,
@@ -166,5 +183,12 @@ export function org(orgId: Id) {
 export const APPEND_ONLY_COLLECTIONS = [
   'entries', 'timeline', 'documents', 'drafts', 'revisions', 'reports',
   'messages', 'audit', 'viewLogs', 'exportLogs', 'aiUsage', 'signatures',
-  'placements', 'obligations', 'lifeBook',
+  'placements', 'obligations', 'lifeBook', 'dictations',
 ] as const
+
+/**
+ * Kolekce, ze kterých se položka SMÍ odstranit, když se nikde nepoužila.
+ * Jediné místo v celém modelu, kde se maže — a i tam jen proto, že
+ * nepoužitou položkou číselníku se nic neztrácí (viz codebooks.ts).
+ */
+export const REMOVABLE_IF_UNUSED = ['codebookItems'] as const
