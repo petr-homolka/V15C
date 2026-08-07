@@ -56,6 +56,11 @@ chat vůbec otevírat. Stojí za to ji mít od začátku.
 
 ## 3. Stupně potvrzení — jádro celého návrhu
 
+> **Upraveno dokumentem [16 — Charta chování](./16-charta-chovani-partner.md).**
+> Stupně 1 a 2 se **neptají předem** — akce proběhne a vedle ní je *Vrátit zpět*.
+> Karta se stále ukazuje, ale jako **výsledek**, ne jako otázka. Nic z toho, co je
+> níže popsané jako „potvrzení“, nesmí práci zastavit. Stupeň 3 zůstává.
+
 Ne všechno smí stát stejně. Rozdělení je podle **následku**, ne podle složitosti.
 
 ### Stupeň 0 — bez potvrzení
@@ -63,7 +68,7 @@ Ne všechno smí stát stejně. Rozdělení je podle **následku**, ne podle slo
 Čtení, hledání, souhrny, návrhy textu, navigace. Nic nepřetrvá, co si člověk nevyžádal.
 Zůstává jen `AssistantQuery` v auditu (dok. 14).
 
-### Stupeň 1 — jedno klepnutí na kartu
+### Stupeň 1 — provede se, karta ukáže výsledek, vedle ní *Vrátit zpět*
 
 Interní, snadno vratné, bez právního ani finančního následku.
 
@@ -78,10 +83,12 @@ Karta ukazuje **vyplněná pole, ne shrnutí větou**. Kontrola je v tom, že č
 `pátek 15. 8., 15:00–16:00 · Novákovi (ROD-2026-001) · Ledvice`, ne v tom, že by četl
 odstavec.
 
-### Stupeň 2 — potvrzení s kontrolou obsahu (otevře se formulář)
+### Stupeň 2 — provede se, ale karta je podrobnější
 
-Záznamy s **právním nebo finančním následkem**. Karta nestačí; otevře se předvyplněný
-formulář a člověk projde pole.
+Záznamy s **právním nebo finančním následkem**. Zapíše se totéž co u stupně 1; rozdíl
+je jen v tom, že karta rozepisuje pole, kterých se následek týká — u osobního styku
+řádek za každé dítě. **Nic se neblokuje a nic se nemusí vyplnit.** Co nebylo řečeno,
+zůstane prázdné a lhůta tomu dítěti prostě běží dál.
 
 | Záznam | Proč stupeň 2 |
 | --- | --- |
@@ -92,11 +99,21 @@ formulář a člověk projde pole.
 | `Placement`, změna dohody | mění právní stav |
 | zápis do spisu s obsahem | je to část spisové dokumentace |
 
-**Osobní styk je ten nejcitlivější případ v celém systému.** Věta „byl jsem u Nováků,
-Honza byl ve škole“ nesmí vzniknout jako jeden záznam s odškrtnutou rodinou. Formulář
-proto **vždycky** vypíše všechny svěřené děti a u každého se aktivně potvrdí přítomnost
-nebo zapíše důvod nepřítomnosti a to, zda je omluvitelný. Kdyby to chat zjednodušil,
-vyrobil by přesně tu chybu, které se dok. 11 vyhýbá: **vykázaný soulad tam, kde není.**
+**Osobní styk je jediné místo, kde na podrobnosti karty záleží** — ne kvůli přísnosti,
+ale proto, že lhůta běží zvlášť za každé dítě (dok. 11). Věta „byl jsem u Nováků, Honza
+byl ve škole“ se zapíše celá a hned; karta pak ukáže:
+
+```
+Osobní styk · Novákovi · dnes                              [ Vrátit zpět ]
+  paní Nováková    přítomna
+  Klára            přítomna
+  Honza            nepřítomen — ve škole        [ omluvit ]  [ nechat tak ]
+```
+
+Honzovi lhůta běží dál a nikdo se ho na nic neptá; kdo chce, jedním klepnutím dopíše
+důvod. **Systém tedy nic nevyžaduje — jen za tebe netvrdí, že jsi u Honzy byl.**
+To je rozdíl mezi partnerem a buzerantem: partner nelže tvým jménem, ale ani tě
+nezdržuje.
 
 ### Stupeň 3 — z chatu nikdy
 
@@ -112,6 +129,10 @@ Chat smí připravit, ne provést:
 
 Rozdělení je nastavitelné směrem k **přísnějšímu**: organizace může posunout položku
 ze stupně 1 na 2. Opačně ne — stupeň 3 je platformní.
+
+Stupeň 3 není omezení pracovníka, ale **ochrana před cizím jménem**: podpis a odeslání
+ven musí být vlastní úkon, jinak by šlo něčím jménem podepsat nebo odeslat cokoli.
+Nejde o nedůvěru v pracovníka, jde o to, aby za ním nikdo jiný nemohl.
 
 ---
 
