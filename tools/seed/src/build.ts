@@ -25,12 +25,13 @@ import type {
   TimelineEntry, AuthorityRequest, Authority, PricingRuleset,
   CodebookDef, CodebookItem, UploadPolicy, Dictation, PlanMatrix,
   AiEntitlement, OrgBranding, LetterheadTemplate, ReferenceNumberSeries,
-  CourseProvider, Course, CourseListing, Order, Enrolment, CourseCertificate,
-  MarketplaceTerms, ScanTranscript,
+  MarketplaceProvider, Course, Listing, Order, Enrolment, CourseCertificate,
+  MarketplaceTerms, ScanTranscript, ServiceOffer, ServiceConfirmation,
+  InternalServiceDelivery, MarketplaceDomain,
 } from '../../../schema/src/index'
 import {
   org as orgPaths, platform as platformPaths, marketplace as mkPaths,
-  CODEBOOKS, DEFAULT_LETTERHEADS,
+  CODEBOOKS, DEFAULT_LETTERHEADS, DOMAIN_RIGHT_CODE,
 } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
@@ -341,13 +342,29 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
    * Objednávky se zakládají u organizací, protože ony kurz platí.
    */
   function buildMarketplace(): void {
+    // Provize a poplatek se nastavují v systémovém nastavení, ZVLÁŠŤ pro
+    // každou doménu — kurz za 1 800 Kč a tábor za 6 500 Kč nemají důvod mít
+    // stejnou sazbu. Výši rozhoduje vlastník produktu; v seedu jsou nuly.
     const terms: MarketplaceTerms = {
       id: 'mkt-2026-01',
       effectiveFrom: '2026-01-01',
-      // Provizi ani poplatek NEROZHODUJI — je to místo, kam se to zapíše.
-      commissionPct: null,
-      listingFee: null,
-      listingRequiresVerification: false,
+      note: 'Výchozí sada. Sazby nastavuje superadmin v nastavení systému.',
+      defaults: {
+        commissionPct: null,
+        commissionCap: null,
+        listingFee: null,
+        listingFeePeriod: null,
+        listingRequiresVerification: false,
+        listingRequiresEligibility: false,
+      },
+      perDomain: [
+        { domain: 'education' },
+        // U péče o dítě je způsobilost podle § 49 odst. 4 vidět v nabídce,
+        // ale nelistuje se podle ní — rozhodnutí patří organizaci (dok. 16).
+        { domain: 'respite', listingRequiresEligibility: false },
+        { domain: 'therapy' },
+        { domain: 'tutoring' },
+      ],
       termsDocumentId: null,
     }
     push(
@@ -356,11 +373,38 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       'marketplaceTerms',
     )
 
-    const PROVIDERS = [
+    const PROVIDERS: Array<{
+      id: string; slug: string; legal: string; display: string; ico: string
+      verified: boolean; accred: string | null
+      domains: MarketplaceDomain[]
+      eligibility: 'natural_person_vetted' | 'recreation_event_organizer' | 'not_applicable'
+      eligibilityComplete: boolean
+    }> = [
       { id: 'prov-akademie', slug: 'akademie-nrp', legal: 'Akademie NRP, z.ú.',
-        display: 'Akademie NRP', ico: '28100011', verified: true, accred: '2024/1234-A' },
+        display: 'Akademie NRP', ico: '28100011', verified: true, accred: '2024/1234-A',
+        domains: ['education'], eligibility: 'not_applicable', eligibilityComplete: true },
       { id: 'prov-most', slug: 'most-k-rodine', legal: 'Most k rodině, o.p.s.',
-        display: 'Most k rodině', ico: '28100022', verified: false, accred: null },
+        display: 'Most k rodině', ico: '28100022', verified: false, accred: null,
+        domains: ['education', 'counselling'], eligibility: 'not_applicable', eligibilityComplete: true },
+      // Tábor je způsobilý tím, že je zotavovací akcí — § 49 odst. 4 písm. b).
+      { id: 'prov-tabory', slug: 'letni-tabory-slunce', legal: 'Tábory Slunce, s.r.o.',
+        display: 'Tábory Slunce', ico: '28100033', verified: true, accred: null,
+        domains: ['respite'], eligibility: 'recreation_event_organizer', eligibilityComplete: true },
+      // Chůva je fyzická osoba — musí doložit bezúhonnost a zdravotní
+      // způsobilost podle § 49 odst. 4 písm. a). Tahle je má.
+      { id: 'prov-chuva', slug: 'hlidani-teplicko', legal: 'Jana Marková',
+        display: 'Hlídání Teplicko', ico: '88100044', verified: true, accred: null,
+        domains: ['respite'], eligibility: 'natural_person_vetted', eligibilityComplete: true },
+      // Psycholožka — péči o dítě podle písm. a)/b) neposkytuje, takže
+      // způsobilost podle § 49 odst. 4 se jí netýká.
+      { id: 'prov-psycholog', slug: 'psychologicka-poradna-labe', legal: 'PhDr. Eva Dvořáková',
+        display: 'Psychologická poradna Labe', ico: '88100055', verified: false, accred: null,
+        domains: ['therapy', 'counselling'], eligibility: 'not_applicable', eligibilityComplete: true },
+      // Doučování — nedoložená způsobilost. V nabídce je to VIDĚT,
+      // ale nikdo to neblokuje (dok. 16).
+      { id: 'prov-doucovani', slug: 'doucovani-most', legal: 'Doučování Most, z.s.',
+        display: 'Doučování Most', ico: '28100066', verified: false, accred: null,
+        domains: ['tutoring'], eligibility: 'natural_person_vetted', eligibilityComplete: false },
     ]
 
     const COURSES: Array<[string, string, string, number, string, number, string[]]> = [
@@ -372,7 +416,8 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     ]
 
     PROVIDERS.forEach((prov, pi) => {
-      const p: CourseProvider = {
+      const caresForChildren = prov.eligibility !== 'not_applicable'
+      const p: MarketplaceProvider = {
         ...sys('superadmin'),
         id: prov.id,
         slug: prov.slug,
@@ -380,30 +425,56 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         displayName: prov.display,
         ico: prov.ico,
         dic: null,
+        domains: prov.domains,
+        kind: 'external',
+        organizationId: null,
         contact: {
-          email: `kurzy@${prov.slug}.priklad.test`,
+          email: `kontakt@${prov.slug}.priklad.test`,
           phone: makePhone(rng),
           web: `https://www.${prov.slug}.priklad.test`,
           address: null,
         },
-        about: `${prov.display} pořádá vzdělávání pro pěstouny a pracovníky doprovázejících organizací.`,
+        about: `${prov.display} — nabídka pro pěstounské rodiny a doprovázející organizace.`,
         logoDocumentId: null,
+        serviceAreas: rng.sample(['Ústecký kraj', 'Středočeský kraj', 'Praha'], rng.int(1, 2)),
         verification: {
           status: prov.verified ? 'verified' : 'unverified',
           verifiedOn: prov.verified ? '2025-11-03' : null,
           verifiedByPersonId: prov.verified ? 'superadmin' : null,
           note: null,
+          accreditation: prov.accred
+            ? { number: prov.accred, validUntil: '2028-12-31', documentId: null }
+            : null,
         },
-        accreditation: prov.accred
-          ? { number: prov.accred, validUntil: '2028-12-31', documentId: null }
-          : null,
+        eligibility: {
+          basis: prov.eligibility,
+          criminalRecord: caresForChildren && prov.eligibilityComplete
+            && prov.eligibility === 'natural_person_vetted'
+            ? { checkedOn: '2026-01-20', documentId: null } : null,
+          medicalFitness: caresForChildren && prov.eligibilityComplete
+            && prov.eligibility === 'natural_person_vetted'
+            ? { checkedOn: '2026-01-20', documentId: null } : null,
+          personalPrerequisites: caresForChildren && prov.eligibilityComplete
+            && prov.eligibility === 'natural_person_vetted'
+            ? { assessedOn: '2026-01-25', note: 'pohovor a reference', documentId: null } : null,
+          recreationEventNote: prov.eligibility === 'recreation_event_organizer'
+            ? 'zotavovací akce ohlášena KHS' : null,
+          complete: prov.eligibilityComplete,
+          validUntil: prov.eligibility === 'natural_person_vetted' ? '2029-01-20' : null,
+        },
         billing: { bankAccount: makeBankAccount(rng), invoiceNote: 'splatnost 14 dnů' },
         status: 'active',
       }
       push(mkPaths.provider(p.id), p as unknown as Record<string, unknown>, 'providers')
 
+      if (!prov.domains.includes('education')) {
+        buildServiceOffers(prov)
+        return
+      }
+
       // Každý pořadatel má část katalogu; jeden kurz zůstane rozpracovaný.
-      const mine = COURSES.filter((_, i) => i % PROVIDERS.length === pi)
+      const eduIndex = PROVIDERS.filter((x) => x.domains.includes('education')).indexOf(prov)
+      const mine = COURSES.filter((_, i) => i % 2 === eduIndex % 2)
       mine.forEach(([slug, title, formLabel, hours, formCode, priceMinor, topics], ci) => {
         const listed = ci > 0 || pi === 0
         const c: Course = {
@@ -438,21 +509,25 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         )
 
         if (!listed) return
-        const l: CourseListing = {
+        const l: Listing = {
           id: `lst-${c.id}`,
-          courseId: c.id,
+          domain: 'education',
+          offerKind: 'course',
+          offerId: c.id,
           providerId: prov.id,
           providerSlug: prov.slug,
           providerDisplayName: prov.display,
           providerVerified: prov.verified,
+          providerEligible: null,        // u vzdělávání se § 49 odst. 4 neuplatní
           title: c.title,
           perex: c.perex,
           hours: c.hours,
-          formCode: c.formCode,
-          topicCodes: c.topicCodes,
-          price: c.price,
+          unitLabel: null,
+          priceFrom: c.price,
+          priceNote: null,
+          serviceAreas: [],
           language: c.language,
-          nextSessionAt: c.delivery.kind === 'self_paced'
+          nextDateAt: c.delivery.kind === 'self_paced'
             ? null
             : isoDateTime(addDays(opt.today, rng.int(10, 70))),
           // Část nabídky je veřejná (jde koupit i mimo systém), část jen v systému.
@@ -464,6 +539,121 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
       })
     })
+
+    /**
+     * Nabídka služby může být OBECNÁ nebo POLOŽKOVÁ. Psycholog termíny
+     * nevypisuje, tábor bez termínu nedává smysl — obojí proto musí jít.
+     */
+    function buildServiceOffers(prov: (typeof PROVIDERS)[number]): void {
+      const OFFERS: Record<string, Array<Partial<ServiceOffer> & { itemsSpec?: unknown }>> = {}
+      void OFFERS
+
+      const domain = prov.domains[0]!
+      const itemized = domain === 'respite'
+
+      const offer: ServiceOffer = {
+        ...sys('superadmin'),
+        id: `${prov.id}-nabidka`,
+        providerId: prov.id,
+        slug: 'nabidka',
+        domain,
+        title: domain === 'respite' && prov.id === 'prov-tabory'
+          ? 'Letní tábory pro děti v náhradní rodinné péči'
+          : domain === 'respite' ? 'Hlídání a krátkodobá péče'
+          : domain === 'therapy' ? 'Psychologická a terapeutická pomoc'
+          : 'Doučování a příprava do školy',
+        perex: domain === 'respite'
+          ? 'Odlehčení pro pěstounské rodiny.'
+          : 'Odborná pomoc pro dítě i pečující osobu.',
+        description: 'Podrobnosti k domluvě s poskytovatelem.',
+        offerKind: itemized ? 'itemized' : 'general',
+        general: itemized ? null : {
+          priceNote: domain === 'therapy' ? 'od 900 Kč / konzultace' : 'od 350 Kč / hodina',
+          availabilityNote: 'termíny po domluvě',
+          contactFirst: true,
+        },
+        items: itemized ? buildItems(prov.id) : [],
+        childAgeFrom: domain === 'respite' ? 2 : null,
+        childAgeTo: 18,
+        audience: ['dite', 'pestoun'],
+        serviceAreas: ['Ústecký kraj'],
+        language: 'cs',
+        status: 'listed',
+      }
+      push(
+        mkPaths.service(prov.id, offer.id),
+        offer as unknown as Record<string, unknown>,
+        'serviceOffers',
+      )
+
+      const cheapest = offer.items.length > 0
+        ? offer.items.reduce((a, b) => (a.unitPrice.amountMinor <= b.unitPrice.amountMinor ? a : b))
+        : null
+      const l: Listing = {
+        id: `lst-${offer.id}`,
+        domain,
+        offerKind: 'service',
+        offerId: offer.id,
+        providerId: prov.id,
+        providerSlug: prov.slug,
+        providerDisplayName: prov.display,
+        providerVerified: prov.verified,
+        // U péče o dítě se v nabídce UKAZUJE, jestli je způsobilost doložená.
+        providerEligible: prov.eligibility === 'not_applicable' ? null : prov.eligibilityComplete,
+        title: offer.title,
+        perex: offer.perex,
+        hours: null,
+        unitLabel: cheapest ? cheapest.unit : 'hour',
+        priceFrom: cheapest ? cheapest.unitPrice : null,
+        priceNote: offer.general?.priceNote ?? null,
+        serviceAreas: offer.serviceAreas,
+        language: offer.language,
+        nextDateAt: cheapest?.from ? `${cheapest.from}T08:00:00Z` : null,
+        visibility: 'public',
+        publishedAt: now,
+        unlistedAt: null,
+        popularity: rng.int(0, 30),
+      }
+      push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
+    }
+
+    function buildItems(providerId: string) {
+      if (providerId === 'prov-tabory') {
+        return [
+          {
+            code: 'tabor-cerven', label: 'Příměstský tábor 22.–26. 6.',
+            unit: 'day' as const, unitPrice: { amountMinor: 320000, currency: 'CZK' as const },
+            vatIncluded: true, from: '2026-06-22', to: '2026-06-26',
+            capacity: 18, place: 'Teplice',
+            // Pobytový tábor se do čtrnáctidenního nároku počítá po dnech.
+            respiteDays: 5, includesMeals: true, includesAccommodation: false,
+          },
+          {
+            code: 'tabor-cervenec', label: 'Letní pobytový tábor 12.–19. 7.',
+            unit: 'package' as const, unitPrice: { amountMinor: 650000, currency: 'CZK' as const },
+            vatIncluded: true, from: '2026-07-12', to: '2026-07-19',
+            capacity: 30, place: 'Doksy',
+            respiteDays: 8, includesMeals: true, includesAccommodation: true,
+          },
+        ]
+      }
+      return [
+        {
+          code: 'hlidani-hodina', label: 'Hlídání — hodina',
+          unit: 'hour' as const, unitPrice: { amountMinor: 35000, currency: 'CZK' as const },
+          vatIncluded: true, from: null, to: null, capacity: null, place: null,
+          // Hodinové hlídání se do čtrnáctidenního nároku nepočítá —
+          // proto je to vlastní pole, ne dopočet z jednotky.
+          respiteDays: 0, includesMeals: false, includesAccommodation: false,
+        },
+        {
+          code: 'hlidani-vikend', label: 'Víkendová péče (pá–ne)',
+          unit: 'day' as const, unitPrice: { amountMinor: 180000, currency: 'CZK' as const },
+          vatIncluded: true, from: null, to: null, capacity: null, place: null,
+          respiteDays: 3, includesMeals: true, includesAccommodation: true,
+        },
+      ]
+    }
   }
 
   function buildOrganization(orgIndex: number): void {
@@ -907,6 +1097,8 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       // Podatelna a žádost úřadu jen u pár spisů, ať to není u každého.
       if (seq % 4 === 0) buildDictation(caseFileId, keyWorkerId)
       if (seq % 5 === 0) buildCourseOrder(orgId, caseFileId, agreementId, keyWorkerId, carerIds, carerNames)
+      if (seq % 6 === 0 && children.length > 0) buildRespiteOrder(orgId, caseFileId, keyWorkerId, children)
+      if (seq % 8 === 0 && children.length > 0) buildInternalDelivery(orgId, caseFileId, keyWorkerId, children)
       if (seq % 7 === 0) buildSubmission(caseFileId, keyWorkerId, ref)
       if (seq % 9 === 0) buildDraft(caseFileId, keyWorkerId, agreement.carerDisplayName)
 
@@ -1017,9 +1209,12 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const order: Order = {
           ...sys(keyWorkerId),
           id: orderId,
+          domain: 'education',
+          offerKind: 'course',
           providerId,
-          courseId,
+          offerId: courseId,
           sessionId: null,
+          itemCode: null,
           buyer: {
             kind: 'organization',
             organizationId: orgId,
@@ -1033,6 +1228,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
             email: `${slugify(carerNames[0]!)}@priklad.test`,
             educationPeriodId: `${agreementId}-edu1`,
           }],
+          bookings: [],
           seatCount: 1,
           unitPrice: { amountMinor: priceMinor, currency: 'CZK' },
           totalPrice: { amountMinor: priceMinor, currency: 'CZK' },
@@ -1051,6 +1247,8 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           },
           invoiceDocumentId: null,
           expenseEntryIds: [],
+          // Písmeno práva rozhoduje o pásmu čerpání SPVPP (§ 5c vyhlášky).
+          rightCode: DOMAIN_RIGHT_CODE.education,
           placedAt: isoDateTime(placed),
           cancelledAt: null,
           cancelledReason: null,
@@ -1067,7 +1265,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           ...sys(keyWorkerId),
           id: `${orderId}-enr1`,
           orderId,
-          courseId,
+          offerId: courseId,
           providerId,
           personId: carerIds[0]!,
           displayName: carerNames[0]!,
@@ -1093,7 +1291,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           id: `${orderId}-cert1`,
           enrolmentId: enrolment.id,
           orderId,
-          courseId,
+          offerId: courseId,
           providerId,
           participantName: carerNames[0]!,
           participantPersonId: carerIds[0]!,
@@ -1115,6 +1313,164 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           mkPaths.certificate(cert.id),
           cert as unknown as Record<string, unknown>,
           'certificates',
+        )
+      }
+
+      /**
+       * Objednávka respitu u externího poskytovatele. Z potvrzení vznikne
+       * respitní epizoda, která se počítá proti čtrnáctidennímu nároku
+       * (§ 47a odst. 2 písm. b) — a při přechodu pěstouna jde s ním (dok. 09).
+       */
+      function buildRespiteOrder(
+        orgId: string, caseFileId: string, keyWorkerId: string,
+        children: Array<{ id: string; name: ReturnType<typeof makeName>; birth: Date }>,
+      ): void {
+        // Nárok na celodenní péči má dítě od 2 let (§ 47a odst. 2 písm. b).
+        const eligible = children.filter((c) => ageYears(c.birth) >= 2)
+        if (eligible.length === 0) return
+        const child = rng.pick(eligible)
+
+        const useCamp = rng.bool(0.6)
+        const providerId = useCamp ? 'prov-tabory' : 'prov-chuva'
+        const offerId = `${providerId}-nabidka`
+        const itemCode = useCamp ? 'tabor-cervenec' : 'hlidani-vikend'
+        const respiteDays = useCamp ? 8 : 3
+        const unitPrice = useCamp ? 650000 : 180000
+        const from = addDays(opt.today, -rng.int(20, 200))
+        const to = addDays(from, respiteDays - 1)
+        const confirmed = rng.bool(0.75)
+
+        const orderId = `${caseFileId}-resp1`
+        const order: Order = {
+          ...sys(keyWorkerId),
+          id: orderId,
+          domain: 'respite',
+          offerKind: 'service',
+          providerId,
+          offerId,
+          sessionId: null,
+          itemCode,
+          buyer: {
+            kind: 'organization',
+            organizationId: orgId,
+            organizationName: meta.display,
+            ico: meta.ico,
+            billingAddress: `${orgTown.city}, ${orgTown.zip}`,
+          },
+          seats: [],
+          // Poskytovatel dostane jméno a věk dítěte. Nic dalšího.
+          bookings: [{
+            childId: child.id,
+            childDisplayName: child.name.displayName,
+            childAgeYears: ageYears(child.birth),
+            from: isoDate(from),
+            to: isoDate(to),
+            units: useCamp ? 1 : respiteDays,
+            unit: useCamp ? 'package' : 'day',
+            respiteDays,
+            caseFileId,
+            careEpisodeId: null,
+          }],
+          seatCount: 1,
+          unitPrice: { amountMinor: unitPrice, currency: 'CZK' },
+          totalPrice: { amountMinor: unitPrice, currency: 'CZK' },
+          status: confirmed ? 'completed' : 'confirmed',
+          requestedByPersonId: null,
+          approvedByPersonId: managerId,
+          approvedAt: isoDateTime(addDays(from, -14)),
+          rejectedReason: null,
+          payment: {
+            method: 'invoice',
+            flowsThroughPlatform: false,
+            paidOn: confirmed ? isoDate(addDays(to, 12)) : null,
+            variableSymbol: String(rng.int(100000, 999999)),
+            note: null,
+          },
+          invoiceDocumentId: null,
+          expenseEntryIds: [],
+          rightCode: DOMAIN_RIGHT_CODE.respite,
+          placedAt: isoDateTime(addDays(from, -21)),
+          cancelledAt: null,
+          cancelledReason: null,
+        }
+        push(mkPaths.order(orderId), order as unknown as Record<string, unknown>, 'respiteOrders')
+        push(`${p.courseOrders()}/${orderId}`, {
+          orderId, providerId, offerId, domain: 'respite',
+          title: useCamp ? 'Letní pobytový tábor' : 'Víkendová péče',
+          status: order.status, totalPrice: order.totalPrice,
+          placedAt: order.placedAt, caseFileId,
+        }, 'orgCourseOrders')
+
+        if (!confirmed) return
+        const conf: ServiceConfirmation = {
+          ...sys('superadmin'),
+          id: `${orderId}-conf1`,
+          orderId,
+          offerId,
+          providerId,
+          domain: 'respite',
+          childId: child.id,
+          childDisplayName: child.name.displayName,
+          from: isoDate(from),
+          to: isoDate(to),
+          unitsDelivered: useCamp ? 1 : respiteDays,
+          unit: useCamp ? 'package' : 'day',
+          // Skutečné dny se nemusí rovnat objednaným — dítě mohlo odjet dřív.
+          respiteDays: rng.bool(0.15) ? respiteDays - 1 : respiteDays,
+          issuedByPersonId: 'provider-staff',
+          issuedAt: isoDateTime(addDays(to, 2)),
+          documentId: null,
+          verificationToken: `conf-${orderId}`,
+          note: null,
+          careEpisodeId: null,
+          revokedAt: null,
+          revokedReason: null,
+        }
+        push(
+          mkPaths.confirmation(conf.id),
+          { ...conf, organizationId: orgId } as unknown as Record<string, unknown>,
+          'serviceConfirmations',
+        )
+      }
+
+      /**
+       * Hlídání nebo doučování zaměstnancem organizace. Nefakturuje se,
+       * účtuje se vnitřně — ale dny se do nároku počítají stejně
+       * a způsobilost podle § 49 odst. 4 platí i tady (marketplace.ts).
+       */
+      function buildInternalDelivery(
+        orgId: string, caseFileId: string, keyWorkerId: string,
+        children: Array<{ id: string; name: ReturnType<typeof makeName>; birth: Date }>,
+      ): void {
+        const child = rng.pick(children)
+        const tutoring = rng.bool(0.5)
+        const from = addDays(opt.today, -rng.int(10, 120))
+        const days = tutoring ? 0 : rng.int(1, 2)
+        const d: InternalServiceDelivery = {
+          ...sys(keyWorkerId),
+          id: `${caseFileId}-int1`,
+          organizationId: orgId,
+          providerId: `${orgId}-internal`,
+          performedByPersonId: keyWorkers[1]?.id ?? keyWorkerId,
+          domain: tutoring ? 'tutoring' : 'respite',
+          childId: child.id,
+          caseFileId,
+          from: isoDate(from),
+          to: isoDate(addDays(from, Math.max(0, days - 1))),
+          units: tutoring ? rng.int(1, 4) : days,
+          unit: tutoring ? 'hour' : 'day',
+          respiteDays: days,
+          internalCost: rng.bool(0.6)
+            ? { amountMinor: (tutoring ? 30000 : 26000) * Math.max(1, days), currency: 'CZK' }
+            : null,
+          rateBasis: tutoring ? 'per_hour' : 'per_day',
+          careEpisodeId: null,
+          expenseEntryId: null,
+        }
+        push(
+          `${p.internalDeliveries()}/${d.id}`,
+          d as unknown as Record<string, unknown>,
+          'internalDeliveries',
         )
       }
 

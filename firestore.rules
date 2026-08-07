@@ -163,6 +163,15 @@ service cloud.firestore {
           allow delete: if false;
         }
       }
+
+      // Nabídky služeb — respit, terapie, doučování. Stejná pravidla jako
+      // u kurzů: veřejné jen vylistované.
+      match /services/{serviceId} {
+        allow get, list: if resource.data.status == 'listed'
+                         || isProviderStaff(providerId) || isSuperadmin();
+        allow create, update: if isProviderStaff(providerId);
+        allow delete: if false;
+      }
     }
 
     // Veřejná výkladní skříň. Čitelná BEZ přihlášení, aby se nabídka dala
@@ -199,6 +208,21 @@ service cloud.firestore {
     // nesmí dát upravit z klienta.
     match /certificates/{certificateId} {
       allow get: if signedIn();
+      allow list: if false;
+      allow write: if false;
+    }
+
+    // Potvrzení služby. Protějšek certifikátu — potvrzuje DNY, které se
+    // počítají proti čtrnáctidennímu nároku (§ 47a odst. 2 písm. b).
+    // Ze stejného důvodu se nesmí dát upravit z klienta.
+    //
+    // Je v něm jméno dítěte, takže na rozdíl od certifikátu ho nesmí číst
+    // každý přihlášený — jen poskytovatel a organizace, která ho objednala.
+    match /confirmations/{confirmationId} {
+      allow get: if signedIn() && (
+                   isProviderStaff(resource.data.providerId)
+                   || isMember(resource.data.organizationId)
+                 );
       allow list: if false;
       allow write: if false;
     }
@@ -639,6 +663,17 @@ service cloud.firestore {
       match /courseOrders/{id} {
         allow read: if isMember(orgId);
         allow write: if false;
+      }
+
+      // Interní hlídání a doučování zaměstnancem organizace. Nefakturuje se,
+      // protože obě strany jsou tatáž organizace — ale dny se do nároku
+      // počítají stejně a způsobilost podle § 49 odst. 4 platí i tady
+      // (marketplace.ts).
+      match /internalDeliveries/{id} {
+        allow read: if canReadContent(orgId);
+        allow create: if canReadContent(orgId) && authorIsCaller();
+        allow update: if canReadContent(orgId);
+        allow delete: if false;
       }
 
       match /exitPackages/{id} {

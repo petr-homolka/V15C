@@ -47,6 +47,18 @@ await env.withSecurityRulesDisabled(async (ctx) => {
     status: 'approved',
   })
   await setDoc(doc(db, 'certificates/cert1'), { orderId: 'ord1', hours: 8, participantName: 'Eva Nováková' })
+  await setDoc(doc(db, 'providers/prov1/services/s-listed'), { title: 'Hlídání', status: 'listed', domain: 'respite' })
+  await setDoc(doc(db, 'confirmations/conf1'), {
+    orderId: 'ord1', providerId: 'prov1', organizationId: 'o1',
+    childId: 'ch1', childDisplayName: 'Klára Dvořáková', respiteDays: 8,
+  })
+  await setDoc(doc(db, 'confirmations/conf2'), {
+    orderId: 'ord2', providerId: 'prov9', organizationId: 'o9',
+    childId: 'ch9', childDisplayName: 'Cizí dítě', respiteDays: 3,
+  })
+  await setDoc(doc(db, 'orgs/o1/internalDeliveries/int1'), {
+    performedByPersonId: 'p-kw', childId: 'ch1', respiteDays: 2, createdByPersonId: 'p-kw',
+  })
   await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/documents/d1'), { category: 'receipt', title: 'Účtenka' })
   await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'), {
     documentId: 'd1', documentVersionNo: 1, ocrText: 'Celkem 340 Kč',
@@ -116,6 +128,16 @@ await check('cizí objednávku organizace nevidí', assertFails(getDoc(doc(worke
 await check('pořadatel vidí objednávku na svůj kurz', assertSucceeds(getDoc(doc(provider, 'orders/ord1'))))
 await check('objednávku nezaloží klient', assertFails(setDoc(doc(worker, 'orders/ord3'), { providerId: 'prov1' })))
 await check('certifikát se nedá upravit z klienta', assertFails(setDoc(doc(provider, 'certificates/cert1'), { hours: 40 })))
+
+// respit: nabídka služby, potvrzení se jménem dítěte, interní péče
+await check('vylistovaná služba je veřejná', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1/services/s-listed'))))
+await check('potvrzení služby vidí jeho organizace', assertSucceeds(getDoc(doc(worker, 'confirmations/conf1'))))
+await check('cizí potvrzení organizace NEVIDÍ', assertFails(getDoc(doc(worker, 'confirmations/conf2'))))
+await check('potvrzení nevidí nepřihlášený', assertFails(getDoc(doc(anonMk, 'confirmations/conf1'))))
+await check('dny v potvrzení nepřepíše klient', assertFails(setDoc(doc(worker, 'confirmations/conf1'), { respiteDays: 40 })))
+await check('interní péči zapíše klíčová osoba', assertSucceeds(setDoc(doc(worker, 'orgs/o1/internalDeliveries/int2'), {
+  performedByPersonId: 'p-kw', childId: 'ch1', respiteDays: 1, createdByPersonId: 'p-kw' })))
+await check('interní péči účetní nevidí', assertFails(getDoc(doc(accountant, 'orgs/o1/internalDeliveries/int1'))))
 
 // přepis dokladu: opravitelný kdykoli, ale ocrText se nepřepisuje
 await check('přepis dokladu lze opravit kdykoli', assertSucceeds(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'), {

@@ -71,6 +71,9 @@ export const marketplace = {
   course: (providerId: Id, courseId: Id) => `providers/${providerId}/courses/${courseId}`,
   sessions: (providerId: Id, courseId: Id) =>
     `providers/${providerId}/courses/${courseId}/sessions`,
+  /** Nabídky služeb — respit, terapie, doučování. */
+  services: (providerId: Id) => `providers/${providerId}/services`,
+  service: (providerId: Id, serviceId: Id) => `providers/${providerId}/services/${serviceId}`,
 
   /** VEŘEJNÉ — čitelné bez přihlášení, proto bez osobních údajů. */
   listings: () => 'listings',
@@ -81,6 +84,9 @@ export const marketplace = {
   enrolments: (orderId: Id) => `orders/${orderId}/enrolments`,
   certificates: () => 'certificates',
   certificate: (id: Id) => `certificates/${id}`,
+  /** Potvrzení služby — protějšek certifikátu, potvrzuje DNY. */
+  confirmations: () => 'confirmations',
+  confirmation: (id: Id) => `confirmations/${id}`,
 } as const
 
 /**
@@ -208,6 +214,8 @@ export function org(orgId: Id) {
     exitPackages: () => `${base}/exitPackages`,
     /** Objednávky kurzů organizace — zrcadlo kořenové kolekce `orders`. */
     courseOrders: () => `${base}/courseOrders`,
+    /** Interní hlídání a doučování — bez faktury, účtuje se vnitřně. */
+    internalDeliveries: () => `${base}/internalDeliveries`,
 
     /* --- Eli --- */
     assistantSessions: () => `${base}/assistant`,
