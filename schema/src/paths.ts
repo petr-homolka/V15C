@@ -59,6 +59,16 @@ export const transfers = {
 } as const
 
 /**
+ * Registr entit. Každá věc s profilem má UID a záznam tady — je to index,
+ * ne profil (entities.ts). Kořenová kolekce, protože UID musí být
+ * dohledatelné, aniž by se vědělo, kde ta věc leží.
+ */
+export const entities = {
+  all: () => 'entities',
+  one: (uid: string) => `entities/${uid}`,
+} as const
+
+/**
  * Marketplace vzdělávání. Pořadatel je samostatný subjekt, prodává napříč
  * organizacemi a jeho nabídka je veřejná — proto kořenové kolekce, ne
  * podkolekce organizace (marketplace.ts).

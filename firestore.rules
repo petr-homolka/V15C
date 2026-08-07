@@ -105,6 +105,27 @@ service cloud.firestore {
     }
 
     /* ============================================================ */
+    /* entities/{uid} — registr entit                                */
+    /* ============================================================ */
+
+    // Index, ne profil (entities.ts). Drží druh, vlastníka, cestu k profilu
+    // a zobrazovaný název — žádný obsah.
+    //
+    // Čte se podle `organizationId` v samotném dokumentu, takže to nestojí
+    // žádné další čtení. `list` je zakázaný: kdyby šel vypsat, dal by se
+    // z něj přečíst seznam všech dětí a rodin napříč organizacemi.
+    match /entities/{uid} {
+      allow get: if isSuperadmin()
+                 || (resource.data.organizationId == null && signedIn())
+                 || (resource.data.organizationId != null
+                     && isMember(resource.data.organizationId));
+      allow list: if false;
+      // Registr píše Function spolu se vznikem profilu — jinak by se
+      // rozešel s tím, na co ukazuje.
+      allow write: if false;
+    }
+
+    /* ============================================================ */
     /* verifications/{token} — ověření z QR kódu                     */
     /* ============================================================ */
 
@@ -458,6 +479,9 @@ service cloud.firestore {
 
       /* ---------- dohody ---------- */
 
+      // Dohoda = karta rodiny. Přejmenovat ji smí Klíčová osoba, protože
+      // je to popisek, ne identita — všechno je vedené pod UID a spisovou
+      // značkou (entities.ts). Původní názvy zůstávají v `naming.previousNames`.
       match /agreements/{agreementId} {
         allow read: if isMember(orgId);
         allow create, update: if canReadContent(orgId);

@@ -139,7 +139,10 @@ async function clearDemo(db: Firestore): Promise<number> {
   // Marketplace žije v kořenových kolekcích, ne pod organizací
   // (marketplace.ts). Bez tohohle by po `clear` zůstali pořadatelé,
   // nabídka a certifikáty — a „smazáno vše“ by byla nepravda.
-  for (const collection of ['providers', 'listings', 'orders', 'certificates', 'confirmations', 'verifications']) {
+  for (const collection of [
+    'entities', 'providers', 'listings', 'orders',
+    'certificates', 'confirmations', 'verifications',
+  ]) {
     for (const ref of await db.collection(collection).listDocuments()) {
       await deleteRecursive(ref.path)
     }

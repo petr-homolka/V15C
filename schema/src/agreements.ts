@@ -11,6 +11,7 @@
 import type {
   AuditFields, ComputedFrom, Id, IsoDate, Lifecycle,
 } from './common'
+import type { AgreementNaming } from './entities'
 import type { CustodyBasis } from './people'
 
 /* ------------------------------------------------------------------ */
@@ -58,6 +59,15 @@ export interface Agreement extends AuditFields {
   /** Předchozí a následující organizace při přechodu (dok. 02, 09). */
   previousOrganizationId: Id | null
   transferCode: string | null
+
+  /**
+   * Název profilu dohody — karty rodiny. Odvozuje se z příjmení pěstouna
+   * a Klíčová osoba ho může přejmenovat (entities.ts, `AgreementNaming`).
+   *
+   * **Nic se na název neváže.** Vazby, hledání i reporty jdou přes UID
+   * a spisovou značku; název je popisek.
+   */
+  naming: AgreementNaming
 
   /* --- denormalizované ukazatele: každá obrazovka jeden dotaz --- */
   carerDisplayName: string

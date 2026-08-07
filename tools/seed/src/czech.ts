@@ -13,6 +13,7 @@
  *      kde v UI chybí rozlišení osob.
  */
 
+import { familyPlural } from '../../../schema/src/index'
 import { Rng } from './rng'
 
 /* ------------------------------------------------------------------ */
@@ -80,12 +81,13 @@ export function pickSurnameIndex(rng: Rng, avoid: number[] = []): number {
   return rng.int(0, SURNAMES.length - 1)
 }
 
-/** Rodné jméno v množném čísle pro označení rodiny: „Novákovi“. */
+/**
+ * Označení rodiny v množném čísle. Pravidlo samo je ve schématu
+ * (`familyPlural`), protože ho potřebuje aplikace při odvozování názvu
+ * dohody — ne jen testovací data.
+ */
 export function familyLabel(surnameIndex: number): string {
-  const male = SURNAMES[surnameIndex % SURNAMES.length]![0]
-  if (male.endsWith('ý')) return `${male.slice(0, -1)}í`      // Veselý → Veselí
-  if (male.endsWith('a')) return `${male.slice(0, -1)}ovi`    // Fiala → Fialovi
-  return `${male}ovi`                                        // Novák → Novákovi
+  return familyPlural(SURNAMES[surnameIndex % SURNAMES.length]![1])
 }
 
 /* ------------------------------------------------------------------ */

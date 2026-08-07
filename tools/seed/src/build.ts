@@ -28,10 +28,12 @@ import type {
   MarketplaceProvider, Course, Listing, Order, Enrolment, CourseCertificate,
   MarketplaceTerms, ScanTranscript, ServiceOffer, ServiceConfirmation,
   InternalServiceDelivery, MarketplaceDomain, Money,
+  EntityRecord, EntityKind, AgreementNaming,
 } from '../../../schema/src/index'
 import {
   org as orgPaths, platform as platformPaths, marketplace as mkPaths,
   CODEBOOKS, DEFAULT_LETTERHEADS, DOMAIN_RIGHT_CODE, PRICE_HIDDEN_NOTE,
+  entities as entityPaths, ENTITY_SERVICES, deriveAgreementName,
 } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
@@ -97,6 +99,34 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
   const push = (path: string, data: Record<string, unknown>, statKey: string) => {
     docs.push({ path, data: { ...data, ...mark } })
     stats[statKey] = (stats[statKey] ?? 0) + 1
+  }
+
+  /**
+   * Zápis do registru entit. Každá věc s profilem tam musí být, jinak ji
+   * nejde dohledat podle UID (entities.ts).
+   */
+  const registerEntity = (
+    uid: string, kind: EntityKind, organizationId: string | null,
+    profilePath: string, displayName: string, subtitle: string | null,
+    createdBy: string, status: EntityRecord['status'] = 'active',
+  ) => {
+    const e: EntityRecord = {
+      createdByPersonId: createdBy,
+      createdAt: isoDateTime(opt.today),
+      via: 'import',
+      updatedByPersonId: null,
+      updatedAt: null,
+      uid,
+      kind,
+      organizationId,
+      profilePath,
+      displayName,
+      subtitle,
+      services: [...ENTITY_SERVICES[kind]],
+      status,
+      archivedOn: status === 'archived' ? isoDate(opt.today) : null,
+    }
+    push(entityPaths.one(uid), e as unknown as Record<string, unknown>, 'entities')
   }
 
   const now = isoDateTime(opt.today)
@@ -466,6 +496,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         status: 'active',
       }
       push(mkPaths.provider(p.id), p as unknown as Record<string, unknown>, 'providers')
+      registerEntity(
+        p.id, 'provider', null, mkPaths.provider(p.id), p.displayName,
+        prov.domains.join(', '), 'superadmin',
+      )
 
       if (!prov.domains.includes('education')) {
         buildServiceOffers(prov)
@@ -750,6 +784,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       exitedOn: null,
     }
     push(p.doc(), organization as unknown as Record<string, unknown>, 'organizations')
+    registerEntity(orgId, 'organization', orgId, p.doc(), meta.display, meta.ico, managerId)
 
     // Vedení má org_admin i manager — v malé organizaci to je jeden člověk.
     pushPerson(managerId, managerName, ['staff'], orgTown, { staff: true })
@@ -822,6 +857,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         lifecycle: 'active',
       }
       push(p.person(personId), person as unknown as Record<string, unknown>, 'persons')
+      registerEntity(
+        personId, 'person', orgId, p.person(personId), name.displayName,
+        roles.includes('staff') ? 'pracovník organizace' : 'pečující osoba', managerId,
+      )
 
       // Kontakty ODDĚLENĚ — proto to je podřízený dokument (dok. 04).
       const contact: PersonContact = {
@@ -889,14 +928,23 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
       const carerIds: string[] = []
       const carerNames: string[] = []
+      const carerFamilyNames: string[] = []
+      const carerSurnames: number[] = []
       for (let c = 0; c < carerCount; c++) {
         const gender: Gender = carerCount === 2 ? (c === 0 ? 'f' : 'm') : (rng.bool(0.7) ? 'f' : 'm')
-        const name = makeName(rng, gender, carerSurname)
+        // U části dvojic mají pěstouni RŮZNÁ příjmení — pak se z nich jedno
+        // vybere pro název dohody.
+        const surnameIndex = c === 1 && rng.bool(0.35)
+          ? pickSurnameIndex(rng, [carerSurname])
+          : carerSurname
+        const name = makeName(rng, gender, surnameIndex)
         const id = `${agreementId}-carer${c + 1}`
         pushPerson(id, name, ['caregiver'], carerTown)
         pushCarerProfile(id, special)
         carerIds.push(id)
         carerNames.push(name.displayName)
+        carerFamilyNames.push(name.familyName)
+        carerSurnames.push(surnameIndex)
       }
 
       const carerKind: Agreement['carerKind'] =
@@ -955,6 +1003,11 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           careEndDocumentId: null,
         }
         push(p.child(childId), child as unknown as Record<string, unknown>, 'children')
+        registerEntity(
+          childId, 'child', orgId, p.child(childId), name.displayName,
+          `${ageYears(birth)} let`, keyWorkerId,
+          special === 'archived' ? 'archived' : 'active',
+        )
 
         const childAddress = makeAddress(rng, childTown)
         push(p.childContact(childId), {
@@ -972,10 +1025,43 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         pushLifeBook(childId, name, keyWorkerId)
       }
 
+      // Název profilu dohody se odvozuje z příjmení pěstouna. U dvou různých
+      // příjmení systém vybere jedno — deterministicky, aby se dohoda po
+      // přepočtu sama nepřejmenovala (entities.ts).
+      const derived = deriveAgreementName(
+        carerIds.map((id, i) => ({
+          uid: id,
+          familyName: carerFamilyNames[i]!,
+          familyLabel: familyLabel(carerSurnames[i]!),
+        })),
+        seq,
+      )
+      // Část dohod je přejmenovaná Klíčovou osobou, ať jde otestovat obojí.
+      const renamed = rng.bool(0.15)
+      const naming: AgreementNaming = renamed
+        ? {
+            displayName: `${derived.displayName} — pěstounská péče`,
+            source: 'renamed',
+            derivedFromPersonUid: derived.derivedFromPersonUid,
+            renamedByPersonId: keyWorkerId,
+            renamedAt: isoDateTime(addMonths(opt.today, -2)),
+            previousNames: [{
+              name: derived.displayName,
+              until: isoDateTime(addMonths(opt.today, -2)),
+            }],
+          }
+        : {
+            ...derived,
+            renamedByPersonId: null,
+            renamedAt: null,
+            previousNames: [],
+          }
+
       const agreement: Agreement = {
         ...sys(managerId),
         id: agreementId,
         reference: ref,
+        naming,
         carerPersonIds: carerIds,
         jointSpouses,
         separatedByOrpDecision: false,
@@ -999,7 +1085,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           : null,
         previousOrganizationId: null,
         transferCode: null,
-        carerDisplayName: jointSpouses ? familyLabel(carerSurname) : carerNames[0]!,
+        carerDisplayName: naming.displayName,
         childCount,
         activePlacementCount: special === 'archived' ? 0 : childCount,
         nextObligationDueOn: null,     // dopočítá Function; tady jen kostra
@@ -1007,6 +1093,11 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         lifecycle: special === 'archived' ? 'archived' : 'active',
       }
       push(p.agreement(agreementId), agreement as unknown as Record<string, unknown>, 'agreements')
+      registerEntity(
+        agreementId, 'agreement', orgId, p.agreement(agreementId),
+        naming.displayName, ref, managerId,
+        special === 'archived' ? 'archived' : 'active',
+      )
 
       // Souhlas ORP — bez něj nelze vyplatit státní příspěvek (dok. 01).
       const consent: OrpConsent = {

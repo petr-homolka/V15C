@@ -78,6 +78,19 @@ await env.withSecurityRulesDisabled(async (ctx) => {
     publicFacts: { issuerName: 'Test o.p.s.', ourReference: 'ZPR-2026/0042', contentHash: 'abc' },
   })
   await setDoc(doc(db, 'orgs/o1/branding/current'), { logo: { printHeightMm: 14 } })
+  // registr entit
+  await setDoc(doc(db, 'entities/chi_klara'), {
+    uid: 'chi_klara', kind: 'child', organizationId: 'o1',
+    profilePath: 'orgs/o1/children/chi_klara', displayName: 'Klára Dvořáková',
+  })
+  await setDoc(doc(db, 'entities/chi_cizi'), {
+    uid: 'chi_cizi', kind: 'child', organizationId: 'o9',
+    profilePath: 'orgs/o9/children/chi_cizi', displayName: 'Cizí dítě',
+  })
+  await setDoc(doc(db, 'entities/prv_akademie'), {
+    uid: 'prv_akademie', kind: 'provider', organizationId: null,
+    profilePath: 'providers/prv_akademie', displayName: 'Akademie NRP',
+  })
   await setDoc(doc(db, 'orgs/o1/referenceSeries/zprava'), { prefix: 'ZPR', year: 2026, lastSequence: 42 })
   await setDoc(doc(db, 'orgs/o1/codebookItems/ci-used'), {
     codebookCode: 'expense.category', code: 'jizdne', label: 'Jízdné',
@@ -85,6 +98,7 @@ await env.withSecurityRulesDisabled(async (ctx) => {
   })
 })
 
+const anon = env.unauthenticatedContext().firestore()
 const outsider = env.authenticatedContext('u-out', { pid: 'p-out', orgs: {} }).firestore()
 const accountant = env.authenticatedContext('u-acc', { pid: 'p-acc', orgs: { o1: 'accountant' } }).firestore()
 const worker = env.authenticatedContext('u-kw', { pid: 'p-kw', orgs: { o1: 'key_worker' } }).firestore()
@@ -121,13 +135,12 @@ await check('vedení položku vyřadí', assertSucceeds(setDoc(doc(admin, 'orgs/
 await check('položku číselníku nemaže ani admin', assertFails(deleteDoc(doc(admin, 'orgs/o1/codebookItems/ci-used'))))
 
 // marketplace: veřejná nabídka bez přihlášení, objednávky jen svým
-const anonMk = env.unauthenticatedContext().firestore()
 const provider = env.authenticatedContext('u-prov', { pid: 'p-prov', providers: { prov1: 'provider_admin' } }).firestore()
-await check('profil pořadatele je veřejný', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1'))))
-await check('vylistovaný kurz je veřejný', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1/courses/c-listed'))))
-await check('rozpracovaný kurz veřejný NENÍ', assertFails(getDoc(doc(anonMk, 'providers/prov1/courses/c-draft'))))
-await check('veřejná nabídka jde číst bez přihlášení', assertSucceeds(getDoc(doc(anonMk, 'listings/l1'))))
-await check('nabídka jen pro systém veřejná není', assertFails(getDoc(doc(anonMk, 'listings/l2'))))
+await check('profil pořadatele je veřejný', assertSucceeds(getDoc(doc(anon, 'providers/prov1'))))
+await check('vylistovaný kurz je veřejný', assertSucceeds(getDoc(doc(anon, 'providers/prov1/courses/c-listed'))))
+await check('rozpracovaný kurz veřejný NENÍ', assertFails(getDoc(doc(anon, 'providers/prov1/courses/c-draft'))))
+await check('veřejná nabídka jde číst bez přihlášení', assertSucceeds(getDoc(doc(anon, 'listings/l1'))))
+await check('nabídka jen pro systém veřejná není', assertFails(getDoc(doc(anon, 'listings/l2'))))
 await check('nabídku nezapíše ani pořadatel', assertFails(setDoc(doc(provider, 'listings/l3'), { visibility: 'public' })))
 await check('pořadatel upraví svůj kurz', assertSucceeds(setDoc(doc(provider, 'providers/prov1/courses/c-listed'), { title: 'Attachment II', status: 'listed', hours: 8 })))
 await check('cizí kurz pořadatel neupraví', assertFails(setDoc(doc(worker, 'providers/prov1/courses/c-listed'), { title: 'Hack', status: 'listed', hours: 8 })))
@@ -137,11 +150,19 @@ await check('pořadatel vidí objednávku na svůj kurz', assertSucceeds(getDoc(
 await check('objednávku nezaloží klient', assertFails(setDoc(doc(worker, 'orders/ord3'), { providerId: 'prov1' })))
 await check('certifikát se nedá upravit z klienta', assertFails(setDoc(doc(provider, 'certificates/cert1'), { hours: 40 })))
 
+// REGISTR ENTIT: čte se podle organizace v samotném záznamu
+await check('entitu své organizace přečtu', assertSucceeds(getDoc(doc(worker, 'entities/chi_klara'))))
+await check('entitu cizí organizace NEPŘEČTU', assertFails(getDoc(doc(worker, 'entities/chi_cizi'))))
+await check('entitu bez organizace přečte přihlášený', assertSucceeds(getDoc(doc(worker, 'entities/prv_akademie'))))
+await check('registr entit nevidí nepřihlášený', assertFails(getDoc(doc(anon, 'entities/prv_akademie'))))
+await check('registr entit nezapíše klient', assertFails(setDoc(doc(admin, 'entities/chi_novy'), {
+  uid: 'chi_novy', kind: 'child', organizationId: 'o1', displayName: 'Nové' })))
+
 // CENY: veřejně nedostupné, protože nejsou polem nabídky (marketplace.ts)
 const carer = env.authenticatedContext('uid-verified', { pid: 'p-carer', carer: true }).firestore()
 const strangerIn = env.authenticatedContext('uid-x', { pid: 'p-x' }).firestore()
-await check('nabídku vidí nepřihlášený', assertSucceeds(getDoc(doc(anonMk, 'listings/l1'))))
-await check('CENU nepřihlášený NEVIDÍ', assertFails(getDoc(doc(anonMk, 'listings/l1/pricing/current'))))
+await check('nabídku vidí nepřihlášený', assertSucceeds(getDoc(doc(anon, 'listings/l1'))))
+await check('CENU nepřihlášený NEVIDÍ', assertFails(getDoc(doc(anon, 'listings/l1/pricing/current'))))
 await check('cenu nevidí ani přihlášený bez role a bez ověření', assertFails(getDoc(doc(strangerIn, 'listings/l1/pricing/current'))))
 await check('cenu vidí pracovnice organizace', assertSucceeds(getDoc(doc(worker, 'listings/l1/pricing/current'))))
 await check('cenu vidí ověřený pěstoun', assertSucceeds(getDoc(doc(carer, 'listings/l1/pricing/current'))))
@@ -159,10 +180,10 @@ await check('ověření si uživatel NENASTAVÍ sám', assertFails(setDoc(doc(st
   verification: { status: 'verified', basis: 'manual_review' } })))
 
 // respit: nabídka služby, potvrzení se jménem dítěte, interní péče
-await check('vylistovaná služba je veřejná', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1/services/s-listed'))))
+await check('vylistovaná služba je veřejná', assertSucceeds(getDoc(doc(anon, 'providers/prov1/services/s-listed'))))
 await check('potvrzení služby vidí jeho organizace', assertSucceeds(getDoc(doc(worker, 'confirmations/conf1'))))
 await check('cizí potvrzení organizace NEVIDÍ', assertFails(getDoc(doc(worker, 'confirmations/conf2'))))
-await check('potvrzení nevidí nepřihlášený', assertFails(getDoc(doc(anonMk, 'confirmations/conf1'))))
+await check('potvrzení nevidí nepřihlášený', assertFails(getDoc(doc(anon, 'confirmations/conf1'))))
 await check('dny v potvrzení nepřepíše klient', assertFails(setDoc(doc(worker, 'confirmations/conf1'), { respiteDays: 40 })))
 await check('interní péči zapíše klíčová osoba', assertSucceeds(setDoc(doc(worker, 'orgs/o1/internalDeliveries/int2'), {
   performedByPersonId: 'p-kw', childId: 'ch1', respiteDays: 1, createdByPersonId: 'p-kw' })))
@@ -178,7 +199,6 @@ await check('surový OCR text se nepřepisuje', assertFails(setDoc(doc(worker, '
 await check('účetní přepis dokladu nevidí', assertFails(getDoc(doc(accountant, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'))))
 
 // QR ověření: veřejně čitelné po tokenu, ale nevypsatelné
-const anon = env.unauthenticatedContext().firestore()
 await check('ověření dokumentu čte i nepřihlášený', assertSucceeds(getDoc(doc(anon, 'verifications/tok-abc'))))
 await check('ověření se nedá přepsat', assertFails(setDoc(doc(anon, 'verifications/tok-abc'), { documentId: 'x' })))
 await check('ověření nezapíše ani admin', assertFails(setDoc(doc(admin, 'verifications/tok-xyz'), { documentId: 'x' })))
