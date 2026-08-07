@@ -25,14 +25,17 @@ import type {
   TimelineEntry, AuthorityRequest, Authority, PricingRuleset,
   CodebookDef, CodebookItem, UploadPolicy, Dictation, PlanMatrix,
   AiEntitlement, OrgBranding, LetterheadTemplate, ReferenceNumberSeries,
+  CourseProvider, Course, CourseListing, Order, Enrolment, CourseCertificate,
+  MarketplaceTerms, ScanTranscript,
 } from '../../../schema/src/index'
 import {
-  org as orgPaths, platform as platformPaths, CODEBOOKS, DEFAULT_LETTERHEADS,
+  org as orgPaths, platform as platformPaths, marketplace as mkPaths,
+  CODEBOOKS, DEFAULT_LETTERHEADS,
 } from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
   makeEmail, makeFakeNationalId, makeName, makePhone, pickSurnameIndex,
-  pickTown, pickTownInOtherOrp,
+  pickTown, pickTownInOtherOrp, slug,
 } from './czech'
 import { Rng, addDays, addMonths, isoDate, isoDateTime } from './rng'
 
@@ -76,6 +79,10 @@ const ORG_NAMES = [
   { legal: 'Naděje pro rodiny, o.p.s.', display: 'Naděje pro rodiny', ico: '27100033', ku: 'KU-ULK' },
 ]
 
+function slugify(name: string): string {
+  return slug(name).replace(/\./g, '.')
+}
+
 /* ------------------------------------------------------------------ */
 
 export function build(options: Partial<SeedOptions> = {}): SeedResult {
@@ -101,6 +108,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
   })
 
   buildPlatform()
+  buildMarketplace()
   for (let o = 0; o < opt.organizations; o++) {
     buildOrganization(o)
   }
@@ -326,6 +334,136 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       pricing as unknown as Record<string, unknown>,
       'pricingRulesets',
     )
+  }
+
+  /**
+   * Marketplace: dva pořadatelé, sklad kurzů, veřejná nabídka.
+   * Objednávky se zakládají u organizací, protože ony kurz platí.
+   */
+  function buildMarketplace(): void {
+    const terms: MarketplaceTerms = {
+      id: 'mkt-2026-01',
+      effectiveFrom: '2026-01-01',
+      // Provizi ani poplatek NEROZHODUJI — je to místo, kam se to zapíše.
+      commissionPct: null,
+      listingFee: null,
+      listingRequiresVerification: false,
+      termsDocumentId: null,
+    }
+    push(
+      platformPaths.marketplaceTerm(terms.id),
+      terms as unknown as Record<string, unknown>,
+      'marketplaceTerms',
+    )
+
+    const PROVIDERS = [
+      { id: 'prov-akademie', slug: 'akademie-nrp', legal: 'Akademie NRP, z.ú.',
+        display: 'Akademie NRP', ico: '28100011', verified: true, accred: '2024/1234-A' },
+      { id: 'prov-most', slug: 'most-k-rodine', legal: 'Most k rodině, o.p.s.',
+        display: 'Most k rodině', ico: '28100022', verified: false, accred: null },
+    ]
+
+    const COURSES: Array<[string, string, string, number, string, number, string[]]> = [
+      ['attachment', 'Attachment a vztahová vazba v náhradní rodině', 'prezenčně', 8, 'prezencne', 180000, ['attachment']],
+      ['trauma', 'Trauma a jeho projevy u dětí školního věku', 'online živě', 6, 'online', 120000, ['trauma']],
+      ['pravo', 'Právní minimum pro pěstouny', 'e-learning', 4, 'elearning', 60000, ['pravo']],
+      ['kontakt', 'Kontakt s biologickou rodinou v praxi', 'prezenčně', 12, 'prezencne', 250000, ['attachment']],
+      ['fasd', 'FASD a prenatální expozice', 'online živě', 6, 'online', 140000, ['trauma']],
+    ]
+
+    PROVIDERS.forEach((prov, pi) => {
+      const p: CourseProvider = {
+        ...sys('superadmin'),
+        id: prov.id,
+        slug: prov.slug,
+        legalName: prov.legal,
+        displayName: prov.display,
+        ico: prov.ico,
+        dic: null,
+        contact: {
+          email: `kurzy@${prov.slug}.priklad.test`,
+          phone: makePhone(rng),
+          web: `https://www.${prov.slug}.priklad.test`,
+          address: null,
+        },
+        about: `${prov.display} pořádá vzdělávání pro pěstouny a pracovníky doprovázejících organizací.`,
+        logoDocumentId: null,
+        verification: {
+          status: prov.verified ? 'verified' : 'unverified',
+          verifiedOn: prov.verified ? '2025-11-03' : null,
+          verifiedByPersonId: prov.verified ? 'superadmin' : null,
+          note: null,
+        },
+        accreditation: prov.accred
+          ? { number: prov.accred, validUntil: '2028-12-31', documentId: null }
+          : null,
+        billing: { bankAccount: makeBankAccount(rng), invoiceNote: 'splatnost 14 dnů' },
+        status: 'active',
+      }
+      push(mkPaths.provider(p.id), p as unknown as Record<string, unknown>, 'providers')
+
+      // Každý pořadatel má část katalogu; jeden kurz zůstane rozpracovaný.
+      const mine = COURSES.filter((_, i) => i % PROVIDERS.length === pi)
+      mine.forEach(([slug, title, formLabel, hours, formCode, priceMinor, topics], ci) => {
+        const listed = ci > 0 || pi === 0
+        const c: Course = {
+          ...sys('superadmin'),
+          id: `${prov.id}-${slug}`,
+          providerId: prov.id,
+          slug,
+          title,
+          perex: `${title} — ${hours} hodin, ${formLabel}.`,
+          description: `Kurz je určen pěstounům a osobám v evidenci. Rozsah ${hours} hodin.`,
+          // Hodiny jsou nosné pole: plní zákonnou povinnost (marketplace.ts).
+          hours,
+          formCode,
+          topicCodes: topics,
+          price: { amountMinor: priceMinor, currency: 'CZK' },
+          vatIncluded: true,
+          capacity: formCode === 'elearning' ? null : rng.int(8, 20),
+          language: 'cs',
+          audience: ['pestoun', 'osoba_v_evidenci'],
+          delivery: {
+            kind: formCode === 'elearning' ? 'self_paced'
+                : formCode === 'online' ? 'scheduled_online' : 'in_person',
+            platformNote: formCode === 'online' ? 'Zoom' : formCode === 'elearning' ? 'vlastní LMS' : 'Teplice',
+            accessInstructions: null,
+          },
+          status: listed ? 'listed' : 'draft',
+        }
+        push(
+          mkPaths.course(prov.id, c.id),
+          c as unknown as Record<string, unknown>,
+          'courses',
+        )
+
+        if (!listed) return
+        const l: CourseListing = {
+          id: `lst-${c.id}`,
+          courseId: c.id,
+          providerId: prov.id,
+          providerSlug: prov.slug,
+          providerDisplayName: prov.display,
+          providerVerified: prov.verified,
+          title: c.title,
+          perex: c.perex,
+          hours: c.hours,
+          formCode: c.formCode,
+          topicCodes: c.topicCodes,
+          price: c.price,
+          language: c.language,
+          nextSessionAt: c.delivery.kind === 'self_paced'
+            ? null
+            : isoDateTime(addDays(opt.today, rng.int(10, 70))),
+          // Část nabídky je veřejná (jde koupit i mimo systém), část jen v systému.
+          visibility: rng.bool(0.8) ? 'public' : 'system_only',
+          publishedAt: now,
+          unlistedAt: null,
+          popularity: rng.int(0, 40),
+        }
+        push(mkPaths.listing(l.id), l as unknown as Record<string, unknown>, 'listings')
+      })
+    })
   }
 
   function buildOrganization(orgIndex: number): void {
@@ -768,6 +906,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
 
       // Podatelna a žádost úřadu jen u pár spisů, ať to není u každého.
       if (seq % 4 === 0) buildDictation(caseFileId, keyWorkerId)
+      if (seq % 5 === 0) buildCourseOrder(orgId, caseFileId, agreementId, keyWorkerId, carerIds, carerNames)
       if (seq % 7 === 0) buildSubmission(caseFileId, keyWorkerId, ref)
       if (seq % 9 === 0) buildDraft(caseFileId, keyWorkerId, agreement.carerDisplayName)
 
@@ -848,6 +987,134 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           p.dictation(caseFileId, d.id),
           d as unknown as Record<string, unknown>,
           'dictations',
+        )
+      }
+
+      /**
+       * Objednávka kurzu, přístup a certifikát. Certifikát potvrzuje hodiny,
+       * které plní zákonnou povinnost — a je vidět, že přišly od pořadatele,
+       * ne z klávesnice Klíčové osoby (marketplace.ts).
+       */
+      function buildCourseOrder(
+        orgId: string, caseFileId: string, agreementId: string,
+        keyWorkerId: string, carerIds: string[], carerNames: string[],
+      ): void {
+        if (carerIds.length === 0) return
+        const courseIds = [
+          ['prov-akademie', 'prov-akademie-attachment', 'Attachment a vztahová vazba v náhradní rodině', 8, 'prezencne', 180000],
+          ['prov-akademie', 'prov-akademie-pravo', 'Právní minimum pro pěstouny', 4, 'elearning', 60000],
+          ['prov-most', 'prov-most-trauma', 'Trauma a jeho projevy u dětí školního věku', 6, 'online', 120000],
+        ] as const
+        const pick = rng.pick(courseIds)
+        const [providerId, courseId, title, hours, formCode, priceMinor] = pick
+
+        const orderId = `${caseFileId}-ord1`
+        const placed = addMonths(opt.today, -rng.int(1, 6))
+        // Část objednávek vzejde z žádosti pěstouna, část vybere Klíčová osoba.
+        const requestedByCarer = rng.bool(0.5)
+        const completed = rng.bool(0.7)
+
+        const order: Order = {
+          ...sys(keyWorkerId),
+          id: orderId,
+          providerId,
+          courseId,
+          sessionId: null,
+          buyer: {
+            kind: 'organization',
+            organizationId: orgId,
+            organizationName: meta.display,
+            ico: meta.ico,
+            billingAddress: `${orgTown.city}, ${orgTown.zip}`,
+          },
+          seats: [{
+            personId: carerIds[0]!,
+            displayName: carerNames[0]!,
+            email: `${slugify(carerNames[0]!)}@priklad.test`,
+            educationPeriodId: `${agreementId}-edu1`,
+          }],
+          seatCount: 1,
+          unitPrice: { amountMinor: priceMinor, currency: 'CZK' },
+          totalPrice: { amountMinor: priceMinor, currency: 'CZK' },
+          status: completed ? 'completed' : rng.pick(['approved', 'confirmed', 'invoiced']),
+          requestedByPersonId: requestedByCarer ? carerIds[0]! : null,
+          approvedByPersonId: managerId,
+          approvedAt: isoDateTime(addDays(placed, 2)),
+          rejectedReason: null,
+          payment: {
+            // Peníze netečou přes nás — pořadatel fakturuje, organizace platí.
+            method: 'invoice',
+            flowsThroughPlatform: false,
+            paidOn: completed ? isoDate(addDays(placed, 18)) : null,
+            variableSymbol: String(rng.int(100000, 999999)),
+            note: null,
+          },
+          invoiceDocumentId: null,
+          expenseEntryIds: [],
+          placedAt: isoDateTime(placed),
+          cancelledAt: null,
+          cancelledReason: null,
+        }
+        push(mkPaths.order(orderId), order as unknown as Record<string, unknown>, 'courseOrders')
+        // Zrcadlo u organizace, aby „naše kurzy“ byl jeden dotaz.
+        push(`${p.courseOrders()}/${orderId}`, {
+          orderId, providerId, courseId, title,
+          status: order.status, totalPrice: order.totalPrice,
+          placedAt: order.placedAt, caseFileId,
+        }, 'orgCourseOrders')
+
+        const enrolment: Enrolment = {
+          ...sys(keyWorkerId),
+          id: `${orderId}-enr1`,
+          orderId,
+          courseId,
+          providerId,
+          personId: carerIds[0]!,
+          displayName: carerNames[0]!,
+          email: order.seats[0]!.email,
+          access: {
+            kind: formCode === 'prezencne' ? 'in_person' : 'link',
+            value: formCode === 'prezencne' ? null : 'https://kurzy.priklad.test/pristup/xyz',
+            sharedAt: isoDateTime(addDays(placed, 3)),
+          },
+          status: completed ? 'completed' : 'enrolled',
+          completedOn: completed ? isoDate(addDays(placed, 25)) : null,
+          certificateId: completed ? `${orderId}-cert1` : null,
+        }
+        push(
+          `${mkPaths.enrolments(orderId)}/${enrolment.id}`,
+          enrolment as unknown as Record<string, unknown>,
+          'enrolments',
+        )
+
+        if (!completed) return
+        const cert: CourseCertificate = {
+          ...sys('superadmin'),
+          id: `${orderId}-cert1`,
+          enrolmentId: enrolment.id,
+          orderId,
+          courseId,
+          providerId,
+          participantName: carerNames[0]!,
+          participantPersonId: carerIds[0]!,
+          courseTitle: title,
+          hours,
+          formCode,
+          completedOn: enrolment.completedOn!,
+          issuedByPersonId: 'provider-staff',
+          issuedAt: isoDateTime(addDays(placed, 26)),
+          accreditationNumber: providerId === 'prov-akademie' ? '2024/1234-A' : null,
+          documentId: null,
+          verificationToken: `cert-${orderId}`,
+          // Vzdělávací záznam z certifikátu vznikne sám, s možností vrátit zpět.
+          educationRecordId: null,
+          revokedAt: null,
+          revokedReason: null,
+        }
+        push(
+          mkPaths.certificate(cert.id),
+          cert as unknown as Record<string, unknown>,
+          'certificates',
         )
       }
 
@@ -1130,10 +1397,77 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         }
         push(p.document(caseFileId, id), doc as unknown as Record<string, unknown>, 'documents')
         pushTimeline(caseFileId, id, 'document', keyWorkerId, at, `Dokument: ${title}`)
+        if (category === 'receipt' || category === 'certificate') {
+          pushScanTranscript(caseFileId, id, category, keyWorkerId, at)
+        }
       })
     }
 
     /* ---------------------------------------------------------------- */
+
+    /**
+     * Vyfocený doklad má editovatelný přepis. Na rozdíl od diktátu se smí
+     * opravovat kdykoli — originál zůstává, takže je proti čemu srovnat
+     * (scans.ts). `ocrText` je surový výstup a nepřepisuje se.
+     */
+    function pushScanTranscript(
+      caseFileId: string, documentId: string,
+      category: 'receipt' | 'certificate', keyWorkerId: string, at: Date,
+    ): void {
+      const isReceipt = category === 'receipt'
+      const amount = rng.int(80, 1200)
+      const hours = rng.pick([4, 6, 8, 12])
+      const ocr = isReceipt
+        ? `ČERPACÍ STANICE PŘÍKLAD\n${isoDate(at)}\nNatural 95   ${amount},00 Kč\nCELKEM ${amount},00 Kč`
+        : `OSVĚDČENÍ O ABSOLVOVÁNÍ\nAkademie NRP, z.ú.\nRozsah: ${hours} hodin\nDatum: ${isoDate(at)}`
+      // Část přepisů je opravená člověkem — OCR plete 3 a 8.
+      const edited = rng.bool(0.3)
+      const t: ScanTranscript = {
+        ...sys(keyWorkerId),
+        documentId,
+        documentVersionNo: 1,
+        caseFileId,
+        visibilityClass: 'content',
+        ocrText: ocr,
+        ocrEngine: 'document_ai',
+        ocrConfidence: rng.bool(0.75) ? 0.96 : 0.68,
+        language: 'cs',
+        content: { format: 'blocks', version: 1, blocks: [], plainText: ocr },
+        plainText: ocr,
+        source: edited ? 'ocr_then_edited' : 'ocr',
+        extracted: {
+          docKind: isReceipt ? 'receipt' : 'certificate',
+          confidence: rng.bool(0.8) ? 'high' : 'low',
+          fields: isReceipt
+            ? [
+                { key: 'date', label: 'Datum', value: isoDate(at), snippet: isoDate(at), confidence: 0.97, correctedByPersonId: null },
+                { key: 'amount', label: 'Částka', value: String(amount), snippet: `CELKEM ${amount},00 Kč`, confidence: 0.93, correctedByPersonId: edited ? keyWorkerId : null },
+                { key: 'vendor', label: 'Dodavatel', value: 'Čerpací stanice Příklad', snippet: 'ČERPACÍ STANICE PŘÍKLAD', confidence: 0.88, correctedByPersonId: null },
+              ]
+            : [
+                { key: 'title', label: 'Název', value: 'Attachment a vztahová vazba', snippet: 'OSVĚDČENÍ O ABSOLVOVÁNÍ', confidence: 0.91, correctedByPersonId: null },
+                { key: 'hours', label: 'Hodiny', value: String(hours), snippet: `Rozsah: ${hours} hodin`, confidence: 0.95, correctedByPersonId: null },
+                { key: 'provider', label: 'Pořadatel', value: 'Akademie NRP, z.ú.', snippet: 'Akademie NRP, z.ú.', confidence: 0.94, correctedByPersonId: null },
+              ],
+          suggests: {
+            kind: isReceipt ? 'expense' : 'education_record',
+            payload: isReceipt
+              ? { amountMinor: amount * 100, currency: 'CZK', categoryCode: 'jizdne' }
+              : { hours, formCode: 'prezencne' },
+            missingFields: isReceipt ? [] : ['educationPeriodId'],
+          },
+        },
+        lastEditedAt: edited ? isoDateTime(addDays(at, 1)) : null,
+        lastEditedByPersonId: edited ? keyWorkerId : null,
+        editCount: edited ? 1 : 0,
+        cost: { amountMinor: 3, currency: 'CZK' },
+      }
+      push(
+        p.scanTranscript(caseFileId, documentId, 1),
+        t as unknown as Record<string, unknown>,
+        'scanTranscripts',
+      )
+    }
 
     function buildObligations(
       caseFileId: string, agreementId: string, ref: string, keyWorkerId: string,

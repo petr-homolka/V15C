@@ -30,6 +30,29 @@ await env.withSecurityRulesDisabled(async (ctx) => {
     transcript: { text: 'původní', editableUntilMs: closed, editWindowDays: 3 },
     summary: { proposedPlainText: 'souhrn' },
   })
+  // marketplace
+  await setDoc(doc(db, 'providers/prov1'), { slug: 'akademie', displayName: 'Akademie NRP' })
+  await setDoc(doc(db, 'providers/prov1/courses/c-listed'), { title: 'Attachment', status: 'listed', hours: 8 })
+  await setDoc(doc(db, 'providers/prov1/courses/c-draft'), { title: 'Rozpracovaný', status: 'draft', hours: 4 })
+  await setDoc(doc(db, 'listings/l1'), { courseId: 'c-listed', providerId: 'prov1', visibility: 'public', title: 'Attachment', hours: 8 })
+  await setDoc(doc(db, 'listings/l2'), { courseId: 'c-x', providerId: 'prov1', visibility: 'system_only', title: 'Jen v systému', hours: 4 })
+  await setDoc(doc(db, 'orders/ord1'), {
+    providerId: 'prov1', courseId: 'c-listed',
+    buyer: { kind: 'organization', organizationId: 'o1', organizationName: 'Test' },
+    status: 'approved',
+  })
+  await setDoc(doc(db, 'orders/ord2'), {
+    providerId: 'prov9', courseId: 'c-y',
+    buyer: { kind: 'organization', organizationId: 'o9', organizationName: 'Cizí' },
+    status: 'approved',
+  })
+  await setDoc(doc(db, 'certificates/cert1'), { orderId: 'ord1', hours: 8, participantName: 'Eva Nováková' })
+  await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/documents/d1'), { category: 'receipt', title: 'Účtenka' })
+  await setDoc(doc(db, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'), {
+    documentId: 'd1', documentVersionNo: 1, ocrText: 'Celkem 340 Kč',
+    plainText: 'Celkem 340 Kč', createdByPersonId: 'p-kw',
+  })
+
   await setDoc(doc(db, 'verifications/tok-abc'), {
     documentId: 'doc1', organizationId: 'o1',
     publicFacts: { issuerName: 'Test o.p.s.', ourReference: 'ZPR-2026/0042', contentHash: 'abc' },
@@ -76,6 +99,32 @@ await check('vedení položku vyřadí', assertSucceeds(setDoc(doc(admin, 'orgs/
   codebookCode: 'expense.category', code: 'jizdne', label: 'Jízdné',
   createdByPersonId: 'p-kw', status: 'retired' })))
 await check('položku číselníku nemaže ani admin', assertFails(deleteDoc(doc(admin, 'orgs/o1/codebookItems/ci-used'))))
+
+// marketplace: veřejná nabídka bez přihlášení, objednávky jen svým
+const anonMk = env.unauthenticatedContext().firestore()
+const provider = env.authenticatedContext('u-prov', { pid: 'p-prov', providers: { prov1: 'provider_admin' } }).firestore()
+await check('profil pořadatele je veřejný', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1'))))
+await check('vylistovaný kurz je veřejný', assertSucceeds(getDoc(doc(anonMk, 'providers/prov1/courses/c-listed'))))
+await check('rozpracovaný kurz veřejný NENÍ', assertFails(getDoc(doc(anonMk, 'providers/prov1/courses/c-draft'))))
+await check('veřejná nabídka jde číst bez přihlášení', assertSucceeds(getDoc(doc(anonMk, 'listings/l1'))))
+await check('nabídka jen pro systém veřejná není', assertFails(getDoc(doc(anonMk, 'listings/l2'))))
+await check('nabídku nezapíše ani pořadatel', assertFails(setDoc(doc(provider, 'listings/l3'), { visibility: 'public' })))
+await check('pořadatel upraví svůj kurz', assertSucceeds(setDoc(doc(provider, 'providers/prov1/courses/c-listed'), { title: 'Attachment II', status: 'listed', hours: 8 })))
+await check('cizí kurz pořadatel neupraví', assertFails(setDoc(doc(worker, 'providers/prov1/courses/c-listed'), { title: 'Hack', status: 'listed', hours: 8 })))
+await check('organizace vidí svou objednávku', assertSucceeds(getDoc(doc(worker, 'orders/ord1'))))
+await check('cizí objednávku organizace nevidí', assertFails(getDoc(doc(worker, 'orders/ord2'))))
+await check('pořadatel vidí objednávku na svůj kurz', assertSucceeds(getDoc(doc(provider, 'orders/ord1'))))
+await check('objednávku nezaloží klient', assertFails(setDoc(doc(worker, 'orders/ord3'), { providerId: 'prov1' })))
+await check('certifikát se nedá upravit z klienta', assertFails(setDoc(doc(provider, 'certificates/cert1'), { hours: 40 })))
+
+// přepis dokladu: opravitelný kdykoli, ale ocrText se nepřepisuje
+await check('přepis dokladu lze opravit kdykoli', assertSucceeds(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'), {
+  documentId: 'd1', documentVersionNo: 1, ocrText: 'Celkem 340 Kč',
+  plainText: 'Celkem 340,00 Kč', createdByPersonId: 'p-kw' })))
+await check('surový OCR text se nepřepisuje', assertFails(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'), {
+  documentId: 'd1', documentVersionNo: 1, ocrText: 'Celkem 3400 Kč',
+  plainText: 'Celkem 3400 Kč', createdByPersonId: 'p-kw' })))
+await check('účetní přepis dokladu nevidí', assertFails(getDoc(doc(accountant, 'orgs/o1/caseFiles/cf1/documents/d1/transcript/1'))))
 
 // QR ověření: veřejně čitelné po tokenu, ale nevypsatelné
 const anon = env.unauthenticatedContext().firestore()

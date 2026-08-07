@@ -123,6 +123,87 @@ service cloud.firestore {
     }
 
     /* ============================================================ */
+    /* Marketplace vzdělávání                                        */
+    /* ============================================================ */
+
+    function providerRole(providerId) {
+      return signedIn() && request.auth.token.providers != null
+        ? request.auth.token.providers[providerId]
+        : null;
+    }
+    function isProviderStaff(providerId) {
+      return providerRole(providerId) != null;
+    }
+
+    // Profil pořadatele je VEŘEJNÝ — má být k nalezení i mimo systém.
+    // Nejsou v něm osobní údaje účastníků, jen údaje o firmě.
+    match /providers/{providerId} {
+      allow get, list: if true;
+      allow create: if isSuperadmin();
+      allow update: if isProviderStaff(providerId) || isSuperadmin();
+      allow delete: if false;
+
+      // Kdo za pořadatele pracuje. Ne veřejné.
+      match /members/{personId} {
+        allow read: if isProviderStaff(providerId) || isSuperadmin();
+        allow write: if isSuperadmin();
+      }
+
+      // Sklad kurzů. Veřejně jen to, co je vylistované — nevylistovaný
+      // kurz je rozpracovaný a nikomu do něj nic není.
+      match /courses/{courseId} {
+        allow get, list: if resource.data.status == 'listed'
+                         || isProviderStaff(providerId) || isSuperadmin();
+        allow create, update: if isProviderStaff(providerId);
+        allow delete: if false;
+
+        match /sessions/{sessionId} {
+          allow get, list: if true;
+          allow create, update: if isProviderStaff(providerId);
+          allow delete: if false;
+        }
+      }
+    }
+
+    // Veřejná výkladní skříň. Čitelná BEZ přihlášení, aby se nabídka dala
+    // najít na internetu a koupit i mimo systém — a právě proto v ní nesmí
+    // být nic osobního (marketplace.ts).
+    match /listings/{listingId} {
+      allow get, list: if resource.data.visibility == 'public' || signedIn();
+      allow write: if false;   // píše Function při vylistování kurzu
+    }
+
+    // Objednávka. Vidí ji kupující a pořadatel — nikdo jiný.
+    match /orders/{orderId} {
+      allow get: if signedIn() && (
+                   isProviderStaff(resource.data.providerId)
+                   || (resource.data.buyer.kind == 'organization'
+                       && isMember(resource.data.buyer.organizationId))
+                 );
+      allow list: if false;      // výpis vždy přes dotaz s filtrem, ne plošně
+      allow create, update: if false;   // zakládá a mění Function
+      allow delete: if false;
+
+      // Přístupy ke kurzu. Pořadatel vidí jméno a e-mail účastníka a nic víc.
+      match /enrolments/{enrolmentId} {
+        allow read: if signedIn() && (
+                      isProviderStaff(get(/databases/$(database)/documents/orders/$(orderId)).data.providerId)
+                      || isSelf(resource.data.personId)
+                    );
+        allow write: if false;
+      }
+    }
+
+    // Certifikát vystavuje pořadatel. Čte ho účastník, jeho organizace
+    // a pořadatel — hodiny z něj plní zákonnou povinnost, takže se
+    // nesmí dát upravit z klienta.
+    match /certificates/{certificateId} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow write: if false;
+    }
+
+    /* ============================================================ */
     /* transfers/{code} — jediná mezi-organizační kolekce            */
     /* ============================================================ */
 
@@ -384,6 +465,25 @@ service cloud.firestore {
           allow update: if canReadContent(orgId);
           allow delete: if false;   // vyřazení jen skartačním řízením
 
+          // Přepis vyfoceného dokladu. Na rozdíl od diktátu se smí opravovat
+          // KDYKOLI — originál zůstává, takže je pořád proti čemu srovnat
+          // (scans.ts). `ocrText` je surový výstup stroje a nepřepisuje se;
+          // to hlídá Function, protože pravidla neumí porovnávat pole
+          // napříč verzemi.
+          match /transcript/{versionNo} {
+            allow read: if canReadContent(orgId);
+            allow create: if canReadContent(orgId) && authorIsCaller();
+            allow update: if canReadContent(orgId)
+                          && request.resource.data.ocrText == resource.data.ocrText;
+            allow delete: if false;
+
+            match /revisions/{revisionNo} {
+              allow read: if canReadContent(orgId);
+              allow create: if canReadContent(orgId);
+              allow update, delete: if false;
+            }
+          }
+
           // Index dědí viditelnost dokumentu, protože je jeho podkolekcí —
           // kdyby žil vedle, obešel by se jím model oprávnění (dok. 17).
           // Píše ho indexovací Function.
@@ -532,6 +632,13 @@ service cloud.firestore {
         allow read: if isManagement(orgId) || hasRole(orgId, ['accountant']);
         allow create, update: if isManagement(orgId) || hasRole(orgId, ['accountant']);
         allow delete: if false;
+      }
+
+      // Zrcadlo objednávek organizace, aby „naše kurzy“ byl jeden dotaz
+      // bez sahání do kořenové kolekce. Píše Function spolu s objednávkou.
+      match /courseOrders/{id} {
+        allow read: if isMember(orgId);
+        allow write: if false;
       }
 
       match /exitPackages/{id} {

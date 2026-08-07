@@ -48,12 +48,39 @@ export const platform = {
   /** Co je v jakém tarifu — rozhoduje vlastník produktu, ne kód. */
   planMatrices: () => `${PLATFORM_ROOT}/planMatrix`,
   planMatrix: (id: Id) => `${PLATFORM_ROOT}/planMatrix/${id}`,
+  marketplaceTerms: () => `${PLATFORM_ROOT}/marketplaceTerms`,
+  marketplaceTerm: (id: Id) => `${PLATFORM_ROOT}/marketplaceTerms/${id}`,
 } as const
 
 /** Jediná mezi-organizační kolekce. Zapisuje POUZE Cloud Function. */
 export const transfers = {
   all: () => 'transfers',
   one: (code: string) => `transfers/${code}`,
+} as const
+
+/**
+ * Marketplace vzdělávání. Pořadatel je samostatný subjekt, prodává napříč
+ * organizacemi a jeho nabídka je veřejná — proto kořenové kolekce, ne
+ * podkolekce organizace (marketplace.ts).
+ */
+export const marketplace = {
+  providers: () => 'providers',
+  provider: (id: Id) => `providers/${id}`,
+  providerMembers: (providerId: Id) => `providers/${providerId}/members`,
+  courses: (providerId: Id) => `providers/${providerId}/courses`,
+  course: (providerId: Id, courseId: Id) => `providers/${providerId}/courses/${courseId}`,
+  sessions: (providerId: Id, courseId: Id) =>
+    `providers/${providerId}/courses/${courseId}/sessions`,
+
+  /** VEŘEJNÉ — čitelné bez přihlášení, proto bez osobních údajů. */
+  listings: () => 'listings',
+  listing: (id: Id) => `listings/${id}`,
+
+  orders: () => 'orders',
+  order: (id: Id) => `orders/${id}`,
+  enrolments: (orderId: Id) => `orders/${orderId}/enrolments`,
+  certificates: () => 'certificates',
+  certificate: (id: Id) => `certificates/${id}`,
 } as const
 
 /**
@@ -135,6 +162,12 @@ export function org(orgId: Id) {
 
     documents: (caseFileId: Id) => `${base}/caseFiles/${caseFileId}/documents`,
     document: (caseFileId: Id, id: Id) => `${base}/caseFiles/${caseFileId}/documents/${id}`,
+    /** Přepis vyfoceného dokladu — podřízený dokumentu, dědí viditelnost. */
+    scanTranscript: (caseFileId: Id, documentId: Id, versionNo: number) =>
+      `${base}/caseFiles/${caseFileId}/documents/${documentId}/transcript/${versionNo}`,
+    scanTranscriptRevisions: (caseFileId: Id, documentId: Id, versionNo: number) =>
+      `${base}/caseFiles/${caseFileId}/documents/${documentId}/transcript/${versionNo}/revisions`,
+
     documentIndex: (caseFileId: Id, documentId: Id, versionNo: number) =>
       `${base}/caseFiles/${caseFileId}/documents/${documentId}/index/${versionNo}`,
     documentChunks: (caseFileId: Id, documentId: Id, versionNo: number) =>
@@ -173,6 +206,8 @@ export function org(orgId: Id) {
     registryReturn: (year: number) => `${base}/registryReturns/${year}`,
     reportDefinitions: () => `${base}/reportDefinitions`,
     exitPackages: () => `${base}/exitPackages`,
+    /** Objednávky kurzů organizace — zrcadlo kořenové kolekce `orders`. */
+    courseOrders: () => `${base}/courseOrders`,
 
     /* --- Eli --- */
     assistantSessions: () => `${base}/assistant`,
