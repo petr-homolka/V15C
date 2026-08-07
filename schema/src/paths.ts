@@ -45,12 +45,25 @@ export const platform = {
   codebookItem: (id: Id) => `${PLATFORM_ROOT}/codebookItems/${id}`,
   uploadPolicies: () => `${PLATFORM_ROOT}/uploadPolicies`,
   uploadPolicy: (id: Id) => `${PLATFORM_ROOT}/uploadPolicies/${id}`,
+  /** Co je v jakém tarifu — rozhoduje vlastník produktu, ne kód. */
+  planMatrices: () => `${PLATFORM_ROOT}/planMatrix`,
+  planMatrix: (id: Id) => `${PLATFORM_ROOT}/planMatrix/${id}`,
 } as const
 
 /** Jediná mezi-organizační kolekce. Zapisuje POUZE Cloud Function. */
 export const transfers = {
   all: () => 'transfers',
   one: (code: string) => `transfers/${code}`,
+} as const
+
+/**
+ * Ověření dokumentu z QR kódu. Musí být čitelné BEZ přihlášení, takže leží
+ * mimo `orgs/**` — a proto v něm nesmí být nic z obsahu (branding.ts).
+ * Zapisuje pouze Cloud Function.
+ */
+export const verifications = {
+  all: () => 'verifications',
+  one: (token: string) => `verifications/${token}`,
 } as const
 
 /* ---------------------------------------------------------------- */
@@ -78,6 +91,13 @@ export function org(orgId: Id) {
     codebookItems: () => `${base}/codebookItems`,
     codebookItem: (id: Id) => `${base}/codebookItems/${id}`,
     storageQuota: () => `${base}/quota/current`,
+    /** Branding a šablony dopisních papírů. */
+    branding: () => `${base}/branding/current`,
+    letterheads: () => `${base}/letterheads`,
+    letterhead: (id: Id) => `${base}/letterheads/${id}`,
+    referenceSeries: () => `${base}/referenceSeries`,
+    referenceSerie: (id: Id) => `${base}/referenceSeries/${id}`,
+    aiEntitlement: () => `${base}/entitlements/ai`,
 
     /* --- osoby a děti; kontakty jsou ODDĚLENĚ (dok. 04) --- */
     persons: () => `${base}/persons`,

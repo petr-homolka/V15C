@@ -263,6 +263,21 @@ export const CODEBOOKS: readonly CodebookDef[] = [
     note: 'Skupina řídí, co se nabízí k podpisu a co jde do exportu.',
   },
   {
+    code: 'photo.purpose',
+    label: 'Účel fotografie',
+    usedIn: 'fotoaparát v aplikaci, vkládání z galerie',
+    kind: 'mapped',
+    behavior: {
+      field: 'processing',
+      label: 'Jak zpracovat',
+      allowed: ['document_grayscale', 'photo_color'],
+      required: true,
+    },
+    openForOrgs: true,
+    retirable: true,
+    note: 'Doklad se převádí do odstínů šedi — menší soubor při stejné čitelnosti. Fotka pokoje zůstává barevná.',
+  },
+  {
     code: 'task.type',
     label: 'Druh úkolu',
     usedIn: 'úkoly',

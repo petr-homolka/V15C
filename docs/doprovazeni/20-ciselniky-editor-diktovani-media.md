@@ -141,7 +141,7 @@ učit uživatele něco, co nikde jinde neplatí.
 
 ## 3. Diktování, přepis a souhrn
 
-Zadání: zvuk se ukládat nemusí (ukládání může být Premium), ale **přepis se
+Zadání: zvuk se ukládat nemusí, ale **přepis se
 ukládat musí** a je editovatelný v okamžiku nahrávání a **3 dny** potom.
 **Souhrn od AI** je editovatelný.
 
@@ -182,17 +182,25 @@ nepotvrdí, je to jen diktát — AI navrhuje, člověk potvrzuje (dok. 02 sekce
 
 ### 3.5 Co je v jakém tarifu
 
-**Diktát a přepis jsou v bezplatné variantě záměrně.** Je to ta nejužitečnější
-věc pro terén (dok. 02: *„minimum psaní — diktát je hlavní vstup“*) a schovat ji
-za tarif by znamenalo, že systém v terénu nepomůže tomu, kdo neplatí.
-
-Premium je až **uchování zvuku** — což je náklad a riziko, ne užitek.
+> **OPRAVENO v dok. 21.** Původně tady stálo, že diktát a přepis jsou zdarma —
+> to bylo moje rozhodnutí, které mi nepatřilo. Platí:
+>
+> | | |
+> | --- | --- |
+> | AI (včetně diktátu a přepisu) | první **2 měsíce**, pak kredit nebo paušál s limitem. Nikdy zdarma. |
+> | Zdarma | **ruční dopisování** |
+>
+> A hlavně: tarify už nejsou konstanta v kódu, ale **datovaný záznam
+> `PlanMatrix`** — o zařazení schopnosti do tarifu rozhoduje vlastník produktu
+> a mění se to bez nasazení kódu.
 
 ---
 
 ## 4. Videa
 
-**Zakázaná, v Premium s limitem.** Důvod není jen cena: video z rodiny je
+**Zakázaná natrvalo** (upraveno v dok. 21 — původně tu stálo „v Premium
+s limitem“; v modelu je to `allowed: false`, konstanta bez režimu).
+Důvod není jen cena: video z rodiny je
 nejcitlivější možný obsah, indexovat se nedá a v archivu by leželo desítky let
 (dok. 10). Zákaz je proto výchozí stav, ne šetření.
 

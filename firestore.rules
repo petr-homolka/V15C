@@ -105,6 +105,24 @@ service cloud.firestore {
     }
 
     /* ============================================================ */
+    /* verifications/{token} — ověření z QR kódu                     */
+    /* ============================================================ */
+
+    // Čitelné BEZ přihlášení — QR na dopise musí fungovat komukoli,
+    // kdo ten dopis dostal. Právě proto v tom dokumentu NENÍ nic z obsahu:
+    // jen vydavatel, datum, druh dokumentu, jednací číslo a otisk
+    // (branding.ts). Odkaz na samotný dokument dostane až přihlášený,
+    // kdo na něj má právo — rozhoduje přihlášení, ne držení papíru.
+    //
+    // `list` je zakázaný: kdyby šel vypsat, dal by se z něj přečíst přehled
+    // toho, kdo komu co posílá.
+    match /verifications/{token} {
+      allow get: if true;
+      allow list: if false;
+      allow write: if false;   // píše pouze Cloud Function
+    }
+
+    /* ============================================================ */
     /* transfers/{code} — jediná mezi-organizační kolekce            */
     /* ============================================================ */
 
@@ -179,6 +197,34 @@ service cloud.firestore {
         allow read: if isMember(orgId);
         allow create, update: if isManagement(orgId);
         allow delete: if false;
+      }
+
+      // Branding a šablony dopisních papírů. Čtou všichni, protože podle
+      // nich klient vykresluje náhled dokumentu; mění je vedení.
+      match /branding/{docId} {
+        allow read: if isMember(orgId);
+        allow write: if isManagement(orgId);
+      }
+      match /letterheads/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId);
+        allow delete: if false;   // nová verze je nový dokument
+      }
+
+      // Číselné řady jednacích čísel. Přiděluje Cloud Function transakčně —
+      // z klienta by dvě zprávy vytvořené naráz dostaly stejné číslo.
+      match /referenceSeries/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId)
+                              && request.resource.data.lastSequence == resource.data.lastSequence;
+        allow delete: if false;
+      }
+
+      // Oprávnění k AI. Vidí vedení, mění se mimo klienta — o zařazení
+      // schopnosti do tarifu rozhoduje vlastník produktu (media.ts).
+      match /entitlements/{docId} {
+        allow read: if isMember(orgId);
+        allow write: if false;
       }
 
       // Vlastní položky číselníků — „+ Přidat nové“ v každé nabídce.

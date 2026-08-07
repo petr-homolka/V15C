@@ -23,9 +23,12 @@ import type {
   Person, PersonContact, Placement, Report, ServiceInquiry, Task,
   CalendarEvent, OrgSettings, Subscription, CreditWallet, OrpConsent,
   TimelineEntry, AuthorityRequest, Authority, PricingRuleset,
-  CodebookDef, CodebookItem, UploadPolicy, Dictation,
+  CodebookDef, CodebookItem, UploadPolicy, Dictation, PlanMatrix,
+  AiEntitlement, OrgBranding, LetterheadTemplate, ReferenceNumberSeries,
 } from '../../../schema/src/index'
-import { org as orgPaths, platform as platformPaths, CODEBOOKS } from '../../../schema/src/index'
+import {
+  org as orgPaths, platform as platformPaths, CODEBOOKS, DEFAULT_LETTERHEADS,
+} from '../../../schema/src/index'
 import {
   Address, Gender, KU_LIST, ORP_LIST, Town, familyLabel, makeAddress, makeBankAccount,
   makeEmail, makeFakeNationalId, makeName, makePhone, pickSurnameIndex,
@@ -184,6 +187,12 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       ['contact.absenceReason', 'hospitalizace', 'Hospitalizace', { justifiedByDefault: 'yes' }],
       ['careEpisode.place', 'babicka', 'U prarodičů', null],
       ['careEpisode.place', 'tabor', 'Tábor', null],
+      ['photo.purpose', 'pokoj', 'Pokoj dítěte', { processing: 'photo_color' }],
+      ['photo.purpose', 'vysvedceni', 'Vysvědčení', { processing: 'document_grayscale' }],
+      ['photo.purpose', 'uctenka', 'Účtenka nebo doklad', { processing: 'document_grayscale' }],
+      ['photo.purpose', 'smlouva', 'Smlouva nebo dohoda', { processing: 'document_grayscale' }],
+      ['photo.purpose', 'certifikat', 'Certifikát ze vzdělávání', { processing: 'document_grayscale' }],
+      ['photo.purpose', 'poznamky', 'Ruční poznámky', { processing: 'document_grayscale' }],
       ['task.type', 'doklad', 'Doložit doklad', null],
       ['agenda.code', 'doprovazeni', 'Doprovázení', null],
       ['agenda.code', 'ostatni', 'Ostatní agendy', null],
@@ -231,15 +240,13 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         maxBytes: 40 * 1024 * 1024,
       },
       audio: {
-        captureAllowed: true,
-        storeAllowed: 'premium_only',
+        captureRequiresEntitlement: 'ai.dictation',
+        storeRequiresEntitlement: 'audio_retention',
         maxBytes: 60 * 1024 * 1024,
         defaultRetentionDays: 90,
       },
       video: {
-        mode: 'forbidden',
-        maxBytes: 0,
-        maxDurationSeconds: 0,
+        allowed: false,
         refusalMessage: 'Video se do spisu nenahrává. Popis situace patří do zápisu, snímek jako fotografie.',
       },
       quota: {
@@ -253,6 +260,48 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       platformPaths.uploadPolicy(uploadPolicy.id),
       uploadPolicy as unknown as Record<string, unknown>,
       'uploadPolicies',
+    )
+
+    // Co je v jakém tarifu. Rozhodnutí VLASTNÍKA PRODUKTU, uložené jako
+    // datovaný záznam — mění se bez nasazení kódu (media.ts).
+    const planMatrix: PlanMatrix = {
+      id: 'plans-2026-01',
+      effectiveFrom: '2026-01-01',
+      note: 'AI zdarma jen ve zkušebním období; ruční dopisování zdarma vždy.',
+      plans: [
+        {
+          plan: 'free',
+          label: 'Základní',
+          entitlements: [
+            'case_file', 'calendar', 'documents', 'tasks', 'obligations',
+            'editor', 'manual_entry', 'photo_capture', 'reports_statutory',
+          ],
+        },
+        {
+          plan: 'paid',
+          label: 'Placená',
+          entitlements: [
+            'case_file', 'calendar', 'documents', 'tasks', 'obligations',
+            'editor', 'manual_entry', 'photo_capture', 'reports_statutory',
+            'reports_accounting', 'checklists', 'standards', 'exports',
+            'branding', 'codebook_custom_items',
+          ],
+        },
+      ],
+      // AI a uchování zvuku se kupují zvlášť; zdarma AI není nikdy.
+      addOns: [
+        { entitlement: 'ai.assistant', label: 'Eli — dotazy a koncepty' },
+        { entitlement: 'ai.dictation', label: 'Diktování a přepis' },
+        { entitlement: 'ai.summary', label: 'Souhrny' },
+        { entitlement: 'ai.document_index', label: 'Čtení dokumentů' },
+        { entitlement: 'audio_retention', label: 'Uchování zvuku diktátu' },
+        { entitlement: 'extra_storage', label: 'Další prostor' },
+      ],
+    }
+    push(
+      platformPaths.planMatrix(planMatrix.id),
+      planMatrix as unknown as Record<string, unknown>,
+      'planMatrices',
     )
 
     // Ceník jako datovaná série — model se bude měnit, tak není v kódu (dok. 19).
@@ -354,6 +403,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     pushInquiries(orgId, managerId)
     pushOrgMemory(orgId, keyWorkers[0]!.id, keyWorkers[0]!.name.givenName)
     pushOwnCodebookItems(orgId, keyWorkers[0]!.id, orgIndex)
+    pushBranding(orgId, managerId, meta, orgTown)
+    pushLetterheads(orgId, managerId)
+    pushReferenceSeries(orgId, managerId)
+    pushAiEntitlement(orgId, managerId, orgIndex)
 
     /* --- dohody --------------------------------------------------- */
 
@@ -746,7 +799,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
                 storagePath: `demo/${caseFileId}/dic1.m4a`,
                 byteSize: rng.int(300, 3000) * 1024,
                 mimeType: 'audio/mp4',
-                storedUnderPlan: 'premium',
+                storedUnderEntitlement: 'audio_retention',
                 retainUntil: isoDate(addDays(recorded, 90)),
                 deletedOn: null,
               }
@@ -755,7 +808,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
                 storagePath: null,
                 byteSize: null,
                 mimeType: null,
-                storedUnderPlan: null,
+                storedUnderEntitlement: null,
                 retainUntil: null,
                 deletedOn: null,
               },
@@ -1586,6 +1639,116 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         }
         push(p.codebookItem(item.id), item as unknown as Record<string, unknown>, 'ownCodebookItems')
       })
+    }
+
+    function pushBranding(
+      orgId: string, managerId: string,
+      meta: { legal: string; ico: string }, town: Town,
+    ): void {
+      const p = orgPaths(orgId)
+      const b: OrgBranding = {
+        ...sys(managerId),
+        logo: { lightDocumentId: null, darkDocumentId: null, printHeightMm: 14 },
+        accent: { hex: '#0d5c63', contrastOnWhite: 6.4 },
+        footer: {
+          legalName: meta.legal,
+          seatLine: `Nádražní 12, ${town.zip} ${town.city}`,
+          ico: meta.ico,
+          dic: null,
+          registrationNote: 'zapsáno v rejstříku obecně prospěšných společností',
+          bankAccount: makeBankAccount(rng),
+          isds: `isds-${orgId}`,
+          web: `https://www.${orgId}.priklad.test`,
+          phone: makePhone(rng),
+          email: `info@${orgId}.priklad.test`,
+          mandateNote: 'pověření k výkonu SPOD č. 1/2019 vydané Krajským úřadem',
+        },
+        signatureBlock: {
+          defaultSignerPersonId: managerId,
+          defaultSignerTitle: rng.bool() ? 'ředitelka' : 'vedoucí služby',
+          scannedSignatureDocumentId: null,
+          stampDocumentId: null,
+        },
+        qr: { enabled: true, placement: 'footer_right', sizeMm: 18 },
+      }
+      push(p.branding(), b as unknown as Record<string, unknown>, 'branding')
+    }
+
+    function pushLetterheads(orgId: string, managerId: string): void {
+      const p = orgPaths(orgId)
+      DEFAULT_LETTERHEADS.forEach((tpl, i) => {
+        const l: LetterheadTemplate = {
+          ...sys(managerId),
+          id: `${orgId}-lh-${tpl.code}`,
+          code: tpl.code,
+          label: tpl.label,
+          version: '2026.1',
+          effectiveFrom: '2026-01-01',
+          supersedesId: null,
+          format: tpl.format,
+          orientation: tpl.orientation,
+          margins: tpl.margins,
+          blocks: [...tpl.blocks],
+          addressWindow: { ...tpl.addressWindow },
+          pagination: { ...tpl.pagination },
+          continuationHeader: tpl.continuationHeader,
+        }
+        void i
+        push(p.letterhead(l.id), l as unknown as Record<string, unknown>, 'letterheads')
+      })
+    }
+
+    function pushReferenceSeries(orgId: string, managerId: string): void {
+      const p = orgPaths(orgId)
+      const series: Array<[string, string, string]> = [
+        ['zprava', 'Zprávy o průběhu PP', 'ZPR'],
+        ['odpoved-urad', 'Odpovědi úřadům', 'ODP'],
+        ['obecne', 'Obecná korespondence', 'DOP'],
+      ]
+      series.forEach(([code, label, prefix], i) => {
+        const r: ReferenceNumberSeries = {
+          ...sys(managerId),
+          id: `${orgId}-rs-${code}`,
+          code,
+          label,
+          pattern: '{PREFIX}-{ROK}/{SEQ}',
+          prefix,
+          year: 2026,
+          lastSequence: rng.int(10, 90),
+          resetsYearly: true,
+          padTo: 4,
+        }
+        void i
+        push(p.referenceSerie(r.id), r as unknown as Record<string, unknown>, 'referenceSeries')
+      })
+    }
+
+    /**
+     * AI ve třech stavech, aby šlo testovat všechny: zkušební období, kredit
+     * po jeho vypršení, a paušál s limitem. Zdarma AI není nikdy.
+     */
+    function pushAiEntitlement(orgId: string, managerId: string, orgIndex: number): void {
+      const p = orgPaths(orgId)
+      const trialFrom = addMonths(opt.today, orgIndex === 0 ? -8 : -1)
+      const trialUntil = addMonths(trialFrom, 2)
+      const expired = trialUntil < opt.today
+      const e: AiEntitlement = {
+        ...sys(managerId),
+        organizationId: orgId,
+        trialFrom: isoDate(trialFrom),
+        trialUntil: isoDate(trialUntil),
+        trialMonths: 2,
+        mode: expired ? (orgIndex === 0 ? 'credit' : 'flat') : 'trial',
+        flatMonthlyLimit: expired && orgIndex !== 0
+          ? { unit: 'token', amount: 2_000_000 }
+          : null,
+        usedThisPeriod: expired ? rng.int(0, 1_500_000) : rng.int(0, 400_000),
+        periodResetsOn: expired ? isoDate(addMonths(opt.today, 1)) : null,
+        fallbackNote:
+          'Bez AI zůstává editor, knihovna vět a fotografování dokladů; ' +
+          'diktát a souhrny ne.',
+      }
+      push(p.aiEntitlement(), e as unknown as Record<string, unknown>, 'aiEntitlements')
     }
 
     function pushOrgMemory(orgId: string, personId: string, givenName: string): void {

@@ -30,6 +30,12 @@ await env.withSecurityRulesDisabled(async (ctx) => {
     transcript: { text: 'původní', editableUntilMs: closed, editWindowDays: 3 },
     summary: { proposedPlainText: 'souhrn' },
   })
+  await setDoc(doc(db, 'verifications/tok-abc'), {
+    documentId: 'doc1', organizationId: 'o1',
+    publicFacts: { issuerName: 'Test o.p.s.', ourReference: 'ZPR-2026/0042', contentHash: 'abc' },
+  })
+  await setDoc(doc(db, 'orgs/o1/branding/current'), { logo: { printHeightMm: 14 } })
+  await setDoc(doc(db, 'orgs/o1/referenceSeries/zprava'), { prefix: 'ZPR', year: 2026, lastSequence: 42 })
   await setDoc(doc(db, 'orgs/o1/codebookItems/ci-used'), {
     codebookCode: 'expense.category', code: 'jizdne', label: 'Jízdné',
     createdByPersonId: 'p-kw', status: 'active',
@@ -70,6 +76,17 @@ await check('vedení položku vyřadí', assertSucceeds(setDoc(doc(admin, 'orgs/
   codebookCode: 'expense.category', code: 'jizdne', label: 'Jízdné',
   createdByPersonId: 'p-kw', status: 'retired' })))
 await check('položku číselníku nemaže ani admin', assertFails(deleteDoc(doc(admin, 'orgs/o1/codebookItems/ci-used'))))
+
+// QR ověření: veřejně čitelné po tokenu, ale nevypsatelné
+const anon = env.unauthenticatedContext().firestore()
+await check('ověření dokumentu čte i nepřihlášený', assertSucceeds(getDoc(doc(anon, 'verifications/tok-abc'))))
+await check('ověření se nedá přepsat', assertFails(setDoc(doc(anon, 'verifications/tok-abc'), { documentId: 'x' })))
+await check('ověření nezapíše ani admin', assertFails(setDoc(doc(admin, 'verifications/tok-xyz'), { documentId: 'x' })))
+
+// branding a číselné řady
+await check('branding čte každý člen', assertSucceeds(getDoc(doc(worker, 'orgs/o1/branding/current'))))
+await check('branding mění jen vedení', assertFails(setDoc(doc(accountant, 'orgs/o1/branding/current'), { logo: { printHeightMm: 20 } })))
+await check('jednací číslo nezvyšuje klient', assertFails(setDoc(doc(admin, 'orgs/o1/referenceSeries/zprava'), { prefix: 'ZPR', year: 2026, lastSequence: 43 })))
 
 // diktát: přepis jen v okně, souhrn vždy
 await check('přepis lze upravit v okně', assertSucceeds(setDoc(doc(worker, 'orgs/o1/caseFiles/cf1/dictations/d-open'), {

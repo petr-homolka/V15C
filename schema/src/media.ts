@@ -4,7 +4,7 @@
  * ┌─────────────────────────────────────────────────────────────────────┐
  * │ PROČ JE OKNO NA ÚPRAVU PŘEPISU PRÁVĚ TŘI DNY                        │
  * │                                                                     │
- * │ Zvuk se neukládá (ukládání je Premium). Tím se ale ztrácí možnost   │
+ * │ Zvuk se neukládá. Tím se ale ztrácí možnost                         │
  * │ přepis později zkontrolovat proti tomu, co bylo řečeno — a přepis   │
  * │ je primární záznam o tom, co pracovnice v rodině viděla.            │
  * │                                                                     │
@@ -63,8 +63,8 @@ export interface DictationAudio {
   storagePath: string | null
   byteSize: number | null
   mimeType: string | null
-  /** Ukládání zvuku je Premium — viz `PlanFeatures`. */
-  storedUnderPlan: 'premium' | null
+  /** Podle kterého oprávnění se zvuk uchoval — viz `PlanMatrix`. */
+  storedUnderEntitlement: string | null
   /** Do kdy se drží; potom ho smaže úklidová funkce, přepis zůstává. */
   retainUntil: IsoDate | null
   deletedOn: IsoDate | null
@@ -165,18 +165,27 @@ export interface UploadPolicy {
   documents: { allowedMimeTypes: string[]; maxBytes: number }
 
   audio: {
-    /** Nahrávání diktátu jde vždy; ukládání zvuku je Premium. */
-    captureAllowed: boolean
-    storeAllowed: 'never' | 'premium_only' | 'always'
+    /**
+     * Nahrávání diktátu vyžaduje oprávnění k AI (`ai.dictation`), protože
+     * bez přepisu je zvuk k ničemu — viz `PlanMatrix`.
+     */
+    captureRequiresEntitlement: PlanEntitlement
+    /** Uchování zvuku je samostatná věc; o zařazení do tarifu rozhoduje vlastník. */
+    storeRequiresEntitlement: PlanEntitlement | null
     maxBytes: number
     defaultRetentionDays: number
   }
 
+  /**
+   * Video je zakázané **natrvalo**. Není to tarifní páka a nedá se zapnout
+   * ani v placené variantě — proto tady není režim, ale konstanta.
+   *
+   * Důvod není cena: video z rodiny je nejcitlivější možný obsah, nedá se
+   * indexovat, nedá se pseudonymizovat a v archivu by leželo desítky let
+   * (dok. 10). Rozhodnutí zadavatele: nikdy.
+   */
   video: {
-    /** Výchozí stav. */
-    mode: 'forbidden' | 'premium_only'
-    maxBytes: number
-    maxDurationSeconds: number
+    allowed: false
     /** Co se uživateli řekne, když to zkusí. Fakticky, bez poučování (dok. 16). */
     refusalMessage: string
   }
@@ -202,35 +211,159 @@ export interface StorageQuota {
 }
 
 /* ------------------------------------------------------------------ */
-/* Co je v jakém tarifu                                                */
+/* Fotografování — hlavní vstup dokladů z terénu                        */
 /* ------------------------------------------------------------------ */
 
 /**
- * Základní varianta je **příznaky, ne druhá aplikace** (dok. 19 sekce 6).
- * Seznam je tady, aby byl na jednom místě a dal se testovat.
+ * `orgs/{orgId}/caseFiles/{cid}/documents/{id}` s `origin: 'photo_capture'`.
+ *
+ * Nejde o krásné fotky. Jde o **čitelný doklad**: pokoj, vysvědčení, účtenka,
+ * smlouva, certifikát, ručně psaná poznámka. Z toho plyne všechno ostatní —
+ * cílem je čitelnost textu při co nejmenším souboru, ne barevná věrnost.
+ *
+ * Vstup z galerie (fotka nebo snímek obrazovky z mobilu) jde stejnou cestou.
+ * Jediný rozdíl je, odkud snímek přišel.
  */
-export const PLAN_FEATURES = {
-  free: [
-    'case_file', 'calendar', 'documents', 'tasks', 'obligations',
-    'reports_statutory', 'editor', 'dictation_transcript',
-  ],
-  paid: [
-    'assistant', 'document_index', 'reports_accounting', 'checklists',
-    'standards', 'exports', 'codebook_custom_items',
-  ],
-  premium: [
-    'dictation_audio_storage', 'video_upload', 'extra_storage_blocks',
-  ],
-} as const
+export interface PhotoCapture {
+  documentId: Id
+  source: 'camera' | 'gallery' | 'screenshot' | 'scanner_app'
+  /** Číselník `photo.purpose` — rozšiřitelný (codebooks.ts). */
+  purposeCode: string
 
-export type PlanFeature =
-  | (typeof PLAN_FEATURES.free)[number]
-  | (typeof PLAN_FEATURES.paid)[number]
-  | (typeof PLAN_FEATURES.premium)[number]
+  /** K čemu se to připíná. Fotka bez vazby je k nenalezení. */
+  subject: {
+    kind: 'person' | 'child' | 'case_file' | 'entry' | 'expense' | 'education' | 'agreement'
+    id: Id
+  }
+
+  /** Více snímků = jeden dokument. Účtenka i smlouva mají obvykle víc stran. */
+  pages: PhotoPage[]
+  /** Sloučeno do jednoho PDF; jednotlivé JPEG se po sloučení nedrží. */
+  mergedIntoPdf: boolean
+
+  capturedAt: IsoDateTime
+  /** V terénu bez signálu jde do fronty a nahraje se později (dok. 02). */
+  capturedOffline: boolean
+  uploadedAt: IsoDateTime | null
+}
+
+export interface PhotoPage {
+  pageNo: number
+  /** Rozměr a velikost PO zmenšení na zařízení. Originál se nikam neposílá. */
+  widthPx: number
+  heightPx: number
+  byteSize: number
+  /** Automatické narovnání a výřez okrajů dokumentu, když to jde. */
+  deskewed: boolean
+  /** Odhad čitelnosti; při nízkém se nabídne přefotit (dok. 16 — nabídka, ne blok). */
+  legibilityScore: number | null
+}
 
 /**
- * Diktát a přepis jsou v bezplatné variantě záměrně. Je to ta nejužitečnější
- * věc pro terén (dok. 02: „minimum psaní — diktát je hlavní vstup“) a schovat
- * ji za tarif by znamenalo, že systém v terénu nepomůže tomu, kdo neplatí.
- * Premium je až **uchování zvuku**, což je náklad a riziko, ne užitek.
+ * Zpracování na zařízení. Zmenšuje se **před nahráním**, ne po něm:
+ *
+ *   – pracovnice v terénu má často slabý signál a datový limit;
+ *   – originál z mobilu má 3–8 MB, po zmenšení ~150–250 KB;
+ *   – co se nenahraje, to se nemusí platit ani mazat.
  */
+export interface PhotoProcessing {
+  /** Delší strana v pixelech. 2200 px = čitelné A4 s drobným písmem. */
+  maxLongEdgePx: number
+  jpegQuality: number
+  /** Odstranit barvu u textových dokladů — menší soubor, stejná čitelnost. */
+  grayscaleForDocuments: boolean
+  autoDeskew: boolean
+  autoCropEdges: boolean
+  mergePagesToPdf: boolean
+
+  /**
+   * EXIF se odstraňuje VŽDY a bez možnosti vypnout.
+   *
+   * Fotka pokoje v pěstounské rodině nese v EXIF GPS souřadnice — tedy
+   * **adresu domácnosti dítěte v náhradní péči**. Ta se nezobrazuje ani
+   * v aplikaci příbuzných (dok. 09), takže ji nesmí prozradit metadata
+   * fotky, kterou si někdo stáhne ze spisu.
+   */
+  stripExif: true
+}
+
+export const DEFAULT_PHOTO_PROCESSING: PhotoProcessing = {
+  maxLongEdgePx: 2200,
+  jpegQuality: 72,
+  grayscaleForDocuments: true,
+  autoDeskew: true,
+  autoCropEdges: true,
+  mergePagesToPdf: true,
+  stripExif: true,
+}
+
+/* ------------------------------------------------------------------ */
+/* Tarify — rozhoduje vlastník produktu, ne kód                        */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Oprávnění, na která se v aplikaci ptáme. Jsou to **jména schopností**,
+ * ne tarify — do kterého tarifu která schopnost patří, se rozhoduje jinde
+ * a mění se bez nasazení kódu.
+ */
+export type PlanEntitlement =
+  | 'case_file' | 'calendar' | 'documents' | 'tasks' | 'obligations'
+  | 'editor' | 'manual_entry' | 'photo_capture'
+  | 'reports_statutory' | 'reports_accounting'
+  | 'checklists' | 'standards' | 'exports' | 'branding'
+  | 'codebook_custom_items'
+  | 'ai.assistant' | 'ai.dictation' | 'ai.summary' | 'ai.document_index'
+  | 'audio_retention' | 'extra_storage'
+
+/**
+ * `platform/registry/planMatrix/{id}` — co je v jakém tarifu.
+ *
+ * ┌─────────────────────────────────────────────────────────────────────┐
+ * │ TOHLE JE DATOVÝ ZÁZNAM, NE KONSTANTA V KÓDU.                        │
+ * │                                                                     │
+ * │ O zařazení schopnosti do tarifu rozhoduje výhradně vlastník         │
+ * │ produktu. Kód se smí ptát „má tahle organizace `ai.dictation`?“,    │
+ * │ ale nesmí obsahovat názor na to, jestli má být zdarma.              │
+ * │                                                                     │
+ * │ Matrice je datovaná stejně jako ceník a právní sady (dok. 02, 19),  │
+ * │ takže změna tarifu je nový záznam s platností „od“.                 │
+ * └─────────────────────────────────────────────────────────────────────┘
+ */
+export interface PlanMatrix {
+  id: Id
+  effectiveFrom: IsoDate
+  note: string | null
+  /** Které schopnosti má daný tarif. */
+  plans: Array<{
+    plan: string                   // 'free' | 'paid' | … — pojmenuje vlastník
+    label: string
+    entitlements: PlanEntitlement[]
+  }>
+  /** Schopnosti, které nejsou v žádném tarifu, ale kupují se zvlášť. */
+  addOns: Array<{ entitlement: PlanEntitlement; label: string }>
+}
+
+/**
+ * Přístup k AI. Zkušební období, potom kredit nebo paušál s limitem —
+ * zdarma AI není nikdy.
+ */
+export interface AiEntitlement {
+  organizationId: Id
+  /** Zkušební období od zavedení organizace. */
+  trialFrom: IsoDate
+  trialUntil: IsoDate
+  trialMonths: number
+
+  mode: 'trial' | 'credit' | 'flat' | 'none'
+  /** U `flat`: měsíční limit užití. Po vyčerpání se AI zastaví, nic jiného. */
+  flatMonthlyLimit: { unit: 'token' | 'call'; amount: number } | null
+  usedThisPeriod: number
+  periodResetsOn: IsoDate | null
+
+  /**
+   * Když AI není dostupná, systém zůstává plně použitelný ručně:
+   * editor, knihovna vět (deterministická a offline, dok. 07) a fotografování
+   * dokladů. Diktát ani souhrn ne — ty jsou AI.
+   */
+  fallbackNote: string
+}
