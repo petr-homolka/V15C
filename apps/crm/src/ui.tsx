@@ -8,8 +8,10 @@ import type { ReactNode } from 'react'
 /* --- obrazovka ------------------------------------------------------------ */
 
 export function Screen({ children }: { children: ReactNode }) {
+  // Spodní lišta je `fixed`, takže obsah pod ní musí mít místo — jinak by
+  // poslední řádek seznamu nešel přečíst ani doscrollovat.
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col pb-[env(safe-area-inset-bottom)]">
+    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col pb-[calc(4rem+env(safe-area-inset-bottom))]">
       {children}
     </div>
   )

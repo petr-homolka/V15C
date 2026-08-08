@@ -65,7 +65,7 @@ function TabBar({ route, go }: { route: string; go: (r: string) => void }) {
     ['/prepnout', 'Pohled'],
   ]
   return (
-    <nav className="app-bar sticky bottom-0 z-10 mx-auto w-full max-w-2xl border-t border-[var(--ds-gray-alpha-400)] pb-[env(safe-area-inset-bottom)]">
+    <nav className="app-bar fixed inset-x-0 bottom-0 z-20 mx-auto w-full max-w-2xl border-t border-[var(--ds-gray-alpha-400)] pb-[env(safe-area-inset-bottom)]">
       <div className="flex">
         {tabs.map(([path, label]) => {
           const active = path === '/' ? route === '/' : route.startsWith(path)
