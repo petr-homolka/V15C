@@ -44,155 +44,102 @@ const fam4Uid = generateUid(ENTITY_TYPES.AGREEMENT, 4); // 9048270000045
 
 export const EXTENSIVE_SEED_DATA = {
   fosterParents: [
-    {
-      uid: fp1Uid,
-      name: 'Petr Dvořák',
-      rc: '850112/1234',
-      phone: '+420 777 111 222',
-      email: 'petr.dvorak@seznam.cz',
-      city: 'Praha 4 - Nusle',
-      familyUid: fam1Uid,
-      ko: 'Mgr. Jana Nováková',
-      type: 'foster'
-    },
-    {
-      uid: fp2Uid,
-      name: 'Anna Dvořáková',
-      rc: '885420/5678',
-      phone: '+420 777 111 333',
-      email: 'anna.dvorakova@seznam.cz',
-      city: 'Praha 4 - Nusle',
-      familyUid: fam1Uid,
-      ko: 'Mgr. Jana Nováková',
-      type: 'foster'
-    },
-    {
-      uid: fp3Uid,
-      name: 'Marie Svobodová',
-      rc: '795810/4321',
-      phone: '+420 608 333 444',
-      email: 'svobodova.marie@centrum.cz',
-      city: 'Praha 8 - Karlín',
-      familyUid: fam2Uid,
-      ko: 'Mgr. Jana Nováková',
-      type: 'foster'
-    },
-    {
-      uid: fp4Uid,
-      name: 'Jan Novotný',
-      rc: '820315/9876',
-      phone: '+420 731 555 666',
-      email: 'jan.novotny@gmail.com',
-      city: 'Benešov',
-      familyUid: fam3Uid,
-      ko: 'Bc. Martin Růžička',
-      type: 'foster'
-    },
-    {
-      uid: fp5Uid,
-      name: 'Kateřina Novotná',
-      rc: '845920/1122',
-      phone: '+420 731 555 777',
-      email: 'katerina.novotna@gmail.com',
-      city: 'Benešov',
-      familyUid: fam3Uid,
-      ko: 'Bc. Martin Růžička',
-      type: 'foster'
-    },
-    {
-      uid: fp6Uid,
-      name: 'Ing. Jaroslav Černý',
-      rc: '770911/3344',
-      phone: '+420 724 999 888',
-      email: 'jaroslav.cerny@email.cz',
-      city: 'Kladno',
-      familyUid: fam4Uid,
-      ko: 'Mgr. Jana Nováková',
-      type: 'foster'
-    },
-    {
-      uid: fp7Uid,
-      name: 'Lucie Černá',
-      rc: '805405/5566',
-      phone: '+420 724 999 999',
-      email: 'lucie.cerna@email.cz',
-      city: 'Kladno',
-      familyUid: fam4Uid,
-      ko: 'Mgr. Jana Nováková',
-      type: 'foster'
-    }
+    { id: fp1Uid, uid: fp1Uid, name: 'Petr Dvořák', role: 'Klíčový pěstoun', email: 'petr.dvorak@email.cz', phone: '+420 777 111 222', city: 'Praha 4 - Nusle', familyName: 'Dvořákovi', type: 'foster_parent' },
+    { id: fp2Uid, uid: fp2Uid, name: 'Anna Dvořáková', role: 'Pěstounka', email: 'anna.dvorakova@email.cz', phone: '+420 777 111 333', city: 'Praha 4 - Nusle', familyName: 'Dvořákovi', type: 'foster_parent' },
+    { id: fp3Uid, uid: fp3Uid, name: 'Marie Svobodová', role: 'Pěstounka (Výhradní péče)', email: 'marie.svobodova@seznam.cz', phone: '+420 777 222 444', city: 'Praha 8 - Karlín', familyName: 'Svobodová', type: 'foster_parent' },
+    { id: fp4Uid, uid: fp4Uid, name: 'Jan Novotný', role: 'Klíčový pěstoun', email: 'jan.novotny@centrum.cz', phone: '+420 777 333 555', city: 'Benešov', familyName: 'Novotní', type: 'foster_parent' },
+    { id: fp5Uid, uid: fp5Uid, name: 'Kateřina Novotná', role: 'Pěstounka', email: 'katerina.novotna@centrum.cz', phone: '+420 777 333 666', city: 'Benešov', familyName: 'Novotní', type: 'foster_parent' },
+    { id: fp6Uid, uid: fp6Uid, name: 'Ing. Jaroslav Černý', role: 'Klíčový pěstoun', email: 'cerny.jaroslav@post.cz', phone: '+420 777 444 777', city: 'Kladno', familyName: 'Černí', type: 'foster_parent' },
+    { id: fp7Uid, uid: fp7Uid, name: 'Lucie Černá', role: 'Pěstounka', email: 'cerna.lucie@post.cz', phone: '+420 777 444 888', city: 'Kladno', familyName: 'Černí', type: 'foster_parent' }
   ],
 
   families: [
     {
       id: fam1Uid,
       uid: fam1Uid,
-      careType: 'joint',
-      primaryFosterParent: { uid: fp1Uid, name: 'Petr Dvořák', rc: '850112/1234', phone: '+420 777 111 222', email: 'petr.dvorak@seznam.cz' },
-      secondaryFosterParent: { uid: fp2Uid, name: 'Anna Dvořáková', rc: '885420/5678', phone: '+420 777 111 333', email: 'anna.dvorakova@seznam.cz' },
-      fosterParentsDisplay: 'Petr Dvořák a Anna Dvořáková (Společná péče)',
+      fosterParents: 'Petr a Anna Dvořákovi',
+      primaryFosterParent: { name: 'Petr Dvořák', uid: fp1Uid },
+      secondaryFosterParent: { name: 'Anna Dvořáková', uid: fp2Uid },
+      children: [
+        { name: 'Tomáš Dvořák', uid: ch1Uid, age: 8, school: 'ZŠ Křesomyslova' },
+        { name: 'Eliška Dvořáková', uid: ch2Uid, age: 5, school: 'MŠ Boleslavova' }
+      ],
+      ospod: 'OSPOD Praha 4',
       city: 'Praha 4 - Nusle',
-      childrenCount: 2,
+      phone: '+420 777 111 222',
+      email: 'dvorak@seznam.cz',
       lastVisitAt: '2026-06-15',
-      nextPlannedVisit: '2026-08-10',
+      nextPlannedVisit: '2026-08-15',
       assignedTo: 'Mgr. Jana Nováková',
       status: 'Aktivní dohlížení',
       warning: false,
       respitHoursUsed: 14,
       respitHoursTotal: 40,
-      spvppUsed: 3500,
+      spvppUsed: 4200,
       spvppTotal: 12000,
-      agreementDate: '2022-01-15'
+      agreementDate: '2022-05-01'
     },
     {
       id: fam2Uid,
       uid: fam2Uid,
-      careType: 'sole',
-      primaryFosterParent: { uid: fp3Uid, name: 'Marie Svobodová', rc: '795810/4321', phone: '+420 608 333 444', email: 'svobodova.marie@centrum.cz' },
-      secondaryFosterParent: null,
-      fosterParentsDisplay: 'Marie Svobodová (Výhradní péče)',
+      fosterParents: 'Marie Svobodová',
+      primaryFosterParent: { name: 'Marie Svobodová', uid: fp3Uid },
+      children: [
+        { name: 'Jakub Svoboda', uid: ch3Uid, age: 3, school: 'MŠ Křižíkova' }
+      ],
+      ospod: 'OSPOD Praha 8',
       city: 'Praha 8 - Karlín',
-      childrenCount: 1,
+      phone: '+420 777 222 444',
+      email: 'marie.svobodova@seznam.cz',
       lastVisitAt: '2026-05-10',
-      nextPlannedVisit: '2026-07-29',
+      nextPlannedVisit: '2026-07-10',
       assignedTo: 'Mgr. Jana Nováková',
-      status: 'Čeká na návštěvu',
+      status: 'Aktivní dohlížení',
       warning: true,
-      respitHoursUsed: 28,
+      respitHoursUsed: 32,
       respitHoursTotal: 40,
-      spvppUsed: 8900,
+      spvppUsed: 9800,
       spvppTotal: 12000,
-      agreementDate: '2021-09-01'
+      agreementDate: '2021-09-15'
     },
     {
       id: fam3Uid,
       uid: fam3Uid,
-      careType: 'joint',
-      primaryFosterParent: { uid: fp4Uid, name: 'Jan Novotný', rc: '820315/9876', phone: '+420 731 555 666', email: 'jan.novotny@gmail.com' },
-      secondaryFosterParent: { uid: fp5Uid, name: 'Kateřina Novotná', rc: '845920/1122', phone: '+420 731 555 777', email: 'katerina.novotna@gmail.com' },
-      fosterParentsDisplay: 'Jan Novotný a Kateřina Novotná (Společná péče)',
+      fosterParents: 'Jan a Kateřina Novotní',
+      primaryFosterParent: { name: 'Jan Novotný', uid: fp4Uid },
+      secondaryFosterParent: { name: 'Kateřina Novotná', uid: fp5Uid },
+      children: [
+        { name: 'Klára Novotná', uid: ch4Uid, age: 7, school: 'ZŠ Dukelská Benešov' },
+        { name: 'Filip Novotný', uid: ch5Uid, age: 4, school: 'MŠ Úsměv Benešov' }
+      ],
+      ospod: 'OSPOD Benešov',
       city: 'Benešov',
-      childrenCount: 3,
-      lastVisitAt: '2026-07-01',
-      nextPlannedVisit: '2026-09-01',
+      phone: '+420 777 333 555',
+      email: 'novotny@centrum.cz',
+      lastVisitAt: '2026-06-02',
+      nextPlannedVisit: '2026-08-02',
       assignedTo: 'Bc. Martin Růžička',
       status: 'Aktivní dohlížení',
       warning: false,
       respitHoursUsed: 8,
       respitHoursTotal: 40,
-      spvppUsed: 1200,
+      spvppUsed: 1500,
       spvppTotal: 12000,
-      agreementDate: '2023-03-10'
+      agreementDate: '2023-01-10'
     },
     {
       id: fam4Uid,
       uid: fam4Uid,
-      careType: 'joint',
-      primaryFosterParent: { uid: fp6Uid, name: 'Ing. Jaroslav Černý', rc: '770911/3344', phone: '+420 724 999 888', email: 'jaroslav.cerny@email.cz' },
-      secondaryFosterParent: { uid: fp7Uid, name: 'Lucie Černá', rc: '805405/5566', phone: '+420 724 999 999', email: 'lucie.cerna@email.cz' },
-      fosterParentsDisplay: 'Ing. Jaroslav Černý a Lucie Černá (Společná péče)',
+      fosterParents: 'Jaroslav a Lucie Černí',
+      primaryFosterParent: { name: 'Ing. Jaroslav Černý', uid: fp6Uid },
+      secondaryFosterParent: { name: 'Lucie Černá', uid: fp7Uid },
+      children: [
+        { name: 'Matěj Černý', uid: ch6Uid, age: 6, school: 'ZŠ Norská Kladno' }
+      ],
+      ospod: 'OSPOD Kladno',
       city: 'Kladno',
-      childrenCount: 2,
+      phone: '+420 777 444 777',
+      email: 'cerny@post.cz',
       lastVisitAt: '2026-06-20',
       nextPlannedVisit: '2026-08-20',
       assignedTo: 'Mgr. Jana Nováková',
@@ -223,6 +170,22 @@ export const EXTENSIVE_SEED_DATA = {
     { id: emp3Uid, uid: emp3Uid, name: 'Ing. Veronika Malá', role: 'Koordinátorka respitní péče a vzdělávaní', phone: '+420 777 567 890', email: 'veronika.mala@doprovazeni.cz', activeFamilies: 35, type: 'staff' }
   ]
 };
+
+export function getSeedFamilies() {
+  return EXTENSIVE_SEED_DATA.families;
+}
+
+export function getSeedFosterParents() {
+  return EXTENSIVE_SEED_DATA.fosterParents;
+}
+
+export function getSeedChildren() {
+  return EXTENSIVE_SEED_DATA.children;
+}
+
+export function getSeedTeamMembers() {
+  return EXTENSIVE_SEED_DATA.team;
+}
 
 export async function seedAllTestData() {
   localStorage.setItem('extensive_foster_parents', JSON.stringify(EXTENSIVE_SEED_DATA.fosterParents));

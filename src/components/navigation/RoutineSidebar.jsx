@@ -1,220 +1,188 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { SvgIcon } from '../common/SvgIcon.jsx';
 
-/**
- * RoutineSidebar - Plynule schovávací levé menu Routine se stabilním vykreslením ikon.
- */
-export function RoutineSidebar({ activePage, activeSubView, onNavigate, onOpenQuickConsole, user }) {
-  const [collapsed, setCollapsed] = useState(false);
-
-  const mainNav = [
-    { id: 'agenda', label: 'Agenda & Dnes', icon: 'las la-calendar-check', page: 'dashboard', subView: 'dashboard' },
-    { id: 'families', label: 'Rodiny & Spisy', icon: 'las la-folder-open', page: 'dashboard', subView: 'dashboard' },
-    { id: 'foster-parents', label: 'Pěstouni', icon: 'las la-heart', page: 'dashboard', subView: 'foster-parents' },
-    { id: 'children', label: 'Děti', icon: 'las la-smile', page: 'dashboard', subView: 'children' },
-    { id: 'team', label: 'Tým & KO', icon: 'las la-user-tie', page: 'dashboard', subView: 'team' },
-    { id: 'calendar', label: 'Kalendář', icon: 'las la-clock', page: 'calendar' },
-    { id: 'notes', label: 'Poznámky', icon: 'las la-file-alt', page: 'notes' },
-    { id: 'contacts', label: 'Kontakty', icon: 'las la-address-book', page: 'contacts' },
-    { id: 'ospod-report', label: 'Zprávy OSPOD', icon: 'las la-file-pdf', page: 'ospod-report' },
-    { id: 'respit', label: 'Respit & Vzdělávání', icon: 'las la-graduation-cap', page: 'respit' }
+export function RoutineSidebar({ currentView, subView, onViewChange, isCollapsed, onToggleCollapse, user, onLogout }) {
+  const mainNavItems = [
+    { id: 'agenda', label: 'Agenda & Dnes', icon: 'clock' },
+    { id: 'families', label: 'Rodiny & Spisy', icon: 'user' },
+    { id: 'foster-parents', label: 'Pěstouni', icon: 'shield' },
+    { id: 'children', label: 'Děti', icon: 'user' },
+    { id: 'team', label: 'Tým & KO', icon: 'user' },
+    { id: 'calendar', label: 'Kalendář', icon: 'calendar' },
+    { id: 'notes', label: 'Poznámky', icon: 'stream' },
+    { id: 'contacts', label: 'Kontakty', icon: 'mail' },
+    { id: 'ospod-report', label: 'Zprávy OSPOD', icon: 'pdf' },
+    { id: 'respit', label: 'Respit & Vzdělávání', icon: 'tasks' }
   ];
 
+  const handleNavClick = (itemId) => {
+    onViewChange(itemId);
+  };
+
+  const isItemActive = (itemId) => {
+    if (currentView === itemId) return true;
+    if (currentView === 'dashboard') {
+      if (itemId === 'families' && (!subView || subView === 'families' || subView === 'overview')) return true;
+      if (itemId === 'foster-parents' && subView === 'foster-parents') return true;
+      if (itemId === 'children' && subView === 'children') return true;
+      if (itemId === 'team' && subView === 'team') return true;
+      if (itemId === 'agenda' && subView === 'agenda') return true;
+    }
+    return false;
+  };
+
   return (
-    <div 
-      style={{
-        width: collapsed ? '64px' : '220px',
-        transition: 'width 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
-        height: '100vh',
-        backgroundColor: '#FAF8F5',
-        borderRight: '1px solid #E6E3DC',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        flexShrink: 0,
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-        zIndex: 50
-      }}
-    >
-      <div style={{ padding: '8px' }}>
-        {/* Tlačítko Nový */}
-        <div
-          onClick={onOpenQuickConsole}
-          title={collapsed ? 'Nový (Ctrl+N)' : ''}
+    <aside style={{
+      width: isCollapsed ? '64px' : '240px',
+      height: '100vh',
+      backgroundColor: '#ffffff',
+      borderRight: '1px solid #f3f4f6',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      flexShrink: 0,
+      transition: 'width 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+      userSelect: 'none',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      {/* Top Workspace Header */}
+      <div style={{ padding: '16px 12px 8px 12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyBetween: 'space-between', width: '100%' }}>
+          {!isCollapsed ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '4px' }}>
+              <div style={{ width: '22px', height: '22px', borderRadius: '6px', backgroundColor: '#FF4742', color: '#ffffff', fontWeight: 700, fontSize: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                D
+              </div>
+              <span style={{ fontWeight: 700, fontSize: '14px', color: '#111827', letterSpacing: '-0.01em' }}>
+                Doprovázení.com
+              </span>
+            </div>
+          ) : (
+            <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: '#FF4742', color: '#ffffff', fontWeight: 700, fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto' }}>
+              D
+            </div>
+          )}
+        </div>
+
+        {/* Action Button */}
+        <button
+          onClick={() => handleNavClick('agenda')}
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '9px 0' : '8px 10px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            backgroundColor: '#FFF5F5',
+            gap: '8px',
+            padding: '8px 10px',
+            borderRadius: '6px',
+            backgroundColor: '#fee2e2',
             color: '#FF4742',
-            marginBottom: '6px',
-            overflow: 'hidden',
-            transition: 'all 0.2s ease'
-          }}
-        >
-          <i 
-            className="las la-plus-circle" 
-            style={{ 
-              fontSize: collapsed ? '24px' : '20px', 
-              color: '#FF4742', 
-              flexShrink: 0, 
-              transition: 'font-size 0.2s ease' 
-            }}
-          />
-          {!collapsed && <span style={{ color: '#FF4742', fontWeight: 600, fontSize: '13px', whiteSpace: 'nowrap' }}>Nový</span>}
-        </div>
-
-        {/* Hledat */}
-        <div
-          onClick={onOpenQuickConsole}
-          title={collapsed ? 'Hledat (Ctrl+K)' : ''}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '9px 0' : '8px 10px',
-            borderRadius: '8px',
+            border: 'none',
+            fontSize: '13px',
+            fontWeight: 600,
             cursor: 'pointer',
-            color: '#5E6774',
-            marginBottom: '12px',
-            overflow: 'hidden',
-            transition: 'all 0.2s ease'
+            justifyContent: isCollapsed ? 'center' : 'flex-start'
           }}
         >
-          <i 
-            className="las la-search" 
-            style={{ 
-              fontSize: collapsed ? '22px' : '18px', 
-              flexShrink: 0, 
-              transition: 'font-size 0.2s ease' 
-            }}
-          />
-          {!collapsed && <span style={{ fontSize: '13px', whiteSpace: 'nowrap' }}>Hledat (Ctrl+K)</span>}
-        </div>
+          <SvgIcon name="play" size={14} style={{ color: '#FF4742' }} />
+          {!isCollapsed && <span>Nový záznam</span>}
+        </button>
 
-        {/* Navigační seznam s 100% stabilním vykreslením ikon LineAwesome 'las' */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-          {mainNav.map((item) => {
-            const isActive = (item.page ? activePage === item.page : true) && 
-              (item.subView ? activeSubView === item.subView : true);
-
+        {/* Navigation Items */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px', paddingTop: '4px' }}>
+          {mainNavItems.map((item) => {
+            const active = isItemActive(item.id);
             return (
-              <div
+              <button
                 key={item.id}
-                onClick={() => onNavigate(item.page || 'dashboard', item.subView)}
-                title={collapsed ? item.label : ''}
+                onClick={() => handleNavClick(item.id)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: collapsed ? 'center' : 'flex-start',
-                  gap: collapsed ? 0 : '12px',
-                  padding: collapsed ? '9px 0' : '8px 10px',
-                  borderRadius: '8px',
+                  gap: '10px',
+                  padding: '7px 10px',
+                  borderRadius: '6px',
+                  backgroundColor: active ? '#f3f4f6' : 'transparent',
+                  color: active ? '#111827' : '#6b7280',
+                  fontWeight: active ? 600 : 400,
+                  border: 'none',
+                  fontSize: '13.5px',
                   cursor: 'pointer',
-                  backgroundColor: isActive ? '#F4F4F6' : 'transparent',
-                  color: isActive ? '#171B1F' : '#5E6774',
-                  fontWeight: isActive ? 500 : 400,
-                  overflow: 'hidden',
-                  transition: 'all 0.15s ease'
+                  textAlign: 'left',
+                  transition: 'background-color 0.12s ease',
+                  justifyContent: isCollapsed ? 'center' : 'flex-start'
                 }}
               >
-                <i 
-                  className={item.icon} 
-                  style={{ 
-                    fontSize: collapsed ? '23px' : '18px', 
-                    color: isActive ? '#FF4742' : '#8896A9', 
-                    opacity: collapsed ? 0.9 : 1,
-                    flexShrink: 0,
-                    transition: 'font-size 0.15s ease'
-                  }} 
-                />
-                {!collapsed && <span style={{ fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>}
-              </div>
+                <SvgIcon name={item.icon} size={16} style={{ color: active ? '#111827' : '#9ca3af' }} />
+                {!isCollapsed && <span>{item.label}</span>}
+              </button>
             );
           })}
         </nav>
       </div>
 
-      {/* Spodní část s tlačítkem Sbalit a Uživatelem */}
-      <div style={{ padding: '8px', borderTop: '1px solid #EAEAEA' }}>
-        <div
-          onClick={() => setCollapsed(!collapsed)}
-          title={collapsed ? 'Rozbalit menu' : 'Sbalit menu'}
+      {/* Bottom User Info & Settings Section */}
+      <div style={{ padding: '12px', borderTop: '1px solid #f3f4f6', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <button
+          onClick={() => handleNavClick('settings')}
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '9px 0' : '8px 10px',
-            borderRadius: '8px',
+            gap: '10px',
+            padding: '7px 10px',
+            borderRadius: '6px',
+            backgroundColor: currentView === 'settings' ? '#f3f4f6' : 'transparent',
+            color: currentView === 'settings' ? '#111827' : '#6b7280',
+            border: 'none',
+            fontSize: '13.5px',
             cursor: 'pointer',
-            color: '#747F8F',
-            fontSize: '13px',
-            marginBottom: '4px',
-            overflow: 'hidden',
-            transition: 'all 0.2s ease'
+            justifyContent: isCollapsed ? 'center' : 'flex-start'
           }}
         >
-          <i 
-            className={`las ${collapsed ? 'la-angle-double-right' : 'la-angle-double-left'}`} 
-            style={{ 
-              fontSize: collapsed ? '22px' : '18px', 
-              flexShrink: 0, 
-              transition: 'font-size 0.2s ease' 
-            }}
-          />
-          {!collapsed && <span style={{ whiteSpace: 'nowrap' }}>Sbalit menu</span>}
-        </div>
+          <SvgIcon name="pin" size={16} style={{ color: '#9ca3af' }} />
+          {!isCollapsed && <span>Nastavení</span>}
+        </button>
 
-        <div
-          onClick={() => onNavigate('settings')}
-          title={collapsed ? (user?.name || 'Jana Nováková') : ''}
+        <button
+          onClick={onToggleCollapse}
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            gap: collapsed ? 0 : '10px',
-            padding: collapsed ? '6px 0' : '6px 8px',
-            borderRadius: '8px',
+            gap: '10px',
+            padding: '7px 10px',
+            borderRadius: '6px',
+            backgroundColor: 'transparent',
+            color: '#6b7280',
+            border: 'none',
+            fontSize: '13.5px',
             cursor: 'pointer',
-            overflow: 'hidden',
-            transition: 'all 0.2s ease'
+            justifyContent: isCollapsed ? 'center' : 'flex-start'
           }}
         >
-          <div style={{
-            width: collapsed ? '30px' : '28px',
-            height: collapsed ? '30px' : '28px',
-            borderRadius: '50%',
-            backgroundColor: '#FF4742',
-            color: '#FFF',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 600,
-            fontSize: collapsed ? '12px' : '11px',
-            flexShrink: 0,
-            transition: 'all 0.2s ease'
-          }}>
+          <SvgIcon name={isCollapsed ? "arrow-right" : "arrow-left"} size={14} style={{ color: '#9ca3af' }} />
+          {!isCollapsed && <span>Sbalit menu</span>}
+        </button>
+
+        {/* User Card */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 10px', marginTop: '4px', borderRadius: '6px', backgroundColor: '#fafafa', border: '1px solid #f3f4f6' }}>
+          <div style={{ width: '26px', height: '26px', borderRadius: '50%', backgroundColor: '#FF4742', color: '#ffffff', fontSize: '11px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             {user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'JN'}
           </div>
-          {!collapsed && (
-            <div style={{ overflow: 'hidden' }}>
-              <strong style={{ fontSize: '12px', display: 'block', color: '#171B1F', whiteSpace: 'nowrap', textOverflow: 'ellipsis', fontWeight: 500 }}>
-                {user?.name || 'Jana Nováková'}
-              </strong>
-              <span style={{ fontSize: '10px', color: '#747F8F', display: 'block', whiteSpace: 'nowrap' }}>
-                Klíčová osoba
-              </span>
+          {!isCollapsed && (
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {user?.name || 'Mgr. Jana Nováková'}
+              </div>
+              <div style={{ fontSize: '10px', color: '#9ca3af' }}>Klíčová osoba</div>
             </div>
+          )}
+          {!isCollapsed && onLogout && (
+            <button onClick={onLogout} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '2px' }} title="Odhlásit se">
+              <SvgIcon name="arrow-right" size={14} />
+            </button>
           )}
         </div>
       </div>
-    </div>
+    </aside>
   );
 }
+
 export default RoutineSidebar;

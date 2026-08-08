@@ -1110,15 +1110,6 @@ export function RoutineAgendaView({ user, onNavigate, onSelectEntity, onOpenQuic
         }
       `}</style>
 
-      {/* 1. Levá schovávací navigace Routine */}
-      <RoutineSidebar
-        activePage="agenda"
-        activeSubView="agenda"
-        onNavigate={onNavigate}
-        onOpenQuickConsole={onOpenQuickConsole}
-        user={user}
-      />
-
       {/* 2. LEVÁ ČÁST: ÚKOLY (FLEXIBILNÍ POUŠTĚNÍ A POSOUVÁNÍ ŠÍŘKY SLUPCE) */}
       <div 
         ref={leftColumnRef}

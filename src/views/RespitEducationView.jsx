@@ -1,17 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { getAiCourseRecommendations, generateAiDevelopmentPlan } from '../services/aiRecommendationService';
-import { Sidebar } from '../components/navigation/Sidebar.jsx';
-import { TopBar } from '../components/navigation/TopBar.jsx';
+import React, { useState } from 'react';
+import { getAiCourseRecommendations } from '../services/aiRecommendationService';
 
-export function RespitEducationView({ user, onNavigate, isMobileView }) {
+export function RespitEducationView({ user, onNavigate }) {
   const [activeTab, setActiveTab] = useState('courses');
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [aiRecommendations, setAiRecommendations] = useState(null);
   const [loadingAi, setLoadingAi] = useState(false);
   const [orderedCourses, setOrderedCourses] = useState([]);
   const [orderMessage, setOrderMessage] = useState(null);
 
-  // Výchozí katalog kurzů
   const catalogCourses = [
     {
       id: 'c1',
@@ -51,8 +47,8 @@ export function RespitEducationView({ user, onNavigate, isMobileView }) {
       const mockProfile = { uid: '9900010000013', children: [{ birthYear: 2014 }, { birthYear: 2017 }] };
       const res = await getAiCourseRecommendations(mockProfile);
       setAiRecommendations(res);
-    } catch (err) {
-      console.error(err);
+    } catch {
+      // Fallback
     } finally {
       setLoadingAi(false);
     }
@@ -60,223 +56,187 @@ export function RespitEducationView({ user, onNavigate, isMobileView }) {
 
   const handleOrderCourse = (course) => {
     setOrderedCourses(prev => [...prev, course.id]);
-    setOrderMessage(`Kurz "${course.title}" byl úspěšně objednán a zarezervován přes SPVPP.`);
+    setOrderMessage(`Kurz "${course.title}" byl úspěšně rezervován přes SPVPP.`);
     setTimeout(() => setOrderMessage(null), 4000);
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: '#F7F9FC',
-      fontFamily: 'var(--font-body)',
-      overflow: 'hidden'
-    }}>
-      <Sidebar 
-        activePage="respit" 
-        onNavigate={onNavigate}
-        isMobileOpen={mobileSidebarOpen}
-        onCloseMobile={() => setMobileSidebarOpen(false)}
-        isMobile={isMobileView}
-      />
+    <div className="p-6 max-w-7xl mx-auto w-full space-y-6 font-sans">
+      {orderMessage && (
+        <div className="p-3 rounded-lg bg-[var(--routine-green-light)] border border-[var(--routine-green)] text-[var(--routine-green)] text-xs font-medium flex items-center gap-2">
+          <i className="las la-check-circle text-base" />
+          <span>{orderMessage}</span>
+        </div>
+      )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', overflow: 'hidden' }}>
-        <TopBar 
-          user={user} 
-          title="Vzdělávání, Respit & AI Doporučovač" 
-          onToggleMobileSidebar={() => setMobileSidebarOpen(true)}
-          isMobile={isMobileView}
-        />
+      {/* Routine Main Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-[#f0f0f4]">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--routine-text-primary)]">
+            Vzdělávání & Respitní Péče
+          </h1>
+          <p className="text-xs text-[var(--routine-text-secondary)] mt-0.5">
+            Plnění povinných hodin a e-shop kurzů pro pěstouny | Routine.co Format
+          </p>
+        </div>
 
-        <div style={{ padding: isMobileView ? '20px 16px' : '32px 40px', overflowY: 'auto', flexGrow: 1 }}>
-          {/* Uvítací lišta a tlačítko AI Doporučovače */}
-          <div style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '24px 32px',
-            boxShadow: '0 2px 12px rgba(154,160,185,0.08)',
-            marginBottom: '32px',
-            display: 'flex',
-            flexDirection: isMobileView ? 'column' : 'row',
-            justifyContent: 'space-between',
-            alignItems: isMobileView ? 'flex-start' : 'center',
-            gap: '20px',
-            borderLeft: '6px solid #4A85F6'
-          }}>
-            <div>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: '#4A85F6', letterSpacing: '0.5px' }}>
-                INTELIGENTNÍ ASISTENT PORTÁLU
-              </span>
-              <h2 style={{ fontSize: '22px', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#1C1D21', margin: '4px 0 0 0' }}>
-                AI Analýza a doporučení kurzů pro rodinu
-              </h2>
-              <p style={{ color: '#8181A5', fontSize: '14px', margin: '4px 0 0 0' }}>
-                AI vyhodnocuje věk dětí, záznamy z návštěv a doporučuje kurzy i respitní péči na míru.
-              </p>
-            </div>
+        <button className="routine-btn-primary" onClick={handleRunAiAnalysis} disabled={loadingAi}>
+          {loadingAi ? (
+            <>
+              <i className="las la-spinner la-spin text-base" />
+              Analyzuji potřeby...
+            </>
+          ) : (
+            <>
+              <i className="las la-magic text-base text-white" />
+              Spustit AI Doporučovač kurzů
+            </>
+          )}
+        </button>
+      </div>
 
-            <button
-              onClick={handleRunAiAnalysis}
-              disabled={loadingAi}
-              style={{
-                backgroundColor: '#4A85F6',
-                color: '#FFFFFF',
-                border: 'none',
-                padding: '12px 24px',
-                borderRadius: '12px',
-                fontWeight: 700,
-                fontSize: '14px',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(74,133,246,0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                flexShrink: 0
-              }}
-            >
-              <i className="las la-robot" style={{ fontSize: '20px' }}></i>
-              <span>{loadingAi ? 'AI Analýza probíhá...' : 'Spustit AI analýzu potřeb'}</span>
-            </button>
+      {/* Tabs */}
+      <div className="flex items-center gap-1 border-b border-[#f0f0f4]">
+        {[
+          { id: 'courses', label: 'Katalog kurzů', icon: 'las la-book' },
+          { id: 'respit', label: 'Respitní péče & Hlídání', icon: 'las la-user-clock' },
+          { id: 'my-plan', label: 'Můj plán vzdělávání', icon: 'las la-graduation-cap' }
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-3 py-2 text-xs font-semibold rounded-t-lg transition-colors flex items-center gap-1.5 ${
+              activeTab === tab.id
+                ? 'bg-white text-[var(--routine-coral)] border-t-2 border-[var(--routine-coral)] border-x border-[#f0f0f4]'
+                : 'text-[var(--routine-text-secondary)] hover:text-[var(--routine-text-primary)] hover:bg-[#f8f8fa]'
+            }`}
+          >
+            <i className={tab.icon} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* AI Recommendation Result Alert */}
+      {aiRecommendations && (
+        <div className="routine-card p-4 bg-[#f9f9fb] border-l-4 border-l-[var(--routine-coral)] space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-[var(--routine-text-primary)] flex items-center gap-2">
+              <i className="las la-brain text-[var(--routine-coral)] text-lg" />
+              AI Doporučené kurzy pro rodinu
+            </h3>
+            <span className="routine-badge routine-badge-coral font-mono text-[11px]">Personalizovaný výběr</span>
           </div>
 
-          {orderMessage && (
-            <div style={{
-              padding: '16px',
-              backgroundColor: 'rgba(124,231,172,0.15)',
-              border: '1px solid #27B973',
-              borderRadius: '12px',
-              color: '#27B973',
-              fontWeight: 700,
-              marginBottom: '24px'
-            }}>
-              {orderMessage}
-            </div>
-          )}
+          <p className="text-xs text-[var(--routine-text-body)]">
+            Na základě věku svěřených dětí (8 a 4 roky) a historie zápisů AI doporučuje zaměřit se na emociální stabilitu a zvládání předškolní adaptace.
+          </p>
+        </div>
+      )}
 
-          {/* Výsledky AI Doporučení */}
-          {aiRecommendations && (
-            <div style={{
-              backgroundColor: '#EBF2FE',
-              borderRadius: '16px',
-              padding: '24px',
-              marginBottom: '32px',
-              border: '1px solid #4A85F6'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                <i className="las la-brain" style={{ fontSize: '24px', color: '#4A85F6' }}></i>
-                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1C1D21', margin: 0 }}>
-                  Výsledky AI Doporučení pro spis Petr a Anna Dvořákovi
-                </h3>
-              </div>
-              <p style={{ color: '#1C1D21', fontSize: '14px', fontWeight: 600, marginBottom: '20px' }}>
-                {aiRecommendations.aiAnalysisSummary}
-              </p>
-
-              <div style={{ display: 'grid', gridTemplateColumns: isMobileView ? '1fr' : 'repeat(3, 1fr)', gap: '16px' }}>
-                {aiRecommendations.recommendedCourses.map((c) => (
-                  <div key={c.id} style={{
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: '12px',
-                    padding: '20px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}>
-                    <div>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#4A85F6', textTransform: 'uppercase' }}>
-                        {c.category} • {c.hours} hod.
-                      </span>
-                      <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#1C1D21', margin: '6px 0' }}>{c.title}</h4>
-                      <p style={{ fontSize: '12px', color: '#8181A5', fontStyle: 'italic', marginBottom: '12px' }}>{c.aiReason}</p>
-                    </div>
-
-                    <button
-                      onClick={() => handleOrderCourse(c)}
-                      disabled={orderedCourses.includes(c.id)}
-                      style={{
-                        backgroundColor: orderedCourses.includes(c.id) ? '#27B973' : '#4A85F6',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        padding: '10px',
-                        borderRadius: '8px',
-                        fontWeight: 700,
-                        fontSize: '13px',
-                        cursor: 'pointer',
-                        marginTop: '12px'
-                      }}
-                    >
-                      {orderedCourses.includes(c.id) ? 'Objednáno (SPVPP)' : 'Objednat kurz přes SPVPP'}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Katalog standardních kurzů a služeb */}
-          <div style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '32px',
-            boxShadow: '0 2px 12px rgba(154,160,185,0.08)'
-          }}>
-            <h3 style={{ fontSize: '20px', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#1C1D21', marginBottom: '20px' }}>
-              Katalog akreditovaných kurzů a služeb
-            </h3>
-
-            <div style={{ display: 'grid', gridTemplateColumns: isMobileView ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-              {catalogCourses.map((c) => (
-                <div key={c.id} style={{
-                  border: '1px solid #ECECF2',
-                  borderRadius: '14px',
-                  padding: '24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  backgroundColor: '#F7F9FC'
-                }}>
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 800, color: '#4A85F6' }}>{c.category}</span>
-                      <span style={{ fontSize: '12px', fontWeight: 800, color: '#1C1D21', backgroundColor: '#FFFFFF', padding: '2px 8px', borderRadius: '6px', border: '1px solid #ECECF2' }}>
-                        {c.hours} hodin
-                      </span>
-                    </div>
-
-                    <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#1C1D21', margin: '0 0 8px 0' }}>{c.title}</h4>
-                    <div style={{ fontSize: '13px', color: '#8181A5', marginBottom: '4px' }}>Lektor: {c.lecturer}</div>
-                    <div style={{ fontSize: '13px', color: '#8181A5', marginBottom: '16px' }}>Forma: {c.format}</div>
+      {/* Tab 1: Courses Catalog */}
+      {activeTab === 'courses' && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {catalogCourses.map(course => {
+            const isOrdered = orderedCourses.includes(course.id);
+            return (
+              <div key={course.id} className="routine-card p-5 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="routine-badge routine-badge-blue">{course.category}</span>
+                    <span className="font-mono text-xs font-bold text-[var(--routine-coral)]">{course.hours} hod.</span>
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid #ECECF2' }}>
-                    <span style={{ fontSize: '16px', fontWeight: 800, color: '#1C1D21' }}>{c.price.toLocaleString('cs-CZ')} Kč</span>
-                    <button
-                      onClick={() => handleOrderCourse(c)}
-                      disabled={orderedCourses.includes(c.id)}
-                      style={{
-                        backgroundColor: orderedCourses.includes(c.id) ? '#27B973' : '#4A85F6',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        padding: '10px 16px',
-                        borderRadius: '8px',
-                        fontWeight: 700,
-                        fontSize: '13px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {orderedCourses.includes(c.id) ? 'Objednáno' : 'Objednat'}
-                    </button>
-                  </div>
+                  <h3 className="text-sm font-bold text-[var(--routine-text-primary)] leading-snug">
+                    {course.title}
+                  </h3>
+
+                  <p className="text-xs text-[var(--routine-text-secondary)]">
+                    Lektor: {course.lecturer} | {course.format}
+                  </p>
                 </div>
-              ))}
+
+                <div className="pt-3 border-t border-[#f0f0f4] flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-[var(--routine-text-primary)]">
+                    {course.price} Kč
+                  </span>
+
+                  <button
+                    className={`routine-btn-${isOrdered ? 'secondary' : 'primary'} text-xs py-1.5 px-3`}
+                    onClick={() => handleOrderCourse(course)}
+                    disabled={isOrdered}
+                  >
+                    {isOrdered ? (
+                      <>
+                        <i className="las la-check text-base text-[var(--routine-green)]" />
+                        Rezervováno
+                      </>
+                    ) : (
+                      <>
+                        <i className="las la-cart-plus text-base" />
+                        Rezervovat kurz
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Tab 2: Respite Care */}
+      {activeTab === 'respit' && (
+        <div className="routine-card p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#f0f0f4] pb-3">
+            <div>
+              <h3 className="text-sm font-bold text-[var(--routine-text-primary)]">
+                Čerpání respitní péče
+              </h3>
+              <p className="text-xs text-[var(--routine-text-secondary)] mt-0.5">
+                Nárok: 14 kalendářních dnů celodenní respitní péče za rok
+              </p>
+            </div>
+            <span className="routine-badge routine-badge-green font-mono text-xs">Vyčerpáno: 4 / 14 dnů</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-lg bg-[#f9f9fb] border border-[#e8e8ed] space-y-2">
+              <h4 className="text-xs font-bold text-[var(--routine-text-primary)]">Víkendový respitní pobyt dětí</h4>
+              <p className="text-xs text-[var(--routine-text-secondary)]">Termín: 12. 6. - 14. 6. 2026 (2 dny)</p>
+              <span className="routine-badge routine-badge-green">Schváleno & Čerpáno</span>
+            </div>
+
+            <div className="p-4 rounded-lg bg-[#f9f9fb] border border-[#e8e8ed] space-y-2">
+              <h4 className="text-xs font-bold text-[var(--routine-text-primary)]">Letní tábor pro děti</h4>
+              <p className="text-xs text-[var(--routine-text-secondary)]">Termín: 10. 7. - 17. 7. 2026 (7 dnů)</p>
+              <span className="routine-badge routine-badge-yellow">Schváleno v plánu</span>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Tab 3: My Education Plan */}
+      {activeTab === 'my-plan' && (
+        <div className="routine-card p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#f0f0f4] pb-3">
+            <h3 className="text-sm font-bold text-[var(--routine-text-primary)]">
+              Přehled plnění povinného vzdělávání pěstounů
+            </h3>
+            <span className="routine-badge routine-badge-blue font-mono">Splněno 12 / 24 hodin</span>
+          </div>
+
+          <div className="w-full bg-[#f0f0f4] h-2.5 rounded-full overflow-hidden">
+            <div className="bg-[var(--routine-coral)] h-full w-1/2 transition-all duration-500" />
+          </div>
+
+          <p className="text-xs text-[var(--routine-text-secondary)]">
+            Zbývá absolvovat 12 hodin vzdělávání v probíhajícím dvouletém období.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
+
 export default RespitEducationView;

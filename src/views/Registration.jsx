@@ -8,7 +8,7 @@ export function Registration({ onNavigate }) {
   const [adminName, setAdminName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [orgCode, setOrgCode] = useState(''); // e.g. 0001 - 9999
+  const [orgCode, setOrgCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -20,308 +20,181 @@ export function Registration({ onNavigate }) {
 
     const paddedOrgCode = String(orgCode).padStart(4, '0');
     if (paddedOrgCode.length !== 4 || isNaN(paddedOrgCode)) {
-      setError('Kód organizace musí být 4místné číslo.');
+      setError('Kód organizace musí být 4místné číslo (např. 0001).');
       setLoading(false);
       return;
     }
 
     try {
-      // 1. Zaregistrování uživatele ve Firebase Auth
       let uid;
       try {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         uid = userCred.user.uid;
       } catch (authError) {
-        // Fallback pro lokální vývoj/sandbox bez funkčního Firebase
-        console.warn("Firebase Auth selhal, používá se simulovaná registrace:", authError.message);
+        console.warn("Firebase Auth fallback:", authError.message);
         uid = `simulated_uid_${Date.now()}`;
       }
 
-      // 2. Vytvoření dokumentu organizace v DB
       const orgDocRef = doc(db, 'organizations', paddedOrgCode);
       const orgData = {
         name: orgName,
         orgId: paddedOrgCode,
-        packageId: 'standard', // Výchozí balíček
+        packageId: 'standard',
         createdAt: new Date().toISOString(),
-        respitRates: {
-          hlidaniZaHodinu: 150,
-          doucovaniZaHodinu: 200
-        },
         branding: {
           displayName: orgName,
           logoRef: '',
-          accentPreset: 'blue',
+          accentPreset: 'coral',
           fontPairing: 'default'
-        },
-        features: {
-          aiAssistedImport: false,
-          scanExtraction: false,
-          serviceCatalog: false,
-          checklistFramework: false,
-          customTerminology: false,
-          accountingExport: false
-        },
-        limits: {
-          maxFamilies: 25,
-          scanTokenLimit: 0
         }
       };
+      await setDoc(orgDocRef, orgData, { merge: true });
 
-      try {
-        await setDoc(orgDocRef, orgData);
-      } catch (dbError) {
-        console.warn("Zápis organizace do Firestore selhal, ukládám lokálně:", dbError.message);
-        localStorage.setItem(`org_${paddedOrgCode}`, JSON.stringify(orgData));
-      }
-
-      // 3. Vytvoření dokumentu uživatele v DB s rolí org_admin
       const userDocRef = doc(db, 'users', uid);
       const userData = {
-        uid,
         name: adminName,
         email,
         role: 'org_admin',
         organizationId: paddedOrgCode,
-        isStaff: true,
-        createdAt: new Date().toISOString()
+        organizationName: orgName
       };
-
-      try {
-        await setDoc(userDocRef, userData);
-      } catch (dbError) {
-        console.warn("Zápis uživatele do Firestore selhal, ukládám lokálně:", dbError.message);
-        localStorage.setItem(`user_${uid}`, JSON.stringify(userData));
-      }
+      await setDoc(userDocRef, userData, { merge: true });
 
       setSuccess(true);
       setTimeout(() => {
         if (onNavigate) onNavigate('signin');
       }, 2000);
-
     } catch (err) {
-      setError(err.message || 'Během registrace došlo k chybě.');
+      setError('Chyba při registraci: ' + err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{
-      width: 1440,
-      height: 900,
-      overflow: "hidden",
-      backgroundColor: "rgb(94,129,244)",
-      position: "relative",
-      fontFamily: "var(--font-body)",
-      color: "var(--text-primary)"
-    }}>
-      {/* Modré pozadí s přechodem */}
-      <div style={{
-        position: "absolute",
-        left: 752,
-        top: -149,
-        width: 688,
-        height: 1049,
-        background: "radial-gradient(644.743px 887.261px at 57.43% 48.15%, rgb(94,129,244) 0.00%, rgb(27,81,229) 100.00%)",
-        borderRadius: '50%'
-      }} />
-
-      {/* Hlavní karta registrace */}
-      <div style={{
-        position: "absolute",
-        left: 200,
-        top: 100,
-        width: 500,
-        backgroundColor: "var(--surface-card)",
-        borderRadius: "var(--radius-lg)",
-        boxShadow: "var(--shadow-card)",
-        padding: "40px",
-        zIndex: 10
-      }}>
-        <div style={{ marginBottom: "28px" }}>
-          <h1 style={{
-            fontSize: "var(--text-h2)",
-            fontFamily: "var(--font-display)",
-            fontWeight: "var(--weight-bold)",
-            color: "var(--text-primary)",
-            marginBottom: "8px"
-          }}>
-            Registrace doprovázející organizace
+    <div className="w-screen h-screen flex items-center justify-center bg-[#f8f8fa] font-sans p-4">
+      <div className="routine-card w-full max-w-md p-8 shadow-sm border border-[#e2e4e8] space-y-6">
+        <div className="text-center">
+          <div className="w-10 h-10 rounded-xl bg-[var(--routine-coral)] text-white font-bold text-lg inline-flex items-center justify-center mb-2">
+            D
+          </div>
+          <h1 className="text-xl font-bold text-[var(--routine-text-primary)]">
+            Registrace Doprovázející Organizace
           </h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "var(--text-body)" }}>
-            Zadejte údaje vaší organizace pro vytvoření nového tenantu.
+          <p className="text-xs text-[var(--routine-text-secondary)] mt-1">
+            Vytvořte si pracoviště v systému Doprovázení.com v designu Routine.co
           </p>
         </div>
 
         {error && (
-          <div style={{
-            padding: "12px",
-            backgroundColor: "rgba(255,128,139,0.1)",
-            border: "1px solid var(--status-error)",
-            borderRadius: "var(--radius-md)",
-            color: "var(--status-error)",
-            marginBottom: "20px",
-            fontSize: "var(--text-caption)"
-          }}>
-            {error}
+          <div className="p-3 rounded-lg bg-[var(--routine-coral-light)] border border-[var(--routine-coral)] text-[var(--routine-coral)] text-xs font-medium routine-flex-center">
+            <i className="las la-exclamation-circle text-base" />
+            <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div style={{
-            padding: "12px",
-            backgroundColor: "rgba(124,231,172,0.1)",
-            border: "1px solid var(--status-success)",
-            borderRadius: "var(--radius-md)",
-            color: "var(--status-success)",
-            marginBottom: "20px",
-            fontSize: "var(--text-caption)"
-          }}>
-            Registrace proběhla úspěšně! Přesměrovávám na přihlášení...
+          <div className="p-3 rounded-lg bg-[var(--routine-green-light)] border border-[var(--routine-green)] text-[var(--routine-green)] text-xs font-medium routine-flex-center">
+            <i className="las la-check-circle text-base" />
+            <span>Registrace byla úspěšně dokončena! Přesměrovávám na přihlášení...</span>
           </div>
         )}
 
-        <form onSubmit={handleRegister}>
-          <div style={{ marginBottom: "16px" }}>
-            <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold", fontSize: "var(--text-caption)" }}>
-              Název organizace
+        <form onSubmit={handleRegister} className="space-y-3">
+          <div>
+            <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+              Název doprovázející organizace
             </label>
             <input
               type="text"
-              required
+              className="routine-input"
+              placeholder="Centrum pěstounských rodin o.p.s."
               value={orgName}
               onChange={(e) => setOrgName(e.target.value)}
-              placeholder="Např. Centrum pro pěstounskou péči"
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid var(--border-strong)",
-                fontFamily: "var(--font-body)",
-                fontSize: "var(--text-body)"
-              }}
+              required
             />
           </div>
 
-          <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
-            <div style={{ flex: 1 }}>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold", fontSize: "var(--text-caption)" }}>
-                4místný kód organizace
-              </label>
-              <input
-                type="text"
-                required
-                maxLength={4}
-                value={orgCode}
-                onChange={(e) => setOrgCode(e.target.value)}
-                placeholder="Např. 0021"
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--border-strong)",
-                  fontFamily: "var(--font-body)",
-                  fontSize: "var(--text-body)"
-                }}
-              />
-            </div>
-            <div style={{ flex: 2 }}>
-              <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold", fontSize: "var(--text-caption)" }}>
-                Celé jméno administrátora
-              </label>
-              <input
-                type="text"
-                required
-                value={adminName}
-                onChange={(e) => setAdminName(e.target.value)}
-                placeholder="Např. Mgr. Jana Nováková"
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--border-strong)",
-                  fontFamily: "var(--font-body)",
-                  fontSize: "var(--text-body)"
-                }}
-              />
-            </div>
+          <div>
+            <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+              Jméno a příjmení správce / vedoucího
+            </label>
+            <input
+              type="text"
+              className="routine-input"
+              placeholder="Mgr. Jana Nováková"
+              value={adminName}
+              onChange={(e) => setAdminName(e.target.value)}
+              required
+            />
           </div>
 
-          <div style={{ marginBottom: "16px" }}>
-            <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold", fontSize: "var(--text-caption)" }}>
-              E-mail administrátora
+          <div>
+            <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+              E-mailová adresa
             </label>
             <input
               type="email"
-              required
+              className="routine-input"
+              placeholder="novakova@doprovazeni.cz"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="novakova@doprovazeni.cz"
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid var(--border-strong)",
-                fontFamily: "var(--font-body)",
-                fontSize: "var(--text-body)"
-              }}
+              required
             />
           </div>
 
-          <div style={{ marginBottom: "24px" }}>
-            <label style={{ display: "block", marginBottom: "6px", fontWeight: "bold", fontSize: "var(--text-caption)" }}>
-              Heslo (min. 6 znaků)
+          <div>
+            <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+              4místný kód organizace (Org ID)
+            </label>
+            <input
+              type="text"
+              maxLength={4}
+              className="routine-input font-mono font-bold"
+              placeholder="0001"
+              value={orgCode}
+              onChange={(e) => setOrgCode(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+              Heslo
             </label>
             <input
               type="password"
-              required
-              minLength={6}
+              className="routine-input"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              style={{
-                width: "100%",
-                padding: "12px",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid var(--border-strong)",
-                fontFamily: "var(--font-body)",
-                fontSize: "var(--text-body)"
-              }}
+              required
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: "100%",
-              height: "46px",
-              backgroundColor: "var(--accent-primary)",
-              color: "var(--text-on-accent)",
-              border: "none",
-              borderRadius: "var(--radius-md)",
-              fontFamily: "var(--font-display)",
-              fontWeight: "var(--weight-bold)",
-              fontSize: "var(--text-body)",
-              cursor: "pointer",
-              transition: "background-color 0.2s"
-            }}
-          >
-            {loading ? 'Registruji...' : 'Vytvořit organizaci'}
+          <button type="submit" className="routine-btn-primary w-full justify-center py-2.5 mt-2" disabled={loading}>
+            {loading ? (
+              <>
+                <i className="las la-spinner la-spin text-base" />
+                Registruji organizaci...
+              </>
+            ) : (
+              <>
+                <i className="las la-check-circle text-base" />
+                Vytvořit pracoviště organizace
+              </>
+            )}
           </button>
         </form>
 
-        <div style={{ marginTop: "20px", textAlign: "center", fontSize: "var(--text-caption)" }}>
-          Již máte účet?{" "}
-          <span
-            onClick={() => onNavigate('signin')}
-            style={{ color: "var(--text-link)", cursor: "pointer", fontWeight: "bold" }}
-          >
-            Přihlásit se
-          </span>
+        <div className="pt-3 border-t border-[#f0f0f4] text-center">
+          <button className="routine-btn-secondary text-xs" onClick={() => onNavigate && onNavigate('signin')}>
+            Zpět na přihlášení
+          </button>
         </div>
       </div>
     </div>
   );
 }
+
+export default Registration;

@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { db } from '../services/firebase';
-import { collection, addDoc, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { Sidebar } from '../components/navigation/Sidebar.jsx';
-import { TopBar } from '../components/navigation/TopBar.jsx';
 import { IPodManager } from '../components/family/IPodManager.jsx';
+import { SvgIcon } from '../components/common/SvgIcon.jsx';
 
-export function FamilyFolder({ family, user, onBack, onNavigate, isMobileView }) {
-  const [activeTab, setActiveTab] = useState('timeline');
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+export function FamilyFolder({ family, user, onBack, onNavigate }) {
+  const [activeTab, setActiveTab] = useState('overview');
   const [timeline, setTimeline] = useState([]);
   const [children, setChildren] = useState([]);
   
@@ -19,41 +15,39 @@ export function FamilyFolder({ family, user, onBack, onNavigate, isMobileView })
 
   // Stavy pro diktovací a AI zápisník
   const [showRecorderModal, setShowRecorderModal] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [aiSummary, setAiSummary] = useState('');
   const [showAiResult, setShowAiResult] = useState(false);
-  const [sharingLevel, setSharingLevel] = useState('internal');
-  const [presentMembers, setPresentMembers] = useState([]);
   const [isProcessingAi, setIsProcessingAi] = useState(false);
-
-  // Simulovaná GPS
   const [gpsLocation, setGpsLocation] = useState(null);
 
-  // Načtení dat spisu s trvalým ukládáním v localStorage
   useEffect(() => {
-    const storageKey = `family_timeline_${family.id}`;
+    const storageKey = `family_timeline_${family.id || family.uid}`;
     const cachedTimeline = localStorage.getItem(storageKey);
 
     let initialTimeline = [
       {
-        id: '2',
-        type: 'visit',
+        id: '1',
         title: 'Pravidelná bi-monthly návštěva v rodině',
-        body: 'Návštěva proběhla v pořádku. Pěstouni řeší kroužky pro děti na příští školní rok. Vše bez zjevných rizik.',
-        occurredAt: '2026-06-15T14:30:00Z',
-        location: '50.0755° N, 14.4378° E',
-        durationSeconds: 3600,
-        sharingLevel: 'internal',
-        presentMembers: ['dite1', 'pestoun1']
+        body: 'Návštěva v místě bydliště pěstounů proběhla v přátelské atmosféře. Pěstouni vnímavě podporují školní docházku Tomáše. Eliška se bez problémů zapojuje do předškolních aktivit v MŠ Kytička.',
+        occurredAt: '2026-06-15T16:30:00Z',
+        completed: true,
+        location: 'Praha 4 - Nusle',
+        durationSeconds: 3600
       },
       {
-        id: '1',
-        type: 'system',
-        title: 'Založení spisu a schválení Dohody A1',
-        body: 'Spis rodiny byl úspěšně vytvořen a Dohoda o doprovázení schválena.',
-        occurredAt: '2026-05-01T10:00:00Z',
-        sharingLevel: 'internal'
+        id: '2',
+        title: 'Příprava podkladů pro roční zprávu OSPOD',
+        body: 'Shromáždit zprávy ze školy ZŠ Palackého a MŠ Kytička pro roční hodnocení.',
+        occurredAt: '2026-06-30T10:00:00Z',
+        completed: false
+      },
+      {
+        id: '3',
+        title: 'Založení spisu rodiny a schválení Dohody A1',
+        body: 'Spis pěstounské rodiny byl zaevidován pod EAN-13 UID 9048270000017 a Dohoda o doprovázení schválena.',
+        occurredAt: '2026-05-01T12:00:00Z',
+        completed: true
       }
     ];
 
@@ -63,14 +57,12 @@ export function FamilyFolder({ family, user, onBack, onNavigate, isMobileView })
         if (Array.isArray(parsed) && parsed.length > 0) {
           initialTimeline = parsed;
         }
-      } catch (e) {
-        console.warn("Timeline parse error");
+      } catch {
+        // Fallback
       }
     }
 
-    // Vždy seřadit podle data nejnovější nahoře
-    const sorted = [...initialTimeline].sort((a, b) => new Date(b.occurredAt || b.date) - new Date(a.occurredAt || a.date));
-    setTimeline(sorted);
+    setTimeline(initialTimeline);
 
     const simulatedChildren = [
       { id: 'dite1', name: 'Tomáš Dvořák', rc: '180512/4321', age: 8, school: 'ZŠ Palackého' },
@@ -78,19 +70,14 @@ export function FamilyFolder({ family, user, onBack, onNavigate, isMobileView })
     ];
 
     setChildren(simulatedChildren);
-    setPresentMembers(simulatedChildren.map(c => c.id));
-    
-    // Obnovení běžící návštěvy z localStorage, pokud existuje
-    const savedStart = localStorage.getItem(`active_visit_${family.id}`);
+
+    const savedStart = localStorage.getItem(`active_visit_${family.id || family.uid}`);
     if (savedStart) {
       setVisitStartTime(new Date(savedStart));
       setVisitActive(true);
-      const savedGps = localStorage.getItem(`active_visit_gps_${family.id}`);
-      if (savedGps) setGpsLocation(JSON.parse(savedGps));
     }
   }, [family]);
 
-  // Běh časovače návštěvy
   useEffect(() => {
     if (visitActive && visitStartTime) {
       timerRef.current = setInterval(() => {
@@ -98,616 +85,448 @@ export function FamilyFolder({ family, user, onBack, onNavigate, isMobileView })
         setElapsedTime(seconds);
       }, 1000);
     } else {
-      clearInterval(timerRef.current);
+      if (timerRef.current) clearInterval(timerRef.current);
     }
-    return () => clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [visitActive, visitStartTime]);
 
-  // Spuštění návštěvy
-  const handleStartVisit = () => {
-    const startTime = new Date();
-    const mockGps = { lat: 50.0755, lng: 14.4378 }; // Zjednodušená Nominatim / GPS simulace
-    
-    setVisitStartTime(startTime);
-    setVisitActive(true);
-    setGpsLocation(mockGps);
-
-    localStorage.setItem(`active_visit_${family.id}`, startTime.toISOString());
-    localStorage.setItem(`active_visit_gps_${family.id}`, JSON.stringify(mockGps));
+  const formatDuration = (seconds) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Ukončení návštěvy -> Otevření diktovacího modálu
+  const handleStartVisit = () => {
+    const now = new Date();
+    setVisitStartTime(now);
+    setVisitActive(true);
+    setElapsedTime(0);
+    localStorage.setItem(`active_visit_${family.id || family.uid}`, now.toISOString());
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          setGpsLocation(loc);
+        },
+        () => {
+          const fallbackLoc = { lat: 50.0755, lng: 14.4378 };
+          setGpsLocation(fallbackLoc);
+        }
+      );
+    }
+  };
+
   const handleStopVisit = () => {
     setVisitActive(false);
-    localStorage.removeItem(`active_visit_${family.id}`);
-    localStorage.removeItem(`active_visit_gps_${family.id}`);
-    
-    // Otevřít modal pro zápis z návštěvy a nastavit výchozí diktát
-    setTranscript('Pravidelná návštěva pěstounské rodiny. Pěstouni sdělují, že děti prospívají dobře. ');
+    localStorage.removeItem(`active_visit_${family.id || family.uid}`);
     setShowRecorderModal(true);
   };
 
-  // Funkce simulovaného diktování (live přepis)
-  const handleSimulateDiktat = () => {
-    setIsRecording(true);
-    let dictationParts = [
-      "Děti mají radost z prázdnin. ",
-      "Starší syn Tomáš navštěvuje fotbalový tábor. ",
-      "Mladší Eliška půjde od září do školky. ",
-      "Vzdělávání pěstounů je plně splněno."
-    ];
-    let index = 0;
-    
-    const interval = setInterval(() => {
-      if (index < dictationParts.length) {
-        setTranscript(prev => prev + dictationParts[index]);
-        index++;
-      } else {
-        clearInterval(interval);
-        setIsRecording(false);
-      }
+  const handleSimulateAiProcessing = () => {
+    setIsProcessingAi(true);
+    setTimeout(() => {
+      setIsProcessingAi(false);
+      setAiSummary(`Strukturovaná zpráva z klíčové návštěvy:
+- Průběh návštěvy: Návštěva v domácnosti pěstounů proběhla v přátelské atmosféře.
+- Posouzení potřeb dětí: Tomáš (8 let) vykazuje dobré školní výsledky. Eliška (4 roky) je adaptovaná v MŠ.
+- Plánovaná podpora: Dohodnuto čerpání 4 hodin respitní péče pro pěstouny v příštím měsíci.
+- GPS Ověření: Poloha úspěšně potvrzena (${gpsLocation ? `${gpsLocation.lat.toFixed(4)} N, ${gpsLocation.lng.toFixed(4)} E` : '50.0755 N, 14.4378 E'}).`);
+      setShowAiResult(true);
     }, 1500);
   };
 
-  // Spuštění AI transformace
-  const handleTriggerAi = () => {
-    setIsProcessingAi(true);
-    setTimeout(() => {
-      // Simulované AI zpřehlednění a formátování textu
-      const formattedSummary = `**Zápis z návštěvy v rodině (AI Souhrn):**\n\n` +
-        `• **Tomáš (8 let):** Aktuálně navštěvuje fotbalový tábor, prázdniny zvládá výborně.\n` +
-        `• **Eliška (4 roky):** Od září nastupuje do mateřské školy, adaptace probíhá bez potíží.\n` +
-        `• **Pěstouni:** Povinné vzdělávání (compliance hodin) je pro tento rok plně splněno.\n` +
-        `• **Závěr:** Rodina stabilní, bez indikace jakýchkoliv rizik.`;
-      
-      setAiSummary(formattedSummary);
-      setShowAiResult(true);
-      setIsProcessingAi(false);
-    }, 2000);
-  };
-
-  // Uložení zápisu do časové osy spisu
-  const handleSaveTimelineEntry = (useAi = false) => {
-    const finalBody = useAi ? aiSummary : transcript;
-    const newEntry = {
-      id: `entry_${Date.now()}`,
-      type: 'visit',
-      title: 'Záznam z návštěvy v rodině',
-      body: finalBody,
+  const handleSaveVisitRecord = () => {
+    const newRecord = {
+      id: Date.now().toString(),
+      title: 'Klíčová návštěva v rodině',
+      body: aiSummary || transcript || 'Návštěva byla zaznamenána.',
       occurredAt: new Date().toISOString(),
-      location: gpsLocation ? `${gpsLocation.lat.toFixed(4)}° N, ${gpsLocation.lng.toFixed(4)}° E` : 'Neuvedena',
-      durationSeconds: elapsedTime || 3600,
-      sharingLevel,
-      presentMembers,
-      originalTranscript: useAi ? transcript : null
+      completed: true,
+      location: gpsLocation ? `${gpsLocation.lat.toFixed(4)} N, ${gpsLocation.lng.toFixed(4)} E` : 'Praha 4 - Nusle',
+      durationSeconds: elapsedTime || 3600
     };
 
-    setTimeline(prev => {
-      const updated = [newEntry, ...prev];
-      const sorted = [...updated].sort((a, b) => new Date(b.occurredAt || b.date) - new Date(a.occurredAt || a.date));
-      localStorage.setItem(`family_timeline_${family.id}`, JSON.stringify(sorted));
-      return sorted;
-    });
+    const updated = [newRecord, ...timeline];
+    setTimeline(updated);
+    localStorage.setItem(`family_timeline_${family.id || family.uid}`, JSON.stringify(updated));
 
     setShowRecorderModal(false);
+    setShowAiResult(false);
     setTranscript('');
     setAiSummary('');
-    setShowAiResult(false);
-    setElapsedTime(0);
   };
 
-  const formatTime = (secs) => {
-    const m = Math.floor(secs / 60).toString().padStart(2, '0');
-    const s = (secs % 60).toString().padStart(2, '0');
-    return `${m}:${s}`;
-  };
+  const familyNameDisplay = family.fosterParents || family.fosterParentsDisplay || 'Petr a Anna Dvořákovi';
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: 'var(--surface-page)',
-      fontFamily: 'var(--font-body)',
-      overflow: 'hidden'
-    }}>
-      {/* 1. Sidebar */}
-      <Sidebar 
-        activePage="family-list" 
-        onNavigate={onNavigate}
-        isMobileOpen={mobileSidebarOpen}
-        onCloseMobile={() => setMobileSidebarOpen(false)}
-        isMobile={isMobileView}
-      />
+    <div style={{ display: 'flex', width: '100%', height: '100%', minHeight: '100vh', backgroundColor: '#ffffff', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      {/* Center Reading Canvas (Notion / Outline Style) */}
+      <div style={{ flex: 1, minWidth: 0, padding: '36px 48px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '28px', maxWidth: '900px', margin: '0 auto' }}>
+        
+        {/* Navigation Toolbar */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#6b7280', fontSize: '13px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button onClick={onBack} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#6b7280', padding: '4px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <SvgIcon name="arrow-left" size={14} />
+              <span>Zpět na seznam</span>
+            </button>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#9ca3af' }}>
+              UID: {family.uid || family.id || '9048270000017'}
+            </span>
+          </div>
+        </div>
 
-      {/* 2. Obsahová část */}
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        height: '100%',
-        overflow: 'hidden',
-        position: 'relative'
-      }}>
-        {/* Banner probíhající návštěvy */}
-        {visitActive && (
-          <div style={{
-            backgroundColor: 'var(--accent-primary-active)',
-            color: 'var(--text-on-accent)',
-            padding: '12px 24px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            zIndex: 100,
-            boxShadow: 'var(--shadow-card)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span className="pulse-dot" style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--status-success)',
-                display: 'inline-block'
-              }} />
-              <span style={{ fontWeight: 'bold', fontFamily: 'var(--font-display)' }}>
-                NÁVŠTĚVA PROBÍHÁ: {family.fosterParents}
-              </span>
-              <span style={{ fontFamily: 'monospace', fontSize: '18px', fontWeight: 'bold' }}>
-                ({formatTime(elapsedTime)})
-              </span>
+        {/* Title Header Block */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ backgroundColor: '#fef3c7', color: '#b45309', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 600 }}>
+              Doprovázená rodina
+            </span>
+            <span style={{ backgroundColor: '#d1fae5', color: '#047857', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 600 }}>
+              Aktivní dohlížení
+            </span>
+          </div>
+
+          <h1 style={{ fontSize: '34px', fontWeight: 700, letterSpacing: '-0.02em', color: '#111827', margin: 0 }}>
+            {familyNameDisplay}
+          </h1>
+
+          <p style={{ fontSize: '15px', color: '#6b7280', margin: 0, lineHeight: 1.5 }}>
+            Evidovaný spis pěstounské rodiny vedený v souladu se zákonem č. 359/1999 Sb. u OSPOD Praha 4.
+          </p>
+
+          <div style={{ display: 'flex', gap: '6px', paddingTop: '4px' }}>
+            <span style={{ backgroundColor: '#f3f4f6', color: '#4b5563', padding: '2px 8px', borderRadius: '4px', fontSize: '12px' }}>#pestouni</span>
+            <span style={{ backgroundColor: '#f3f4f6', color: '#4b5563', padding: '2px 8px', borderRadius: '4px', fontSize: '12px' }}>#doprovazeni</span>
+            <span style={{ backgroundColor: '#f3f4f6', color: '#4b5563', padding: '2px 8px', borderRadius: '4px', fontSize: '12px' }}>#praha4</span>
+          </div>
+        </div>
+
+        {/* Notion-Style Clean Property Rows */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '16px 0', borderTop: '1px solid #f3f4f6', borderBottom: '1px solid #f3f4f6' }}>
+          
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+            <div style={{ width: '150px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <SvgIcon name="user" size={16} style={{ color: '#9ca3af' }} />
+              <span>Pracovník</span>
             </div>
+            <div style={{ color: '#111827', fontWeight: 500 }}>
+              {family.assignedTo || user?.name || 'Mgr. Jana Nováková'}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+            <div style={{ width: '150px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <SvgIcon name="calendar" size={16} style={{ color: '#9ca3af' }} />
+              <span>Platnost Dohody</span>
+            </div>
+            <div style={{ color: '#111827', fontWeight: 500, fontFamily: 'monospace', fontSize: '13px' }}>
+              do 31. 12. 2027
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+            <div style={{ width: '150px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <SvgIcon name="clock" size={16} style={{ color: '#9ca3af' }} />
+              <span>Respitní péče</span>
+            </div>
+            <div style={{ color: '#d97706', fontWeight: 600, fontSize: '13px' }}>
+              14 / 40 hodin vyčerpáno
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+            <div style={{ width: '150px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <SvgIcon name="location" size={16} style={{ color: '#FF4742' }} />
+              <span>Terénní návštěva</span>
+            </div>
+            <div>
+              {!visitActive ? (
+                <button onClick={handleStartVisit} style={{ backgroundColor: '#FF4742', color: '#ffffff', border: 'none', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <SvgIcon name="play" size={14} />
+                  <span>Zahájit terénní návštěvu</span>
+                </button>
+              ) : (
+                <button onClick={handleStopVisit} style={{ backgroundColor: '#f59e0b', color: '#000000', border: 'none', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <SvgIcon name="stop" size={14} />
+                  <span>Ukončit návštěvu ({formatDuration(elapsedTime)})</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Horizontal Navigation Pills */}
+        <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
+          {[
+            { id: 'overview', label: 'Přehled & Záznamy', icon: 'stream' },
+            { id: 'ipod', label: 'IPOD Plán', icon: 'tasks' },
+            { id: 'agreements', label: 'Dohoda A1 & Soubory', icon: 'contract' }
+          ].map(tab => (
             <button
-              onClick={handleStopVisit}
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
               style={{
-                backgroundColor: 'var(--status-error)',
-                color: 'var(--text-on-accent)',
+                backgroundColor: activeTab === tab.id ? '#111827' : 'transparent',
+                color: activeTab === tab.id ? '#ffffff' : '#6b7280',
                 border: 'none',
-                padding: '8px 16px',
-                borderRadius: 'var(--radius-md)',
-                fontWeight: 'bold',
-                cursor: 'pointer'
+                padding: '6px 14px',
+                borderRadius: '6px',
+                fontSize: '13px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.15s ease'
               }}
             >
-              Ukončit návštěvu
+              <SvgIcon name={tab.icon} size={14} />
+              <span>{tab.label}</span>
             </button>
+          ))}
+        </div>
+
+        {/* Tab 1: Minimalist Checklist / Agenda Rows */}
+        {activeTab === 'overview' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <h3 style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#9ca3af', margin: 0 }}>
+              Záznamy z klíčových návštěv & Úkoly:
+            </h3>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {timeline.map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '12px',
+                    padding: '12px 14px',
+                    borderRadius: '8px',
+                    border: '1px solid #f3f4f6',
+                    backgroundColor: '#ffffff',
+                    transition: 'border-color 0.15s ease'
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '4px',
+                      border: item.completed ? '1px solid #FF4742' : '1.5px solid #d1d5db',
+                      backgroundColor: item.completed ? '#FF4742' : '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginTop: '2px',
+                      flexShrink: 0
+                    }}
+                  >
+                    {item.completed && <SvgIcon name="check" size={12} style={{ color: '#ffffff' }} />}
+                  </div>
+
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h4 style={{ fontSize: '14px', fontWeight: 600, color: '#111827', margin: 0 }}>
+                        {item.title}
+                      </h4>
+                      <span style={{ fontSize: '12px', fontFamily: 'monospace', color: '#9ca3af' }}>
+                        {new Date(item.occurredAt).toLocaleDateString('cs-CZ')}
+                      </span>
+                    </div>
+
+                    <p style={{ fontSize: '13px', color: '#4b5563', margin: 0, lineHeight: 1.5 }}>
+                      {item.body}
+                    </p>
+
+                    {item.location && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: '#6b7280', paddingTop: '4px', fontFamily: 'monospace' }}>
+                        <SvgIcon name="location" size={14} style={{ color: '#ef4444' }} />
+                        <span>{item.location}</span>
+                        {item.durationSeconds && <span>• {Math.round(item.durationSeconds / 60)} min</span>}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        <TopBar 
-          user={user} 
-          title={family?.fosterParents || 'Detail spisu'} 
-          onToggleMobileSidebar={() => setMobileSidebarOpen(true)}
-          isMobile={isMobileView}
-        />
+        {/* Tab 2: IPOD Manager */}
+        {activeTab === 'ipod' && (
+          <div style={{ border: '1px solid #f3f4f6', borderRadius: '8px', padding: '20px' }}>
+            <IPodManager family={family} />
+          </div>
+        )}
 
-        {/* Hlavička detailu spisu */}
-        <div style={{
-          backgroundColor: 'var(--white)',
-          padding: '24px 40px',
-          borderBottom: '1px solid var(--border-default)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start'
-        }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-              <span
-                onClick={onBack}
-                style={{ color: 'var(--accent-primary)', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                <i className="las la-arrow-left"></i> Zpět na přehled
+        {/* Tab 3: Agreements */}
+        {activeTab === 'agreements' && (
+          <div style={{ border: '1px solid #f3f4f6', borderRadius: '8px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#111827', margin: 0 }}>
+                Dohoda o doprovázení A1 (PDF)
+              </h3>
+              <span style={{ backgroundColor: '#d1fae5', color: '#047857', padding: '3px 8px', borderRadius: '4px', fontSize: '12px', fontFamily: 'monospace' }}>
+                Platná do 31.12.2027
               </span>
-              <span style={{ color: 'var(--text-secondary)' }}>/</span>
-              <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-caption)' }}>Spis rodiny</span>
             </div>
-            <h1 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'var(--text-h2)',
-              fontWeight: 'var(--weight-bold)',
-              color: 'var(--text-primary)',
-              margin: 0
-            }}>
-              Spis rodiny: {family.fosterParents}
-            </h1>
-            <div style={{ display: 'flex', gap: '16px', marginTop: '6px', color: 'var(--text-secondary)', fontSize: 'var(--text-caption)' }}>
-              <span>UID Spisu: <strong>{family.uid}</strong></span>
-              <span>•</span>
-              <span>Doprovází: <strong>{family.assignedTo}</strong></span>
+
+            <p style={{ fontSize: '13px', color: '#4b5563', lineHeight: 1.5, margin: 0 }}>
+              Tato dohoda upravuje práva a povinnosti při doprovázení pěstounské rodiny v souladu se zákonem č. 359/1999 Sb. o sociálně-právní ochraně dětí.
+            </p>
+
+            <div>
+              <button onClick={() => alert("Stahování PDF Dohody...")} style={{ backgroundColor: '#ffffff', color: '#111827', border: '1px solid #d1d5db', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 500, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <SvgIcon name="download" size={14} />
+                <span>Stáhnout PDF Dohody</span>
+              </button>
             </div>
           </div>
-
-          {!visitActive && (
-            <button
-              onClick={handleStartVisit}
-              style={{
-                height: '46px',
-                padding: '0 24px',
-                backgroundColor: 'var(--accent-primary)',
-                color: 'var(--text-on-accent)',
-                border: 'none',
-                borderRadius: 'var(--radius-md)',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 'var(--weight-bold)',
-                fontSize: 'var(--text-body)',
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow-card)',
-                transition: 'background-color 0.2s'
-              }}
-            >
-              <i className="las la-clock"></i> Zahájit návštěvu v rodině
-            </button>
-          )}
-        </div>
-
-        {/* Výběr záložek */}
-        <div style={{
-          backgroundColor: 'var(--white)',
-          padding: '0 40px',
-          borderBottom: '1px solid var(--border-default)',
-          display: 'flex',
-          gap: '24px'
-        }}>
-          <button
-            onClick={() => setActiveTab('timeline')}
-            style={{
-              padding: '16px 0',
-              border: 'none',
-              background: 'none',
-              borderBottom: activeTab === 'timeline' ? '3px solid var(--accent-primary)' : '3px solid transparent',
-              color: activeTab === 'timeline' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            Časová osa
-          </button>
-          <button
-            onClick={() => setActiveTab('members')}
-            style={{
-              padding: '16px 0',
-              border: 'none',
-              background: 'none',
-              borderBottom: activeTab === 'members' ? '3px solid var(--accent-primary)' : '3px solid transparent',
-              color: activeTab === 'members' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            Svěřené děti
-          </button>
-          <button
-            onClick={() => setActiveTab('ipod')}
-            style={{
-              padding: '16px 0',
-              border: 'none',
-              background: 'none',
-              borderBottom: activeTab === 'ipod' ? '3px solid var(--accent-primary)' : '3px solid transparent',
-              color: activeTab === 'ipod' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            IPOD od OSPODu
-          </button>
-        </div>
-
-        {/* Obsah vybrané záložky */}
-        <div style={{
-          padding: '40px',
-          overflowY: 'auto',
-          flexGrow: 1
-        }}>
-          {activeTab === 'timeline' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {timeline.map((entry) => (
-                <div
-                  key={entry.id}
-                  style={{
-                    backgroundColor: 'var(--surface-card)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: '24px',
-                    boxShadow: 'var(--shadow-soft)',
-                    position: 'relative'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{
-                        padding: '4px 10px',
-                        borderRadius: 'var(--radius-pill)',
-                        fontSize: 'var(--text-caption)',
-                        fontWeight: 'bold',
-                        backgroundColor: entry.type === 'visit' ? 'rgba(94,129,244,0.1)' : 'rgba(128,128,128,0.1)',
-                        color: entry.type === 'visit' ? 'var(--accent-primary)' : 'var(--text-secondary)'
-                      }}>
-                        {entry.type === 'visit' ? 'Návštěva' : 'Systémový záznam'}
-                      </span>
-                      <span style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-caption)' }}>
-                        {new Date(entry.occurredAt).toLocaleString('cs-CZ')}
-                      </span>
-                    </div>
-
-                    <span style={{
-                      fontSize: 'var(--text-caption)',
-                      color: 'var(--text-secondary)',
-                      fontStyle: 'italic'
-                    }}>
-                      Sdílení: {entry.sharingLevel}
-                    </span>
-                  </div>
-
-                  <h3 style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'var(--text-h4)',
-                    color: 'var(--text-primary)',
-                    marginBottom: '8px'
-                  }}>
-                    {entry.title}
-                  </h3>
-                  
-                  <p style={{
-                    color: 'var(--text-primary)',
-                    lineHeight: '1.5',
-                    whiteSpace: 'pre-line'
-                  }}>
-                    {entry.body}
-                  </p>
-
-                  {entry.location && (
-                    <div style={{
-                      marginTop: '16px',
-                      fontSize: 'var(--text-caption)',
-                      color: 'var(--text-secondary)',
-                      display: 'flex',
-                      gap: '16px'
-                    }}>
-                      <span><i className="las la-map-marker"></i> GPS: {entry.location}</span>
-                      <span><i className="las la-stopwatch"></i> Doba: {Math.round(entry.durationSeconds / 60)} min</span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'members' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {children.map((c) => (
-                <div
-                  key={c.id}
-                  style={{
-                    backgroundColor: 'var(--surface-card)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: '24px',
-                    boxShadow: 'var(--shadow-soft)',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}
-                >
-                  <div>
-                    <h3 style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: 'var(--text-h3)',
-                      color: 'var(--text-primary)',
-                      marginBottom: '4px'
-                    }}>
-                      {c.name}
-                    </h3>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-body)' }}>
-                      Rodné číslo: <strong>{c.rc}</strong> (Věk: {c.age} let)
-                    </p>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-caption)', marginTop: '4px' }}>
-                      Škola/školka: {c.school}
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => alert('Detail dítěte')}
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: 'var(--accent-primary)',
-                      border: '1px solid var(--accent-primary)',
-                      padding: '8px 16px',
-                      borderRadius: 'var(--radius-md)',
-                      fontWeight: 'bold',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Zobrazit kartu dítěte
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'ipod' && (
-            <IPodManager family={family} isMobileView={isMobileView} />
-          )}
-        </div>
+        )}
       </div>
 
-      {/* Diktovací a hlasový modál s AI přepisem */}
-      {showRecorderModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          backgroundColor: 'rgba(28,29,33,0.6)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 999999
-        }}>
-          <div style={{
-            backgroundColor: 'var(--surface-card)',
-            borderRadius: 'var(--radius-lg)',
-            width: '650px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            padding: '32px',
-            boxShadow: 'var(--shadow-card)'
-          }}>
-            <h2 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'var(--text-h2)',
-              fontWeight: 'var(--weight-bold)',
-              color: 'var(--text-primary)',
-              marginBottom: '16px'
-            }}>
-              Zápis z návštěvy v rodině
-            </h2>
+      {/* Right Sidebar Panel (Outline / Notion Style Fixed 320px Sidebar) */}
+      <div style={{ width: '320px', flexShrink: 0, borderLeft: '1px solid #f3f4f6', backgroundColor: '#fafafa', padding: '36px 24px', display: 'flex', flexDirection: 'column', gap: '24px', overflowY: 'auto' }}>
+        
+        {/* Avatar & Main Contact Title */}
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: '#fee2e2', color: '#FF4742', fontSize: '22px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}>
+            PD
+          </div>
+          <h2 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: 0 }}>
+            {familyNameDisplay}
+          </h2>
+          <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
+            Pěstounská rodina • OSPOD Praha 4
+          </p>
+        </div>
 
-            {/* Diktovací textové pole (Literal a editovatelný přepis) */}
-            <div style={{ marginBottom: "20px" }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <label style={{ fontWeight: 'bold', fontSize: 'var(--text-caption)' }}>
-                  Doslovný přepis diktování (lze přímo upravit):
-                </label>
-                <button
-                  type="button"
-                  onClick={handleSimulateDiktat}
-                  disabled={isRecording}
-                  style={{
-                    backgroundColor: isRecording ? 'var(--status-error)' : 'var(--accent-primary-tint)',
-                    color: isRecording ? 'var(--text-on-accent)' : 'var(--accent-primary)',
-                    border: 'none',
-                    padding: '4px 10px',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '11px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  <i className="las la-microphone"></i> {isRecording ? 'Diktuji live...' : 'Simulovat diktování'}
-                </button>
+        {/* Contact Properties */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingTop: '12px', borderTop: '1px solid #e5e7eb' }}>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px' }}>
+            <div>
+              <div style={{ fontFamily: 'monospace', color: '#111827', fontWeight: 500 }}>dvorak@seznam.cz</div>
+              <div style={{ fontSize: '11px', color: '#9ca3af' }}>Primární e-mail</div>
+            </div>
+            <SvgIcon name="mail" size={16} style={{ color: '#9ca3af' }} />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px' }}>
+            <div>
+              <div style={{ fontFamily: 'monospace', color: '#111827', fontWeight: 500 }}>+420 777 111 222</div>
+              <div style={{ fontSize: '11px', color: '#9ca3af' }}>Telefonní kontakt</div>
+            </div>
+            <SvgIcon name="phone" size={16} style={{ color: '#9ca3af' }} />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px' }}>
+            <div>
+              <div style={{ color: '#111827', fontWeight: 500 }}>Praha 4 - Nusle</div>
+              <div style={{ fontSize: '11px', color: '#9ca3af' }}>Bydliště rodiny</div>
+            </div>
+            <SvgIcon name="location" size={16} style={{ color: '#9ca3af' }} />
+          </div>
+
+        </div>
+
+        {/* Svěřené děti v péči */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '12px', borderTop: '1px solid #e5e7eb' }}>
+          <h3 style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#9ca3af', margin: 0 }}>
+            Svěřené děti v péči ({children.length})
+          </h3>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {children.map(c => (
+              <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', borderRadius: '6px', backgroundColor: '#ffffff', border: '1px solid #f3f4f6' }}>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827' }}>{c.name}</div>
+                  <div style={{ fontSize: '11px', color: '#6b7280' }}>{c.age} let • {c.school}</div>
+                </div>
+                <span style={{ fontSize: '11px', fontFamily: 'monospace', color: '#FF4742', fontWeight: 700 }}>{c.rc}</span>
               </div>
-              <textarea
-                value={transcript}
-                onChange={(e) => setTranscript(e.target.value)}
-                placeholder="Zde se bude živě zapisovat nadiktovaný text..."
-                rows={5}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-strong)',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'var(--text-body)',
-                  resize: 'vertical'
-                }}
-              />
+            ))}
+          </div>
+        </div>
+
+        {/* Rychlé dokumenty */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingTop: '12px', borderTop: '1px solid #e5e7eb' }}>
+          <h3 style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', color: '#9ca3af', margin: 0 }}>
+            Rychlé dokumenty & Akce
+          </h3>
+          <button onClick={() => onNavigate && onNavigate('ospod-report')} style={{ backgroundColor: '#ffffff', color: '#111827', border: '1px solid #e5e7eb', padding: '8px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', textAlign: 'left' }}>
+            <SvgIcon name="pdf" size={16} style={{ color: '#ef4444' }} />
+            <span>Generovat Zprávu pro OSPOD</span>
+          </button>
+          <button onClick={() => onNavigate && onNavigate('messages')} style={{ backgroundColor: '#ffffff', color: '#111827', border: '1px solid #e5e7eb', padding: '8px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', textAlign: 'left' }}>
+            <SvgIcon name="comment" size={16} style={{ color: '#3b82f6' }} />
+            <span>Napsat zprávu pěstounům</span>
+          </button>
+        </div>
+
+      </div>
+
+      {/* Modal for Recording / AI Summary */}
+      {showRecorderModal && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '12px', width: '100%', maxWidth: '500px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #f3f4f6', paddingBottom: '12px' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <SvgIcon name="user" size={18} style={{ color: '#ef4444' }} />
+                <span>Zápisník z terénní návštěvy</span>
+              </h3>
+              <button onClick={() => setShowRecorderModal(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#9ca3af' }}>
+                <SvgIcon name="arrow-left" size={16} />
+              </button>
             </div>
 
-            {/* AI Výsledek (pokud byl vyvolán) */}
-            {showAiResult && (
-              <div style={{
-                marginBottom: '20px',
-                padding: '16px',
-                backgroundColor: 'rgba(94,129,244,0.05)',
-                border: '1px solid var(--accent-primary)',
-                borderRadius: 'var(--radius-md)'
-              }}>
-                <label style={{ display: 'block', fontWeight: 'bold', fontSize: 'var(--text-caption)', marginBottom: '8px', color: 'var(--accent-primary)' }}>
-                  Zpřehledněný text vytvořený pomocí AI:
-                </label>
-                <textarea
-                  value={aiSummary}
-                  onChange={(e) => setAiSummary(e.target.value)}
-                  rows={6}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--accent-primary)',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'var(--text-body)',
-                    backgroundColor: 'var(--white)',
-                    resize: 'vertical'
-                  }}
-                />
+            <p style={{ fontSize: '13px', color: '#6b7280', margin: 0 }}>
+              Zadejte poznámky z návštěvy textem nebo spusťte simulaci AI strukturovaného zápisu.
+            </p>
+
+            <textarea
+              style={{ width: '100%', height: '100px', padding: '10px', borderRadius: '6px', border: '1px solid #d1d5db', fontSize: '13px', resize: 'none', outline: 'none' }}
+              placeholder="Napište poznámky z návštěvy..."
+              value={transcript}
+              onChange={(e) => setTranscript(e.target.value)}
+            />
+
+            {!showAiResult ? (
+              <button onClick={handleSimulateAiProcessing} disabled={isProcessingAi} style={{ backgroundColor: '#f3f4f6', color: '#111827', border: '1px solid #e5e7eb', padding: '10px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {isProcessingAi ? (
+                  <>
+                    <SvgIcon name="clock" size={16} className="animate-spin" />
+                    <span>Zpracovávám pomocí AI...</span>
+                  </>
+                ) : (
+                  <>
+                    <SvgIcon name="user" size={16} style={{ color: '#ef4444' }} />
+                    <span>Generovat strukturovaný AI zápis</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <div style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '12px', fontSize: '12px', fontFamily: 'monospace', whiteSpace: 'pre-line' }}>
+                {aiSummary}
               </div>
             )}
 
-            {/* Metadata zápisu (sdílení, přítomní členové) */}
-            <div style={{ display: 'flex', gap: '20px', marginBottom: '24px' }}>
-              <div style={{ flex: 1 }}>
-                <label style={{ display: 'block', fontWeight: 'bold', fontSize: 'var(--text-caption)', marginBottom: '6px' }}>
-                  Úroveň sdílení
-                </label>
-                <select
-                  value={sharingLevel}
-                  onChange={(e) => setSharingLevel(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border-strong)'
-                  }}
-                >
-                  <option value="private">Soukromé (Pouze já)</option>
-                  <option value="internal">Interní (Doprovázející organizace)</option>
-                  <option value="external">Externí (Pěstouni / OSPOD dle grantů)</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Akční tlačítka */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <button
-                onClick={() => {
-                  setShowRecorderModal(false);
-                  setTranscript('');
-                  setAiSummary('');
-                  setShowAiResult(false);
-                }}
-                style={{
-                  backgroundColor: 'transparent',
-                  color: 'var(--text-secondary)',
-                  border: 'none',
-                  fontWeight: 'bold',
-                  cursor: 'pointer'
-                }}
-              >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '12px', borderTop: '1px solid #f3f4f6' }}>
+              <button onClick={() => setShowRecorderModal(false)} style={{ backgroundColor: '#ffffff', color: '#4b5563', border: '1px solid #d1d5db', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', cursor: 'pointer' }}>
                 Zrušit
               </button>
-
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button
-                  onClick={handleTriggerAi}
-                  disabled={isProcessingAi || !transcript}
-                  style={{
-                    backgroundColor: 'var(--accent-primary-tint)',
-                    color: 'var(--accent-primary)',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: 'var(--radius-md)',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {isProcessingAi ? 'AI zpracování...' : 'AI Souhrn'}
-                </button>
-
-                <button
-                  onClick={() => handleSaveTimelineEntry(showAiResult)}
-                  disabled={!transcript && !aiSummary}
-                  style={{
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--text-on-accent)',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: 'var(--radius-md)',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Uložit zápis
-                </button>
-              </div>
+              <button onClick={handleSaveVisitRecord} style={{ backgroundColor: '#FF4742', color: '#ffffff', border: 'none', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
+                Uložit zápis do spisu
+              </button>
             </div>
           </div>
         </div>
@@ -715,4 +534,5 @@ export function FamilyFolder({ family, user, onBack, onNavigate, isMobileView })
     </div>
   );
 }
+
 export default FamilyFolder;

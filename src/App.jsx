@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { db, auth } from './services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
-import { SignIn } from './ui_kits/crm-dashboard/screens/SignIn.jsx';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { Registration } from './views/Registration.jsx';
 import { Dashboard } from './views/Dashboard.jsx';
 import { FamilyFolder } from './views/FamilyFolder.jsx';
@@ -20,11 +19,12 @@ import { RoutineNotesView } from './views/RoutineNotesView.jsx';
 import { EntityProfileView } from './views/EntityProfileView.jsx';
 import { QuickCaptureConsole } from './components/common/QuickCaptureConsole.jsx';
 import RoutineCommandKModal from './components/navigation/RoutineCommandKModal.jsx';
+import RoutineSidebar from './components/navigation/RoutineSidebar.jsx';
 import './styles/routineDesign.css';
 
 function App() {
   const [page, setPage] = useState('signin');
-  const [dashboardSubView, setDashboardSubView] = useState('dashboard');
+  const [dashboardSubView, setDashboardSubView] = useState('agenda');
   const [user, setUser] = useState(null);
   const [selectedFamily, setSelectedFamily] = useState(null);
   const [selectedEntity, setSelectedEntity] = useState(null);
@@ -33,9 +33,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [viewportMode, setViewportMode] = useState('desktop'); // 'desktop' | 'mobile'
 
-  const handleNavigate = (targetPage, subView = 'dashboard') => {
+  const handleNavigate = (targetPage, subView = 'agenda') => {
     setPage(targetPage);
     if (subView) setDashboardSubView(subView);
   };
@@ -45,49 +44,19 @@ function App() {
     setPage('entity-profile');
   };
 
-  // Globální klávesová zkratka Ctrl+K / Cmd+K pro Routine Quick Capture Console
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setIsQuickConsoleOpen(prev => !prev);
+        setIsCommandKOpen(prev => !prev);
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+        e.preventDefault();
+        setIsQuickConsoleOpen(true);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  const isMobile = viewportMode === 'mobile';
-
-  // Uplatnění uloženého měřítka písma při startu
-  useEffect(() => {
-    const savedScale = localStorage.getItem('font_scale') || '1.33';
-    const root = document.documentElement;
-    const baseSizes = { h1: 32, h2: 26, h3: 22, h4: 18, bodyLg: 16, body: 14, caption: 12 };
-    const scale = parseFloat(savedScale);
-    root.style.setProperty('--text-h1', `${Math.round(baseSizes.h1 * scale)}px`);
-    root.style.setProperty('--text-h2', `${Math.round(baseSizes.h2 * scale)}px`);
-    root.style.setProperty('--text-h3', `${Math.round(baseSizes.h3 * scale)}px`);
-    root.style.setProperty('--text-h4', `${Math.round(baseSizes.h4 * scale)}px`);
-    root.style.setProperty('--text-body-lg', `${Math.round(baseSizes.bodyLg * scale)}px`);
-    root.style.setProperty('--text-body', `${Math.round(baseSizes.body * scale)}px`);
-    root.style.setProperty('--text-caption', `${Math.round(baseSizes.caption * scale)}px`);
-  }, []);
-
-  const handleUpdateUserBranding = (branding, rates, terminology) => {
-    setUser(prev => {
-      const updated = {
-        ...prev,
-        branding,
-        respitRates: rates,
-        terminologyOverrides: terminology
-      };
-      if (localStorage.getItem('sandbox_user')) {
-        localStorage.setItem('sandbox_user', JSON.stringify(updated));
-      }
-      return updated;
-    });
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
@@ -98,10 +67,10 @@ function App() {
             const userData = userDoc.data();
             setUser({ uid: authUser.uid, email: authUser.email, ...userData });
           } else {
-            setUser({ uid: authUser.uid, email: authUser.email, name: 'Klíčová osoba', role: 'ko' });
+            setUser({ uid: authUser.uid, email: authUser.email, name: 'Mgr. Jana Nováková', role: 'ko' });
           }
-        } catch (e) {
-          setUser({ uid: authUser.uid, email: authUser.email, name: 'Klíčová osoba', role: 'ko' });
+        } catch {
+          setUser({ uid: authUser.uid, email: authUser.email, name: 'Mgr. Jana Nováková', role: 'ko' });
         }
         setPage('dashboard');
       } else {
@@ -138,7 +107,7 @@ function App() {
         setUser(mockUser);
         setPage('dashboard');
       }
-    } catch (err) {
+    } catch {
       const mockUser = {
         uid: 'sandbox_ko_01',
         name: 'Mgr. Jana Nováková',
@@ -160,282 +129,222 @@ function App() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#F7F9FC' }}>
-        <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#4A85F6' }}>Načítám portál Doprovázení...</span>
+      <div className="routine-layout items-center justify-center h-screen bg-white">
+        <div className="flex items-center gap-3 text-sm text-[var(--routine-text-secondary)] font-medium">
+          <i className="las la-spinner la-spin text-2xl text-[var(--routine-coral)]" />
+          <span>Načítám CRM Doprovázení (Routine.co)...</span>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#1C1D21', overflow: 'hidden' }}>
-      {/* Horní ovládací lišta prototypu */}
-      <div style={{
-        height: '44px',
-        backgroundColor: '#121316',
-        borderBottom: '1px solid rgba(255,255,255,0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 20px',
-        color: '#FFFFFF',
-        fontSize: '13px',
-        fontWeight: 600,
-        zIndex: 10000,
-        flexShrink: 0
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span style={{ color: '#4A85F6', fontWeight: 800 }}>PROTOTYP CRM WORKROOM</span>
-          <span style={{ color: '#8181A5' }}>| Doprovázení.com</span>
-        </div>
-
-        {/* Přepínač režimu náhledu */}
-        <div style={{ display: 'flex', backgroundColor: 'rgba(255,255,255,0.08)', borderRadius: '8px', padding: '2px' }}>
-          <button
-            onClick={() => setViewportMode('desktop')}
-            style={{
-              backgroundColor: viewportMode === 'desktop' ? '#4A85F6' : 'transparent',
-              color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '4px 12px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <i className="las la-desktop"></i>
-            <span>Desktop náhled</span>
-          </button>
-
-          <button
-            onClick={() => setViewportMode('mobile')}
-            style={{
-              backgroundColor: viewportMode === 'mobile' ? '#4A85F6' : 'transparent',
-              color: '#FFFFFF',
-              border: 'none',
-              borderRadius: '6px',
-              padding: '4px 12px',
-              fontSize: '12px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <i className="las la-mobile"></i>
-            <span>PWA Mobilní náhled</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Rámce aplikace */}
-      <div style={{
-        flexGrow: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: viewportMode === 'mobile' ? '#0F1012' : '#F7F9FC',
-        overflow: 'hidden',
-        padding: viewportMode === 'mobile' ? '20px' : 0
-      }}>
-        <div style={{
-          width: viewportMode === 'mobile' ? '390px' : '100%',
-          height: viewportMode === 'mobile' ? '812px' : '100%',
-          maxHeight: '100%',
-          backgroundColor: '#F7F9FC',
-          borderRadius: viewportMode === 'mobile' ? '32px' : 0,
-          boxShadow: viewportMode === 'mobile' ? '0 20px 50px rgba(0,0,0,0.5)' : 'none',
-          overflow: 'hidden',
-          position: 'relative',
-          border: viewportMode === 'mobile' ? '8px solid #1C1D21' : 'none',
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-          {page === 'signin' && (
-            <div style={{ padding: "40px", display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-              <div style={{ width: "360px", padding: "32px", backgroundColor: "#FFFFFF", borderRadius: "16px", boxShadow: "0 2px 12px rgba(154,160,185,0.08)" }}>
-                <h2 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px", fontFamily: "var(--font-display)", textAlign: "center" }}>Vstoupit do CRM</h2>
-                <p style={{ color: "#8181A5", marginBottom: "24px", fontSize: "14px", textAlign: "center" }}>
-                  Přihlášení klíčové osoby / administrátora
-                </p>
-                <form onSubmit={handleSignIn}>
-                  <input
-                    type="text"
-                    placeholder="Kód klíčové osoby"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ width: '100%', padding: '12px', marginBottom: '16px', borderRadius: '8px', border: '1px solid #E0E0E8' }}
-                  />
-                  <input
-                    type="password"
-                    placeholder="Heslo"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={{ width: '100%', padding: '12px', marginBottom: '24px', borderRadius: '8px', border: '1px solid #E0E0E8' }}
-                  />
-                  <button
-                    type="submit"
-                    style={{ width: '100%', height: '46px', backgroundColor: '#4A85F6', color: '#FFF', border: 'none', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' }}
-                  >
-                    Vstoupit do CRM
-                  </button>
-                </form>
-              </div>
+  // Sign In Screen in Routine Style
+  if (page === 'signin') {
+    return (
+      <div className="w-screen h-screen flex items-center justify-center bg-[#f8f8fa] font-sans">
+        <div className="routine-card w-full max-w-sm p-8 shadow-sm border border-[#e2e4e8]">
+          <div className="text-center mb-6">
+            <div className="w-10 h-10 rounded-xl bg-[var(--routine-coral)] text-white font-bold text-lg inline-flex items-center justify-center mb-3">
+              D
             </div>
-          )}
+            <h1 className="text-xl font-bold text-[var(--routine-text-primary)]">
+              Doprovázení.com
+            </h1>
+            <p className="text-xs text-[var(--routine-text-secondary)] mt-1">
+              CRM systém pěstounské péče v designu Routine.co
+            </p>
+          </div>
 
-          {page === 'signup' && (
-            <Registration onNavigate={handleNavigate} />
-          )}
-
-          {page === 'dashboard' && (
-            dashboardSubView === 'dashboard' ? (
-              <RoutineAgendaView
-                user={user}
-                onNavigate={handleNavigate}
-                onSelectEntity={handleOpenEntityProfile}
-                onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
-                isMobileView={isMobile}
+          <form onSubmit={handleSignIn} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+                Kód klíčové osoby / E-mail
+              </label>
+              <input
+                type="text"
+                className="routine-input"
+                placeholder="jana.novakova@doprovazeni.cz"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-            ) : (
-              <Dashboard
-                user={user}
-                onNavigate={handleNavigate}
-                activeSubView={dashboardSubView}
-                onSelectFamily={handleSelectFamily}
-                onSelectEntity={handleOpenEntityProfile}
-                onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
-                isMobileView={isMobile}
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[var(--routine-text-secondary)] mb-1">
+                Heslo
+              </label>
+              <input
+                type="password"
+                className="routine-input"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            )
-          )}
+            </div>
 
-          {page === 'entity-profile' && (
-            <EntityProfileView
-              entity={selectedEntity}
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
+            <button type="submit" className="routine-btn-primary w-full justify-center py-2.5 mt-2">
+              <i className="las la-sign-in-alt text-base" />
+              Vstoupit do agendy
+            </button>
+          </form>
 
-          {page === 'family-detail' && selectedFamily && (
-            <FamilyFolder
-              family={selectedFamily}
-              user={user}
-              onBack={() => handleNavigate('dashboard')}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'settings' && (
-            <Settings
-              user={user}
-              onNavigate={handleNavigate}
-              onUpdateUserBranding={handleUpdateUserBranding}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'import-export' && (
-            <ImportExport
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'foster-portal' && (
-            <FosterParentPortal
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'ospod-report' && (
-            <OspodReportView
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'respit' && (
-            <RespitEducationView
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'superadmin' && (
-            <SuperAdminView
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'calendar' && (
-            <CalendarView
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'messages' && (
-            <MessagesView
-              user={user}
-              onNavigate={handleNavigate}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'contacts' && (
-            <RoutineContactsView
-              user={user}
-              onNavigate={handleNavigate}
-              onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
-              isMobileView={isMobile}
-            />
-          )}
-
-          {page === 'notes' && (
-            <RoutineNotesView
-              user={user}
-              onNavigate={handleNavigate}
-              onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
-              isMobileView={isMobile}
-            />
-          )}
-
-          <QuickCaptureConsole
-            isOpen={isQuickConsoleOpen}
-            onClose={() => setIsQuickConsoleOpen(false)}
-            onNavigate={handleNavigate}
-            onSelectEntity={handleOpenEntityProfile}
-          />
-
-          <RoutineCommandKModal
-            isOpen={isCommandKOpen}
-            onClose={() => setIsCommandKOpen(false)}
-            onSelectAction={(targetPath) => {
-              if (targetPath === '/') handleNavigate('dashboard', 'dashboard');
-              else if (targetPath === '/notes') handleNavigate('notes');
-              else if (targetPath === '/contacts') handleNavigate('contacts');
-              else if (targetPath === '/fosters') handleNavigate('dashboard', 'foster-parents');
-              else if (targetPath === '/children') handleNavigate('dashboard', 'children');
-            }}
-          />
+          <div className="mt-6 pt-4 border-t border-[#f0f0f4] flex items-center justify-between text-xs text-[var(--routine-text-secondary)]">
+            <span>Režim simulace</span>
+            <span className="routine-badge routine-badge-coral font-mono font-medium">Routine.co v10G</span>
+          </div>
         </div>
       </div>
+    );
+  }
+
+  // Authenticated Main Workspace Layout in 100% Routine.co Style
+  return (
+    <div className="routine-layout">
+      {/* Official Routine Collapsible Left Navigation Sidebar */}
+      <RoutineSidebar
+        activePage={page}
+        activeSubView={dashboardSubView}
+        onNavigate={handleNavigate}
+        onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
+        user={user}
+      />
+
+      {/* Main Canvas Workspace */}
+      <div className="routine-main-canvas flex-1 overflow-y-auto">
+        {page === 'signup' && (
+          <Registration onNavigate={handleNavigate} />
+        )}
+
+        {page === 'dashboard' && (
+          dashboardSubView === 'agenda' ? (
+            <RoutineAgendaView
+              user={user}
+              onNavigate={handleNavigate}
+              onSelectEntity={handleOpenEntityProfile}
+              onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
+            />
+          ) : (
+            <Dashboard
+              user={user}
+              onNavigate={handleNavigate}
+              activeSubView={dashboardSubView}
+              onSelectFamily={handleSelectFamily}
+              onSelectEntity={handleOpenEntityProfile}
+              onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
+            />
+          )
+        )}
+
+        {page === 'entity-profile' && (
+          <EntityProfileView
+            entity={selectedEntity}
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'family-detail' && selectedFamily && (
+          <FamilyFolder
+            family={selectedFamily}
+            user={user}
+            onBack={() => handleNavigate('dashboard', 'families')}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'settings' && (
+          <Settings
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'import-export' && (
+          <ImportExport
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'foster-portal' && (
+          <FosterParentPortal
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'ospod-report' && (
+          <OspodReportView
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'respit' && (
+          <RespitEducationView
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'superadmin' && (
+          <SuperAdminView
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'calendar' && (
+          <CalendarView
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'messages' && (
+          <MessagesView
+            user={user}
+            onNavigate={handleNavigate}
+          />
+        )}
+
+        {page === 'contacts' && (
+          <RoutineContactsView
+            user={user}
+            onNavigate={handleNavigate}
+            onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
+          />
+        )}
+
+        {page === 'notes' && (
+          <RoutineNotesView
+            user={user}
+            onNavigate={handleNavigate}
+            onOpenQuickConsole={() => setIsQuickConsoleOpen(true)}
+          />
+        )}
+      </div>
+
+      {/* Routine Quick Capture Console (Ctrl+N / Cmd+N) */}
+      <QuickCaptureConsole
+        isOpen={isQuickConsoleOpen}
+        onClose={() => setIsQuickConsoleOpen(false)}
+        onNavigate={handleNavigate}
+        onSelectEntity={handleOpenEntityProfile}
+      />
+
+      {/* Routine Command Modal (Ctrl+K / Cmd+K) */}
+      <RoutineCommandKModal
+        isOpen={isCommandKOpen}
+        onClose={() => setIsCommandKOpen(false)}
+        onSelectAction={(targetPath) => {
+          if (targetPath === '/') handleNavigate('dashboard', 'agenda');
+          else if (targetPath === '/notes') handleNavigate('notes');
+          else if (targetPath === '/contacts') handleNavigate('contacts');
+          else if (targetPath === '/fosters') handleNavigate('dashboard', 'foster-parents');
+          else if (targetPath === '/children') handleNavigate('dashboard', 'children');
+        }}
+      />
     </div>
   );
 }

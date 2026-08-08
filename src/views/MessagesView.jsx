@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Sidebar } from '../components/navigation/Sidebar.jsx';
-import { TopBar } from '../components/navigation/TopBar.jsx';
 
-export function MessagesView({ user, onNavigate, isMobileView }) {
-  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+export function MessagesView() {
   const [activeThread, setActiveThread] = useState('1');
   const [newMessage, setNewMessage] = useState('');
 
@@ -52,132 +49,94 @@ export function MessagesView({ user, onNavigate, isMobileView }) {
   const currentThread = threads.find(t => t.id === activeThread);
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: '#F7F9FC',
-      fontFamily: 'var(--font-body)',
-      overflow: 'hidden'
-    }}>
-      <Sidebar 
-        activePage="messages" 
-        onNavigate={onNavigate}
-        isMobileOpen={mobileSidebarOpen}
-        onCloseMobile={() => setMobileSidebarOpen(false)}
-        isMobile={isMobileView}
-      />
+    <div className="flex flex-row h-full w-full bg-white overflow-hidden font-sans">
+      {/* Levý seznam konverzací (Routine 2-pane) */}
+      <div className="w-80 border-r border-[#e8e8ed] p-6 flex flex-col gap-4 bg-white shrink-0">
+        <div>
+          <span className="text-[11px] font-bold text-[var(--routine-text-secondary)] uppercase tracking-wider">
+            ZPRÁVY & KOMUNIKACE
+          </span>
+          <h1 className="text-xl font-bold text-[var(--routine-text-primary)] mt-1">
+            Konverzace
+          </h1>
+        </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100%', overflow: 'hidden' }}>
-        <TopBar 
-          user={user} 
-          title="Zprávy a komunikace s pěstouny" 
-          onToggleMobileSidebar={() => setMobileSidebarOpen(true)}
-          isMobile={isMobileView}
-        />
-
-        <div style={{ display: 'flex', flexGrow: 1, overflow: 'hidden', padding: isMobileView ? '16px' : '24px 40px', gap: '24px' }}>
-          {/* Levý seznam konverzací */}
-          <div style={{
-            width: isMobileView ? '100%' : '320px',
-            backgroundColor: '#FFFFFF',
-            borderRadius: '16px',
-            padding: '20px',
-            boxShadow: '0 2px 12px rgba(154,160,185,0.08)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 800, color: '#1C1D21' }}>Konverzace s pěstouny</h3>
-            {threads.map((t) => (
+        <div className="flex flex-col gap-1">
+          {threads.map(t => {
+            const isSelected = activeThread === t.id;
+            return (
               <div
                 key={t.id}
                 onClick={() => setActiveThread(t.id)}
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: '12px',
-                  backgroundColor: activeThread === t.id ? '#EBF2FE' : '#F7F9FC',
-                  border: activeThread === t.id ? '1px solid #4A85F6' : '1px solid transparent',
-                  cursor: 'pointer'
-                }}
+                className={`p-3 rounded-lg cursor-pointer transition-colors ${
+                  isSelected
+                    ? 'bg-[var(--routine-coral-light)] text-[var(--routine-coral)] font-semibold'
+                    : 'hover:bg-[#f4f4f6] text-[var(--routine-text-primary)]'
+                }`}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 800, color: '#1C1D21' }}>{t.sender}</h4>
-                  <span style={{ fontSize: '11px', color: '#8181A5' }}>{t.time}</span>
+                <div className="flex items-center justify-between text-xs mb-1">
+                  <span className="font-bold">{t.sender}</span>
+                  <span className="text-[11px] text-[var(--routine-text-secondary)] font-mono">{t.time}</span>
                 </div>
-                <p style={{ margin: 0, fontSize: '12px', color: '#8181A5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <p className="text-[11px] text-[var(--routine-text-secondary)] truncate font-normal">
                   {t.lastMessage}
                 </p>
               </div>
-            ))}
-          </div>
-
-          {/* Pravé okno zpráv */}
-          {(!isMobileView || activeThread) && currentThread && (
-            <div style={{
-              flexGrow: 1,
-              backgroundColor: '#FFFFFF',
-              borderRadius: '16px',
-              padding: '24px',
-              boxShadow: '0 2px 12px rgba(154,160,185,0.08)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}>
-              <div>
-                <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: 800, borderBottom: '1px solid #ECECF2', paddingBottom: '16px', color: '#1C1D21' }}>
-                  Konverzace: {currentThread.sender}
-                </h3>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '400px', overflowY: 'auto' }}>
-                  {currentThread.messages.map((m) => (
-                    <div
-                      key={m.id}
-                      style={{
-                        alignSelf: m.sender.includes('Nováková') ? 'flex-end' : 'flex-start',
-                        backgroundColor: m.sender.includes('Nováková') ? '#4A85F6' : '#F7F9FC',
-                        color: m.sender.includes('Nováková') ? '#FFFFFF' : '#1C1D21',
-                        padding: '12px 16px',
-                        borderRadius: '12px',
-                        maxWidth: '75%'
-                      }}
-                    >
-                      <div style={{ fontSize: '11px', fontWeight: 700, marginBottom: '4px', opacity: 0.8 }}>{m.sender} • {m.time}</div>
-                      <div style={{ fontSize: '13px' }}>{m.text}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
-                <input
-                  type="text"
-                  placeholder="Napište zprávu pěstounům..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  style={{ flexGrow: 1, padding: '12px', borderRadius: '10px', border: '1px solid #E0E0E8', fontSize: '14px' }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    backgroundColor: '#4A85F6',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    padding: '0 24px',
-                    borderRadius: '10px',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}
-                >
-                  Odeslat
-                </button>
-              </form>
-            </div>
-          )}
+            );
+          })}
         </div>
       </div>
+
+      {/* Pravé okno zpráv */}
+      {currentThread && (
+        <div className="flex-1 p-8 overflow-y-auto bg-[#f9f9fb] flex flex-col justify-between">
+          <div className="space-y-4">
+            <div className="pb-3 border-b border-[#e8e8ed] flex items-center justify-between">
+              <h2 className="text-base font-bold text-[var(--routine-text-primary)]">
+                Konverzace: {currentThread.sender}
+              </h2>
+              <span className="routine-badge routine-badge-green">Pěstounská rodina</span>
+            </div>
+
+            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+              {currentThread.messages.map(m => {
+                const isMe = m.sender.includes('Nováková');
+                return (
+                  <div
+                    key={m.id}
+                    className={`p-3.5 rounded-xl max-w-md text-xs space-y-1 ${
+                      isMe
+                        ? 'ml-auto bg-[var(--routine-coral)] text-white'
+                        : 'bg-white border border-[#e8e8ed] text-[var(--routine-text-primary)]'
+                    }`}
+                  >
+                    <div className={`text-[10px] font-bold ${isMe ? 'text-white/80' : 'text-[var(--routine-text-secondary)]'}`}>
+                      {m.sender} • {m.time}
+                    </div>
+                    <div>{m.text}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <form onSubmit={handleSendMessage} className="flex gap-2 pt-4 border-t border-[#e8e8ed]">
+            <input
+              type="text"
+              placeholder="Napište zprávu pěstounům..."
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              className="routine-input flex-1"
+            />
+            <button type="submit" className="routine-btn-primary">
+              <i className="las la-paper-plane text-base" />
+              Odeslat
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
+
 export default MessagesView;

@@ -1,6 +1,7 @@
 /* Routine.co Official Native Bundle Import & Style System */
 
 @import url('https://rsms.me/inter/inter.css');
+@import url('https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css');
 
 :root {
   --vc-clr-primary: #171b1f;
@@ -14,7 +15,7 @@
   --routine-text-secondary: #747f8f;
   --routine-text-muted: #8896a9;
   --routine-text-sub: #5e6774;
-  --routine-text-body: #47505d;
+  --routine-text-body: #374151;
   
   /* Routine Coral Red & Pastel Accents */
   --routine-coral: #FF4742;
@@ -24,15 +25,29 @@
   --routine-yellow: #F59E0B;
   --routine-yellow-light: #FEF3C7;
   --routine-green: #10B981;
+  --routine-green-light: #E6F9F0;
   
   --routine-border: #f2f2f2;
   --routine-border-dark: #d0cbcb;
-  --routine-hover: #f4f4f4;
+  --routine-hover: #f5f5f7;
   --routine-font: Inter, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
 }
 
 *, ::after, ::before {
   box-sizing: border-box;
+}
+
+/* Ensure LineAwesome font icon rendering is never overridden by Inter font */
+i.las, i.lab, i.lar, .las, .lab, .lar {
+  font-family: 'Line Awesome Free', 'Line Awesome Brands', 'LineAwesome' !important;
+  font-weight: 900 !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  line-height: 1 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
 }
 
 html, body, #root {
@@ -130,41 +145,243 @@ html, body, #root {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
   background-color: #ffffff;
 }
 
-/* Routine Headings */
-h1, .h1 {
-  letter-spacing: -1.5px;
-  font-size: 32px;
-  line-height: 42px;
-  font-weight: 400;
+/* Routine 3-Pane Contact / Object Workspace (Exact Routine.co Layout from Screenshot 5) */
+.routine-object-workspace {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.routine-center-canvas {
+  flex: 1;
+  min-width: 0;
+  padding: 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.routine-right-panel {
+  width: 320px;
+  flex-shrink: 0;
+  border-left: 1px solid #f0f0f4;
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+/* Top Action Toolbar in Routine Pages (← →  Pin ...) */
+.routine-top-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--routine-text-secondary);
+  font-size: 13px;
+  padding-bottom: 8px;
+}
+
+.routine-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--routine-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background-color 0.12s;
+}
+
+.routine-icon-btn:hover {
+  background-color: #f0f0f4;
   color: var(--routine-text-primary);
 }
 
-h2, .h2 {
-  letter-spacing: -1px;
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 400;
-  color: var(--routine-text-primary);
+/* Routine Property Table (Notion / Routine Property Rows) */
+.routine-properties-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 0;
+  border-top: 1px solid #f0f0f4;
+  border-bottom: 1px solid #f0f0f4;
 }
 
-h3, .h3 {
-  letter-spacing: -0.5px;
-  font-size: 20px;
-  line-height: 28px;
+.routine-property-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13.5px;
+}
+
+.routine-property-label {
+  width: 140px;
+  flex-shrink: 0;
+  color: var(--routine-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.routine-property-value {
+  flex: 1;
+  color: var(--routine-text-primary);
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Routine Tag Pill */
+.routine-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #f2f2f5;
+  color: var(--routine-text-secondary);
+}
+
+/* Routine Todo Checklist Item */
+.routine-todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 13.5px;
   color: var(--routine-text-primary);
 }
 
-/* Checkbox in Routine Style */
-.routine-checkbox {
-  width: 17px;
-  height: 17px;
+.routine-todo-item .todo-date {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--routine-text-secondary);
+}
+
+/* Right Panel Contact Items (Exact from Screenshot 5) */
+.routine-panel-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #f2f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--routine-coral);
+  margin: 0 auto;
+}
+
+.routine-panel-info-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--routine-text-primary);
+  padding: 6px 0;
+}
+
+.routine-panel-info-row .label-sub {
+  font-size: 12px;
+  color: var(--routine-text-secondary);
+}
+
+.routine-panel-info-row .icon-right {
+  color: var(--routine-text-secondary);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Routine Card System */
+.routine-card {
+  background-color: #ffffff;
+  border: 1px solid #e8e8ed;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.routine-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Routine Badges */
+.routine-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 9px;
   border-radius: 5px;
-  border: 1px solid var(--routine-border-dark);
+  white-space: nowrap;
+}
+
+.routine-badge-coral {
+  background-color: var(--routine-coral-light);
+  color: var(--routine-coral);
+}
+
+.routine-badge-blue {
+  background-color: var(--routine-blue-light);
+  color: var(--routine-blue);
+}
+
+.routine-badge-green {
+  background-color: var(--routine-green-light);
+  color: var(--routine-green);
+}
+
+.routine-badge-yellow {
+  background-color: var(--routine-yellow-light);
+  color: var(--routine-yellow);
+}
+
+/* Routine Input */
+.routine-input {
+  width: 100%;
+  font-family: var(--routine-font);
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1px solid #e2e4e8;
+  background-color: #ffffff;
+  color: var(--routine-text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.routine-input:focus {
+  border-color: var(--routine-coral);
+  box-shadow: 0 0 0 2px rgba(255, 71, 66, 0.15);
+}
+
+/* Routine Checkbox */
+.routine-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid var(--routine-border-dark);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -179,187 +396,43 @@ h3, .h3 {
   color: #ffffff;
 }
 
-/* Time Indicator Line with Pulsing Effect */
-@keyframes routineTimePulse {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.97); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.routine-time-bar {
-  position: relative;
-  border-top: 2px solid var(--routine-coral);
-  z-index: 10;
-}
-
-.routine-time-bubble {
-  position: absolute;
-  left: -58px;
-  top: -11px;
+.routine-btn-primary {
   background-color: var(--routine-coral);
   color: #ffffff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(255, 71, 66, 0.4);
-  animation: routineTimePulse 2s infinite ease-in-out;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.routine-pulse-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  display: inline-block;
-  animation: routineTimePulse 1.2s infinite ease-in-out;
-}
-
-/* OFFICIAL ROUTINE EDITOR SUGGESTION LIST CSS FROM BUNDLE */
-.suggestion-list {
-  font-family: Inter,-apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  border: 1px solid var(--routine-coral);
+  padding: 8px 16px;
+  border-radius: 7px;
   font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 19px;
-  min-width: 240px;
-  max-height: 328px;
-  padding: 4px;
-  overflow-y: auto;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 1px 14px rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  background-color: #ffffff;
-  z-index: 1000;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.12s;
+  text-decoration: none;
 }
 
-.suggestion-list .group-header {
+.routine-btn-primary:hover {
+  opacity: 0.92;
+}
+
+.routine-btn-secondary {
+  background-color: #ffffff;
+  color: var(--routine-text-primary);
+  border: 1px solid #e2e4e8;
+  padding: 8px 16px;
+  border-radius: 7px;
   font-size: 13px;
   font-weight: 500;
-  padding: 6px 0 2px 8px;
-  color: #a9a9a9;
-}
-
-.suggestion-list .separator {
-  height: 1px;
-  width: calc(100% + 8px);
-  margin: 6px 0 6px -4px;
-  background-color: #f2f2f2;
-}
-
-.suggestion-list__item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 10px;
-  border-radius: 7px;
-  padding: 6px 8px 6px 12px;
-  margin-bottom: 1px;
-  width: 100%;
-  box-sizing: border-box;
-  justify-content: flex-start;
-  color: #5e6774;
   cursor: pointer;
-  transition: background-color .1s ease-in, color .1s ease-in;
-}
-
-.suggestion-list__item:hover, .suggestion-list__item.is-selected {
-  background-color: #f4f4f4;
-  color: #2a3038;
-}
-
-.suggestion-list__item .command-content {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
+  display: inline-flex;
   align-items: center;
+  gap: 6px;
+  transition: background-color 0.12s, border-color 0.12s;
+  text-decoration: none;
 }
 
-.suggestion-list__item .command-content .command-help {
-  font-size: 11px;
-  color: #94949c;
-  font-family: monospace;
-}
-
-/* OFFICIAL TABLE OF CONTENTS (TOC) CSS FROM ROUTINE BUNDLE */
-.table-of-contents {
-  position: absolute;
-  top: 0;
-  left: calc(100% + 24px);
-  z-index: 10;
-  height: 100%;
-  pointer-events: none;
-}
-
-.table-of-contents .toc-content {
-  position: sticky;
-  top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px;
-  border-radius: 7px;
-  overflow-y: auto;
-  width: 32px;
-  pointer-events: auto;
-  cursor: default;
-  background: #ffffff;
-  transition: width 0.2s ease, box-shadow 0.2s ease;
-}
-
-.table-of-contents.expanded .toc-content {
-  width: 160px;
-  box-shadow: -2px 0 6px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.06);
-  border: 1px solid #e5e5e5;
-  padding: 8px;
-}
-
-.table-of-contents .toc-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 4px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color .15s ease;
-}
-
-.table-of-contents .toc-item:hover {
-  background-color: #f4f4f4;
-}
-
-.table-of-contents .toc-item .toc-line {
-  flex-shrink: 0;
-  height: 2px;
-  border-radius: 1px;
-  transition: width 0.2s ease, background-color 0.2s ease;
-}
-
-.table-of-contents .toc-item .toc-line.level-1 { width: 20px; background-color: #a9a9a9; }
-.table-of-contents .toc-item .toc-line.level-2 { width: 14px; background-color: #94949c; }
-.table-of-contents .toc-item .toc-line.level-3 { width: 8px; background-color: #ccc; }
-
-.table-of-contents .toc-item.active .toc-line {
-  background-color: #FF4742 !important;
-  width: 22px !important;
-}
-
-.table-of-contents .toc-item .toc-text {
-  font-size: 12px;
-  color: #79818c;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: none;
-}
-
-.table-of-contents.expanded .toc-item .toc-text {
-  display: block;
-}
-
-.table-of-contents.expanded .toc-item .toc-line {
-  display: none;
+.routine-btn-secondary:hover {
+  background-color: #f4f4f6;
+  border-color: #d1d5db;
 }

@@ -293,16 +293,7 @@ export function CalendarView({ user, onNavigate, onOpenQuickConsole, isMobileVie
   const timedEvents = calendarEvents.filter(e => !e.isAllDay);
 
   return (
-    <div className="routine-layout" style={{ display: 'flex', width: '100vw', height: '100vh', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
-      {/* 1. Levé hlavní menu Routine */}
-      <RoutineSidebar
-        activePage="calendar"
-        activeSubView="calendar"
-        onNavigate={onNavigate}
-        onOpenQuickConsole={onOpenQuickConsole}
-        user={user}
-      />
-
+    <div className="flex-1 flex h-full w-full overflow-hidden bg-white relative">
       {/* 2. Hlavní Plátno Kalendáře */}
       <div style={{ flexGrow: 1, display: 'flex', height: '100vh', overflow: 'hidden', backgroundColor: '#FFFFFF', position: 'relative' }}>
         
