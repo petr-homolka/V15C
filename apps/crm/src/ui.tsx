@@ -17,7 +17,7 @@ import type { ReactNode } from 'react'
 
 export function Screen({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
+    <div className="mx-auto w-full max-w-3xl px-4 pb-[calc(3rem+env(safe-area-inset-bottom))]">
       {children}
     </div>
   )
@@ -36,7 +36,7 @@ export function LargeTitle({
   back?: () => void
 }) {
   return (
-    <header className="pt-[calc(env(safe-area-inset-top)+1.25rem)] pb-4">
+    <header className="pb-4 pt-2">
       {back ? (
         <button
           type="button"

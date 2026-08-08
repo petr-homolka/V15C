@@ -36,7 +36,7 @@ body {
   backdrop-filter: saturate(1.8) blur(20px);
 }
 
-/* Plocha aplikace je zapuštěná, karty na ní svítí. */
+/* Hlavní plocha je čistá; zapuštěné je jen vysouvací menu. */
 body {
-  background: var(--ds-background-200);
+  background: var(--ds-background-100);
 }
