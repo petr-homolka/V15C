@@ -90,9 +90,22 @@ function TopBar({
 
         <div className="flex-1" />
 
-        <span className="text-label-13 hidden rounded-md border border-[var(--ds-gray-alpha-400)] px-2 py-1 text-[var(--ds-gray-900)] sm:inline-flex">
-          {persona.organizationName ?? 'Systém'}
-        </span>
+        {/* Hledání je i tady, ne jen v rozvržení B — cesta k věci má být
+            všude stejně krátká. */}
+        <button
+          type="button"
+          onClick={() => go('/b')}
+          className="text-copy-14 hidden h-9 w-64 items-center gap-2 rounded-lg border border-[var(--ds-gray-alpha-400)] px-3 text-left text-[var(--ds-gray-700)] hover:bg-[var(--ds-gray-100)] md:flex"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.5-3.5" />
+          </svg>
+          <span className="flex-1 truncate">Hledat</span>
+          <kbd className="kt-kbd">⌘K</kbd>
+        </button>
+
+        <Bell go={go} />
 
         <PersonaMenu go={go} />
       </div>
@@ -195,6 +208,45 @@ function PersonaMenu({ go }: { go: (r: string) => void }) {
   )
 }
 
+/**
+ * Zvonek. Číslo je počet lhůt po termínu — jediné, co v tomhle systému
+ * opravdu „přišlo" a nepočká. Notifikace se teprve navrhují (dok. 00),
+ * tak zatím ukazuje to, co spočítat umíme.
+ */
+function Bell({ go }: { go: (r: string) => void }) {
+  const { persona } = usePersona()
+  const orgId = persona.organizationId
+  const mine = persona.role === 'key_worker' ? persona.personId : null
+  const late = orgId
+    ? data
+        .obligations(orgId)
+        .filter((o) => o.status === 'overdue')
+        .filter((o) => {
+          if (!mine) return true
+          const f = data.caseFiles(orgId).find((c) => c.id === o.caseFileId)
+          return f?.keyWorkerPersonId === mine
+        }).length
+    : 0
+
+  return (
+    <button
+      type="button"
+      onClick={() => go('/prehled')}
+      aria-label={`Po termínu: ${late}`}
+      className="relative flex h-9 w-9 items-center justify-center rounded-lg text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-100)]"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-2 8-2 8h16s-2-1-2-8M10.3 20a2 2 0 0 0 3.4 0" />
+      </svg>
+      {late > 0 ? (
+        <span className="text-label-12 absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--ds-red-700)] px-1 text-white">
+          {late}
+        </span>
+      ) : null}
+    </button>
+  )
+}
+
 export function IconButton({
   children,
   label,
@@ -251,8 +303,14 @@ function Sidebar({
   ).slice(0, 40)
 
   return (
+    /*
+     * Panel je černý v obou režimech. Není to zapsaná barva: třídou `dark`
+     * se uvnitř přepnou tokeny Geistu na tmavé hodnoty, takže `background-100`
+     * je tady skoro černá a `gray-1000` skoro bílá. V tmavém režimu se nic
+     * nemění — panel už tmavý je.
+     */
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex w-[17.5rem] max-w-[86vw] flex-col border-r border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] transition-transform duration-200 lg:translate-x-0 ${
+      className={`dark fixed inset-y-0 left-0 z-50 flex w-[17.5rem] max-w-[86vw] flex-col bg-[var(--ds-background-100)] transition-transform duration-200 lg:translate-x-0 ${
         open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -271,6 +329,7 @@ function Sidebar({
 
       {/* --- co je pořád po ruce ------------------------------------- */}
       <nav className="px-2 py-2">
+        <p className="text-label-12 px-2 pb-1 pt-1 text-[var(--ds-gray-700)]">Práce</p>
         <NavItem
           icon={<path d="M21 12a8 8 0 0 1-8 8 9 9 0 0 1-2.6-.4L5 21l1.4-3.3A8 8 0 1 1 21 12Z" />}
           label="Eli"
@@ -293,6 +352,7 @@ function Sidebar({
 
       {/* --- oblasti ------------------------------------------------- */}
       <div className="border-t border-[var(--ds-gray-alpha-400)]">
+        <p className="text-label-12 px-4 pb-1 pt-3 text-[var(--ds-gray-700)]">Agenda</p>
         <div className="flex px-2">
           {SEGMENTS.map(([key, label]) => (
             <button

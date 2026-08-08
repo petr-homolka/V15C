@@ -9,6 +9,7 @@
  */
 
 import { useMemo } from 'react'
+import { Area, Donut } from '../charts'
 import * as data from '../demo/data'
 import * as L from '../labels'
 import { usePersona } from '../persona'
@@ -47,6 +48,49 @@ export function Prehled({ go }: { go: (r: string) => void }) {
     .sort((a, b) => a.startAt.localeCompare(b.startAt))
     .slice(0, 5)
 
+  /** Návštěvy po měsících — půl roku zpět, poslední sloupec je tento měsíc. */
+  const visits = useMemo(() => {
+    const out: Array<{ label: string; n: number }> = []
+    const names = ['led', 'úno', 'bře', 'dub', 'kvě', 'čvn', 'čvc', 'srp', 'zář', 'říj', 'lis', 'pro']
+    const now = new Date()
+    for (let i = 5; i >= 0; i--) {
+      const from = new Date(now.getFullYear(), now.getMonth() - i, 1)
+      const to = new Date(now.getFullYear(), now.getMonth() - i + 1, 1)
+      const n = data
+        .events(orgId)
+        .filter((e) => (!mine || e.ownerPersonId === mine) && e.kind === 'visit')
+        .filter((e) => {
+          const at = new Date(e.startAt)
+          return at >= from && at < to
+        }).length
+      out.push({ label: names[from.getMonth()]!, n })
+    }
+    return out
+  }, [orgId, mine])
+
+  const visitTotal = visits.reduce((sum, v) => sum + v.n, 0)
+  const visitDelta = (visits[5]?.n ?? 0) - (visits[4]?.n ?? 0)
+
+  /** Rozdělení dohod podle druhu péče. */
+  const byBasis = useMemo(() => {
+    const tones = [
+      'var(--ds-purple-700)',
+      'var(--ds-blue-700)',
+      'var(--ds-teal-700)',
+      'var(--ds-amber-700)',
+      'var(--ds-gray-600)',
+    ]
+    const map = new Map<string, number>()
+    for (const a of agreements) {
+      const k = a.note ?? '—'
+      map.set(k, (map.get(k) ?? 0) + 1)
+    }
+    return [...map]
+      .sort((x, y) => y[1] - x[1])
+      .slice(0, 5)
+      .map(([label, value], i) => ({ label, value, tone: tones[i]! }))
+  }, [agreements])
+
   /** Rozložení podle obcí — kam se nejvíc jezdí. */
   const byTown = useMemo(() => {
     const map = new Map<string, number>()
@@ -68,12 +112,14 @@ export function Prehled({ go }: { go: (r: string) => void }) {
       <Stack>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <Tile
+            icon="home"
             label="Dohody ve správě"
             value={agreements.length}
             note={`${children.length} dětí v péči`}
             onClick={() => go('/seznam/dohody')}
           />
           <Tile
+            icon="alert"
             label="Po termínu"
             value={overdue.length}
             note={overdue.length ? 'vyžaduje pozornost' : 'nic nechybí'}
@@ -81,6 +127,7 @@ export function Prehled({ go }: { go: (r: string) => void }) {
             onClick={() => go('/seznam/dohody')}
           />
           <Tile
+            icon="clock"
             label="Lhůty tento týden"
             value={thisWeek.length}
             note="do sedmi dnů"
@@ -88,13 +135,28 @@ export function Prehled({ go }: { go: (r: string) => void }) {
             onClick={() => go('/seznam/dohody')}
           />
           <Tile
-            label="Nejbližší schůzka"
-            value={upcoming[0] ? formatDate(upcoming[0].startAt) : '—'}
-            note={upcoming[0]?.subjectDisplayName ?? 'nic naplánovaného'}
-            small
+            icon="calendar"
+            label="Návštěvy za 6 měsíců"
+            value={visitTotal}
+            note={
+              visitDelta === 0
+                ? 'stejně jako předchozí měsíc'
+                : `${visitDelta > 0 ? '+' : ''}${visitDelta} oproti minulému měsíci`
+            }
+            tone={visitDelta >= 0 ? 'green' : 'amber'}
             onClick={() => go('/dnes')}
           />
         </div>
+
+        <Grid>
+          <Card title="Návštěvy po měsících" padded>
+            <Area points={visits.map((v) => v.n)} labels={visits.map((v) => v.label)} />
+          </Card>
+
+          <Card title="Podle druhu péče" padded>
+            <Donut slices={byBasis} total={agreements.length} caption="Rozdělení dohod podle druhu péče" />
+          </Card>
+        </Grid>
 
         <Card
           table
@@ -194,12 +256,20 @@ export function Prehled({ go }: { go: (r: string) => void }) {
  * Dlaždice s číslem. Barva jen tehdy, když číslo něco znamená — nula po
  * termínu je zelená, protože to je dobrá zpráva; deset je červená.
  */
+const TILE_ICONS: Record<string, string> = {
+  home: 'M4 11l8-6 8 6v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8Z',
+  alert: 'M12 9v4m0 4h.01M10.3 3.9 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z',
+  clock: 'M12 8v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+  calendar: 'M7 3v3m10-3v3M4 9h16M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z',
+}
+
 function Tile({
   label,
   value,
   note,
   tone = 'neutral',
   small,
+  icon,
   onClick,
 }: {
   label: string
@@ -207,6 +277,7 @@ function Tile({
   note?: string
   tone?: 'neutral' | 'red' | 'amber' | 'green'
   small?: boolean
+  icon?: keyof typeof TILE_ICONS | string
   onClick?: () => void
 }) {
   const color =
@@ -223,7 +294,26 @@ function Tile({
       onClick={onClick}
       className="kt-card p-4 text-left transition-colors hover:bg-[var(--ds-gray-100)]"
     >
-      <div className="text-copy-13 text-[var(--muted-foreground)]">{label}</div>
+      <div className="flex items-start justify-between gap-2">
+        <div className="text-copy-13 text-[var(--muted-foreground)]">{label}</div>
+        {icon ? (
+          <span
+            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+              tone === 'red'
+                ? 'bg-[var(--ds-red-100)] text-[var(--ds-red-700)]'
+                : tone === 'amber'
+                  ? 'bg-[var(--ds-amber-100)] text-[var(--ds-amber-900)]'
+                  : tone === 'green'
+                    ? 'bg-[var(--ds-green-100)] text-[var(--ds-green-700)]'
+                    : 'bg-[var(--ds-purple-100)] text-[var(--ds-purple-700)]'
+            }`}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d={TILE_ICONS[icon] ?? TILE_ICONS.home!} />
+            </svg>
+          </span>
+        ) : null}
+      </div>
       <div className={`${small ? 'text-heading-20' : 'text-heading-32'} pt-1 tabular-nums ${color}`}>
         {value}
       </div>

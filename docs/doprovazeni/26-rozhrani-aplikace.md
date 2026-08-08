@@ -227,3 +227,25 @@ kterému jsou datované. V rozvržení A to nebylo poznat — dokumenty jsou tam
 v tabulce s vlastním sloupcem.
 
 Kde to je: `apps/crm/src/workspace/`, cesta `#/b`. Přepínač je v Pohledu.
+
+
+---
+
+## 9. Černý panel, graf, zvonek
+
+Trojí doplnění, které dělá rozdíl mezi „kostrou" a „systémem":
+
+**Panel je černý v obou režimech.** Není to zapsaná barva — na `<aside>` je
+třída `dark`, takže se uvnitř přepnou tokeny Geistu na tmavé hodnoty
+(`background-100` je tam skoro černá, `gray-1000` skoro bílá). V tmavém režimu
+se nemění nic, panel už tmavý je. Nikde tím nepřibyl hex.
+
+**Grafy jsou ručně kreslené SVG** (`src/charts.tsx`), ne knihovna. Knihovna na
+grafy váží víc než celá aplikace a uměla by dvacet druhů grafů, z nichž
+potřebujeme dva. Navíc by si nesla vlastní barvy; takhle jdou z tokenů.
+Oba grafy mají u sebe čísla — graf, ze kterého se nedá odečíst hodnota, je
+obrázek, ne údaj.
+
+**Zvonek ukazuje počet lhůt po termínu.** Notifikace se teprve navrhují
+(dok. 00), tak zatím ukazuje to jediné, co v systému opravdu „přišlo"
+a nepočká.
