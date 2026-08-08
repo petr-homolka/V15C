@@ -1,14 +1,24 @@
 /**
  * Stavební kusy rozhraní.
  *
- * Záměr: **aplikace, ne tabulka.** Jedna věc na obrazovce, hodně vzduchu,
- * vlasové linky místo rámečků, barva jen tam, kde nese informaci.
+ * ┌───────────────────────────────────────────────────────────────────┐
+ * │ TŘI PRAVIDLA, ZE KTERÝCH VYCHÁZÍ VŠECHNO OSTATNÍ                  │
+ * │                                                                   │
+ * │ 1. **Plochu drží šeď, ne barva.** Podklad stránky je zapuštěný,   │
+ * │    karta je světlá a ohraničená vlasovou linkou. Žádné velké      │
+ * │    stíny a žádné barevné bloky — ty dělají z aplikace plakát.     │
+ * │                                                                   │
+ * │ 2. **Barva něco znamená, jinak tam není.** Fialová je jen na      │
+ * │    hlavní akci, aktivní položku a odkaz. Červená a jantarová      │
+ * │    nesou termín. Nic dalšího barevné není.                        │
+ * │                                                                   │
+ * │ 3. **Hustota je pracovní, ne prezentační.** Řádek 44 px, popisek  │
+ * │    13 px šedý, hodnota 14 px tmavá. Klíčová osoba se dívá na      │
+ * │    dvacet rodin, ne na jednu.                                     │
+ * └───────────────────────────────────────────────────────────────────┘
  *
- * Pravidla, kterých se držím:
- *  – plochu drží `--ds-background-200`, karty `--ds-background-100`;
- *  – oddělovač je vlasová linka uvnitř karty, ne rámeček kolem každého řádku;
- *  – dotyková plocha nejmíň 44 px;
- *  – barevný štítek nejvýš jeden na řádek, jinak se přestane číst.
+ * Vzhled staví na tokenech Geistu (CLAUDE.md) — v kódu není jediný hex,
+ * takže tmavý režim vychází sám.
  */
 
 import { formatUidForReading } from '../../../schema/src/index'
@@ -16,169 +26,284 @@ import type { ReactNode } from 'react'
 
 /* --- plocha --------------------------------------------------------------- */
 
-export function Screen({ children }: { children: ReactNode }) {
+export function Screen({ children, wide }: { children: ReactNode; wide?: boolean }) {
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pb-[calc(3rem+env(safe-area-inset-bottom))]">
+    <div
+      className={`mx-auto w-full ${wide ? 'max-w-6xl' : 'max-w-4xl'} px-4 pb-16 pt-4 sm:px-6`}
+    >
       {children}
     </div>
   )
 }
 
-/** Velký nadpis, jak je na mobilu zvykem — ne lišta s drobným písmem. */
-export function LargeTitle({
+/** Hlavička obrazovky: drobná drobečka, název, popis a akce vpravo. */
+export function PageHead({
   title,
   subtitle,
-  right,
   back,
+  actions,
 }: {
   title: string
   subtitle?: string | null
-  right?: ReactNode
   back?: () => void
+  actions?: ReactNode
 }) {
   return (
-    <header className="pb-4 pt-2">
-      {back ? (
-        <button
-          type="button"
-          onClick={back}
-          className="text-copy-14 -ml-1 mb-2 flex h-8 items-center gap-1 rounded-lg pr-2 text-[var(--ds-purple-700)]"
-        >
-          <Chevron dir="left" /> Zpět
-        </button>
-      ) : null}
-      <div className="flex items-start gap-3">
-        <div className="min-w-0 flex-1">
-          <h1 className="text-heading-32 leading-tight text-[var(--ds-gray-1000)]">{title}</h1>
-          {subtitle ? (
-            <p className="text-copy-14 pt-1 text-[var(--ds-gray-900)]">{subtitle}</p>
-          ) : null}
-        </div>
-        {right}
+    <header className="flex flex-wrap items-end justify-between gap-3 pb-5">
+      <div className="min-w-0">
+        {back ? (
+          <button
+            type="button"
+            onClick={back}
+            className="text-copy-13 -ml-1 mb-1.5 flex h-6 items-center gap-1 text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)]"
+          >
+            <Chevron dir="left" /> Zpět
+          </button>
+        ) : null}
+        <h1 className="text-heading-24 truncate text-[var(--ds-gray-1000)]">{title}</h1>
+        {subtitle ? (
+          <p className="text-copy-14 pt-0.5 text-[var(--ds-gray-900)]">{subtitle}</p>
+        ) : null}
       </div>
+      {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
     </header>
   )
 }
 
-/** Nadpis skupiny. Malý, tichý, bez rámečku. */
-export function GroupTitle({ children, action }: { children: ReactNode; action?: ReactNode }) {
+/**
+ * Karta. Volitelně s vlastní hlavičkou — v ní je název a akce, oddělené
+ * linkou. Tohle je nosný prvek celé aplikace.
+ */
+export function Card({
+  title,
+  action,
+  children,
+  padded,
+}: {
+  title?: string
+  action?: ReactNode
+  children: ReactNode
+  /** Pro obsah, který není seznam řádků (text, mřížka). */
+  padded?: boolean
+}) {
   return (
-    <div className="flex items-baseline justify-between gap-3 px-1 pb-2 pt-6">
-      <h2 className="text-label-13 text-[var(--ds-gray-900)]">{children}</h2>
+    <section className="overflow-hidden rounded-xl border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)]">
+      {title ? (
+        <header className="flex items-center justify-between gap-3 border-b border-[var(--ds-gray-alpha-400)] px-4 py-3">
+          <h2 className="text-heading-16 text-[var(--ds-gray-1000)]">{title}</h2>
+          {action}
+        </header>
+      ) : null}
+      <div className={padded ? 'p-4' : ''}>{children}</div>
+    </section>
+  )
+}
+
+/** Mřížka karet: na mobilu pod sebou, na širokém displeji dva sloupce. */
+export function Grid({ children }: { children: ReactNode }) {
+  return <div className="grid gap-4 lg:grid-cols-2 lg:items-start">{children}</div>
+}
+
+export function Stack({ children }: { children: ReactNode }) {
+  return <div className="flex flex-col gap-4">{children}</div>
+}
+
+export function Divider() {
+  return <div className="h-px bg-[var(--ds-gray-alpha-400)]" />
+}
+
+/* --- řádky ---------------------------------------------------------------- */
+
+/**
+ * Dvojice popisek — hodnota. Na úzkém displeji pod sebou, na širokém vedle
+ * sebe: popisek v pevném sloupci, hodnota za ním. Tak se dá karta číst svisle
+ * jako formulář, ne jako odstavec.
+ */
+export function InfoRow({
+  label,
+  children,
+  action,
+}: {
+  label: string
+  children: ReactNode
+  action?: ReactNode
+}) {
+  return (
+    <div className="flex flex-col gap-0.5 border-b border-[var(--ds-gray-alpha-400)] px-4 py-3 last:border-0 sm:flex-row sm:items-center sm:gap-4">
+      <div className="text-copy-13 text-[var(--ds-gray-900)] sm:w-40 sm:shrink-0">{label}</div>
+      <div className="text-copy-14 min-w-0 flex-1 text-[var(--ds-gray-1000)]">{children}</div>
       {action}
     </div>
   )
 }
 
-/** Karta se seskupenými řádky — základní stavební prvek obrazovky. */
-export function Card({ children }: { children: ReactNode }) {
-  return (
-    <div className="overflow-hidden rounded-2xl bg-[var(--ds-background-100)] shadow-[var(--ds-shadow-border-small)]">
-      {children}
-    </div>
-  )
-}
-
-export function Divider() {
-  return <div className="ml-4 h-px bg-[var(--ds-gray-alpha-400)]" />
-}
-
-/**
- * Řádek. Vodorovné dělení je záměrně **za** ikonou, aby seznam držel
- * pohromadě a nerozpadl se na krabičky.
- */
+/** Klikatelný řádek seznamu uvnitř karty. */
 export function Row({
   title,
   subtitle,
   meta,
-  accessory,
   leading,
   onClick,
-  dimmed,
   wrapTitle,
 }: {
   title: ReactNode
   subtitle?: ReactNode
   meta?: ReactNode
-  accessory?: ReactNode
   leading?: ReactNode
   onClick?: () => void
-  dimmed?: boolean
-  /** Úkol se nemá zkracovat — jeho text je to jediné, co ho odlišuje. */
   wrapTitle?: boolean
 }) {
-  const rest = (
+  const inner = (
     <>
-      <div className="min-w-0 flex-1 py-3">
-        <div
-          className={`text-copy-16 ${wrapTitle ? '' : 'truncate'} ${
-            dimmed ? 'text-[var(--ds-gray-700)] line-through' : 'text-[var(--ds-gray-1000)]'
-          }`}
-        >
+      {leading}
+      <div className="min-w-0 flex-1">
+        <div className={`text-copy-14 ${wrapTitle ? '' : 'truncate'} text-[var(--ds-gray-1000)]`}>
           {title}
         </div>
         {subtitle ? (
-          <div className="text-copy-14 truncate pt-0.5 text-[var(--ds-gray-900)]">{subtitle}</div>
+          <div className="text-copy-13 truncate pt-0.5 text-[var(--ds-gray-900)]">{subtitle}</div>
         ) : null}
       </div>
       {meta ? <div className="shrink-0 pl-2">{meta}</div> : null}
-      {accessory ?? (onClick ? <Chevron /> : null)}
+      {onClick ? <Chevron /> : null}
     </>
   )
-
-  const body = (
-    <>
-      {leading}
-      {rest}
-    </>
-  )
-
-  const cls = 'flex min-h-[52px] w-full items-center gap-3 px-4 text-left'
-
-  // Když je vlevo vlastní tlačítko (odškrtnutí úkolu), nesmí být tlačítkem
-  // celý řádek — tlačítko v tlačítku prohlížeč neumí.
-  if (onClick && leading) {
-    return (
-      <div className={cls}>
-        {leading}
-        <button
-          type="button"
-          onClick={onClick}
-          className="flex min-w-0 flex-1 items-center gap-3 text-left"
-        >
-          {rest}
-        </button>
-      </div>
-    )
-  }
-
+  const cls =
+    'flex w-full items-center gap-3 border-b border-[var(--ds-gray-alpha-400)] px-4 py-2.5 text-left last:border-0'
   return onClick ? (
-    <button type="button" onClick={onClick} className={`${cls} active:bg-[var(--ds-gray-100)]`}>
-      {body}
+    <button type="button" onClick={onClick} className={`${cls} hover:bg-[var(--ds-gray-100)]`}>
+      {inner}
     </button>
   ) : (
-    <div className={cls}>{body}</div>
+    <div className={cls}>{inner}</div>
   )
 }
 
-export function Chevron({ dir = 'right' }: { dir?: 'right' | 'left' }) {
+export function Note({ children }: { children: ReactNode }) {
+  return <p className="text-copy-14 px-4 py-5 text-[var(--ds-gray-900)]">{children}</p>
+}
+
+/* --- tabulka -------------------------------------------------------------- */
+
+/**
+ * Tabulka pro širší displej. Na mobilu se nepoužívá — tam je seznam řádků,
+ * protože šest sloupců na 390 px není tabulka, ale hlavolam.
+ */
+export function Table({
+  columns,
+  children,
+}: {
+  columns: Array<{ label: string; align?: 'right'; hide?: 'sm' | 'md' }>
+  children: ReactNode
+}) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="h-4 w-4 shrink-0 text-[var(--ds-gray-700)]"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+    <div className="overflow-x-auto">
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="border-b border-[var(--ds-gray-alpha-400)]">
+            {columns.map((c) => (
+              <th
+                key={c.label}
+                scope="col"
+                className={`text-label-13 whitespace-nowrap px-4 py-2.5 font-normal text-[var(--ds-gray-900)] ${
+                  c.align === 'right' ? 'text-right' : 'text-left'
+                } ${c.hide === 'sm' ? 'hidden sm:table-cell' : c.hide === 'md' ? 'hidden md:table-cell' : ''}`}
+              >
+                {c.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>{children}</tbody>
+      </table>
+    </div>
+  )
+}
+
+export function Tr({ children, onClick }: { children: ReactNode; onClick?: () => void }) {
+  return (
+    <tr
+      onClick={onClick}
+      className={`border-b border-[var(--ds-gray-alpha-400)] last:border-0 ${
+        onClick ? 'cursor-pointer hover:bg-[var(--ds-gray-100)]' : ''
+      }`}
     >
-      <path d={dir === 'right' ? 'M9 6l6 6-6 6' : 'M15 6l-6 6 6 6'} />
-    </svg>
+      {children}
+    </tr>
+  )
+}
+
+export function Td({
+  children,
+  align,
+  hide,
+  muted,
+}: {
+  children: ReactNode
+  align?: 'right'
+  hide?: 'sm' | 'md'
+  muted?: boolean
+}) {
+  return (
+    <td
+      className={`text-copy-14 px-4 py-2.5 ${align === 'right' ? 'text-right tabular-nums' : ''} ${
+        hide === 'sm' ? 'hidden sm:table-cell' : hide === 'md' ? 'hidden md:table-cell' : ''
+      } ${muted ? 'text-[var(--ds-gray-900)]' : 'text-[var(--ds-gray-1000)]'}`}
+    >
+      {children}
+    </td>
   )
 }
 
 /* --- ovládání ------------------------------------------------------------- */
+
+export function Button({
+  children,
+  onClick,
+  variant = 'secondary',
+  size = 'md',
+}: {
+  children: ReactNode
+  onClick?: () => void
+  variant?: 'primary' | 'secondary' | 'ghost'
+  size?: 'sm' | 'md'
+}) {
+  const look =
+    variant === 'primary'
+      ? 'bg-[var(--ds-purple-700)] text-white hover:bg-[var(--ds-purple-800)]'
+      : variant === 'ghost'
+        ? 'text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-100)]'
+        : 'border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] text-[var(--ds-gray-1000)] hover:bg-[var(--ds-gray-100)]'
+  const dims = size === 'sm' ? 'h-8 px-2.5 text-label-13' : 'h-9 px-3 text-button-14'
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg ${dims} ${look}`}
+    >
+      {children}
+    </button>
+  )
+}
+
+export function Field({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: string
+  onChange: (v: string) => void
+  placeholder: string
+}) {
+  return (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="text-copy-14 h-9 w-full rounded-lg border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] px-3 text-[var(--ds-gray-1000)] outline-none placeholder:text-[var(--ds-gray-700)] focus:border-[var(--ds-purple-600)] focus:shadow-[var(--ds-focus-ring)]"
+    />
+  )
+}
 
 export function Segmented<T extends string>({
   value,
@@ -190,16 +315,16 @@ export function Segmented<T extends string>({
   onChange: (v: T) => void
 }) {
   return (
-    <div className="flex gap-1 rounded-xl bg-[var(--ds-gray-200)] p-1">
+    <div className="inline-flex rounded-lg border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] p-0.5">
       {options.map(([key, label]) => (
         <button
           key={key}
           type="button"
           onClick={() => onChange(key)}
-          className={`text-button-14 h-8 flex-1 rounded-lg ${
+          className={`text-label-13 h-8 rounded-[6px] px-3 ${
             key === value
-              ? 'bg-[var(--ds-background-100)] text-[var(--ds-purple-900)] shadow-[var(--ds-shadow-small)]'
-              : 'text-[var(--ds-gray-900)]'
+              ? 'bg-[var(--ds-gray-100)] text-[var(--ds-gray-1000)]'
+              : 'text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)]'
           }`}
         >
           {label}
@@ -209,39 +334,68 @@ export function Segmented<T extends string>({
   )
 }
 
-export function Chip({ children, onClick }: { children: ReactNode; onClick?: () => void }) {
+/* --- štítky --------------------------------------------------------------- */
+
+export type Tone = 'neutral' | 'purple' | 'amber' | 'red' | 'green'
+
+const CHIP: Record<Tone, string> = {
+  neutral: 'bg-[var(--ds-gray-100)] text-[var(--ds-gray-900)] border-[var(--ds-gray-alpha-400)]',
+  purple: 'bg-[var(--ds-purple-100)] text-[var(--ds-purple-900)] border-[var(--ds-purple-400)]',
+  amber: 'bg-[var(--ds-amber-100)] text-[var(--ds-amber-900)] border-[var(--ds-amber-400)]',
+  red: 'bg-[var(--ds-red-100)] text-[var(--ds-red-900)] border-[var(--ds-red-400)]',
+  green: 'bg-[var(--ds-green-100)] text-[var(--ds-green-900)] border-[var(--ds-green-400)]',
+}
+
+/** Štítek stavu. Světlé pozadí, linka, drobné písmo — ne křiklavá bublina. */
+export function Chip({ tone = 'neutral', children }: { tone?: Tone; children: ReactNode }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="text-copy-14 shrink-0 whitespace-nowrap rounded-full bg-[var(--ds-background-100)] px-3.5 py-2 text-[var(--ds-gray-1000)] shadow-[var(--ds-shadow-border-small)] active:bg-[var(--ds-gray-100)]"
+    <span
+      className={`text-label-12 inline-flex shrink-0 items-center whitespace-nowrap rounded-md border px-1.5 py-0.5 ${CHIP[tone]}`}
     >
       {children}
-    </button>
+    </span>
   )
 }
 
-export type Tone = 'neutral' | 'blue' | 'purple' | 'amber' | 'red' | 'green'
-
-const TONE: Record<Tone, string> = {
+const TEXT_TONE: Record<Tone, string> = {
   neutral: 'text-[var(--ds-gray-900)]',
-  blue: 'text-[var(--ds-blue-700)]',
   purple: 'text-[var(--ds-purple-700)]',
   amber: 'text-[var(--ds-amber-900)]',
   red: 'text-[var(--ds-red-700)]',
   green: 'text-[var(--ds-green-700)]',
 }
 
-/** Stav se píše textem v barvě, ne bublinou. Bublin bylo v seznamu moc. */
 export function Meta({ tone = 'neutral', children }: { tone?: Tone; children: ReactNode }) {
-  return <span className={`text-copy-14 ${TONE[tone]}`}>{children}</span>
+  return <span className={`text-copy-13 ${TEXT_TONE[tone]}`}>{children}</span>
 }
 
-/** UID pro čtení: `u6t 4f3k`. Ukazuje se jen v profilu (dok. 25). */
-export const formatUid = (uid: string): string => formatUidForReading(uid)
+/**
+ * Termín. **Štítek jen tehdy, když hoří** — po termínu nebo do čtrnácti dnů.
+ * Datum za půl roku je údaj, ne varování, a bublina kolem něj by z tabulky
+ * udělala vánoční stromek.
+ */
+export function Due({ iso }: { iso: string | null }) {
+  if (!iso) return <span className="text-copy-13 text-[var(--ds-gray-700)]">—</span>
+  const tone = dueTone(iso)
+  if (tone === 'neutral') return <Meta>{formatDate(iso)}</Meta>
+  return <Chip tone={tone}>{dueLabel(iso)}</Chip>
+}
 
-export function Note({ children }: { children: ReactNode }) {
-  return <p className="text-copy-14 px-4 py-4 text-[var(--ds-gray-900)]">{children}</p>
+export function Chevron({ dir = 'right' }: { dir?: 'right' | 'left' }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-4 w-4 shrink-0 text-[var(--ds-gray-700)]"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d={dir === 'right' ? 'M9 6l6 6-6 6' : 'M15 6l-6 6 6 6'} />
+    </svg>
+  )
 }
 
 /* --- formáty -------------------------------------------------------------- */
@@ -259,16 +413,15 @@ export const formatWeekday = (d: Date): string => {
   return w.charAt(0).toUpperCase() + w.slice(1)
 }
 
+/** UID pro čtení: `u6t 4f3k`. Jen v profilu (dok. 25). */
+export const formatUid = (uid: string): string => formatUidForReading(uid)
+
 export function daysUntil(iso: string, today = new Date()): number {
   return Math.round(
     (new Date(iso).setHours(0, 0, 0, 0) - new Date(today).setHours(0, 0, 0, 0)) / 86_400_000,
   )
 }
 
-/**
- * Jak se termín říká lidsky. Po termínu se to napíše, ale nekřičí se —
- * je to informace, ne výtka (dok. 16).
- */
 export function dueLabel(iso: string): string {
   const d = daysUntil(iso)
   if (d < -1) return `${Math.abs(d)} dní po termínu`
@@ -280,13 +433,7 @@ export function dueLabel(iso: string): string {
   return formatShort(iso)
 }
 
-export const dueTone = (iso: string): Tone => (daysUntil(iso) < 0 ? 'red' : 'neutral')
-
-/**
- * Štítek do seznamu. Krátký schválně: kolik přesně dní je něco po termínu,
- * se řeší v profilu — v seznamu jde o to, aby červená padla do oka a nezabrala
- * půlku řádku.
- */
+/** Krátký štítek do seznamu — přesná čísla patří do profilu. */
 export function dueBadge(iso: string): string {
   const d = daysUntil(iso)
   if (d < 0) return 'po termínu'
@@ -295,7 +442,13 @@ export function dueBadge(iso: string): string {
   return `za ${d} dní`
 }
 
-/** 5 dětí / 2 děti / 1 dítě — bez tohohle to v češtině skřípe. */
+export const dueTone = (iso: string): Tone => {
+  const d = daysUntil(iso)
+  if (d < 0) return 'red'
+  if (d <= 14) return 'amber'
+  return 'neutral'
+}
+
 export function childCountLabel(n: number): string {
   if (n === 0) return 'bez dítěte'
   if (n === 1) return '1 dítě'

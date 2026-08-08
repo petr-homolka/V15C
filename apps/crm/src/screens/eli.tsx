@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react'
 import { answer, SUGGESTIONS, type EliAnswer } from '../eli/answer'
 import { useLocal } from '../local'
 import { usePersona } from '../persona'
-import { Card, Chevron, Chip, Divider, Row } from '../ui'
+import { Button, Card, Chevron, Row } from '../ui'
 
 interface Turn {
   id: number
@@ -56,17 +56,17 @@ export function Eli({ go }: { go: (r: string) => void }) {
   /* --- prázdný stav: střed obrazovky ---------------------------------- */
   if (turns.length === 0) {
     return (
-      <div className="mx-auto flex min-h-[calc(100dvh-3.5rem)] w-full max-w-3xl flex-col justify-center px-4 pb-24">
+      <div className="mx-auto flex min-h-[calc(100dvh-7rem)] w-full max-w-3xl flex-col justify-center px-4 pb-10 sm:px-6">
         <Mark />
-        <h1 className="text-heading-32 pt-5 text-[var(--ds-gray-1000)]">
+        <h1 className="text-heading-24 pt-4 text-[var(--ds-gray-1000)]">
           Dobrý den, {persona.displayName.split(' ')[0]}.
         </h1>
         <div className="pt-5">{composer}</div>
         <div className="flex flex-wrap gap-2 pt-4">
           {SUGGESTIONS.map((s) => (
-            <Chip key={s} onClick={() => (s.endsWith('…') ? setDraft(s.slice(0, -1)) : ask(s))}>
+            <Button key={s} onClick={() => (s.endsWith('…') ? setDraft(s.slice(0, -1)) : ask(s))}>
               {s}
-            </Chip>
+            </Button>
           ))}
         </div>
       </div>
@@ -76,28 +76,30 @@ export function Eli({ go }: { go: (r: string) => void }) {
   /* --- rozhovor -------------------------------------------------------- */
   return (
     <>
-      <div className="mx-auto w-full max-w-3xl px-4 pb-40 pt-2">
+      <div className="mx-auto w-full max-w-3xl px-4 pb-4 pt-4 sm:px-6">
         <div className="flex flex-col gap-5">
           {turns.map((t) =>
             t.from === 'me' ? (
               <div key={t.id} className="flex justify-end">
-                <p className="text-copy-16 max-w-[85%] rounded-2xl rounded-br-md bg-[var(--ds-gray-100)] px-4 py-2.5 text-[var(--ds-gray-1000)]">
+                <p className="text-copy-15 max-w-[85%] rounded-xl rounded-br-sm border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] px-3.5 py-2 text-[var(--ds-gray-1000)]">
                   {t.text}
                 </p>
               </div>
             ) : (
               <div key={t.id} className="flex flex-col gap-3">
-                <p className="text-copy-16 max-w-[92%] leading-relaxed text-[var(--ds-gray-1000)]">
+                <p className="text-copy-15 max-w-[70ch] leading-relaxed text-[var(--ds-gray-1000)]">
                   {t.text}
                 </p>
 
                 {t.answer?.links && t.answer.links.length > 0 ? (
                   <Card>
                     {t.answer.links.map((l, i) => (
-                      <div key={`${l.route}-${i}`}>
-                        {i > 0 ? <Divider /> : null}
-                        <Row title={l.label} subtitle={l.detail} onClick={() => go(l.route)} />
-                      </div>
+                      <Row
+                        key={`${l.route}-${i}`}
+                        title={l.label}
+                        subtitle={l.detail}
+                        onClick={() => go(l.route)}
+                      />
                     ))}
                   </Card>
                 ) : null}
@@ -124,7 +126,7 @@ export function Eli({ go }: { go: (r: string) => void }) {
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[var(--ds-background-100)] via-[var(--ds-background-100)] to-transparent pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-6">
+      <div className="sticky bottom-0 z-20 bg-gradient-to-t from-[var(--ds-background-200)] via-[var(--ds-background-200)] to-transparent pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-6 lg:pl-0">
         <div className="mx-auto w-full max-w-3xl px-4">{composer}</div>
       </div>
     </>
@@ -134,8 +136,8 @@ export function Eli({ go }: { go: (r: string) => void }) {
 /** Značka. Čtverec s iniciálou — logo přijde, až bude. */
 function Mark() {
   return (
-    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--ds-purple-700)]">
-      <span className="text-heading-20 text-white">E</span>
+    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--ds-purple-700)]">
+      <span className="text-label-16 text-white">E</span>
     </div>
   )
 }
@@ -154,7 +156,7 @@ function Composer({
   onSend: () => void
 }) {
   return (
-    <div className="rounded-2xl bg-[var(--ds-background-100)] p-2 shadow-[var(--ds-shadow-border-medium)]">
+    <div className="rounded-xl border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] p-2">
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -162,7 +164,7 @@ function Composer({
           if (e.key === 'Enter') onSend()
         }}
         placeholder="Zeptejte se Eli…"
-        className="text-copy-16 w-full bg-transparent px-2 py-2 text-[var(--ds-gray-1000)] outline-none placeholder:text-[var(--ds-gray-700)]"
+        className="text-copy-15 w-full bg-transparent px-2 py-1.5 text-[var(--ds-gray-1000)] outline-none placeholder:text-[var(--ds-gray-700)]"
       />
       <div className="flex items-center justify-between pt-1">
         <span className="text-label-12 pl-2 text-[var(--ds-gray-700)]">

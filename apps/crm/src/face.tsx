@@ -47,14 +47,14 @@ export const TINTS: Tint[] = ['none', 'purple', 'blue', 'teal', 'green', 'amber'
 
 /** Pozadí obrázku a kroužek kolem. Vše z tokenů, nikde žádný hex. */
 export const TINT_BG: Record<Tint, string> = {
-  none: 'bg-[var(--ds-gray-200)] text-[var(--ds-gray-900)]',
-  purple: 'bg-[var(--ds-purple-200)] text-[var(--ds-purple-900)]',
-  blue: 'bg-[var(--ds-blue-200)] text-[var(--ds-blue-900)]',
-  teal: 'bg-[var(--ds-teal-200)] text-[var(--ds-teal-900)]',
-  green: 'bg-[var(--ds-green-200)] text-[var(--ds-green-900)]',
-  amber: 'bg-[var(--ds-amber-200)] text-[var(--ds-amber-900)]',
-  pink: 'bg-[var(--ds-pink-200)] text-[var(--ds-pink-900)]',
-  red: 'bg-[var(--ds-red-200)] text-[var(--ds-red-900)]',
+  none: 'bg-[var(--ds-gray-100)] text-[var(--ds-gray-900)]',
+  purple: 'bg-[var(--ds-purple-100)] text-[var(--ds-purple-900)]',
+  blue: 'bg-[var(--ds-blue-100)] text-[var(--ds-blue-900)]',
+  teal: 'bg-[var(--ds-teal-100)] text-[var(--ds-teal-900)]',
+  green: 'bg-[var(--ds-green-100)] text-[var(--ds-green-900)]',
+  amber: 'bg-[var(--ds-amber-100)] text-[var(--ds-amber-900)]',
+  pink: 'bg-[var(--ds-pink-100)] text-[var(--ds-pink-900)]',
+  red: 'bg-[var(--ds-red-100)] text-[var(--ds-red-900)]',
 }
 
 const TINT_RING: Record<Tint, string> = {
@@ -165,12 +165,12 @@ export async function shrinkPhoto(file: File, size = 256): Promise<string> {
 /* --- výchozí podoba ------------------------------------------------------- */
 
 /**
- * Než si někdo vybere, dostane obrázek **odvozený z UID**.
+ * Než si někdo vybere, dostane podobu **odvozenou z UID**.
  *
- * Není to náhoda: stejný člověk má vždycky stejnou barvu, takže se seznam dá
- * číst i koutkem oka. Dítě dostane rovnou motiv (kočka, raketa, kytka),
- * dospělý iniciály na barevném podkladu — u dospělých jméno pomáhá víc než
- * obrázek, u dětí je to naopak.
+ * Dospělí a rodiny dostanou iniciály na šedém podkladu. **Barvu má jen
+ * dítě** — a jen protože si obrázek pak stejně vybere samo. Kdyby barvu
+ * dostal každý řádek, přestala by barva cokoli znamenat a seznam dvaceti
+ * rodin by vypadal jako hračka, ne jako pracovní nástroj.
  */
 const KID_MOTIFS = ['kocka', 'pes', 'raketa', 'micek', 'hvezda', 'kytka', 'srdce', 'hudba']
 const AUTO_TINTS: Tint[] = ['purple', 'blue', 'teal', 'green', 'amber', 'pink']
@@ -183,8 +183,9 @@ function hash(uid: string): number {
 
 export function autoFace(uid: string, kind: FaceKind): FaceRecord {
   const h = hash(uid)
+  if (kind !== 'child') return { motif: null, color: 'none', photo: null, mark: 'none' }
   return {
-    motif: kind === 'child' ? KID_MOTIFS[h % KID_MOTIFS.length]! : null,
+    motif: KID_MOTIFS[h % KID_MOTIFS.length]!,
     color: AUTO_TINTS[(h >> 3) % AUTO_TINTS.length]!,
     photo: null,
     mark: 'none',
@@ -195,9 +196,9 @@ export type FaceKind = 'child' | 'person' | 'family'
 
 /* --- zobrazení ------------------------------------------------------------ */
 
-const SIZES = { sm: 'h-9 w-9', md: 'h-11 w-11', lg: 'h-20 w-20' }
-const GLYPH = { sm: 'h-5 w-5', md: 'h-6 w-6', lg: 'h-10 w-10' }
-const TEXT = { sm: 'text-label-14', md: 'text-label-16', lg: 'text-heading-24' }
+const SIZES = { sm: 'h-8 w-8', md: 'h-10 w-10', lg: 'h-16 w-16' }
+const GLYPH = { sm: 'h-4 w-4', md: 'h-5 w-5', lg: 'h-8 w-8' }
+const TEXT = { sm: 'text-label-13', md: 'text-label-14', lg: 'text-heading-20' }
 
 export function Face({
   uid,
@@ -229,7 +230,8 @@ export function Face({
     .join('')
 
   const ring = showMark ? TINT_RING[face.mark] : ''
-  const base = `${SIZES[size]} ${ring} shrink-0 overflow-hidden rounded-full ring-offset-2 ring-offset-[var(--ds-background-100)]`
+  const shape = kind === 'family' ? 'rounded-lg' : 'rounded-full'
+  const base = `${SIZES[size]} ${ring} ${shape} shrink-0 overflow-hidden ring-offset-2 ring-offset-[var(--ds-background-100)]`
 
   if (face.photo) {
     return <img src={face.photo} alt="" className={`${base} object-cover`} />
@@ -304,7 +306,7 @@ export function FacePicker({
         <Face uid={uid} name={name} kind={kind} size="lg" />
         <div className="min-w-0 flex-1">
           <div className="text-copy-16 truncate text-[var(--ds-gray-1000)]">{name}</div>
-          <label className="text-copy-14 mt-1 inline-flex cursor-pointer items-center rounded-lg bg-[var(--ds-purple-700)] px-3 py-1.5 text-white">
+          <label className="text-label-13 mt-1.5 inline-flex h-8 cursor-pointer items-center rounded-lg bg-[var(--ds-purple-700)] px-3 text-white hover:bg-[var(--ds-purple-800)]">
             {busy ? 'Zpracovávám…' : 'Nahrát fotku'}
             <input
               type="file"
@@ -402,14 +404,14 @@ export function Sheet({
   return (
     <>
       <div onClick={onClose} className="fixed inset-0 z-50 bg-[var(--ds-gray-alpha-600)]" />
-      <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-h-[85dvh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-[var(--ds-background-100)] p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-[var(--ds-shadow-modal)]">
+      <div className="fixed inset-x-0 bottom-0 z-50 mx-auto max-h-[85dvh] w-full max-w-xl overflow-y-auto rounded-t-2xl border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] sm:bottom-8 sm:rounded-2xl">
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-[var(--ds-gray-400)]" />
         <div className="flex items-center justify-between pb-4">
-          <h2 className="text-heading-20 text-[var(--ds-gray-1000)]">{title}</h2>
+          <h2 className="text-heading-16 text-[var(--ds-gray-1000)]">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="text-copy-14 rounded-lg px-2 py-1 text-[var(--ds-purple-700)]"
+            className="text-label-13 rounded-lg px-2 py-1 text-[var(--ds-purple-700)]"
           >
             Hotovo
           </button>

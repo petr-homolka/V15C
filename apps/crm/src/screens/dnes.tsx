@@ -1,8 +1,8 @@
 /**
  * Dnešek — schůzky a úkoly.
  *
- * Den je **seznam, ne mřížka**. Hodinová osa vypadá jako kalendář v počítači,
- * ale na mobilu z ní tři čtvrtiny plochy zabírá prázdná noc. Čas nese řádek.
+ * Den je seznam, ne mřížka: na hodinové ose zabírá tři čtvrtiny plochy
+ * prázdná noc. Čas nese sloupec vlevo.
  */
 
 import { useState } from 'react'
@@ -10,7 +10,7 @@ import * as data from '../demo/data'
 import { useLocal } from '../local'
 import { usePersona } from '../persona'
 import {
-  Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen,
+  Button, Card, Chip, Grid, Note, PageHead, Row, Screen, Stack,
   dueLabel, dueTone, formatDate, formatTime, formatWeekday,
 } from '../ui'
 
@@ -26,7 +26,11 @@ export function Dnes({ go }: { go: (r: string) => void }) {
   const isToday = day.toDateString() === new Date().toDateString()
 
   const events = [...data.events(orgId), ...local.events]
-    .filter((e) => (!mine || e.ownerPersonId === mine) && new Date(e.startAt).toDateString() === day.toDateString())
+    .filter(
+      (e) =>
+        (!mine || e.ownerPersonId === mine) &&
+        new Date(e.startAt).toDateString() === day.toDateString(),
+    )
     .sort((a, b) => a.startAt.localeCompare(b.startAt))
 
   const tasks = data
@@ -35,7 +39,8 @@ export function Dnes({ go }: { go: (r: string) => void }) {
     .filter((t) => t.status === 'open' && !local.doneTasks.has(t.id))
     .sort((a, b) => (a.dueOn ?? '').localeCompare(b.dueOn ?? ''))
 
-  const overdue = tasks.filter((t) => t.dueOn && new Date(t.dueOn) < new Date(new Date().toDateString()))
+  const today = new Date(new Date().toDateString())
+  const overdue = tasks.filter((t) => t.dueOn && new Date(t.dueOn) < today)
   const rest = tasks.filter((t) => !overdue.includes(t))
 
   const birthdays = data.children(orgId).filter((c) => {
@@ -44,91 +49,92 @@ export function Dnes({ go }: { go: (r: string) => void }) {
   })
 
   return (
-    <Screen>
-      <LargeTitle
+    <Screen wide>
+      <PageHead
         title={isToday ? 'Dnes' : formatWeekday(day)}
         subtitle={formatDate(day.toISOString())}
-        right={
-          <div className="flex gap-1 pt-1">
-            <Step onClick={() => setDay(new Date(day.getTime() - DAY_MS))}>‹</Step>
-            <Step onClick={() => setDay(new Date(day.getTime() + DAY_MS))}>›</Step>
-          </div>
+        actions={
+          <>
+            <Button size="sm" onClick={() => setDay(new Date(day.getTime() - DAY_MS))}>
+              ‹
+            </Button>
+            <Button size="sm" onClick={() => setDay(new Date())}>
+              Dnes
+            </Button>
+            <Button size="sm" onClick={() => setDay(new Date(day.getTime() + DAY_MS))}>
+              ›
+            </Button>
+          </>
         }
       />
 
-      {birthdays.length > 0 ? (
-        <Card>
-          {birthdays.map((c, i) => (
-            <div key={c.id}>
-              {i > 0 ? <Divider /> : null}
-              <Row
-                title={`Narozeniny — ${c.displayName}`}
-                subtitle={`${day.getFullYear() - new Date(c.birthDate).getFullYear()} let`}
-              />
-            </div>
-          ))}
-        </Card>
-      ) : null}
+      <Grid>
+        <Stack>
+          <Card title={`Schůzky (${events.length})`}>
+            {events.length === 0 ? (
+              <Note>{isToday ? 'Dnes nemáte žádnou schůzku.' : 'Nic naplánovaného.'}</Note>
+            ) : (
+              events.map((e) => (
+                <Row
+                  key={e.id}
+                  leading={
+                    <span className="w-12 shrink-0 tabular-nums">
+                      {e.allDay ? (
+                        <span className="text-copy-13 text-[var(--ds-gray-900)]">celý den</span>
+                      ) : (
+                        <>
+                          <span className="text-copy-14 block text-[var(--ds-gray-1000)]">
+                            {formatTime(e.startAt)}
+                          </span>
+                          <span className="text-copy-13 block text-[var(--ds-gray-700)]">
+                            {formatTime(e.endAt)}
+                          </span>
+                        </>
+                      )}
+                    </span>
+                  }
+                  title={e.title}
+                  subtitle={
+                    e.travelMinutesEstimate
+                      ? `cesta ${e.travelMinutesEstimate} min`
+                      : e.place ?? undefined
+                  }
+                  onClick={e.caseFileId ? () => go(`/spis/${e.caseFileId}`) : undefined}
+                />
+              ))
+            )}
+          </Card>
 
-      <GroupTitle>Schůzky</GroupTitle>
-      <Card>
-        {events.length === 0 ? (
-          <Note>{isToday ? 'Dnes nemáte žádnou schůzku.' : 'Nic naplánovaného.'}</Note>
-        ) : (
-          events.map((e, i) => (
-            <div key={e.id}>
-              {i > 0 ? <Divider /> : null}
-              <Row
-                leading={
-                  <div className="w-14 shrink-0 py-3">
-                    {e.allDay ? (
-                      <div className="text-copy-14 text-[var(--ds-gray-900)]">celý den</div>
-                    ) : (
-                      <>
-                        <div className="text-copy-16 text-[var(--ds-gray-1000)]">{formatTime(e.startAt)}</div>
-                        <div className="text-copy-14 text-[var(--ds-gray-700)]">{formatTime(e.endAt)}</div>
-                      </>
-                    )}
-                  </div>
-                }
-                title={e.title}
-                subtitle={
-                  e.travelMinutesEstimate ? `cesta ${e.travelMinutesEstimate} min` : e.place ?? undefined
-                }
-                onClick={e.caseFileId ? () => go(`/spis/${e.caseFileId}`) : undefined}
-              />
-            </div>
-          ))
-        )}
-      </Card>
+          {birthdays.length > 0 ? (
+            <Card title="Narozeniny">
+              {birthdays.map((c) => (
+                <Row
+                  key={c.id}
+                  title={c.displayName}
+                  subtitle={`${day.getFullYear() - new Date(c.birthDate).getFullYear()} let`}
+                  onClick={() => go(`/dite/${c.id}`)}
+                />
+              ))}
+            </Card>
+          ) : null}
+        </Stack>
 
-      {overdue.length > 0 ? (
-        <>
-          <GroupTitle>Po termínu</GroupTitle>
-          <Card>
-            {overdue.map((t, i) => (
-              <div key={t.id}>
-                {i > 0 ? <Divider /> : null}
-                <TaskRow task={t} go={go} />
-              </div>
+        <Stack>
+          {overdue.length > 0 ? (
+            <Card title={`Po termínu (${overdue.length})`}>
+              {overdue.map((t) => (
+                <TaskRow key={t.id} task={t} go={go} />
+              ))}
+            </Card>
+          ) : null}
+
+          <Card title={`Úkoly (${rest.length})`}>
+            {rest.length === 0 ? <Note>Nic otevřeného.</Note> : rest.map((t) => (
+              <TaskRow key={t.id} task={t} go={go} />
             ))}
           </Card>
-        </>
-      ) : null}
-
-      <GroupTitle>Úkoly</GroupTitle>
-      <Card>
-        {rest.length === 0 ? (
-          <Note>Nic otevřeného.</Note>
-        ) : (
-          rest.map((t, i) => (
-            <div key={t.id}>
-              {i > 0 ? <Divider /> : null}
-              <TaskRow task={t} go={go} />
-            </div>
-          ))
-        )}
-      </Card>
+        </Stack>
+      </Grid>
     </Screen>
   )
 }
@@ -136,34 +142,26 @@ export function Dnes({ go }: { go: (r: string) => void }) {
 function TaskRow({ task, go }: { task: data.TaskRow; go: (r: string) => void }) {
   const local = useLocal()
   return (
-    <Row
-      leading={
-        <button
-          type="button"
-          aria-label="Hotovo"
-          onClick={() => local.toggleTask(task.id)}
-          className="my-3 h-[22px] w-[22px] shrink-0 rounded-full shadow-[0_0_0_1.5px_var(--ds-gray-500)]"
-        />
-      }
-      title={task.title}
-      wrapTitle
-      subtitle={task.subjectDisplayName ?? undefined}
-      meta={
-        task.dueOn ? <Meta tone={dueTone(task.dueOn)}>{dueLabel(task.dueOn)}</Meta> : undefined
-      }
-      onClick={task.caseFileId ? () => go(`/spis/${task.caseFileId}`) : undefined}
-    />
-  )
-}
-
-function Step({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="text-copy-16 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--ds-background-100)] text-[var(--ds-gray-1000)] shadow-[var(--ds-shadow-border-small)]"
-    >
-      {children}
-    </button>
+    <div className="flex items-center gap-3 border-b border-[var(--ds-gray-alpha-400)] px-4 py-2.5 last:border-0">
+      <button
+        type="button"
+        aria-label="Hotovo"
+        onClick={() => local.toggleTask(task.id)}
+        className="h-4 w-4 shrink-0 rounded border border-[var(--ds-gray-600)] hover:border-[var(--ds-purple-700)]"
+      />
+      <button
+        type="button"
+        onClick={() => (task.caseFileId ? go(`/spis/${task.caseFileId}`) : undefined)}
+        className="min-w-0 flex-1 text-left"
+      >
+        <span className="text-copy-14 block text-[var(--ds-gray-1000)]">{task.title}</span>
+        {task.subjectDisplayName ? (
+          <span className="text-copy-13 block truncate text-[var(--ds-gray-900)]">
+            {task.subjectDisplayName}
+          </span>
+        ) : null}
+      </button>
+      {task.dueOn ? <Chip tone={dueTone(task.dueOn)}>{dueLabel(task.dueOn)}</Chip> : null}
+    </div>
   )
 }

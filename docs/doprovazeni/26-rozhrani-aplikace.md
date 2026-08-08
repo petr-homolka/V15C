@@ -29,7 +29,16 @@ navigace vedle sebe a člověk pak neví, kde co hledat.
 Na širokém displeji menu nezmizí a stojí jako sloupec vedle obsahu. Je to
 jedna komponenta se dvěma chováními, ne dvě navigace.
 
-### 2.1 Co je v řádku seznamu
+### 2.1 Seznam na plochu je tabulka
+
+Panel vlevo nese **krátký** seznam a hledání; celý seznam se otevírá na plochu
+jako tabulka se sloupci (kde to je, kdo to má, do kdy). Dvacet rodin se
+porovnává po sloupcích a v pruhu 320 px to nejde.
+
+Na mobilu se tatáž data vykreslí jako řádky — šest sloupců na 390 px není
+tabulka, ale hlavolam.
+
+### 2.2 Co je v řádku seznamu
 
 | Je tam | Není tam |
 | --- | --- |
@@ -46,7 +55,7 @@ nedá přečíst od pohledu, je šum; navíc se podle názvu ani značky nic neh
 (dok. 25). UID je vidět v profilu, kde slouží k dohledání a k nadiktování po
 telefonu.
 
-### 2.2 Seskupení se přepíná
+### 2.3 Seskupení se přepíná
 
 Abecedně · podle obce · podle termínu · podle vlastního označení.
 
@@ -56,7 +65,7 @@ obrazovky a člověk se v tom neztratí, protože se mění jen pořadí, ne obs
 Seskupení podle termínu má vlastní pořadí skupin: **Po termínu, Tento týden,
 Do měsíce, Později, Bez termínu.** Abeceda by tu byla k ničemu.
 
-### 2.3 Upozornění je v seznamu, ne až v detailu
+### 2.4 Upozornění je v seznamu, ne až v detailu
 
 Co je po termínu, svítí červeně přímo v řádku. Do dvou týdnů oranžově. Dál
 nic — kdyby svítilo všechno, přestane svítit cokoli.
@@ -103,14 +112,36 @@ z toho nálepkovací systém na rodiny — a to je přesně to, co charta zakazu
 
 ---
 
-## 5. Barva
+## 5. Barva — a proč jí je málo
 
-Přízvuk je **fialová** (`--ds-purple-*`): aktivní záložka, tlačítko odeslání,
-hlavička profilu, odkazy. Doplňkové barvy nesou význam — červená po termínu,
-oranžová blízký termín, tyrkysová kniha života.
+První pokus o „barevnější" verzi obarvil všechno: fialové hlavičky, barevné
+avatary u každého řádku, bubliny u každého údaje. Vypadalo to jako hračka.
+Platí proto tvrdé pravidlo:
+
+> **Barva něco znamená, jinak tam není.**
+
+| Kde | Co |
+| --- | --- |
+| fialová | hlavní akce, aktivní položka, odkaz — **nic víc** |
+| červená | po termínu |
+| jantarová | termín do čtrnácti dnů |
+| šedá | všechno ostatní |
+
+Z toho plyne i to, co barevné **není**: hlavička profilu, karty, avatary
+dospělých, štítky stavu. Termín se štítkem označí jen tehdy, když hoří —
+datum za půl roku je údaj, ne varování.
+
+Plochu drží zapuštěná šeď, karta je světlá s vlasovou linkou. Žádné velké
+stíny: stín říká „tohle pluje nad stránkou", a v administraci nepluje nic.
 
 Všechno jsou to tokeny. V kódu není jediný hex (CLAUDE.md), takže světlý i
 tmavý režim vychází sám a případná změna palety je jedna změna.
+
+## 5.1 Hustota
+
+Pracovní, ne prezentační: řádek 44 px, popisek 13 px šedý, hodnota 14 px
+tmavá. Klíčová osoba se dívá na dvacet rodin, ne na jednu — a čím víc se jich
+vejde na obrazovku, tím míň scrolluje.
 
 ---
 

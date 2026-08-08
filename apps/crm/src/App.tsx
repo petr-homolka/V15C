@@ -15,6 +15,8 @@ import { Ja } from './screens/ja'
 import { Dite } from './screens/dite'
 import { Pestoun } from './screens/pestoun'
 import { Rodina } from './screens/rodina'
+import { Seznam } from './screens/seznam'
+import type { Segment } from './shell'
 
 function useRoute(): [string, (r: string) => void] {
   const [route, setRoute] = useState(() => window.location.hash.slice(1) || '/')
@@ -45,6 +47,8 @@ function Router() {
   else if (route === '/ja') screen = <Ja go={go} />
   else if (route.startsWith('/rodina/')) {
     screen = <Rodina id={route.slice('/rodina/'.length)} go={go} />
+  } else if (route.startsWith('/seznam/')) {
+    screen = <Seznam segment={route.slice('/seznam/'.length) as Segment} go={go} />
   } else if (route.startsWith('/pestoun/')) {
     screen = <Pestoun id={route.slice('/pestoun/'.length)} go={go} />
   } else if (route.startsWith('/dite/')) {

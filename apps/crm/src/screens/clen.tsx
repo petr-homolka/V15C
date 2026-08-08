@@ -1,15 +1,15 @@
 /**
- * Člen týmu. Kolik má ve správě a co mu utíká — víc o kolegovi vidět nemá
+ * Člen týmu. Kolik má ve správě a co u něj běží — víc o kolegovi vidět nemá
  * být (charta: systém nehlídá lidi, dok. 16).
  */
 
 import * as data from '../demo/data'
 import * as L from '../labels'
 import { usePersona } from '../persona'
-import { Face } from '../face'
+import { ProfileHeader } from './profil'
 import {
-  Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen,
-  childCountLabel, dueLabel, dueTone,
+  Card, Due, Chip, Note, PageHead, Screen, Stack, Table, Td, Tr,
+  childCountLabel, dueTone, formatDate, formatUid,
 } from '../ui'
 
 export function Clen({ id, go }: { id: string; go: (r: string) => void }) {
@@ -21,7 +21,7 @@ export function Clen({ id, go }: { id: string; go: (r: string) => void }) {
   if (!person) {
     return (
       <Screen>
-        <LargeTitle title="Člen týmu" back={() => go('/')} />
+        <PageHead title="Člen týmu" back={() => go('/seznam/tym')} />
         <Card>
           <Note>Tahle osoba tu není.</Note>
         </Card>
@@ -29,41 +29,58 @@ export function Clen({ id, go }: { id: string; go: (r: string) => void }) {
     )
   }
 
+  const contact = data.contactOfPerson(orgId, id)
   const files = data.caseFiles(orgId).filter((c) => c.keyWorkerPersonId === id)
   const ids = new Set(files.map((f) => f.agreementId))
   const agreements = data.agreements(orgId).filter((a) => ids.has(a.id))
 
   return (
-    <Screen>
-      <LargeTitle
-        title={person.displayName}
-        subtitle={member ? L.memberRole(member.role) : undefined}
-        back={() => go('/')}
-      />
+    <Screen wide>
+      <PageHead title="Karta člena týmu" back={() => go('/seznam/tym')} />
 
-      <GroupTitle>Ve správě</GroupTitle>
-      <Card>
-        {agreements.length === 0 ? (
-          <Note>Žádná dohoda ve správě.</Note>
-        ) : (
-          agreements.map((a, i) => (
-            <div key={a.id}>
-              {i > 0 ? <Divider /> : null}
-              <Row
-                leading={<Face uid={a.id} kind="family" name={a.naming.displayName} />}
-                title={a.naming.displayName}
-                subtitle={[data.townOfAgreement(orgId, a.id), childCountLabel(a.childCount)].filter(Boolean).join(' · ')}
-                meta={
-                  a.nextObligationDueOn ? (
-                    <Meta tone={dueTone(a.nextObligationDueOn)}>{dueLabel(a.nextObligationDueOn)}</Meta>
-                  ) : undefined
-                }
-                onClick={() => go(`/rodina/${a.id}`)}
-              />
-            </div>
-          ))
-        )}
-      </Card>
+      <Stack>
+        <ProfileHeader
+          uid={id}
+          name={person.displayName}
+          facts={[
+            ...(member ? [{ icon: 'tag' as const, text: L.memberRole(member.role) }] : []),
+            ...(contact?.address?.city ? [{ icon: 'pin' as const, text: contact.address.city }] : []),
+            { icon: 'home', text: `${agreements.length} dohod ve správě` },
+            { icon: 'tag', text: formatUid(id) },
+          ]}
+          onEditImage={() => undefined}
+        />
+
+        <Card title="Dohody ve správě">
+          {agreements.length === 0 ? (
+            <Note>Žádná dohoda ve správě.</Note>
+          ) : (
+            <Table
+              columns={[
+                { label: 'Rodina' },
+                { label: 'Obec', hide: 'sm' },
+                { label: 'Děti', hide: 'md' },
+                { label: 'Nejbližší lhůta', align: 'right' },
+              ]}
+            >
+              {agreements.map((a) => (
+                <Tr key={a.id} onClick={() => go(`/rodina/${a.id}`)}>
+                  <Td>{a.naming.displayName}</Td>
+                  <Td hide="sm" muted>
+                    {data.townOfAgreement(orgId, a.id) ?? '—'}
+                  </Td>
+                  <Td hide="md" muted>
+                    {childCountLabel(a.childCount)}
+                  </Td>
+                  <Td align="right">
+                    <Due iso={a.nextObligationDueOn} />
+                  </Td>
+                </Tr>
+              ))}
+            </Table>
+          )}
+        </Card>
+      </Stack>
     </Screen>
   )
 }

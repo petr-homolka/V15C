@@ -1,32 +1,34 @@
 /**
  * Karta rodiny.
  *
- * Nahoře kdo to je, pak přepínač na čtyři pohledy. Záznamy jsou tu hlavní
- * obsah, proto mají odstavec textu, ne jen datum vpravo.
+ * Hlavička, čtyři karty pod sebou v mřížce. Záznamy mají vlastní kartu se
+ * záložkami, protože jich bývají desítky — a to už je tabulka, ne seznam.
  */
 
 import { useState } from 'react'
 import * as data from '../demo/data'
+import { Face, FacePicker } from '../face'
 import * as L from '../labels'
 import { usePersona } from '../persona'
-import { Face } from '../face'
+import { ProfileHeader } from './profil'
 import {
-  Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen, Segmented,
-  childCountLabel, dueLabel, dueTone, formatDate, formatUid,
+  Card, Due, Chip, Grid, InfoRow, Note, PageHead, Row, Screen, Segmented, Stack,
+  Table, Td, Tr, childCountLabel, dueLabel, dueTone, formatDate, formatUid,
 } from '../ui'
 
-type Tab = 'prehled' | 'zaznamy' | 'lhuty' | 'dokumenty'
+type Tab = 'zaznamy' | 'lhuty' | 'dokumenty'
 
 export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
   const { persona } = usePersona()
   const orgId = persona.organizationId!
-  const [tab, setTab] = useState<Tab>('prehled')
+  const [tab, setTab] = useState<Tab>('zaznamy')
+  const [picker, setPicker] = useState(false)
 
   const agreement = data.agreements(orgId).find((a) => a.id === id)
   if (!agreement) {
     return (
       <Screen>
-        <LargeTitle title="Rodina" back={() => go('/')} />
+        <PageHead title="Rodina" back={() => go('/seznam/dohody')} />
         <Card>
           <Note>Tahle rodina tu není.</Note>
         </Card>
@@ -39,45 +41,39 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
   const due = data.obligationsOfAgreement(orgId, id)
   const entries = file ? data.entries(orgId, file.id) : []
   const docs = file ? data.documents(orgId, file.id) : []
+  const town = data.townOfAgreement(orgId, id)
 
   return (
-    <Screen>
-      <LargeTitle
-        title={agreement.naming.displayName}
-        subtitle={[data.townOfAgreement(orgId, id), L.custodyBasis(agreement.custodyBasis)]
-          .filter(Boolean)
-          .join(' · ')}
-        back={() => go('/')}
-        right={
-          agreement.status !== 'active' ? (
-            <div className="pt-2">
-              <Meta tone="amber">{L.agreementStatus(agreement.status)}</Meta>
-            </div>
-          ) : undefined
-        }
-      />
+    <Screen wide>
+      <PageHead title="Karta rodiny" back={() => go('/seznam/dohody')} />
 
-      <Segmented
-        value={tab}
-        onChange={setTab}
-        options={[
-          ['prehled', 'Přehled'],
-          ['zaznamy', 'Záznamy'],
-          ['lhuty', 'Lhůty'],
-          ['dokumenty', 'Dokumenty'],
-        ]}
-      />
+      <Stack>
+        <ProfileHeader
+          uid={id}
+          kind="family"
+          name={agreement.naming.displayName}
+          facts={[
+            ...(town ? [{ icon: 'pin' as const, text: town }] : []),
+            { icon: 'tag', text: L.custodyBasis(agreement.custodyBasis) },
+            { icon: 'home', text: childCountLabel(kids.length) },
+            ...(file ? [{ icon: 'tag' as const, text: file.reference }] : []),
+          ]}
+          actions={
+            agreement.status !== 'active' ? (
+              <Chip tone="amber">{L.agreementStatus(agreement.status)}</Chip>
+            ) : undefined
+          }
+          onEditImage={() => setPicker(true)}
+        />
 
-      {tab === 'prehled' ? (
-        <>
-          <GroupTitle>Pečující osoby</GroupTitle>
-          <Card>
-            {agreement.carerPersonIds.map((pid, i) => {
-              const p = data.person(orgId, pid)
-              return (
-                <div key={pid}>
-                  {i > 0 ? <Divider /> : null}
+        <Grid>
+          <Stack>
+            <Card title="Pečující osoby">
+              {agreement.carerPersonIds.map((pid) => {
+                const p = data.person(orgId, pid)
+                return (
                   <Row
+                    key={pid}
                     leading={<Face uid={pid} name={p?.displayName ?? '?'} />}
                     title={p?.displayName ?? pid}
                     subtitle={[data.townOfPerson(orgId, pid), L.carerKind(agreement.carerKind)]
@@ -85,129 +81,169 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
                       .join(' · ')}
                     onClick={() => go(`/pestoun/${pid}`)}
                   />
-                </div>
-              )
-            })}
-          </Card>
+                )
+              })}
+            </Card>
 
-          <GroupTitle>{childCountLabel(kids.length)}</GroupTitle>
-          <Card>
-            {kids.length === 0 ? (
-              <Note>
-                Bez svěřeného dítěte. U osoby v evidenci je to platný stav — dohoda visí na
-                zápisu v evidenci, ne na dítěti.
-              </Note>
-            ) : (
-              kids.map((c, i) => (
-                <div key={c.id}>
-                  {i > 0 ? <Divider /> : null}
+            <Card title={`Děti (${kids.length})`}>
+              {kids.length === 0 ? (
+                <Note>
+                  Bez svěřeného dítěte. U osoby v evidenci je to platný stav — dohoda visí na
+                  zápisu v evidenci, ne na dítěti.
+                </Note>
+              ) : (
+                kids.map((c) => (
                   <Row
+                    key={c.id}
                     leading={<Face uid={c.id} kind="child" name={c.displayName} />}
                     title={c.displayName}
                     subtitle={[data.townOfChild(orgId, c.id), `nar. ${formatDate(c.birthDate)}`]
                       .filter(Boolean)
                       .join(' · ')}
-                    meta={c.careEndedOn ? <Meta>péče ukončena</Meta> : undefined}
+                    meta={c.careEndedOn ? <Chip>péče ukončena</Chip> : undefined}
                     onClick={() => go(`/dite/${c.id}`)}
                   />
-                </div>
-              ))
-            )}
-          </Card>
-
-          <GroupTitle>Spis</GroupTitle>
-          <Card>
-            <Row title="Spisová značka" meta={<Meta>{file?.reference ?? '—'}</Meta>} />
-            <Divider />
-            <Row title="UID" meta={<Meta><span className="font-mono">{formatUid(id)}</span></Meta>} />
-            <Divider />
-            <Row title="Klíčová osoba" meta={<Meta>{file?.keyWorkerDisplayName ?? '—'}</Meta>} />
-            <Divider />
-            <Row title="Uzavřeno" meta={<Meta>{formatDate(agreement.concludedOn)}</Meta>} />
-            {file?.archivedOn ? (
-              <>
-                <Divider />
-                <Row title="Archivováno" meta={<Meta>{formatDate(file.archivedOn)}</Meta>} />
-              </>
-            ) : null}
-          </Card>
-        </>
-      ) : null}
-
-      {tab === 'zaznamy' ? (
-        <>
-          <GroupTitle>{entries.length} záznamů</GroupTitle>
-          <Card>
-            {entries.length === 0 ? (
-              <Note>Zatím nic.</Note>
-            ) : (
-              [...entries]
-                .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))
-                .slice(0, 40)
-                .map((e, i) => (
-                  <div key={e.id}>
-                    {i > 0 ? <Divider /> : null}
-                    <div className="px-4 py-3">
-                      <div className="flex items-baseline justify-between gap-3">
-                        <span className="text-copy-16 text-[var(--ds-gray-1000)]">
-                          {L.entryKind(e.kind)}
-                        </span>
-                        <Meta>{formatDate(e.occurredAt)}</Meta>
-                      </div>
-                      {e.summary ? (
-                        <p className="text-copy-14 pt-1 text-[var(--ds-gray-900)]">{e.summary}</p>
-                      ) : null}
-                    </div>
-                  </div>
                 ))
-            )}
-          </Card>
-        </>
-      ) : null}
+              )}
+            </Card>
+          </Stack>
 
-      {tab === 'lhuty' ? (
-        <>
-          <GroupTitle>{due.length} lhůt</GroupTitle>
-          <Card>
-            {due.length === 0 ? (
-              <Note>Žádná lhůta neběží.</Note>
-            ) : (
-              due.map((o, i) => (
-                <div key={o.id}>
-                  {i > 0 ? <Divider /> : null}
+          <Stack>
+            <Card title="Spis">
+              <InfoRow label="Spisová značka">{file?.reference ?? '—'}</InfoRow>
+              <InfoRow label="Klíčová osoba">{file?.keyWorkerDisplayName ?? '—'}</InfoRow>
+              <InfoRow label="Uzavřeno">{formatDate(agreement.concludedOn)}</InfoRow>
+              <InfoRow label="Postavení">{L.carerKind(agreement.carerKind)}</InfoRow>
+              <InfoRow label="UID">
+                <span className="font-mono">{formatUid(id)}</span>
+              </InfoRow>
+              {file?.archivedOn ? (
+                <InfoRow label="Archivováno">{formatDate(file.archivedOn)}</InfoRow>
+              ) : null}
+            </Card>
+
+            <Card title={`Lhůty (${due.length})`}>
+              {due.length === 0 ? (
+                <Note>Žádná lhůta neběží.</Note>
+              ) : (
+                due.map((o) => (
                   <Row
+                    key={o.id}
                     title={L.obligationKind(o.kind)}
                     subtitle={`${o.subjectDisplayName} · ${formatDate(o.dueOn)}`}
-                    meta={<Meta tone={dueTone(o.dueOn)}>{dueLabel(o.dueOn)}</Meta>}
+                    meta={<Due iso={o.dueOn} />}
                   />
-                </div>
-              ))
-            )}
-          </Card>
-        </>
-      ) : null}
+                ))
+              )}
+            </Card>
+          </Stack>
+        </Grid>
 
-      {tab === 'dokumenty' ? (
-        <>
-          <GroupTitle>{docs.length} dokumentů</GroupTitle>
-          <Card>
-            {docs.length === 0 ? (
+        <Card
+          title="Spisový obsah"
+          action={
+            <Segmented
+              value={tab}
+              onChange={setTab}
+              options={[
+                ['zaznamy', `Záznamy (${entries.length})`],
+                ['lhuty', `Lhůty (${due.length})`],
+                ['dokumenty', `Dokumenty (${docs.length})`],
+              ]}
+            />
+          }
+        >
+          {tab === 'zaznamy' ? (
+            entries.length === 0 ? (
               <Note>Zatím nic.</Note>
             ) : (
-              docs.map((d, i) => (
-                <div key={d.id}>
-                  {i > 0 ? <Divider /> : null}
-                  <Row
-                    title={d.title}
-                    subtitle={L.documentCategory(d.category)}
-                    meta={d.indexStatus === 'queued' ? <Meta tone="blue">čeká na Eli</Meta> : undefined}
-                    onClick={() => undefined}
-                  />
-                </div>
-              ))
-            )}
-          </Card>
-        </>
+              <Table
+                columns={[
+                  { label: 'Druh' },
+                  { label: 'Shrnutí', hide: 'sm' },
+                  { label: 'Datum', align: 'right' },
+                ]}
+              >
+                {[...entries]
+                  .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))
+                  .slice(0, 40)
+                  .map((e) => (
+                    <Tr key={e.id}>
+                      <Td>{L.entryKind(e.kind)}</Td>
+                      <Td hide="sm" muted>
+                        {e.summary ?? '—'}
+                      </Td>
+                      <Td align="right" muted>
+                        {formatDate(e.occurredAt)}
+                      </Td>
+                    </Tr>
+                  ))}
+              </Table>
+            )
+          ) : null}
+
+          {tab === 'lhuty' ? (
+            <Table
+              columns={[
+                { label: 'Povinnost' },
+                { label: 'Koho se týká', hide: 'sm' },
+                { label: 'Termín', align: 'right' },
+              ]}
+            >
+              {due.map((o) => (
+                <Tr key={o.id}>
+                  <Td>{L.obligationKind(o.kind)}</Td>
+                  <Td hide="sm" muted>
+                    {o.subjectDisplayName}
+                  </Td>
+                  <Td align="right">
+                    <Due iso={o.dueOn} />
+                  </Td>
+                </Tr>
+              ))}
+            </Table>
+          ) : null}
+
+          {tab === 'dokumenty' ? (
+            docs.length === 0 ? (
+              <Note>Zatím nic.</Note>
+            ) : (
+              <Table
+                columns={[
+                  { label: 'Název' },
+                  { label: 'Druh', hide: 'sm' },
+                  { label: 'Verze', align: 'right' },
+                ]}
+              >
+                {docs.map((d) => (
+                  <Tr key={d.id}>
+                    <Td>
+                      <span className="flex items-center gap-2">
+                        {d.title}
+                        {d.indexStatus === 'queued' ? <Chip>čeká na Eli</Chip> : null}
+                      </span>
+                    </Td>
+                    <Td hide="sm" muted>
+                      {L.documentCategory(d.category)}
+                    </Td>
+                    <Td align="right" muted>
+                      {d.currentVersionNo}
+                    </Td>
+                  </Tr>
+                ))}
+              </Table>
+            )
+          ) : null}
+        </Card>
+      </Stack>
+
+      {picker ? (
+        <FacePicker
+          uid={id}
+          kind="family"
+          name={agreement.naming.displayName}
+          onClose={() => setPicker(false)}
+        />
       ) : null}
     </Screen>
   )

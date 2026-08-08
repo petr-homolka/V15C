@@ -1,41 +1,31 @@
 /**
- * Skořápka: horní lišta a **skrývající se levé menu** se seznamy.
+ * Skořápka: postranní panel a horní lišta.
  *
- * V řádku seznamu je jen to, co Klíčová osoba potřebuje, než někam klikne:
- * **obrázek, jméno, obec a upozornění.** Spisová značka ani UID tam nejsou —
- * opakovat je u každého řádku je šum a nic se podle nich nehledá (dok. 25).
- * UID je vidět až v profilu, kde slouží k dohledání.
+ * Panel je **navigace, ne obsah**. Nese přepínač čtyř oblastí, hledání a
+ * krátký seznam; celý seznam se otevírá na plochu jako tabulka, protože
+ * dvacet rodin se v pruhu 320 px neprohlíží.
  *
- * Seskupení se přepíná: abecedně, podle obce, podle nejbližšího termínu nebo
- * podle vlastního barevného označení. Jeden seznam, čtyři způsoby, jak se na
- * něj kouknout — to je levnější než čtyři obrazovky.
+ * Na širokém displeji panel stojí, na mobilu se vysouvá. Jedna komponenta,
+ * dvě chování.
  */
 
 import { useMemo, useState, type ReactNode } from 'react'
 import * as data from './demo/data'
-import { Face, TINT_BG, type FaceKind, type Tint, faceOf } from './face'
+import { Face, type FaceKind } from './face'
 import * as L from './labels'
 import { usePersona } from './persona'
-import { Chevron, daysUntil, dueBadge, formatShort } from './ui'
+import { Chevron, Chip, Field, daysUntil, dueBadge, type Tone } from './ui'
 
-type Segment = 'dohody' | 'pestouni' | 'deti' | 'tym'
-type Grouping = 'abeceda' | 'obec' | 'termin' | 'znacka'
+export type Segment = 'dohody' | 'pestouni' | 'deti' | 'tym'
 
-const SEGMENTS: Array<[Segment, string]> = [
+export const SEGMENTS: Array<[Segment, string]> = [
   ['dohody', 'Dohody'],
   ['pestouni', 'Pěstouni'],
   ['deti', 'Děti'],
   ['tym', 'Tým'],
 ]
 
-const GROUPINGS: Array<[Grouping, string]> = [
-  ['abeceda', 'Abecedně'],
-  ['obec', 'Podle obce'],
-  ['termin', 'Podle termínu'],
-  ['znacka', 'Podle označení'],
-]
-
-const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+export const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
 /* ------------------------------------------------------------------ */
 
@@ -50,11 +40,9 @@ export function Shell({
 }) {
   const [open, setOpen] = useState(false)
 
-  // Na širokém displeji menu nezmizí — je to sloupec vedle obsahu. Na mobilu
-  // se vysouvá. Jedna komponenta, dvě chování; druhá navigace by se rozešla.
   return (
-    <div className="min-h-full bg-[var(--ds-background-100)] lg:pl-80">
-      <TopBar onMenu={() => setOpen(true)} go={go} />
+    <div className="min-h-full bg-[var(--ds-background-200)] lg:pl-[17.5rem]">
+      <TopBar onMenu={() => setOpen(true)} go={go} route={route} />
       {children}
 
       <div
@@ -63,7 +51,7 @@ export function Shell({
           open ? 'opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
-      <Drawer
+      <Sidebar
         open={open}
         route={route}
         close={() => setOpen(false)}
@@ -76,31 +64,65 @@ export function Shell({
   )
 }
 
-function TopBar({ onMenu, go }: { onMenu: () => void; go: (r: string) => void }) {
+function TopBar({
+  onMenu,
+  go,
+  route,
+}: {
+  onMenu: () => void
+  go: (r: string) => void
+  route: string
+}) {
   const { persona } = usePersona()
   return (
-    <header className="sticky top-0 z-30 bg-[var(--ds-background-100)]/85 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
-      <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-2 px-3">
+    <header className="sticky top-0 z-30 border-b border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] pt-[env(safe-area-inset-top)]">
+      <div className="mx-auto flex h-14 w-full max-w-6xl items-center gap-2 px-4 sm:px-6">
         <span className="lg:hidden">
           <IconButton label="Menu" onClick={onMenu}>
             <path d="M3 5h18M3 12h18M3 19h18" />
           </IconButton>
         </span>
+
+        <span className="text-copy-14 hidden text-[var(--ds-gray-900)] lg:block">
+          {breadcrumb(route)}
+        </span>
+
         <div className="flex-1" />
+
+        <span className="text-label-13 hidden rounded-md border border-[var(--ds-gray-alpha-400)] px-2 py-1 text-[var(--ds-gray-900)] sm:inline-flex">
+          {persona.organizationName ?? 'Systém'}
+        </span>
+
         <button
           type="button"
-          onClick={() => go('/dnes')}
-          className="text-label-13 rounded-full bg-[var(--ds-purple-100)] px-3 py-1.5 text-[var(--ds-purple-900)]"
+          onClick={() => go('/ja')}
+          aria-label="Pohled"
+          className="flex items-center gap-2 rounded-lg px-1 py-1 hover:bg-[var(--ds-gray-100)]"
         >
-          {persona.organizationName ?? 'Systém'}
-        </button>
-        <div className="flex-1" />
-        <button type="button" onClick={() => go('/ja')} aria-label="Pohled">
           <Face uid={persona.personId ?? persona.key} name={persona.displayName} />
+          <span className="text-copy-14 hidden text-[var(--ds-gray-1000)] md:block">
+            {persona.displayName}
+          </span>
+          <Chevron />
         </button>
       </div>
     </header>
   )
+}
+
+function breadcrumb(route: string): string {
+  if (route === '/') return 'Eli'
+  if (route === '/dnes') return 'Dnes'
+  if (route.startsWith('/seznam/')) {
+    const seg = route.slice('/seznam/'.length) as Segment
+    return SEGMENTS.find(([k]) => k === seg)?.[1] ?? 'Seznam'
+  }
+  if (route.startsWith('/rodina/')) return 'Dohody · karta rodiny'
+  if (route.startsWith('/pestoun/')) return 'Pěstouni · karta'
+  if (route.startsWith('/dite/')) return 'Děti · karta'
+  if (route.startsWith('/clen/')) return 'Tým · karta'
+  if (route === '/ja') return 'Pohled'
+  return ''
 }
 
 export function IconButton({
@@ -117,7 +139,7 @@ export function IconButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="flex h-10 w-10 items-center justify-center rounded-xl text-[var(--ds-gray-900)] active:bg-[var(--ds-gray-100)]"
+      className="flex h-9 w-9 items-center justify-center rounded-lg text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-100)]"
     >
       <svg
         viewBox="0 0 24 24"
@@ -137,7 +159,7 @@ export function IconButton({
 
 /* ------------------------------------------------------------------ */
 
-function Drawer({
+function Sidebar({
   open,
   close,
   go,
@@ -151,23 +173,23 @@ function Drawer({
   const { persona } = usePersona()
   const orgId = persona.organizationId
   const [segment, setSegment] = useState<Segment>('dohody')
-  const [grouping, setGrouping] = useState<Grouping>('abeceda')
   const [q, setQ] = useState('')
 
-  const items = useMemo(() => list(segment, orgId, persona), [segment, orgId, persona])
-  const shown = q.trim()
-    ? items.filter((i) => fold(`${i.name} ${i.town ?? ''} ${i.note ?? ''}`).includes(fold(q.trim())))
-    : items
+  const items = useMemo(() => listOf(segment, orgId, persona), [segment, orgId, persona])
+  const shown = (
+    q.trim() ? items.filter((i) => fold(`${i.name} ${i.town ?? ''}`).includes(fold(q.trim()))) : items
+  ).slice(0, 40)
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-50 flex w-[20rem] max-w-[88vw] flex-col border-r border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-200)] transition-transform duration-200 lg:translate-x-0 lg:shadow-none ${
-        open ? 'translate-x-0 shadow-[var(--ds-shadow-modal)]' : '-translate-x-full'
+      className={`fixed inset-y-0 left-0 z-50 flex w-[17.5rem] max-w-[86vw] flex-col border-r border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] transition-transform duration-200 lg:translate-x-0 ${
+        open ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <div className="flex items-center gap-2 px-3 pt-[calc(env(safe-area-inset-top)+0.75rem)]">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--ds-purple-700)]">
-          <span className="text-label-14 text-white">E</span>
+      {/* --- značka -------------------------------------------------- */}
+      <div className="flex h-14 items-center gap-2.5 border-b border-[var(--ds-gray-alpha-400)] px-4 pt-[env(safe-area-inset-top)]">
+        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--ds-purple-700)]">
+          <span className="text-label-13 text-white">E</span>
         </div>
         <span className="text-heading-16 flex-1 text-[var(--ds-gray-1000)]">Doprovázení</span>
         <span className="lg:hidden">
@@ -177,95 +199,87 @@ function Drawer({
         </span>
       </div>
 
-      <div className="px-3 pt-3">
-        <div className="flex rounded-xl bg-[var(--ds-gray-200)] p-0.5">
-          {SEGMENTS.map(([key, label]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setSegment(key)}
-              className={`text-label-13 h-8 flex-1 rounded-[10px] transition-colors ${
-                key === segment
-                  ? 'bg-[var(--ds-background-100)] text-[var(--ds-purple-900)] shadow-[var(--ds-shadow-small)]'
-                  : 'text-[var(--ds-gray-900)]'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="px-3 pt-3">
-        <DrawerRow
-          icon={<path d="M12 5v14M5 12h14" />}
-          label="Nový dotaz pro Eli"
+      {/* --- co je pořád po ruce ------------------------------------- */}
+      <nav className="px-2 py-2">
+        <NavItem
+          icon={<path d="M21 12a8 8 0 0 1-8 8 9 9 0 0 1-2.6-.4L5 21l1.4-3.3A8 8 0 1 1 21 12Z" />}
+          label="Eli"
           active={route === '/'}
           onClick={() => go('/')}
         />
-        <DrawerRow
+        <NavItem
           icon={<path d="M7 3v3m10-3v3M4 9h16M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z" />}
           label="Dnes"
           active={route === '/dnes'}
           onClick={() => go('/dnes')}
         />
+      </nav>
+
+      {/* --- oblasti ------------------------------------------------- */}
+      <div className="border-t border-[var(--ds-gray-alpha-400)]">
+        <div className="flex px-2">
+          {SEGMENTS.map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setSegment(key)}
+              className={`text-label-13 relative flex-1 py-2.5 ${
+                key === segment
+                  ? 'text-[var(--ds-gray-1000)]'
+                  : 'text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)]'
+              }`}
+            >
+              {label}
+              {key === segment ? (
+                <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[var(--ds-purple-700)]" />
+              ) : null}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="px-3 pt-3">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Hledat jméno nebo obec"
-          className="text-copy-14 w-full rounded-xl bg-[var(--ds-background-100)] px-3 py-2 text-[var(--ds-gray-1000)] shadow-[var(--ds-shadow-border-small)] outline-none placeholder:text-[var(--ds-gray-700)]"
-        />
+      <div className="border-t border-[var(--ds-gray-alpha-400)] px-3 py-2.5">
+        <Field value={q} onChange={setQ} placeholder="Hledat jméno nebo obec" />
       </div>
 
-      {/* Jak se na seznam koukám. Vodorovné, ať se to nerozlije do výšky. */}
-      <div className="flex gap-1.5 overflow-x-auto px-3 pt-2.5 pb-1">
-        {GROUPINGS.map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setGrouping(key)}
-            className={`text-label-12 shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 ${
-              key === grouping
-                ? 'bg-[var(--ds-purple-700)] text-white'
-                : 'bg-[var(--ds-background-100)] text-[var(--ds-gray-900)] shadow-[var(--ds-shadow-border-small)]'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-1 flex-1 overflow-y-auto px-3 pb-3">
+      {/* --- krátký seznam ------------------------------------------- */}
+      <div className="flex-1 overflow-y-auto px-2 pb-2">
         {shown.length === 0 ? (
-          <p className="text-copy-14 px-2 py-4 text-[var(--ds-gray-900)]">Nic tu není.</p>
+          <p className="text-copy-13 px-2 py-3 text-[var(--ds-gray-900)]">Nic tu není.</p>
         ) : (
-          group(shown, grouping).map(([title, rows]) => (
-            <div key={title}>
-              <h3 className="text-label-12 px-2 pb-1 pt-3 text-[var(--ds-gray-700)]">
-                {title} <span className="text-[var(--ds-gray-600)]">· {rows.length}</span>
-              </h3>
-              {rows.map((i) => (
-                <ListRow key={i.uid} item={i} onClick={() => go(i.route)} />
-              ))}
-            </div>
+          shown.map((i) => (
+            <button
+              key={i.uid}
+              type="button"
+              onClick={() => go(i.route)}
+              className={`flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left ${
+                route === i.route ? 'bg-[var(--ds-gray-100)]' : 'hover:bg-[var(--ds-gray-100)]'
+              }`}
+            >
+              <Face uid={i.uid} name={i.name} kind={i.kind} />
+              <span className="min-w-0 flex-1">
+                <span className="text-copy-14 block truncate text-[var(--ds-gray-1000)]">
+                  {i.name}
+                </span>
+                <span className="text-label-12 block truncate text-[var(--ds-gray-700)]">
+                  {i.town ?? i.note ?? '—'}
+                </span>
+              </span>
+              {i.alert && i.alert.tone !== 'neutral' ? (
+                <Chip tone={i.alert.tone}>{i.alert.text}</Chip>
+              ) : null}
+            </button>
           ))
         )}
       </div>
 
-      <div className="border-t border-[var(--ds-gray-alpha-400)] p-3">
+      <div className="border-t border-[var(--ds-gray-alpha-400)] p-2">
         <button
           type="button"
-          onClick={() => go('/ja')}
-          className="flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left active:bg-[var(--ds-gray-200)]"
+          onClick={() => go(`/seznam/${segment}`)}
+          className="text-label-13 flex w-full items-center justify-between rounded-lg px-2 py-2 text-[var(--ds-purple-700)] hover:bg-[var(--ds-gray-100)]"
         >
-          <Face uid={persona.personId ?? persona.key} name={persona.displayName} />
-          <div className="min-w-0 flex-1">
-            <div className="text-copy-14 truncate text-[var(--ds-gray-1000)]">{persona.displayName}</div>
-            <div className="text-label-12 truncate text-[var(--ds-gray-700)]">{persona.roleLabel}</div>
-          </div>
+          Zobrazit celý seznam ({items.length})
           <Chevron />
         </button>
       </div>
@@ -273,69 +287,7 @@ function Drawer({
   )
 }
 
-/** Řádek seznamu: obrázek, jméno, obec, upozornění. */
-function ListRow({ item, onClick }: { item: Item; onClick: () => void }) {
-  const mark = faceOf(item.uid).mark
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex w-full items-center gap-2.5 rounded-xl px-2 py-1.5 text-left active:bg-[var(--ds-gray-200)]"
-    >
-      <Face uid={item.uid} name={item.name} kind={item.kind} />
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5">
-          <span
-            className={`text-copy-14 truncate ${
-              mark === 'none'
-                ? 'text-[var(--ds-gray-1000)]'
-                : `${TINT_BG[mark]} rounded-md px-1.5`
-            }`}
-          >
-            {item.name}
-          </span>
-        </div>
-        <div className="text-label-12 flex items-center gap-1 truncate text-[var(--ds-gray-700)]">
-          {item.town ? <Pin /> : null}
-          <span className="truncate">
-            {[item.town, item.note].filter(Boolean).join(' · ') || '—'}
-          </span>
-        </div>
-      </div>
-      {item.alert ? (
-        <span
-          className={`text-label-12 shrink-0 rounded-full px-2 py-0.5 ${
-            item.alert.urgent
-              ? 'bg-[var(--ds-red-200)] text-[var(--ds-red-900)]'
-              : 'bg-[var(--ds-amber-200)] text-[var(--ds-amber-900)]'
-          }`}
-        >
-          {item.alert.text}
-        </span>
-      ) : null}
-    </button>
-  )
-}
-
-function Pin() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      className="h-3 w-3 shrink-0"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11Z" />
-      <circle cx="12" cy="10" r="2.5" />
-    </svg>
-  )
-}
-
-function DrawerRow({
+function NavItem({
   icon,
   label,
   active,
@@ -350,8 +302,10 @@ function DrawerRow({
     <button
       type="button"
       onClick={onClick}
-      className={`flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left ${
-        active ? 'bg-[var(--ds-purple-100)] text-[var(--ds-purple-900)]' : 'active:bg-[var(--ds-gray-200)]'
+      className={`relative flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left ${
+        active
+          ? 'bg-[var(--ds-gray-100)] text-[var(--ds-gray-1000)]'
+          : 'text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-100)]'
       }`}
     >
       <svg
@@ -360,40 +314,47 @@ function DrawerRow({
         className="h-[18px] w-[18px]"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="1.7"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
         {icon}
       </svg>
       <span className="text-copy-14">{label}</span>
+      {active ? (
+        <span className="absolute inset-y-1 left-0 w-0.5 rounded-full bg-[var(--ds-purple-700)]" />
+      ) : null}
     </button>
   )
 }
 
 /* ------------------------------------------------------------------ */
 
-interface Item {
+export interface Item {
   uid: string
   kind: FaceKind
   name: string
   town: string | null
   note: string | null
+  extra: string | null
   dueOn: string | null
-  alert: { text: string; urgent: boolean } | null
+  alert: { text: string; tone: Tone } | null
   route: string
 }
 
-/** Z lhůty se dělá upozornění jen tehdy, když je na co upozorňovat. */
 function alertOf(dueOn: string | null): Item['alert'] {
   if (!dueOn) return null
   const d = daysUntil(dueOn)
-  if (d < 0) return { text: dueBadge(dueOn), urgent: true }
-  if (d <= 14) return { text: dueBadge(dueOn), urgent: false }
+  if (d < 0) return { text: dueBadge(dueOn), tone: 'red' }
+  if (d <= 14) return { text: dueBadge(dueOn), tone: 'amber' }
   return null
 }
 
-function list(
+export const age = (birthDate: string): number =>
+  Math.floor((Date.now() - new Date(birthDate).getTime()) / (365.25 * 86_400_000))
+
+/** Jeden zdroj pravdy pro panel i pro tabulku. */
+export function listOf(
   segment: Segment,
   orgId: string | null,
   persona: ReturnType<typeof usePersona>['persona'],
@@ -411,9 +372,15 @@ function list(
       kind: 'family' as const,
       name: a.naming.displayName,
       town: data.townOfAgreement(orgId, a.id),
-      note: a.status === 'active' ? L.custodyBasis(a.custodyBasis) : L.agreementStatus(a.status),
-      dueOn: a.nextObligationDueOn,
-      alert: alertOf(a.nextObligationDueOn),
+      note: L.custodyBasis(a.custodyBasis),
+      extra: data.caseFileOfAgreement(orgId, a.id)?.keyWorkerDisplayName ?? null,
+      // `nextObligationDueOn` bude přepočítávat Cloud Function; než bude,
+      // se to spočítá ze lhůt, jinak by sloupec zůstal prázdný.
+      dueOn: data.nextDueOfAgreement(orgId, a.id)?.dueOn ?? a.nextObligationDueOn,
+      alert:
+        a.status === 'active'
+          ? alertOf(data.nextDueOfAgreement(orgId, a.id)?.dueOn ?? a.nextObligationDueOn)
+          : { text: L.agreementStatus(a.status), tone: 'neutral' as const },
       route: `/rodina/${a.id}`,
     }))
   }
@@ -429,10 +396,11 @@ function list(
           .find((o) => o.personId === pid && o.status !== 'met')
         out.push({
           uid: pid,
-          kind: 'person' as const,
+          kind: 'person',
           name: p.displayName,
           town: data.townOfPerson(orgId, pid),
           note: L.carerKind(a.carerKind),
+          extra: a.naming.displayName,
           dueOn: due?.dueOn ?? null,
           alert: alertOf(due?.dueOn ?? null),
           route: `/pestoun/${pid}`,
@@ -451,13 +419,14 @@ function list(
           .find((o) => o.childId === c.id && o.status !== 'met')
         out.push({
           uid: c.id,
-          kind: 'child' as const,
+          kind: 'child',
           name: c.displayName,
           town: data.townOfChild(orgId, c.id),
           note: `${age(c.birthDate)} let`,
+          extra: a.naming.displayName,
           dueOn: due?.dueOn ?? null,
           alert: c.careEndedOn
-            ? { text: 'péče ukončena', urgent: false }
+            ? { text: 'péče ukončena', tone: 'neutral' }
             : alertOf(due?.dueOn ?? null),
           route: `/dite/${c.id}`,
         })
@@ -477,63 +446,11 @@ function list(
         kind: 'person' as const,
         name: p?.displayName ?? m.personId,
         town: data.townOfPerson(orgId, m.personId),
-        note: files > 0 ? `${files} dohod` : L.memberRole(m.role),
+        note: L.memberRole(m.role),
+        extra: files > 0 ? `${files} dohod` : null,
         dueOn: null,
         alert: null,
         route: `/clen/${m.personId}`,
       }
     })
 }
-
-export const age = (birthDate: string): number =>
-  Math.floor((Date.now() - new Date(birthDate).getTime()) / (365.25 * 86_400_000))
-
-/* --- seskupení ------------------------------------------------------------ */
-
-const MARK_ORDER: Tint[] = ['red', 'amber', 'pink', 'purple', 'blue', 'teal', 'green', 'none']
-
-function group(items: Item[], mode: Grouping): Array<[string, Item[]]> {
-  const key = (i: Item): string => {
-    if (mode === 'obec') return i.town ?? 'Bez adresy'
-    if (mode === 'znacka') {
-      const m = faceOf(i.uid).mark
-      return m === 'none' ? 'Neoznačené' : `Označené — ${m}`
-    }
-    if (mode === 'termin') {
-      if (!i.dueOn) return 'Bez termínu'
-      const d = daysUntil(i.dueOn)
-      if (d < 0) return 'Po termínu'
-      if (d <= 7) return 'Tento týden'
-      if (d <= 31) return 'Do měsíce'
-      return 'Později'
-    }
-    return i.name.charAt(0).toUpperCase()
-  }
-
-  const map = new Map<string, Item[]>()
-  for (const i of items) {
-    const k = key(i)
-    const list = map.get(k)
-    if (list) list.push(i)
-    else map.set(k, [i])
-  }
-
-  const out = [...map]
-
-  if (mode === 'termin') {
-    const order = ['Po termínu', 'Tento týden', 'Do měsíce', 'Později', 'Bez termínu']
-    out.sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]))
-    for (const [, rows] of out) rows.sort((x, y) => (x.dueOn ?? '').localeCompare(y.dueOn ?? ''))
-  } else if (mode === 'znacka') {
-    const rank = (s: string) =>
-      MARK_ORDER.findIndex((t) => (t === 'none' ? s === 'Neoznačené' : s.endsWith(t)))
-    out.sort((a, b) => rank(a[0]) - rank(b[0]))
-  } else {
-    out.sort((a, b) => a[0].localeCompare(b[0], 'cs'))
-  }
-
-  return out
-}
-
-/** Krátký termín do řádku — používá se i jinde než v menu. */
-export const shortDue = (iso: string): string => formatShort(iso)

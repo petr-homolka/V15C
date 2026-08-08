@@ -1,23 +1,20 @@
 /**
- * Karta dítěte — dětská sekce.
+ * Karta dítěte.
  *
- * Dítě není řádek v tabulce. Karta proto začíná obrázkem, který si dítě samo
- * vybere, a pokračuje tím, co o něm potřebuje vědět člověk, který za ním jede:
- * kolik mu je, kam chodí do školy, kde bydlí, co se u něj chystá.
- *
- * Kniha života má vlastní místo a **schválně jiný tón** než spis: je to
- * sbírka toho hezkého, ne evidence.
+ * Skladba je stejná jako u dospělých — tohle je pracovní karta, ne dětská
+ * appka. Jediné, co je jinak: **obrázek si vybírá dítě** a kniha života má
+ * vlastní kartu, protože to není evidence.
  */
 
 import { useState } from 'react'
 import * as data from '../demo/data'
-import { Face, FacePicker } from '../face'
+import { FacePicker } from '../face'
 import * as L from '../labels'
 import { usePersona } from '../persona'
-import { ProfileHead } from './pestoun'
 import { age } from '../shell'
+import { EditImageButton, ProfileHeader } from './profil'
 import {
-  Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen,
+  Button, Card, Chip, Due, Grid, InfoRow, Note, PageHead, Row, Screen, Stack,
   dueLabel, dueTone, formatDate, formatTime, formatUid,
 } from '../ui'
 
@@ -30,7 +27,7 @@ export function Dite({ id, go }: { id: string; go: (r: string) => void }) {
   if (!child) {
     return (
       <Screen>
-        <LargeTitle title="Dítě" back={() => go('/')} />
+        <PageHead title="Dítě" back={() => go('/seznam/deti')} />
         <Card>
           <Note>Tohle dítě tu není.</Note>
         </Card>
@@ -44,128 +41,126 @@ export function Dite({ id, go }: { id: string; go: (r: string) => void }) {
     ? data.agreements(orgId).find((a) => a.id === agreementId) ?? null
     : null
   const due = agreementId
-    ? data.obligationsOfAgreement(orgId, agreementId).filter((o) => o.childId === id && o.status !== 'met')
+    ? data
+        .obligationsOfAgreement(orgId, agreementId)
+        .filter((o) => o.childId === id && o.status !== 'met')
     : []
   const events = data
     .events(orgId)
-    .filter((e) => e.caseFileId && agreement && e.subjectDisplayName === agreement.naming.displayName)
+    .filter((e) => agreement && e.subjectDisplayName === agreement.naming.displayName)
     .filter((e) => new Date(e.startAt) >= new Date())
     .sort((a, b) => a.startAt.localeCompare(b.startAt))
-    .slice(0, 3)
+    .slice(0, 4)
 
-  const years = age(child.birthDate)
-  const nameday = birthdayIn(child.birthDate)
+  const days = birthdayIn(child.birthDate)
 
   return (
-    <Screen>
-      <LargeTitle title={child.displayName} back={() => go('/')} />
+    <Screen wide>
+      <PageHead title="Karta dítěte" back={() => go('/seznam/deti')} />
 
-      <ProfileHead
-        uid={id}
-        kind="child"
-        name={child.displayName}
-        line={`${years} let`}
-        town={contact?.address?.city ?? null}
-        onEdit={() => setPicker(true)}
-        extra={
-          nameday !== null ? (
-            <div className="text-copy-14 pt-1 text-[var(--ds-purple-900)]">
-              {nameday === 0 ? 'Dnes má narozeniny 🎂' : `Narozeniny za ${nameday} dní`}
-            </div>
-          ) : null
-        }
-      />
-
-      <GroupTitle>O dítěti</GroupTitle>
-      <Card>
-        <Row title="Narozeno" meta={<Meta>{formatDate(child.birthDate)}</Meta>} />
-        <Divider />
-        <Row
-          title="Škola"
-          subtitle={typeof child.school === 'string' ? child.school : undefined}
-          meta={typeof child.school === 'string' ? undefined : <Meta>—</Meta>}
+      <Stack>
+        <ProfileHeader
+          uid={id}
+          kind="child"
+          name={child.displayName}
+          facts={[
+            { icon: 'cake', text: `${age(child.birthDate)} let` },
+            ...(contact?.address?.city ? [{ icon: 'pin' as const, text: contact.address.city }] : []),
+            ...(typeof child.school === 'string' ? [{ icon: 'home' as const, text: child.school }] : []),
+            ...(days !== null
+              ? [{ icon: 'cake' as const, text: days === 0 ? 'dnes má narozeniny' : `narozeniny za ${days} dní` }]
+              : []),
+          ]}
+          actions={<EditImageButton onClick={() => setPicker(true)} />}
+          onEditImage={() => setPicker(true)}
         />
-        <Divider />
-        <Row
-          title="Bydliště"
-          subtitle={
-            contact?.address
-              ? `${contact.address.street}, ${contact.address.zip} ${contact.address.city}`
-              : undefined
-          }
-        />
-        {agreement ? (
-          <>
-            <Divider />
-            <Row
-              leading={<Face uid={agreement.id} kind="family" name={agreement.naming.displayName} />}
-              title={agreement.naming.displayName}
-              subtitle={L.custodyBasis(agreement.custodyBasis)}
-              onClick={() => go(`/rodina/${agreement.id}`)}
-            />
-          </>
-        ) : null}
-        {child.careEndedOn ? (
-          <>
-            <Divider />
-            <Row title="Péče ukončena" meta={<Meta tone="amber">{formatDate(child.careEndedOn)}</Meta>} />
-          </>
-        ) : null}
-      </Card>
 
-      {due.length > 0 ? (
-        <>
-          <GroupTitle>Co běží</GroupTitle>
-          <Card>
-            {due.map((o, i) => (
-              <div key={o.id}>
-                {i > 0 ? <Divider /> : null}
-                <Row
-                  title={L.obligationKind(o.kind)}
-                  subtitle={dueLabel(o.dueOn)}
-                  meta={<Meta tone={dueTone(o.dueOn)}>{formatDate(o.dueOn)}</Meta>}
-                />
-              </div>
-            ))}
-          </Card>
-        </>
+        <Grid>
+          <Stack>
+            <Card title="Údaje">
+              <InfoRow label="Narozeno">{formatDate(child.birthDate)}</InfoRow>
+              <InfoRow label="Škola">
+                {typeof child.school === 'string' ? child.school : '—'}
+              </InfoRow>
+              <InfoRow label="Bydliště">
+                {contact?.address
+                  ? `${contact.address.street}, ${contact.address.zip} ${contact.address.city}`
+                  : '—'}
+              </InfoRow>
+              <InfoRow label="Rodina">
+                {agreement ? (
+                  <button
+                    type="button"
+                    onClick={() => go(`/rodina/${agreement.id}`)}
+                    className="text-[var(--ds-purple-700)]"
+                  >
+                    {agreement.naming.displayName}
+                  </button>
+                ) : (
+                  '—'
+                )}
+              </InfoRow>
+              <InfoRow label="Druh péče">
+                {agreement ? L.custodyBasis(agreement.custodyBasis) : '—'}
+              </InfoRow>
+              <InfoRow label="UID">
+                <span className="font-mono">{formatUid(id)}</span>
+              </InfoRow>
+              {child.careEndedOn ? (
+                <InfoRow label="Péče ukončena">
+                  <Chip tone="amber">{formatDate(child.careEndedOn)}</Chip>
+                </InfoRow>
+              ) : null}
+            </Card>
+
+            <Card
+              title="Kniha života"
+              action={<Button size="sm">Přidat</Button>}
+            >
+              <Note>
+                Fotky, výkresy, vysvědčení a vzpomínky, které si dítě odnese, až péče skončí.
+                Zatím prázdná — přidávat se bude, až aplikace umí ukládat.
+              </Note>
+            </Card>
+          </Stack>
+
+          <Stack>
+            <Card title="Co běží">
+              {due.length === 0 ? (
+                <Note>Žádná lhůta neběží.</Note>
+              ) : (
+                due.map((o) => (
+                  <Row
+                    key={o.id}
+                    title={L.obligationKind(o.kind)}
+                    subtitle={formatDate(o.dueOn)}
+                    meta={<Due iso={o.dueOn} />}
+                  />
+                ))
+              )}
+            </Card>
+
+            <Card title="Co se chystá">
+              {events.length === 0 ? (
+                <Note>Nic naplánovaného.</Note>
+              ) : (
+                events.map((e) => (
+                  <Row
+                    key={e.id}
+                    title={e.title}
+                    subtitle={`${formatDate(e.startAt)}${e.allDay ? '' : ` · ${formatTime(e.startAt)}`}`}
+                    onClick={e.caseFileId ? () => go(`/spis/${e.caseFileId}`) : undefined}
+                  />
+                ))
+              )}
+            </Card>
+          </Stack>
+        </Grid>
+      </Stack>
+
+      {picker ? (
+        <FacePicker uid={id} kind="child" name={child.displayName} onClose={() => setPicker(false)} />
       ) : null}
-
-      {events.length > 0 ? (
-        <>
-          <GroupTitle>Co se chystá</GroupTitle>
-          <Card>
-            {events.map((e, i) => (
-              <div key={e.id}>
-                {i > 0 ? <Divider /> : null}
-                <Row
-                  title={e.title}
-                  subtitle={`${formatDate(e.startAt)}${e.allDay ? '' : ` · ${formatTime(e.startAt)}`}`}
-                  onClick={e.caseFileId ? () => go(`/spis/${e.caseFileId}`) : undefined}
-                />
-              </div>
-            ))}
-          </Card>
-        </>
-      ) : null}
-
-      <GroupTitle>Kniha života</GroupTitle>
-      <div className="rounded-2xl bg-[var(--ds-teal-100)] p-4">
-        <p className="text-copy-16 text-[var(--ds-teal-900)]">
-          Fotky, výkresy, vysvědčení a vzpomínky, které si dítě odnese, až péče
-          skončí.
-        </p>
-        <p className="text-copy-14 pt-2 text-[var(--ds-teal-900)]">
-          Zatím prázdná — přidávat se bude, až aplikace umí ukládat.
-        </p>
-      </div>
-
-      <GroupTitle>Záznam v systému</GroupTitle>
-      <Card>
-        <Row title="UID" meta={<Meta><span className="font-mono">{formatUid(id)}</span></Meta>} />
-      </Card>
-
-      {picker ? <FacePicker uid={id} kind="child" name={child.displayName} onClose={() => setPicker(false)} /> : null}
     </Screen>
   )
 }

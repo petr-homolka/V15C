@@ -1,23 +1,14 @@
 /**
- * Já — pohled, motiv a co je pod kapotou.
- *
- * Nahrazuje přihlášení, dokud žádné není (dok. 19). Persona drží přesně to,
- * co bude po přihlášení v tokenu.
+ * Pohled — náhrada přihlášení, vzhled a stav dat (dok. 19).
  */
 
 import { getPreference, setTheme } from '../theme.js'
 import { docCount } from '../demo/store'
 import { Face } from '../face'
 import { usePersona } from '../persona'
-import { Card, Divider, GroupTitle, LargeTitle, Meta, Row, Screen } from '../ui'
+import { Card, Chip, Grid, InfoRow, PageHead, Row, Screen, Segmented, Stack } from '../ui'
 
 type Preference = 'light' | 'dark' | 'system'
-
-const THEMES: Array<[Preference, string]> = [
-  ['light', 'Světlý'],
-  ['dark', 'Tmavý'],
-  ['system', 'Podle systému'],
-]
 
 export function Ja({ go }: { go: (r: string) => void }) {
   const { personas, persona, setPersona } = usePersona()
@@ -32,55 +23,55 @@ export function Ja({ go }: { go: (r: string) => void }) {
   }
 
   return (
-    <Screen>
-      <LargeTitle title="Pohled" subtitle="Zatím se nepřihlašuje — pohled se vybírá" />
+    <Screen wide>
+      <PageHead title="Pohled" subtitle="Zatím se nepřihlašuje — pohled se vybírá" />
 
-      {[...groups].map(([name, list]) => (
-        <div key={name}>
-          <GroupTitle>{name}</GroupTitle>
-          <Card>
-            {list.map((p, i) => (
-              <div key={p.key}>
-                {i > 0 ? <Divider /> : null}
+      <Grid>
+        <Stack>
+          {[...groups].map(([name, list]) => (
+            <Card key={name} title={name}>
+              {list.map((p) => (
                 <Row
+                  key={p.key}
                   leading={<Face uid={p.personId ?? p.key} name={p.displayName} />}
                   title={p.displayName}
                   subtitle={p.roleLabel}
-                  meta={p.key === persona.key ? <Meta tone="purple">vybráno</Meta> : undefined}
+                  meta={p.key === persona.key ? <Chip tone="purple">vybráno</Chip> : undefined}
                   onClick={() => {
                     setPersona(p.key)
                     go('/')
                   }}
                 />
-              </div>
-            ))}
+              ))}
+            </Card>
+          ))}
+        </Stack>
+
+        <Stack>
+          <Card title="Vzhled">
+            <InfoRow label="Motiv">
+              <Segmented
+                value={current}
+                onChange={(v) => {
+                  setTheme(v)
+                  go('/ja')
+                }}
+                options={[
+                  ['light', 'Světlý'],
+                  ['dark', 'Tmavý'],
+                  ['system', 'Podle systému'],
+                ]}
+              />
+            </InfoRow>
           </Card>
-        </div>
-      ))}
 
-      <GroupTitle>Vzhled</GroupTitle>
-      <Card>
-        {THEMES.map(([value, label], i) => (
-          <div key={value}>
-            {i > 0 ? <Divider /> : null}
-            <Row
-              title={label}
-              meta={current === value ? <Meta tone="purple">vybráno</Meta> : undefined}
-              onClick={() => {
-                setTheme(value)
-                go('/ja')
-              }}
-            />
-          </div>
-        ))}
-      </Card>
-
-      <GroupTitle>Data</GroupTitle>
-      <Card>
-        <Row title="Testovací sada" meta={<Meta>{docCount()} dokumentů</Meta>} />
-        <Divider />
-        <Row title="Zápis do databáze" meta={<Meta>zatím ne</Meta>} />
-      </Card>
+          <Card title="Data">
+            <InfoRow label="Testovací sada">{docCount()} dokumentů</InfoRow>
+            <InfoRow label="Zápis do databáze">zatím ne</InfoRow>
+            <InfoRow label="Přihlášení">zatím ne</InfoRow>
+          </Card>
+        </Stack>
+      </Grid>
     </Screen>
   )
 }
