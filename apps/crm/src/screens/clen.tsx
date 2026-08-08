@@ -51,7 +51,7 @@ export function Clen({ id, go }: { id: string; go: (r: string) => void }) {
           onEditImage={() => undefined}
         />
 
-        <Card title="Dohody ve správě">
+        <Card title="Dohody ve správě" table>
           {agreements.length === 0 ? (
             <Note>Žádná dohoda ve správě.</Note>
           ) : (

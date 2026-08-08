@@ -9,7 +9,8 @@
  * dvě chování.
  */
 
-import { useMemo, useState, type ReactNode } from 'react'
+import { KTDropdown, KTToast } from '@keenthemes/ktui'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import * as data from './demo/data'
 import { Face, type FaceKind } from './face'
 import * as L from './labels'
@@ -93,18 +94,7 @@ function TopBar({
           {persona.organizationName ?? 'Systém'}
         </span>
 
-        <button
-          type="button"
-          onClick={() => go('/ja')}
-          aria-label="Pohled"
-          className="flex items-center gap-2 rounded-lg px-1 py-1 hover:bg-[var(--ds-gray-100)]"
-        >
-          <Face uid={persona.personId ?? persona.key} name={persona.displayName} />
-          <span className="text-copy-14 hidden text-[var(--ds-gray-1000)] md:block">
-            {persona.displayName}
-          </span>
-          <Chevron />
-        </button>
+        <PersonaMenu go={go} />
       </div>
     </header>
   )
@@ -123,6 +113,85 @@ function breadcrumb(route: string): string {
   if (route.startsWith('/clen/')) return 'Tým · karta'
   if (route === '/ja') return 'Pohled'
   return ''
+}
+
+/**
+ * Nabídka pohledu v liště.
+ *
+ * Vysouvání obstarává KtUI (`data-kt-dropdown`) — umístění, zavírání klikem
+ * vedle i klávesou Esc. Přepnutí pohledu ohlásí hláškou, protože se tím mění
+ * všechno, co je na obrazovce, a bez potvrzení to vypadá jako chyba.
+ */
+function PersonaMenu({ go }: { go: (r: string) => void }) {
+  const { personas, persona, setPersona } = usePersona()
+  const ref = useRef<HTMLDivElement>(null)
+
+  // Nabídka vzniká až v Reactu, takže si init volá sama.
+  useEffect(() => {
+    KTDropdown.init()
+  }, [])
+
+  const pick = (key: string, name: string, role: string) => {
+    setPersona(key)
+    KTDropdown.getInstance(ref.current!)?.hide()
+    KTToast.show({
+      message: `Pohled: ${name} — ${role}`,
+      variant: 'primary',
+      position: 'bottom-center',
+      duration: 2500,
+    })
+    go('/')
+  }
+
+  return (
+    <div ref={ref} data-kt-dropdown="true" data-kt-dropdown-trigger="click">
+      <button
+        type="button"
+        data-kt-dropdown-toggle="true"
+        className="flex items-center gap-2 rounded-lg px-1 py-1 hover:bg-[var(--ds-gray-100)]"
+      >
+        <Face uid={persona.personId ?? persona.key} name={persona.displayName} />
+        <span className="text-copy-14 hidden text-[var(--ds-gray-1000)] md:block">
+          {persona.displayName}
+        </span>
+        <Chevron />
+      </button>
+
+      {/* `kt-dropdown` je v KtUI samotný panel, ne obal — obal je jen nosič
+          data-atributů. `hidden` je povinné, jinak panel svítí i zavřený. */}
+      <div className="kt-dropdown hidden w-72 p-2" data-kt-dropdown-menu="true">
+        <div className="kt-dropdown-header">Přepnout pohled</div>
+        {personas.map((p) => (
+          <button
+            key={p.key}
+            type="button"
+            onClick={() => pick(p.key, p.displayName, p.roleLabel)}
+            data-kt-dropdown-item="true"
+            className="kt-dropdown-menu-link w-full"
+          >
+            <Face uid={p.personId ?? p.key} name={p.displayName} />
+            <span className="min-w-0 flex-1 text-left">
+              <span className="block truncate">{p.displayName}</span>
+              <span className="text-label-12 block truncate text-[var(--muted-foreground)]">
+                {p.roleLabel}
+                {p.organizationName ? ` · ${p.organizationName}` : ''}
+              </span>
+            </span>
+            {p.key === persona.key ? <Chip tone="purple">teď</Chip> : null}
+          </button>
+        ))}
+        <div className="kt-dropdown-menu-separator" />
+        <button
+          type="button"
+          onClick={() => go('/ja')}
+          data-kt-dropdown-item="true"
+          className="kt-dropdown-menu-link w-full"
+        >
+          Nastavení pohledu
+        </button>
+      </div>
+    </div>
+  )
 }
 
 export function IconButton({

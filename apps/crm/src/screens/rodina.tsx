@@ -140,6 +140,7 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
         </Grid>
 
         <Card
+          table
           title="Spisový obsah"
           action={
             <Segmented

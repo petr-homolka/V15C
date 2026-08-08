@@ -7,8 +7,15 @@ import { App } from './App'
 import './app.css'
 import './theme.js'
 
+// KtUI (MIT, Keenthemes) — komponenty, které potřebují chování: nabídka
+// v liště a hlášky. Inicializuje se jednou po vykreslení; komponenty, které
+// vzniknou později, si init volají samy (`KTDropdown.init()`).
+import { KTComponents } from '@keenthemes/ktui'
+
 createRoot(document.getElementById('app')!).render(
   <StrictMode>
     <App />
   </StrictMode>,
 )
+
+KTComponents.init()

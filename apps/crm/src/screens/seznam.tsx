@@ -102,6 +102,7 @@ export function Seznam({ segment, go }: { segment: Segment; go: (r: string) => v
           <Card
             key={title}
             title={grouping === 'zadne' ? undefined : title}
+            table
             footer={
               <>
                 <span>

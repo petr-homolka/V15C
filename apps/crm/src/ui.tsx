@@ -80,6 +80,7 @@ export function Card({
   children,
   footer,
   padded,
+  table,
 }: {
   title?: string
   action?: ReactNode
@@ -88,21 +89,19 @@ export function Card({
   footer?: ReactNode
   /** Pro obsah, který není seznam řádků (text, mřížka). */
   padded?: boolean
+  /** Karta, ve které je tabulka — KtUI jí odebere vnitřní odsazení. */
+  table?: boolean
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)]">
+    <section className={`kt-card ${table ? 'kt-card-table' : ''}`}>
       {title ? (
-        <header className="flex items-center justify-between gap-3 border-b border-[var(--ds-gray-alpha-400)] px-4 py-3">
-          <h2 className="text-heading-16 text-[var(--ds-gray-1000)]">{title}</h2>
-          {action}
+        <header className="kt-card-header">
+          <h2 className="kt-card-title">{title}</h2>
+          {action ? <div className="kt-card-toolbar">{action}</div> : null}
         </header>
       ) : null}
-      <div className={padded ? 'p-4' : ''}>{children}</div>
-      {footer ? (
-        <footer className="text-copy-13 flex items-center justify-between gap-3 border-t border-[var(--ds-gray-alpha-400)] px-4 py-2.5 text-[var(--ds-gray-900)]">
-          {footer}
-        </footer>
-      ) : null}
+      {padded ? <div className="kt-card-content">{children}</div> : children}
+      {footer ? <footer className="kt-card-footer">{footer}</footer> : null}
     </section>
   )
 }
@@ -205,17 +204,17 @@ export function Table({
   children: ReactNode
 }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
+    <div className="kt-table-wrapper kt-scrollable">
+      <table className="kt-table kt-table-border">
         <thead>
-          <tr className="border-b border-[var(--ds-gray-alpha-400)]">
+          <tr>
             {columns.map((c) => (
               <th
                 key={c.label}
                 scope="col"
-                className={`text-label-13 sticky top-14 z-10 whitespace-nowrap bg-[var(--ds-background-100)] px-4 py-2 font-normal text-[var(--ds-gray-900)] ${
-                  c.align === 'right' ? 'text-right' : 'text-left'
-                } ${c.hide === 'sm' ? 'hidden sm:table-cell' : c.hide === 'md' ? 'hidden md:table-cell' : ''}`}
+                className={`${c.align === 'right' ? 'text-right' : ''} ${
+                  c.hide === 'sm' ? 'hidden sm:table-cell' : c.hide === 'md' ? 'hidden md:table-cell' : ''
+                }`}
               >
                 {c.label}
               </th>
@@ -230,12 +229,7 @@ export function Table({
 
 export function Tr({ children, onClick }: { children: ReactNode; onClick?: () => void }) {
   return (
-    <tr
-      onClick={onClick}
-      className={`border-b border-[var(--ds-gray-alpha-400)] last:border-0 ${
-        onClick ? 'cursor-pointer hover:bg-[var(--ds-gray-100)]' : ''
-      }`}
-    >
+    <tr onClick={onClick} className={onClick ? 'cursor-pointer' : ''}>
       {children}
     </tr>
   )
@@ -254,9 +248,9 @@ export function Td({
 }) {
   return (
     <td
-      className={`text-copy-14 px-4 py-2 ${align === 'right' ? 'text-right tabular-nums' : ''} ${
+      className={`${align === 'right' ? 'text-right tabular-nums' : ''} ${
         hide === 'sm' ? 'hidden sm:table-cell' : hide === 'md' ? 'hidden md:table-cell' : ''
-      } ${muted ? 'text-[var(--ds-gray-900)]' : 'text-[var(--ds-gray-1000)]'}`}
+      } ${muted ? 'text-[var(--muted-foreground)]' : ''}`}
     >
       {children}
     </td>
@@ -278,16 +272,15 @@ export function Button({
 }) {
   const look =
     variant === 'primary'
-      ? 'bg-[var(--ds-purple-700)] text-white hover:bg-[var(--ds-purple-800)]'
+      ? 'kt-btn-primary'
       : variant === 'ghost'
-        ? 'text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-100)]'
-        : 'border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] text-[var(--ds-gray-1000)] hover:bg-[var(--ds-gray-100)]'
-  const dims = size === 'sm' ? 'h-8 px-2.5 text-label-13' : 'h-9 px-3 text-button-14'
+        ? 'kt-btn-ghost'
+        : 'kt-btn-outline'
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg ${dims} ${look}`}
+      className={`kt-btn ${look} ${size === 'sm' ? 'kt-btn-sm' : ''}`}
     >
       {children}
     </button>
@@ -308,7 +301,7 @@ export function Field({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="text-copy-14 h-9 w-full rounded-lg border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] px-3 text-[var(--ds-gray-1000)] outline-none placeholder:text-[var(--ds-gray-700)] focus:border-[var(--ds-purple-600)] focus:shadow-[var(--ds-focus-ring)]"
+      className="kt-input"
     />
   )
 }
@@ -323,17 +316,15 @@ export function Segmented<T extends string>({
   onChange: (v: T) => void
 }) {
   return (
-    <div className="inline-flex rounded-lg border border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)] p-0.5">
+    <div className="kt-tabs kt-tabs-line">
       {options.map(([key, label]) => (
         <button
           key={key}
           type="button"
           onClick={() => onChange(key)}
-          className={`text-label-13 h-8 rounded-[6px] px-3 ${
-            key === value
-              ? 'bg-[var(--ds-gray-100)] text-[var(--ds-gray-1000)]'
-              : 'text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)]'
-          }`}
+          data-kt-tab-toggle
+          aria-selected={key === value}
+          className={`kt-tab-toggle ${key === value ? "active" : ""}`}
         >
           {label}
         </button>
@@ -347,21 +338,20 @@ export function Segmented<T extends string>({
 export type Tone = 'neutral' | 'purple' | 'amber' | 'red' | 'green'
 
 const CHIP: Record<Tone, string> = {
-  neutral: 'bg-[var(--ds-gray-100)] text-[var(--ds-gray-900)] border-[var(--ds-gray-alpha-400)]',
-  purple: 'bg-[var(--ds-purple-100)] text-[var(--ds-purple-900)] border-[var(--ds-purple-400)]',
-  amber: 'bg-[var(--ds-amber-100)] text-[var(--ds-amber-900)] border-[var(--ds-amber-400)]',
-  red: 'bg-[var(--ds-red-100)] text-[var(--ds-red-900)] border-[var(--ds-red-400)]',
-  green: 'bg-[var(--ds-green-100)] text-[var(--ds-green-900)] border-[var(--ds-green-400)]',
+  neutral: 'kt-badge-secondary',
+  purple: 'kt-badge-primary',
+  amber: 'kt-badge-warning',
+  red: 'kt-badge-destructive',
+  green: 'kt-badge-success',
 }
 
-/** Štítek stavu. Světlé pozadí, linka, drobné písmo — ne křiklavá bublina. */
+/**
+ * Štítek stavu — KtUI `kt-badge` v obrysové variantě. Plná výplň by v tabulce
+ * o dvaceti řádcích udělala pruhy; obrys nese barvu, ale nekřičí.
+ */
 export function Chip({ tone = 'neutral', children }: { tone?: Tone; children: ReactNode }) {
   return (
-    <span
-      className={`text-label-12 inline-flex shrink-0 items-center whitespace-nowrap rounded-md border px-1.5 py-0.5 ${CHIP[tone]}`}
-    >
-      {children}
-    </span>
+    <span className={`kt-badge kt-badge-sm kt-badge-outline ${CHIP[tone]}`}>{children}</span>
   )
 }
 

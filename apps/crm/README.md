@@ -9,6 +9,17 @@ npm run dev             # http://localhost:5273
 npm run build           # tsc + vite build → apps/crm/dist
 ```
 
+## Na čem to stojí
+
+**Geist** drží barvy, písmo a tmavý režim. **KtUI** (`@keenthemes/ktui`, MIT,
+od autorů Metronicu) drží komponenty — karty, tabulky, tlačítka, štítky,
+nabídky, hlášky. KtUI si barvy bere z proměnných, které v `src/app.css`
+přepisujeme na tokeny Geistu, takže v kódu není jediný hex a tmavý režim
+vychází sám.
+
+`@import` KtUI musí být **první**, před `tailwindcss` — je to předpřeložený
+Tailwind s vlastními utilitami a jinak přebije naše.
+
 ## Tři věci, které jsou tu schválně
 
 **1. Data se negenerují ze serveru, ale v prohlížeči.** `src/demo/store.ts`

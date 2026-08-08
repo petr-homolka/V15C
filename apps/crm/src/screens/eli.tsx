@@ -8,6 +8,7 @@
  * Jak přijde první odpověď, pole sjede dolů a plochu dostane rozhovor.
  */
 
+import { KTToast } from '@keenthemes/ktui'
 import { useEffect, useRef, useState } from 'react'
 import { answer, SUGGESTIONS, type EliAnswer } from '../eli/answer'
 import { useLocal } from '../local'
@@ -109,10 +110,14 @@ export function Eli({ go }: { go: (r: string) => void }) {
                     type="button"
                     onClick={() => {
                       t.answer!.did!.undo()
-                      setTurns((prev) => [
-                        ...prev,
-                        { id: prev.length * 2 + 2, from: 'eli', text: 'Vráceno zpět.' },
-                      ])
+                      // Hláška, ne další řádek v rozhovoru: vrácení zpět není
+                      // odpověď na otázku, jen potvrzení, že se něco stalo.
+                      KTToast.show({
+                        message: 'Vráceno zpět.',
+                        variant: 'secondary',
+                        position: 'bottom-center',
+                        duration: 2000,
+                      })
                     }}
                     className="text-copy-14 self-start rounded-lg text-[var(--ds-purple-700)]"
                   >

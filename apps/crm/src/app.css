@@ -1,10 +1,31 @@
 /*
  * Jediné místo, kde se do aplikace dostane vzhled.
  *
- * Tailwind v4 → `tokens/theme.css` (mapování @theme + geistové utility)
- * a `fonts/fonts.css` (CLAUDE.md). `geist.css` se NEimportuje, ten je pro
- * variantu bez Tailwindu a tokeny by se definovaly dvakrát.
+ * ┌───────────────────────────────────────────────────────────────────┐
+ * │ DVĚ KNIHOVNY, JEDEN ZDROJ BAREV                                   │
+ * │                                                                   │
+ * │ **Geist** (CLAUDE.md) drží barvy, písmo a tmavý režim.            │
+ * │ **KtUI** (MIT, Keenthemes — autoři Metronicu) drží komponenty:    │
+ * │ karty, tabulky, tlačítka, štítky, nabídky, hlášky.                │
+ * │                                                                   │
+ * │ KtUI si barvy bere z proměnných `--primary`, `--card`, `--border` │
+ * │ a podobně. Ty **přepisujeme na tokeny Geistu** (níž), takže:      │
+ * │                                                                   │
+ * │  – v kódu není jediný hex,                                        │
+ * │  – tmavý režim vychází sám, protože tokeny Geistu se překlápí     │
+ * │    na `.dark` a KtUI ten stejný přepínač používá taky,            │
+ * │  – změna palety je změna na jednom místě.                         │
+ * │                                                                   │
+ * │ KtUI se importuje jako první a přepis proměnných je pod ním —     │
+ * │ jinak by jeho vlastní `:root` blok naše hodnoty přebil.           │
+ * └───────────────────────────────────────────────────────────────────┘
+ *
+ * POŘADÍ JE ZÁMĚRNÉ. KtUI je předpřeložený Tailwind a nese i vlastní utility
+ * (`.hidden`, `.flex`, …). Kdyby šel poslední, přebil by naše — a `hidden
+ * sm:block`, kterým se přepíná tabulka na mobilu za seznam, by zůstalo
+ * schované i na širokém displeji. Proto **KtUI první, naše utility po něm**.
  */
+@import '@keenthemes/ktui/dist/styles.css';
 @import 'tailwindcss';
 @import '../../../design-system/tokens/theme.css';
 @import '../../../design-system/fonts/fonts.css';
@@ -13,7 +34,53 @@
 /* Bez tohohle by Tailwind prohledával jen soubory pod tímto adresářem. */
 @source '../src/**/*.{ts,tsx}';
 
-/* --- co je vlastní téhle aplikaci ----------------------------------------- */
+/* --- most mezi KtUI a Geistem -------------------------------------------- */
+
+:root {
+  /* Plocha je zapuštěná, karta světlá — to je celý rozdíl mezi nimi. */
+  --background: var(--ds-background-200);
+  --foreground: var(--ds-gray-1000);
+  --card: var(--ds-background-100);
+  --card-foreground: var(--ds-gray-1000);
+  --popover: var(--ds-background-100);
+  --popover-foreground: var(--ds-gray-1000);
+
+  /* Jediná výrazná barva v aplikaci. */
+  --primary: var(--ds-purple-700);
+  --primary-foreground: #fff;
+
+  --secondary: var(--ds-gray-100);
+  --secondary-foreground: var(--ds-gray-1000);
+  --muted: var(--ds-gray-100);
+  --muted-foreground: var(--ds-gray-900);
+  --accent: var(--ds-gray-100);
+  --accent-foreground: var(--ds-gray-1000);
+
+  --destructive: var(--ds-red-700);
+  --destructive-foreground: #fff;
+  --mono: var(--ds-gray-1000);
+  --mono-foreground: var(--ds-background-100);
+
+  --border: var(--ds-gray-alpha-400);
+  --input: var(--ds-gray-alpha-400);
+  --ring: var(--ds-gray-600);
+
+  /* KtUI staví rádiusy odsud: karta +4 px, ovládání přesně tolik. */
+  --radius: 0.5rem;
+}
+
+/*
+ * V tmavém režimu se nemění mapování, ale hodnoty tokenů Geistu — proto tu
+ * stačí jen to, co je jinak: fialová o stupeň světlejší, aby na tmavém
+ * podkladu držela kontrast.
+ */
+.dark {
+  --primary: var(--ds-purple-700);
+  --primary-foreground: #fff;
+  --ring: var(--ds-gray-700);
+}
+
+/* --- vlastní vrstva ------------------------------------------------------- */
 
 html,
 body,
@@ -22,7 +89,7 @@ body,
 }
 
 body {
-  background: var(--ds-background-100);
+  background: var(--ds-background-200);
   color: var(--ds-gray-1000);
   font-family: var(--font-geist-sans);
   /* Dvojklik na tlačítko v mobilu nesmí zvětšit stránku. */
@@ -30,13 +97,23 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Spodní lišta je jediná věc nad obsahem — sklo, ne plná deska. */
-.app-bar {
-  background: color-mix(in oklab, var(--ds-background-100) 82%, transparent);
-  backdrop-filter: saturate(1.8) blur(20px);
+/* KtUI počítá s vlastním bezpatkovým písmem; my chceme Geist všude. */
+.kt-btn,
+.kt-input,
+.kt-badge,
+.kt-table,
+.kt-card,
+.kt-dropdown-menu,
+.kt-toast {
+  font-family: var(--font-geist-sans);
 }
 
-/* Hlavní plocha je čistá; zapuštěné je jen vysouvací menu. */
-body {
-  background: var(--ds-background-100);
+/*
+ * Hustota tabulky. KtUI má výchozí řádek pro dashboardy s pár řádky; my jich
+ * ukazujeme dvacet, tak se stahuje svisle odsazení. Vodorovné zůstává —
+ * to drží zarovnání se zbytkem karty.
+ */
+.kt-table th,
+.kt-table td {
+  padding-block: calc(var(--spacing) * 2);
 }

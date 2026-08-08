@@ -1,7 +1,38 @@
 # 26 — Rozhraní aplikace
 
-Co drží vzhled aplikace pohromadě a proč. Vzniklo ze tří pokusů: první byl
-seznam v tabulce, druhý agenda s hodinovou mřížkou, třetí je tenhle.
+Co drží vzhled aplikace pohromadě a proč. Vzniklo ze čtyř pokusů: seznam
+v tabulce, agenda s hodinovou mřížkou, vlastní „barevná" verze — a tenhle.
+
+---
+
+## 0. Dvě knihovny, jeden zdroj barev
+
+| | Co drží |
+| --- | --- |
+| **Geist** (vendorovaný, CLAUDE.md) | barvy, písmo, tmavý režim |
+| **KtUI** (`@keenthemes/ktui`, MIT) | komponenty: karty, tabulky, tlačítka, štítky, nabídky, hlášky |
+
+KtUI dělají Keenthemes — autoři Metronicu. Je to jeho dnešní podoba
+a **je open source**, takže se dá použít, ne jen okoukat.
+
+Spojení není „dvě knihovny vedle sebe". KtUI si barvy bere z proměnných
+(`--primary`, `--card`, `--border`, `--radius`); ty **přepisujeme na tokeny
+Geistu** (`apps/crm/src/app.css`). Z toho plyne:
+
+- v kódu není jediný hex,
+- tmavý režim vychází sám — tokeny Geistu se překlápí na `.dark` a KtUI
+  ten stejný přepínač používá,
+- změna palety je změna na jednom místě.
+
+**Pořadí importů je nosné.** KtUI je předpřeložený Tailwind a nese i vlastní
+utility (`.hidden`, `.flex`). Musí jít **první**, jinak přebije naše — a
+`hidden sm:block`, kterým se na mobilu přepíná tabulka za seznam, by zůstalo
+schované i na širokém displeji. (Stálo to jedno hledání, proč zmizela
+tabulka.)
+
+Z KtUI se bere i chování, ne jen vzhled: nabídka pohledu v liště je
+`data-kt-dropdown` (umístění, zavření klikem vedle i klávesou Esc) a potvrzení
+akcí jsou `KTToast`.
 
 ---
 
