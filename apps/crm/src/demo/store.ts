@@ -26,7 +26,10 @@ let cache: { byPath: Map<string, Doc>; byParent: Map<string, Doc[]> } | null = n
 
 function load() {
   if (cache) return cache
-  const { docs } = build()
+  // Sada se ukotví k DNEŠKU, ne k pevnému datu v generátoru — jinak by
+  // agenda po pár dnech ukazovala prázdný den a lhůty by byly všechny
+  // propadlé. Do emulátoru se sype s pevným datem, aby zůstala reprodukovatelná.
+  const { docs } = build({ today: new Date() })
   const byPath = new Map<string, Doc>()
   const byParent = new Map<string, Doc[]>()
   for (const raw of docs) {

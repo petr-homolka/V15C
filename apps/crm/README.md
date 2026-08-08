@@ -34,11 +34,30 @@ naopak vložený **zůstat musí**; externí se načte až po prvním vykreslen�
 
 | Cesta | Co je |
 | --- | --- |
-| `#/` | domů podle pohledu — rodiny a lhůty, u pěstouna vlastní rodina, u dítěte profil, u správce seznam organizací |
+| `#/` | **agenda** u pracovníka (úkoly + den), u pěstouna vlastní rodina, u dítěte profil, u správce seznam organizací |
+| `#/rodiny` | rodiny ve správě a nejbližší lhůty |
 | `#/dohoda/{uid}` | karta dohody: přehled, záznamy, lhůty, dokumenty |
+| `#/spis/{uid}` | totéž přes spis — úkoly a schůzky odkazují na spis |
 | `#/prepnout` | výběr pohledu a motivu |
 
 Směrování je přes hash, bez knihovny. Až bude soupis obrazovek, přibude router.
+
+## Co je převzaté z prototypu V10G
+
+Výchozí obrazovka pracovníka je **denní agenda** podle `RoutineAgendaView`
+z prototypu: úkoly ve skupinách (po termínu / dnes / tento týden / později /
+hotové) s vazbou na rodinu, rychlé přidání řádkem, 24hodinová osa s čarou
+aktuálního času, celodenní pás s narozeninami a zvýrazněný překryv schůzek.
+
+Postaveno znovu, ne zkopírováno: uspořádání a chování se přebírá, vzhled jede
+na tokenech Geistu a data jsou skutečná z `schema` + `tools/seed` — prototyp
+měl schůzky i úkoly jako pole přímo v komponentě.
+
+Nepřevzato: přetahování myší (v terénu na mobilu k ničemu a bez zápisu do
+databáze by jen předstíralo uložení) a diktování — to má vlastní návrh a patří
+k Eli (dok. 15, 20).
+
+Zaškrtnutí a přidání úkolu žijí jen v paměti záložky.
 
 ## Co tu ještě není
 

@@ -900,6 +900,8 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
     /* --- dohody --------------------------------------------------- */
 
     let agreementSeq = 0
+    /** Spisy podle Klíčové osoby — z nich se skládá ukázkový den. */
+    const filesByKeyWorker = new Map<string, Array<{ caseFileId: string; label: string }>>()
 
     keyWorkers.forEach((kw, kwIndex) => {
       const count = rng.int(8, opt.maxAgreementsPerKeyWorker)
@@ -914,6 +916,7 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
           : null
         buildAgreement(orgId, managerId, kw.id, kw.name.displayName, agreementSeq, special)
       }
+      buildDemoDay(kw.id, filesByKeyWorker.get(kw.id) ?? [])
     })
 
     /* ---------------------------------------------------------------- */
@@ -1314,6 +1317,11 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
       buildDocuments(caseFileId, agreementId, keyWorkerId, ref)
       buildObligations(caseFileId, agreementId, ref, keyWorkerId, carerIds, carerNames, children, lastContact)
       buildReport(caseFileId, agreementId, keyWorkerId, carerTown.orpCode, children)
+      const forDay = filesByKeyWorker.get(keyWorkerId)
+      const dayEntry = { caseFileId, label: agreement.carerDisplayName }
+      if (forDay) forDay.push(dayEntry)
+      else filesByKeyWorker.set(keyWorkerId, [dayEntry])
+
       buildTasksAndEvents(caseFileId, keyWorkerId, ref, agreement.carerDisplayName, nextContactDue)
 
       // Podatelna a žádost úřadu jen u pár spisů, ať to není u každého.
@@ -2205,6 +2213,88 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         resultEntryId: null,
       }
       push(p.event(e.id), e as unknown as Record<string, unknown>, 'events')
+    }
+
+    /**
+     * Ukázkový den Klíčové osoby k datu „dnes".
+     *
+     * Bez něj vypadá agenda prázdně: schůzky vznikají rozeseté podle lhůt a
+     * na jeden konkrétní den jich vyjde nula nebo jedna. Den je tu proto, aby
+     * bylo na čem otestovat to, co se jinak nestane samo — **dvě schůzky přes
+     * sebe** (v terénu běžné), celodenní událost vedle časovaných, cesta mezi
+     * návštěvami a úkoly s termínem dnes.
+     */
+    function buildDemoDay(
+      keyWorkerId: string,
+      files: Array<{ caseFileId: string; label: string }>,
+    ): void {
+      if (files.length < 2) return
+      const at = (hour: number, minute: number): Date => {
+        const d = new Date(opt.today)
+        d.setUTCHours(hour, minute, 0, 0)
+        return d
+      }
+      const put = (
+        title: string, kind: CalendarEvent['kind'],
+        from: Date, minutes: number,
+        file: { caseFileId: string; label: string } | null,
+        allDay = false,
+      ) => {
+        const e: CalendarEvent = {
+          ...sys(keyWorkerId),
+          id: newUid(),
+          ownerPersonId: keyWorkerId,
+          title,
+          kind,
+          startAt: isoDateTime(from),
+          endAt: isoDateTime(new Date(from.getTime() + minutes * 60_000)),
+          allDay,
+          place: file ? 'u rodiny' : null,
+          caseFileId: file?.caseFileId ?? null,
+          subjectDisplayName: file?.label ?? null,
+          attendeePersonIds: [],
+          travelMinutesEstimate: file ? rng.int(15, 45) : null,
+          externalCalendarRef: null,
+          status: 'planned',
+          resultEntryId: null,
+        }
+        push(p.event(e.id), e as unknown as Record<string, unknown>, 'events')
+      }
+
+      const [first, second, third] = [files[0]!, files[1]!, files[2] ?? files[0]!]
+
+      put('Vzdělávací seminář — návazná péče', 'other', at(0, 0), 24 * 60, null, true)
+      put(`Návštěva · ${first.label}`, 'visit', at(9, 0), 90, first)
+      // Dvě přes sebe: porada a nečekané jednání na OSPOD. Systém to ukáže,
+      // ale nebrání tomu — kdo si to takhle zapsal, ví proč (dok. 16).
+      put('Porada týmu', 'other', at(11, 0), 60, null)
+      put(`Jednání na OSPOD · ${second.label}`, 'meeting', at(11, 30), 60, second)
+      put(`Návštěva · ${third.label}`, 'visit', at(14, 0), 120, third)
+
+      for (const [title, file] of [
+        ['Zapsat záznam z dopolední návštěvy', first],
+        ['Odpovědět OSPOD na dotaz k plánu', second],
+      ] as const) {
+        const t: Task = {
+          ...sys(keyWorkerId),
+          id: newUid(),
+          title,
+          detail: null,
+          origin: 'manual',
+          originRef: null,
+          servesObligationId: null,
+          caseFileId: file.caseFileId,
+          caseFileReference: null,
+          subjectDisplayName: file.label,
+          assigneePersonId: keyWorkerId,
+          createdForRole: null,
+          dueOn: isoDate(opt.today),
+          status: 'open',
+          doneAt: null,
+          doneByPersonId: null,
+        }
+        push(p.task(t.id), t as unknown as Record<string, unknown>, 'tasks')
+      }
     }
 
     /* ---------------------------------------------------------------- */

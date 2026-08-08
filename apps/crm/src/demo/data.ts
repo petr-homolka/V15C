@@ -97,6 +97,34 @@ export interface ChildRow {
   careEndedOn: string | null
 }
 
+export interface TaskRow {
+  id: string
+  title: string
+  detail: string | null
+  caseFileId: string | null
+  caseFileReference: string | null
+  subjectDisplayName: string | null
+  assigneePersonId: string
+  servesObligationId: string | null
+  dueOn: string | null
+  status: string
+}
+
+export interface EventRow {
+  id: string
+  ownerPersonId: string
+  title: string
+  kind: string
+  startAt: string
+  endAt: string
+  allDay: boolean
+  place: string | null
+  caseFileId: string | null
+  subjectDisplayName: string | null
+  travelMinutesEstimate: number | null
+  status: string
+}
+
 const unwrap = <T>(docs: Array<Doc<T>>): T[] => docs.map((d) => d.data)
 
 export const orgs = (): OrgRow[] => unwrap<OrgRow>(collection('orgs'))
@@ -121,6 +149,12 @@ export const caseFiles = (orgId: string): CaseFileRow[] =>
 
 export const obligations = (orgId: string): ObligationRow[] =>
   unwrap<ObligationRow>(collection(orgPaths(orgId).obligations()))
+
+export const tasks = (orgId: string): TaskRow[] =>
+  unwrap<TaskRow>(collection(orgPaths(orgId).tasks()))
+
+export const events = (orgId: string): EventRow[] =>
+  unwrap<EventRow>(collection(orgPaths(orgId).events()))
 
 export const entries = (orgId: string, caseFileId: string): EntryRow[] =>
   unwrap<EntryRow>(collection(orgPaths(orgId).entries(caseFileId)))
@@ -176,4 +210,14 @@ export const childrenOfAgreement = (orgId: string, agreementId: string): ChildRo
   if (!file) return []
   const ids = new Set(file.childIds)
   return children(orgId).filter((c) => ids.has(c.id))
+}
+
+/** Dohoda podle spisu — úkoly a schůzky odkazují na spis, obrazovka na dohodu. */
+export const agreementOfCaseFile = (
+  orgId: string,
+  caseFileId: string,
+): AgreementRow | null => {
+  const file = caseFiles(orgId).find((c) => c.id === caseFileId)
+  if (!file) return null
+  return agreements(orgId).find((a) => a.id === file.agreementId) ?? null
 }
