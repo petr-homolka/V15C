@@ -46,6 +46,7 @@ naopak vložený **zůstat musí**; externí se načte až po prvním vykreslen�
 | Cesta | Co je |
 | --- | --- |
 | `#/` | **Eli** — chat je hlavní obrazovka |
+| `#/prehled` | ukazatele, co hoří, nejbližší schůzky, kam se jezdí |
 | `#/dnes` | schůzky a úkoly dne |
 | `#/rodina/{uid}` | karta rodiny: přehled, záznamy, lhůty, dokumenty |
 | `#/pestoun/{uid}` | karta pěstouna: co běží, spojení, rodina, UID |
@@ -55,8 +56,9 @@ naopak vložený **zůstat musí**; externí se načte až po prvním vykreslen�
 | `#/ja` | pohled, vzhled, stav dat |
 
 Seznamy nemají vlastní obrazovku: **jsou ve vysouvacím menu** (`src/shell.tsx`)
-s přepínačem Dohody / Pěstouni / Děti / Tým, hledáním a seskupením (abecedně,
-podle obce, podle termínu, podle vlastního označení). Na širokém displeji menu
+s přepínačem Dohody / Pěstouni / Děti / Tým a hledáním. Celý seznam se otevírá
+na plochu jako **tabulka**: řazení kliknutím na hlavičku, stránkování po
+dvanácti, seskupení podle obce nebo termínu. Na širokém displeji menu
 nezmizí a stojí jako sloupec vedle obsahu.
 
 Proč to tak vypadá a co v řádku seznamu smí být, je v `docs/doprovazeni/26-rozhrani-aplikace.md`.

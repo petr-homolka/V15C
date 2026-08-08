@@ -101,7 +101,14 @@ export function Card({
         </header>
       ) : null}
       {padded ? <div className="kt-card-content">{children}</div> : children}
-      {footer ? <footer className="kt-card-footer">{footer}</footer> : null}
+      {footer ? (
+        <footer className="kt-card-footer">
+          {/* KtUI patičce nastaví jen odsazení a linku; rozložení je na nás. */}
+          <div className="text-copy-13 flex w-full items-center justify-between gap-3 text-[var(--muted-foreground)]">
+            {footer}
+          </div>
+        </footer>
+      ) : null}
     </section>
   )
 }
@@ -196,11 +203,32 @@ export function Note({ children }: { children: ReactNode }) {
  * Tabulka pro širší displej. Na mobilu se nepoužívá — tam je seznam řádků,
  * protože šest sloupců na 390 px není tabulka, ale hlavolam.
  */
+export interface Column {
+  label: string
+  align?: 'right'
+  hide?: 'sm' | 'md'
+  /** Klíč, podle kterého se řadí. Bez něj se sloupcem řadit nejde. */
+  sort?: string
+}
+
+export interface Sorting {
+  by: string
+  dir: 'asc' | 'desc'
+}
+
+/**
+ * Tabulka. Sloupec se `sort` se dá kliknutím seřadit — a je to vidět
+ * šipkou, ne jen změnou pořadí, aby bylo poznat, podle čeho se kouká.
+ */
 export function Table({
   columns,
+  sorting,
+  onSort,
   children,
 }: {
-  columns: Array<{ label: string; align?: 'right'; hide?: 'sm' | 'md' }>
+  columns: Column[]
+  sorting?: Sorting
+  onSort?: (by: string) => void
   children: ReactNode
 }) {
   return (
@@ -216,7 +244,22 @@ export function Table({
                   c.hide === 'sm' ? 'hidden sm:table-cell' : c.hide === 'md' ? 'hidden md:table-cell' : ''
                 }`}
               >
-                {c.label}
+                {c.sort && onSort ? (
+                  <button
+                    type="button"
+                    onClick={() => onSort(c.sort!)}
+                    className={`kt-table-col ${c.align === 'right' ? 'justify-end' : ''} ${
+                      sorting?.by === c.sort ? 'text-[var(--ds-purple-700)]' : ''
+                    }`}
+                  >
+                    <span className="kt-table-col-label">{c.label}</span>
+                    <span className="kt-table-col-sort">
+                      <SortArrow active={sorting?.by === c.sort} dir={sorting?.dir ?? 'asc'} />
+                    </span>
+                  </button>
+                ) : (
+                  c.label
+                )}
               </th>
             ))}
           </tr>
@@ -224,6 +267,63 @@ export function Table({
         <tbody>{children}</tbody>
       </table>
     </div>
+  )
+}
+
+function SortArrow({ active, dir }: { active?: boolean; dir: 'asc' | 'desc' }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={`h-3 w-3 ${active ? 'text-[var(--ds-purple-700)]' : 'text-[var(--ds-gray-600)]'}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {active ? (
+        <path d={dir === 'asc' ? 'M12 19V5m0 0l-6 6m6-6l6 6' : 'M12 5v14m0 0l6-6m-6 6l-6-6'} />
+      ) : (
+        <path d="M8 9l4-4 4 4M8 15l4 4 4-4" />
+      )}
+    </svg>
+  )
+}
+
+/** Stránkování pod tabulkou. Text vlevo, ovládání vpravo — jako všude. */
+export function Pager({
+  page,
+  pages,
+  from,
+  to,
+  total,
+  onPage,
+}: {
+  page: number
+  pages: number
+  from: number
+  to: number
+  total: number
+  onPage: (p: number) => void
+}) {
+  return (
+    <>
+      <span>
+        {from}–{to} z {total}
+      </span>
+      <span className="flex items-center gap-1">
+        <Button size="sm" onClick={() => onPage(Math.max(1, page - 1))}>
+          Předchozí
+        </Button>
+        <span className="text-copy-13 px-2 tabular-nums">
+          {page} / {pages}
+        </span>
+        <Button size="sm" onClick={() => onPage(Math.min(pages, page + 1))}>
+          Další
+        </Button>
+      </span>
+    </>
   )
 }
 

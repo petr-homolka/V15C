@@ -13,9 +13,10 @@ import { useMemo, useState } from 'react'
 import { Face } from '../face'
 import { usePersona } from '../persona'
 import { SEGMENTS, fold, listOf, type Item, type Segment } from '../shell'
+import type { Column } from '../ui'
 import {
-  Button, Card, Chip, Due, Field, PageHead, Row, Screen, Table, Td, Tr,
-  daysUntil,
+  Button, Card, Chip, Due, Field, Pager, PageHead, Row, Screen, Table, Td, Tr,
+  daysUntil, type Sorting,
 } from '../ui'
 
 type Grouping = 'zadne' | 'obec' | 'termin'
@@ -26,41 +27,52 @@ const GROUPINGS: Array<[Grouping, string]> = [
   ['termin', 'Podle termínu'],
 ]
 
-const COLUMNS: Record<Segment, Array<{ label: string; align?: 'right'; hide?: 'sm' | 'md' }>> = {
+const COLUMNS: Record<Segment, Column[]> = {
   dohody: [
-    { label: 'Rodina' },
-    { label: 'Obec', hide: 'sm' },
-    { label: 'Druh péče', hide: 'md' },
-    { label: 'Klíčová osoba', hide: 'md' },
-    { label: 'Nejbližší lhůta', align: 'right' },
+    { label: 'Rodina', sort: 'name' },
+    { label: 'Obec', hide: 'sm', sort: 'town' },
+    { label: 'Druh péče', hide: 'md', sort: 'note' },
+    { label: 'Klíčová osoba', hide: 'md', sort: 'extra' },
+    { label: 'Nejbližší lhůta', align: 'right', sort: 'due' },
   ],
   pestouni: [
-    { label: 'Jméno' },
-    { label: 'Obec', hide: 'sm' },
-    { label: 'Postavení', hide: 'md' },
-    { label: 'Rodina', hide: 'md' },
-    { label: 'Nejbližší lhůta', align: 'right' },
+    { label: 'Jméno', sort: 'name' },
+    { label: 'Obec', hide: 'sm', sort: 'town' },
+    { label: 'Postavení', hide: 'md', sort: 'note' },
+    { label: 'Rodina', hide: 'md', sort: 'extra' },
+    { label: 'Nejbližší lhůta', align: 'right', sort: 'due' },
   ],
   deti: [
-    { label: 'Jméno' },
-    { label: 'Obec', hide: 'sm' },
-    { label: 'Věk', hide: 'md' },
-    { label: 'Rodina', hide: 'md' },
-    { label: 'Nejbližší lhůta', align: 'right' },
+    { label: 'Jméno', sort: 'name' },
+    { label: 'Obec', hide: 'sm', sort: 'town' },
+    { label: 'Věk', hide: 'md', sort: 'note' },
+    { label: 'Rodina', hide: 'md', sort: 'extra' },
+    { label: 'Nejbližší lhůta', align: 'right', sort: 'due' },
   ],
   tym: [
-    { label: 'Jméno' },
-    { label: 'Obec', hide: 'sm' },
-    { label: 'Role', hide: 'md' },
-    { label: 'Ve správě', hide: 'md' },
+    { label: 'Jméno', sort: 'name' },
+    { label: 'Obec', hide: 'sm', sort: 'town' },
+    { label: 'Role', hide: 'md', sort: 'note' },
+    { label: 'Ve správě', hide: 'md', sort: 'extra' },
     { label: '', align: 'right' },
   ],
 }
+
+const PER_PAGE = 12
 
 export function Seznam({ segment, go }: { segment: Segment; go: (r: string) => void }) {
   const { persona } = usePersona()
   const [q, setQ] = useState('')
   const [grouping, setGrouping] = useState<Grouping>('zadne')
+  const [sorting, setSorting] = useState<Sorting>({ by: 'name', dir: 'asc' })
+  const [page, setPage] = useState(1)
+
+  // Změna filtru nebo řazení vrací na první stránku — jinak by člověk zíral
+  // na prázdno, protože sedmá stránka po zúžení neexistuje.
+  const change = <T,>(set: (v: T) => void) => (v: T) => {
+    set(v)
+    setPage(1)
+  }
 
   const items = useMemo(
     () => listOf(segment, persona.organizationId, persona),
@@ -70,7 +82,24 @@ export function Seznam({ segment, go }: { segment: Segment; go: (r: string) => v
     ? items.filter((i) => fold(`${i.name} ${i.town ?? ''} ${i.extra ?? ''}`).includes(fold(q.trim())))
     : items
 
-  const groups = group(shown, grouping)
+  const sorted = [...shown].sort((a, b) => {
+    const dir = sorting.dir === 'asc' ? 1 : -1
+    if (sorting.by === 'due') {
+      // Bez termínu patří na konec v obou směrech — je to „nic", ne „nejdřív".
+      if (!a.dueOn) return 1
+      if (!b.dueOn) return -1
+      return a.dueOn.localeCompare(b.dueOn) * dir
+    }
+    const key = sorting.by as 'name' | 'town' | 'note' | 'extra'
+    return (a[key] ?? '').localeCompare(b[key] ?? '', 'cs') * dir
+  })
+
+  // Stránkuje se jen bez seskupení; skupiny jsou samy o sobě porcování.
+  const paged =
+    grouping === 'zadne' ? sorted.slice((page - 1) * PER_PAGE, page * PER_PAGE) : sorted
+  const pages = Math.max(1, Math.ceil(sorted.length / PER_PAGE))
+
+  const groups = group(paged, grouping)
   const label = SEGMENTS.find(([k]) => k === segment)?.[1] ?? 'Seznam'
 
   return (
@@ -81,14 +110,14 @@ export function Seznam({ segment, go }: { segment: Segment; go: (r: string) => v
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <div className="w-52">
-              <Field value={q} onChange={setQ} placeholder="Hledat" />
+              <Field value={q} onChange={change(setQ)} placeholder="Hledat" />
             </div>
             {GROUPINGS.map(([key, text]) => (
               <Button
                 key={key}
                 size="sm"
                 variant={key === grouping ? 'primary' : 'secondary'}
-                onClick={() => setGrouping(key)}
+                onClick={() => change(setGrouping)(key)}
               >
                 {text}
               </Button>
@@ -104,17 +133,38 @@ export function Seznam({ segment, go }: { segment: Segment; go: (r: string) => v
             title={grouping === 'zadne' ? undefined : title}
             table
             footer={
-              <>
-                <span>
-                  {rows.length} {rows.length === 1 ? 'záznam' : rows.length < 5 ? 'záznamy' : 'záznamů'}
-                </span>
-                <span>{shown.length !== items.length ? `filtrováno z ${items.length}` : null}</span>
-              </>
+              grouping === 'zadne' ? (
+                <Pager
+                  page={page}
+                  pages={pages}
+                  from={(page - 1) * PER_PAGE + 1}
+                  to={Math.min(page * PER_PAGE, sorted.length)}
+                  total={sorted.length}
+                  onPage={setPage}
+                />
+              ) : (
+                <>
+                  <span>
+                    {rows.length} {rows.length === 1 ? 'záznam' : rows.length < 5 ? 'záznamy' : 'záznamů'}
+                  </span>
+                  <span>{shown.length !== items.length ? `filtrováno z ${items.length}` : null}</span>
+                </>
+              )
             }
           >
             {/* Široký displej: tabulka. */}
             <div className="hidden sm:block">
-              <Table columns={COLUMNS[segment]}>
+              <Table
+                columns={COLUMNS[segment]}
+                sorting={sorting}
+                onSort={(by) =>
+                  setSorting((prev) =>
+                    prev.by === by
+                      ? { by, dir: prev.dir === 'asc' ? 'desc' : 'asc' }
+                      : { by, dir: 'asc' },
+                  )
+                }
+              >
                 {rows.map((i) => (
                   <Tr key={i.uid} onClick={() => go(i.route)}>
                     <Td>

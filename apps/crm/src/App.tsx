@@ -14,6 +14,7 @@ import { Eli } from './screens/eli'
 import { Ja } from './screens/ja'
 import { Dite } from './screens/dite'
 import { Pestoun } from './screens/pestoun'
+import { Prehled } from './screens/prehled'
 import { Rodina } from './screens/rodina'
 import { Seznam } from './screens/seznam'
 import type { Segment } from './shell'
@@ -43,7 +44,8 @@ function Router() {
   const { persona } = usePersona()
 
   let screen = <Eli go={go} />
-  if (route === '/dnes') screen = <Dnes go={go} />
+  if (route === '/prehled') screen = <Prehled go={go} />
+  else if (route === '/dnes') screen = <Dnes go={go} />
   else if (route === '/ja') screen = <Ja go={go} />
   else if (route.startsWith('/rodina/')) {
     screen = <Rodina id={route.slice('/rodina/'.length)} go={go} />

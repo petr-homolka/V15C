@@ -102,6 +102,7 @@ function TopBar({
 
 function breadcrumb(route: string): string {
   if (route === '/') return 'Eli'
+  if (route === '/prehled') return 'Přehled'
   if (route === '/dnes') return 'Dnes'
   if (route.startsWith('/seznam/')) {
     const seg = route.slice('/seznam/'.length) as Segment
@@ -275,6 +276,12 @@ function Sidebar({
           label="Eli"
           active={route === '/'}
           onClick={() => go('/')}
+        />
+        <NavItem
+          icon={<path d="M4 13h6V4H4v9Zm10 7h6V4h-6v16ZM4 20h6v-4H4v4Z" />}
+          label="Přehled"
+          active={route === '/prehled'}
+          onClick={() => go('/prehled')}
         />
         <NavItem
           icon={<path d="M7 3v3m10-3v3M4 9h16M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z" />}
