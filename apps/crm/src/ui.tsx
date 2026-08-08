@@ -78,11 +78,14 @@ export function Card({
   title,
   action,
   children,
+  footer,
   padded,
 }: {
   title?: string
   action?: ReactNode
   children: ReactNode
+  /** Řádek pod obsahem — počet záznamů, stránkování. */
+  footer?: ReactNode
   /** Pro obsah, který není seznam řádků (text, mřížka). */
   padded?: boolean
 }) {
@@ -95,6 +98,11 @@ export function Card({
         </header>
       ) : null}
       <div className={padded ? 'p-4' : ''}>{children}</div>
+      {footer ? (
+        <footer className="text-copy-13 flex items-center justify-between gap-3 border-t border-[var(--ds-gray-alpha-400)] px-4 py-2.5 text-[var(--ds-gray-900)]">
+          {footer}
+        </footer>
+      ) : null}
     </section>
   )
 }
@@ -205,7 +213,7 @@ export function Table({
               <th
                 key={c.label}
                 scope="col"
-                className={`text-label-13 whitespace-nowrap px-4 py-2.5 font-normal text-[var(--ds-gray-900)] ${
+                className={`text-label-13 sticky top-14 z-10 whitespace-nowrap bg-[var(--ds-background-100)] px-4 py-2 font-normal text-[var(--ds-gray-900)] ${
                   c.align === 'right' ? 'text-right' : 'text-left'
                 } ${c.hide === 'sm' ? 'hidden sm:table-cell' : c.hide === 'md' ? 'hidden md:table-cell' : ''}`}
               >
@@ -246,7 +254,7 @@ export function Td({
 }) {
   return (
     <td
-      className={`text-copy-14 px-4 py-2.5 ${align === 'right' ? 'text-right tabular-nums' : ''} ${
+      className={`text-copy-14 px-4 py-2 ${align === 'right' ? 'text-right tabular-nums' : ''} ${
         hide === 'sm' ? 'hidden sm:table-cell' : hide === 'md' ? 'hidden md:table-cell' : ''
       } ${muted ? 'text-[var(--ds-gray-900)]' : 'text-[var(--ds-gray-1000)]'}`}
     >

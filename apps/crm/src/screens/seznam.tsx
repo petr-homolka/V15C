@@ -99,7 +99,18 @@ export function Seznam({ segment, go }: { segment: Segment; go: (r: string) => v
 
       <div className="flex flex-col gap-4">
         {groups.map(([title, rows]) => (
-          <Card key={title} title={grouping === 'zadne' ? undefined : `${title} · ${rows.length}`}>
+          <Card
+            key={title}
+            title={grouping === 'zadne' ? undefined : title}
+            footer={
+              <>
+                <span>
+                  {rows.length} {rows.length === 1 ? 'záznam' : rows.length < 5 ? 'záznamy' : 'záznamů'}
+                </span>
+                <span>{shown.length !== items.length ? `filtrováno z ${items.length}` : null}</span>
+              </>
+            }
+          >
             {/* Široký displej: tabulka. */}
             <div className="hidden sm:block">
               <Table columns={COLUMNS[segment]}>
