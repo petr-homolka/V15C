@@ -32,6 +32,15 @@ export interface EliContext {
 
 /* --- pomůcky ------------------------------------------------------------- */
 
+/**
+ * České množné číslo. Bez tohohle vyleze „jsou 19 lhůty" — chyba, které si
+ * nikdo nevšimne v kódu a každý si jí všimne na obrazovce.
+ */
+function plural(n: number, one: string, few: string, many: string): string {
+  const form = n === 1 ? one : n >= 2 && n <= 4 ? few : many
+  return form.replace('%n', String(n))
+}
+
 const fold = (s: string): string =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
@@ -223,7 +232,7 @@ export function answer(question: string, ctx: EliContext): EliAnswer {
       .sort((a, b) => a.dueOn.localeCompare(b.dueOn))
     if (late.length === 0) return { text: 'Nic po termínu. ' }
     return {
-      text: `Po termínu ${late.length === 1 ? 'je jedna lhůta' : `jsou ${late.length} lhůty`}.`,
+      text: `Po termínu ${plural(late.length, 'je jedna lhůta', 'jsou %n lhůty', 'je %n lhůt')}.`,
       links: late.slice(0, 8).map((o) => ({
         label: `${o.subjectDisplayName}`,
         detail: `${formatDate(o.dueOn)} · ${dueLabel(o.dueOn)}`,

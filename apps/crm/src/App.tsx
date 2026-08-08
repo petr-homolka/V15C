@@ -15,6 +15,8 @@ import { Ja } from './screens/ja'
 import { Dite } from './screens/dite'
 import { Pestoun } from './screens/pestoun'
 import { Prehled } from './screens/prehled'
+import { Spis } from './workspace/spis'
+import { WorkspaceShell } from './workspace/shell'
 import { Rodina } from './screens/rodina'
 import { Seznam } from './screens/seznam'
 import type { Segment } from './shell'
@@ -42,6 +44,16 @@ export function App() {
 function Router() {
   const [route, go] = useRoute()
   const { persona } = usePersona()
+
+  // Rozvržení B žije vedle A na vlastních cestách, aby se dalo porovnat
+  // klikáním, ne z popisu.
+  if (route === '/b' || route.startsWith('/b/')) {
+    return (
+      <WorkspaceShell go={go} route={route}>
+        <Spis id={route.startsWith('/b/spis/') ? route.slice('/b/spis/'.length) : ''} go={go} />
+      </WorkspaceShell>
+    )
+  }
 
   let screen = <Eli go={go} />
   if (route === '/prehled') screen = <Prehled go={go} />

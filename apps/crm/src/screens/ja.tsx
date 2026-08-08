@@ -65,6 +65,19 @@ export function Ja({ go }: { go: (r: string) => void }) {
             </InfoRow>
           </Card>
 
+          <Card title="Rozvržení">
+            <InfoRow label="A — panel a seznamy">
+              <button type="button" onClick={() => go('/prehled')} className="kt-link kt-link-sm">
+                Otevřít
+              </button>
+            </InfoRow>
+            <InfoRow label="B — spis jako dokument">
+              <button type="button" onClick={() => go('/b')} className="kt-link kt-link-sm">
+                Otevřít
+              </button>
+            </InfoRow>
+          </Card>
+
           <Card title="Data">
             <InfoRow label="Testovací sada">{docCount()} dokumentů</InfoRow>
             <InfoRow label="Zápis do databáze">zatím ne</InfoRow>

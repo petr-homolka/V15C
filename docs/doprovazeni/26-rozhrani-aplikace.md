@@ -195,3 +195,35 @@ hezkého, ne evidence — a nemá vypadat jako spis.
 | desktopový režim s dvěma sloupci (seznam + detail) | s soupisem obrazovek |
 | skutečné ukládání obrázků a označení | s Firestore a přihlášením |
 | kniha života | s ukládáním souborů |
+
+
+---
+
+## 8. Rozvržení B — spis jako dokument
+
+Rozvržení A (všechno výš) je **rejstřík**: navigace vlevo → seznam → karta.
+Vedle něj stojí druhá cesta, aby šlo porovnat klikáním, ne z popisu:
+
+| | A | B |
+| --- | --- | --- |
+| navigace | panel vlevo, seznamy | **žádná** — píše se |
+| obrazovka je | rejstřík | **jeden spis** |
+| obsah spisu | čtyři záložky | **jedna časová osa** |
+| přepnutí rodiny | seznam → řádek | příkazový řádek nebo poslední otevřené |
+
+**Příkazový řádek** (⌘K / Ctrl+K) je jediná navigace. Rozhoduje první slovo:
+co vypadá jako jméno, hledá; co vypadá jako věta, jde na Eli. Klíčová osoba
+nezná strukturu aplikace, ale zná jména — menu ji nutí překládat si jméno na
+cestu, řádek to přeskakuje.
+
+**Časová osa** míchá návštěvy, poznámky, výdaje, dokumenty, lhůty i schůzky
+podle data, protože tak se ta práce odehrála. Budoucí věci jsou nad linkou
+„Dnes", minulost pod ní. V rozvržení A jsou tytéž věci ve čtyřech záložkách
+a pořadí si musí člověk složit v hlavě.
+
+Osa hned odhalila chybu v datech: **všechny dokumenty seděly na dnešku**,
+protože se jim `createdAt` bral z okamžiku generování sady, ne z data, ke
+kterému jsou datované. V rozvržení A to nebylo poznat — dokumenty jsou tam
+v tabulce s vlastním sloupcem.
+
+Kde to je: `apps/crm/src/workspace/`, cesta `#/b`. Přepínač je v Pohledu.

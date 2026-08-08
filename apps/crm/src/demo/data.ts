@@ -81,6 +81,7 @@ export interface EntryRow {
 
 export interface DocumentRow {
   id: string
+  createdAt: string
   title: string
   category: string
   currentVersionNo: number

@@ -1963,6 +1963,10 @@ export function build(options: Partial<SeedOptions> = {}): SeedResult {
         const at = rng.dateBetween(addMonths(opt.today, -14), opt.today)
         const doc: Document = {
           ...sys(keyWorkerId),
+          // Dokument vznikl tehdy, kdy je datovaný — ne ve chvíli, kdy se
+          // generovala sada. Na časové ose (rozvržení B) by jinak všechny
+          // dokumenty seděly na dnešku a osa by nedávala smysl.
+          createdAt: isoDateTime(at),
           id,
           caseFileId,
           category,
