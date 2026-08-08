@@ -30,8 +30,13 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Lišta pohledu je jediná věc nad obsahem, tak ať drží tokenizované sklo. */
+/* Spodní lišta je jediná věc nad obsahem — sklo, ne plná deska. */
 .app-bar {
-  background: color-mix(in oklab, var(--ds-background-100) 88%, transparent);
-  backdrop-filter: saturate(1.6) blur(12px);
+  background: color-mix(in oklab, var(--ds-background-100) 82%, transparent);
+  backdrop-filter: saturate(1.8) blur(20px);
+}
+
+/* Plocha aplikace je zapuštěná, karty na ní svítí. */
+body {
+  background: var(--ds-background-200);
 }

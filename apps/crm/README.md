@@ -34,30 +34,41 @@ naopak vložený **zůstat musí**; externí se načte až po prvním vykreslen�
 
 | Cesta | Co je |
 | --- | --- |
-| `#/` | **agenda** u pracovníka (úkoly + den), u pěstouna vlastní rodina, u dítěte profil, u správce seznam organizací |
-| `#/rodiny` | rodiny ve správě a nejbližší lhůty |
-| `#/dohoda/{uid}` | karta dohody: přehled, záznamy, lhůty, dokumenty |
-| `#/spis/{uid}` | totéž přes spis — úkoly a schůzky odkazují na spis |
-| `#/prepnout` | výběr pohledu a motivu |
+| `#/` | **Eli** — chat je hlavní obrazovka |
+| `#/dnes` | schůzky a úkoly dne |
+| `#/rodiny` | seznam rodin s hledáním |
+| `#/rodina/{uid}` | karta rodiny: přehled, záznamy, lhůty, dokumenty |
+| `#/spis/{uid}` | totéž přes spis — schůzky a úkoly odkazují na spis |
+| `#/ja` | pohled, vzhled, stav dat |
 
 Směrování je přes hash, bez knihovny. Až bude soupis obrazovek, přibude router.
 
-## Co je převzaté z prototypu V10G
+## Proč to vypadá takhle
 
-Výchozí obrazovka pracovníka je **denní agenda** podle `RoutineAgendaView`
-z prototypu: úkoly ve skupinách (po termínu / dnes / tento týden / později /
-hotové) s vazbou na rodinu, rychlé přidání řádkem, 24hodinová osa s čarou
-aktuálního času, celodenní pás s narozeninami a zvýrazněný překryv schůzek.
+První pokus byl přenesená agenda z prototypu V10G — úkoly nad hodinovou mřížkou.
+Vypadalo to jako tabulka v prohlížeči, ne jako aplikace v telefonu, a zahodil
+jsem to. Tady je, čím se řídí ta druhá verze:
 
-Postaveno znovu, ne zkopírováno: uspořádání a chování se přebírá, vzhled jede
-na tokenech Geistu a data jsou skutečná z `schema` + `tools/seed` — prototyp
-měl schůzky i úkoly jako pole přímo v komponentě.
+**Eli je první obrazovka, ne pomocník v rohu.** Chat má být ústřední nástroj
+(dok. 15). Když je hlavní, musí být první — jinak se otevře třikrát a zapomene.
 
-Nepřevzato: přetahování myší (v terénu na mobilu k ničemu a bez zápisu do
-databáze by jen předstíralo uložení) a diktování — to má vlastní návrh a patří
-k Eli (dok. 15, 20).
+**Den je seznam, ne mřížka.** Na 24hodinové ose zabírá tři čtvrtiny plochy
+prázdná noc a schůzky se čtou hůř než v pěti řádcích pod sebou.
 
-Zaškrtnutí a přidání úkolu žijí jen v paměti záložky.
+**Jedna karta, vlasové linky, žádné rámečky kolem každého řádku.** Předtím měl
+každý úkol vlastní obrys a barevnou bublinu — z deseti řádků se stala mozaika.
+Stav se teď píše textem v barvě a nejvýš jeden na řádek.
+
+**Velký nadpis a vzduch.** Písmo 32 px nahoře, obsah v jednom sloupci, dotyková
+plocha 44 px, ovládání dole u palce.
+
+Odpovědi Eli jsou zatím **pravidlové nad skutečnými daty** (`src/eli/answer.ts`),
+ne jazykový model: termíny, co je po termínu, co je dnes, otevři rodinu a zapiš
+schůzku do kalendáře. Až přijde model, zůstane tenhle soubor jako záchranná síť
+pro dotazy s jednoznačnou odpovědí.
+
+Schůzka zapsaná v chatu a odškrtnutý úkol žijí jen v paměti záložky
+(`src/local.tsx`) — kostra do databáze nezapisuje.
 
 ## Co tu ještě není
 
