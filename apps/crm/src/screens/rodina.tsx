@@ -9,9 +9,10 @@ import { useState } from 'react'
 import * as data from '../demo/data'
 import * as L from '../labels'
 import { usePersona } from '../persona'
+import { Face } from '../face'
 import {
-  Avatar, Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen, Segmented,
-  childCountLabel, dueLabel, dueTone, formatDate,
+  Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen, Segmented,
+  childCountLabel, dueLabel, dueTone, formatDate, formatUid,
 } from '../ui'
 
 type Tab = 'prehled' | 'zaznamy' | 'lhuty' | 'dokumenty'
@@ -25,7 +26,7 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
   if (!agreement) {
     return (
       <Screen>
-        <LargeTitle title="Rodina" back={() => go('/rodiny')} />
+        <LargeTitle title="Rodina" back={() => go('/')} />
         <Card>
           <Note>Tahle rodina tu není.</Note>
         </Card>
@@ -43,8 +44,10 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
     <Screen>
       <LargeTitle
         title={agreement.naming.displayName}
-        subtitle={`${agreement.reference} · ${L.custodyBasis(agreement.custodyBasis)}`}
-        back={() => go('/rodiny')}
+        subtitle={[data.townOfAgreement(orgId, id), L.custodyBasis(agreement.custodyBasis)]
+          .filter(Boolean)
+          .join(' · ')}
+        back={() => go('/')}
         right={
           agreement.status !== 'active' ? (
             <div className="pt-2">
@@ -75,9 +78,12 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
                 <div key={pid}>
                   {i > 0 ? <Divider /> : null}
                   <Row
-                    leading={<Avatar text={p?.displayName ?? '?'} tone="blue" />}
+                    leading={<Face uid={pid} name={p?.displayName ?? '?'} />}
                     title={p?.displayName ?? pid}
-                    subtitle={L.carerKind(agreement.carerKind)}
+                    subtitle={[data.townOfPerson(orgId, pid), L.carerKind(agreement.carerKind)]
+                      .filter(Boolean)
+                      .join(' · ')}
+                    onClick={() => go(`/pestoun/${pid}`)}
                   />
                 </div>
               )
@@ -96,10 +102,13 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
                 <div key={c.id}>
                   {i > 0 ? <Divider /> : null}
                   <Row
-                    leading={<Avatar text={c.displayName} />}
+                    leading={<Face uid={c.id} kind="child" name={c.displayName} />}
                     title={c.displayName}
-                    subtitle={`nar. ${formatDate(c.birthDate)}`}
+                    subtitle={[data.townOfChild(orgId, c.id), `nar. ${formatDate(c.birthDate)}`]
+                      .filter(Boolean)
+                      .join(' · ')}
                     meta={c.careEndedOn ? <Meta>péče ukončena</Meta> : undefined}
+                    onClick={() => go(`/dite/${c.id}`)}
                   />
                 </div>
               ))
@@ -109,6 +118,8 @@ export function Rodina({ id, go }: { id: string; go: (r: string) => void }) {
           <GroupTitle>Spis</GroupTitle>
           <Card>
             <Row title="Spisová značka" meta={<Meta>{file?.reference ?? '—'}</Meta>} />
+            <Divider />
+            <Row title="UID" meta={<Meta><span className="font-mono">{formatUid(id)}</span></Meta>} />
             <Divider />
             <Row title="Klíčová osoba" meta={<Meta>{file?.keyWorkerDisplayName ?? '—'}</Meta>} />
             <Divider />

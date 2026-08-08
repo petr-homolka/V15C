@@ -6,8 +6,9 @@
 import * as data from '../demo/data'
 import * as L from '../labels'
 import { usePersona } from '../persona'
+import { Face } from '../face'
 import {
-  Avatar, Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen,
+  Card, Divider, GroupTitle, LargeTitle, Meta, Note, Row, Screen,
   childCountLabel, dueLabel, dueTone,
 } from '../ui'
 
@@ -49,9 +50,9 @@ export function Clen({ id, go }: { id: string; go: (r: string) => void }) {
             <div key={a.id}>
               {i > 0 ? <Divider /> : null}
               <Row
-                leading={<Avatar text={a.naming.displayName} />}
+                leading={<Face uid={a.id} kind="family" name={a.naming.displayName} />}
                 title={a.naming.displayName}
-                subtitle={`${a.reference} · ${childCountLabel(a.childCount)}`}
+                subtitle={[data.townOfAgreement(orgId, a.id), childCountLabel(a.childCount)].filter(Boolean).join(' · ')}
                 meta={
                   a.nextObligationDueOn ? (
                     <Meta tone={dueTone(a.nextObligationDueOn)}>{dueLabel(a.nextObligationDueOn)}</Meta>

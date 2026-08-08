@@ -221,3 +221,44 @@ export const agreementOfCaseFile = (
   if (!file) return null
   return agreements(orgId).find((a) => a.id === file.agreementId) ?? null
 }
+
+/* --- kde koho najdu ------------------------------------------------------ */
+
+interface ContactRow {
+  phone: string | null
+  email: string | null
+  address: { street: string; city: string; zip: string; country: string } | null
+}
+
+/**
+ * Obec, ne celá adresa.
+ *
+ * V seznamu je město to jediné z kontaktu, co Klíčová osoba potřebuje — kam
+ * to je daleko. Ulice a číslo patří do profilu; kontakty jsou v modelu
+ * schválně jinde než jméno (dok. 04) a v seznamu nemají co dělat.
+ */
+export const townOfPerson = (orgId: string, personId: string): string | null =>
+  document<ContactRow>(orgPaths(orgId).personContact(personId))?.data.address?.city ?? null
+
+export const townOfChild = (orgId: string, childId: string): string | null =>
+  document<ContactRow>(orgPaths(orgId).childContact(childId))?.data.address?.city ?? null
+
+export const contactOfPerson = (orgId: string, personId: string): ContactRow | null =>
+  document<ContactRow>(orgPaths(orgId).personContact(personId))?.data ?? null
+
+export const contactOfChild = (orgId: string, childId: string): ContactRow | null =>
+  document<ContactRow>(orgPaths(orgId).childContact(childId))?.data ?? null
+
+/** Obec dohody = obec první pečující osoby. Tam se jezdí. */
+export const townOfAgreement = (orgId: string, agreementId: string): string | null => {
+  const a = agreements(orgId).find((x) => x.id === agreementId)
+  const first = a?.carerPersonIds[0]
+  return first ? townOfPerson(orgId, first) : null
+}
+
+/** Nejbližší neuzavřená lhůta dohody — do seznamu jako upozornění. */
+export const nextDueOfAgreement = (orgId: string, agreementId: string): ObligationRow | null =>
+  obligationsOfAgreement(orgId, agreementId).filter((o) => o.status !== 'met')[0] ?? null
+
+export const childAgreementId = (orgId: string, childId: string): string | null =>
+  caseFiles(orgId).find((c) => c.childIds.includes(childId))?.agreementId ?? null

@@ -7,8 +7,9 @@
 
 import { getPreference, setTheme } from '../theme.js'
 import { docCount } from '../demo/store'
+import { Face } from '../face'
 import { usePersona } from '../persona'
-import { Avatar, Card, Divider, GroupTitle, LargeTitle, Meta, Row, Screen } from '../ui'
+import { Card, Divider, GroupTitle, LargeTitle, Meta, Row, Screen } from '../ui'
 
 type Preference = 'light' | 'dark' | 'system'
 
@@ -42,10 +43,10 @@ export function Ja({ go }: { go: (r: string) => void }) {
               <div key={p.key}>
                 {i > 0 ? <Divider /> : null}
                 <Row
-                  leading={<Avatar text={p.displayName} tone={p.key === persona.key ? 'blue' : 'gray'} />}
+                  leading={<Face uid={p.personId ?? p.key} name={p.displayName} />}
                   title={p.displayName}
                   subtitle={p.roleLabel}
-                  meta={p.key === persona.key ? <Meta tone="blue">vybráno</Meta> : undefined}
+                  meta={p.key === persona.key ? <Meta tone="purple">vybráno</Meta> : undefined}
                   onClick={() => {
                     setPersona(p.key)
                     go('/')
@@ -64,7 +65,7 @@ export function Ja({ go }: { go: (r: string) => void }) {
             {i > 0 ? <Divider /> : null}
             <Row
               title={label}
-              meta={current === value ? <Meta tone="blue">vybráno</Meta> : undefined}
+              meta={current === value ? <Meta tone="purple">vybráno</Meta> : undefined}
               onClick={() => {
                 setTheme(value)
                 go('/ja')

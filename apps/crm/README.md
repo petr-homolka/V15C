@@ -37,13 +37,18 @@ naopak vložený **zůstat musí**; externí se načte až po prvním vykreslen�
 | `#/` | **Eli** — chat je hlavní obrazovka |
 | `#/dnes` | schůzky a úkoly dne |
 | `#/rodina/{uid}` | karta rodiny: přehled, záznamy, lhůty, dokumenty |
+| `#/pestoun/{uid}` | karta pěstouna: co běží, spojení, rodina, UID |
+| `#/dite/{uid}` | karta dítěte: věk, škola, bydliště, co se chystá, kniha života |
 | `#/clen/{uid}` | člen týmu a co má ve správě |
 | `#/spis/{uid}` | totéž přes spis — schůzky a úkoly odkazují na spis |
 | `#/ja` | pohled, vzhled, stav dat |
 
 Seznamy nemají vlastní obrazovku: **jsou ve vysouvacím menu** (`src/shell.tsx`)
-s přepínačem Dohody / Pěstouni / Děti / Tým a hledáním. Spodní lišta zmizela —
-čtyři záložky dole a čtyři v menu jsou dvě navigace vedle sebe.
+s přepínačem Dohody / Pěstouni / Děti / Tým, hledáním a seskupením (abecedně,
+podle obce, podle termínu, podle vlastního označení). Na širokém displeji menu
+nezmizí a stojí jako sloupec vedle obsahu.
+
+Proč to tak vypadá a co v řádku seznamu smí být, je v `docs/doprovazeni/26-rozhrani-aplikace.md`.
 
 Směrování je přes hash, bez knihovny. Až bude soupis obrazovek, přibude router.
 

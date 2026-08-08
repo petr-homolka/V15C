@@ -112,7 +112,7 @@ export function Eli({ go }: { go: (r: string) => void }) {
                         { id: prev.length * 2 + 2, from: 'eli', text: 'Vráceno zpět.' },
                       ])
                     }}
-                    className="text-copy-14 self-start rounded-lg text-[var(--ds-blue-700)]"
+                    className="text-copy-14 self-start rounded-lg text-[var(--ds-purple-700)]"
                   >
                     {t.answer.did.label}
                   </button>
@@ -134,8 +134,8 @@ export function Eli({ go }: { go: (r: string) => void }) {
 /** Značka. Čtverec s iniciálou — logo přijde, až bude. */
 function Mark() {
   return (
-    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--ds-gray-1000)]">
-      <span className="text-heading-20 text-[var(--ds-background-100)]">E</span>
+    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--ds-purple-700)]">
+      <span className="text-heading-20 text-white">E</span>
     </div>
   )
 }
@@ -173,7 +173,7 @@ function Composer({
           onClick={onSend}
           aria-label="Odeslat"
           disabled={value.trim().length === 0}
-          className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--ds-gray-1000)] text-[var(--ds-background-100)] disabled:bg-[var(--ds-gray-200)] disabled:text-[var(--ds-gray-700)]"
+          className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--ds-purple-700)] text-white disabled:bg-[var(--ds-gray-200)] disabled:text-[var(--ds-gray-700)]"
         >
           <span className="-rotate-90">
             <Chevron />

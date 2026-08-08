@@ -11,6 +11,7 @@
  *  – barevný štítek nejvýš jeden na řádek, jinak se přestane číst.
  */
 
+import { formatUidForReading } from '../../../schema/src/index'
 import type { ReactNode } from 'react'
 
 /* --- plocha --------------------------------------------------------------- */
@@ -41,7 +42,7 @@ export function LargeTitle({
         <button
           type="button"
           onClick={back}
-          className="text-copy-14 -ml-1 mb-2 flex h-8 items-center gap-1 rounded-lg pr-2 text-[var(--ds-blue-700)]"
+          className="text-copy-14 -ml-1 mb-2 flex h-8 items-center gap-1 rounded-lg pr-2 text-[var(--ds-purple-700)]"
         >
           <Chevron dir="left" /> Zpět
         </button>
@@ -177,29 +178,6 @@ export function Chevron({ dir = 'right' }: { dir?: 'right' | 'left' }) {
   )
 }
 
-/** Kolečko s iniciálami — v seznamu rodin nese víc než ikona složky. */
-export function Avatar({ text, tone = 'gray' }: { text: string; tone?: 'gray' | 'blue' | 'amber' }) {
-  const bg =
-    tone === 'blue'
-      ? 'bg-[var(--ds-blue-200)] text-[var(--ds-blue-900)]'
-      : tone === 'amber'
-        ? 'bg-[var(--ds-amber-200)] text-[var(--ds-amber-900)]'
-        : 'bg-[var(--ds-gray-200)] text-[var(--ds-gray-900)]'
-  // Jen slova, která začínají písmenem — „Markovi — pěstounská péče" jinak
-  // dá iniciály „M—".
-  const initials = text
-    .split(/[\s—-]+/)
-    .filter((w) => /^\p{L}/u.test(w))
-    .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
-    .join('')
-  return (
-    <div className={`text-label-14 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${bg}`}>
-      {initials}
-    </div>
-  )
-}
-
 /* --- ovládání ------------------------------------------------------------- */
 
 export function Segmented<T extends string>({
@@ -220,7 +198,7 @@ export function Segmented<T extends string>({
           onClick={() => onChange(key)}
           className={`text-button-14 h-8 flex-1 rounded-lg ${
             key === value
-              ? 'bg-[var(--ds-background-100)] text-[var(--ds-gray-1000)] shadow-[var(--ds-shadow-small)]'
+              ? 'bg-[var(--ds-background-100)] text-[var(--ds-purple-900)] shadow-[var(--ds-shadow-small)]'
               : 'text-[var(--ds-gray-900)]'
           }`}
         >
@@ -243,11 +221,12 @@ export function Chip({ children, onClick }: { children: ReactNode; onClick?: () 
   )
 }
 
-export type Tone = 'neutral' | 'blue' | 'amber' | 'red' | 'green'
+export type Tone = 'neutral' | 'blue' | 'purple' | 'amber' | 'red' | 'green'
 
 const TONE: Record<Tone, string> = {
   neutral: 'text-[var(--ds-gray-900)]',
   blue: 'text-[var(--ds-blue-700)]',
+  purple: 'text-[var(--ds-purple-700)]',
   amber: 'text-[var(--ds-amber-900)]',
   red: 'text-[var(--ds-red-700)]',
   green: 'text-[var(--ds-green-700)]',
@@ -257,6 +236,9 @@ const TONE: Record<Tone, string> = {
 export function Meta({ tone = 'neutral', children }: { tone?: Tone; children: ReactNode }) {
   return <span className={`text-copy-14 ${TONE[tone]}`}>{children}</span>
 }
+
+/** UID pro čtení: `u6t 4f3k`. Ukazuje se jen v profilu (dok. 25). */
+export const formatUid = (uid: string): string => formatUidForReading(uid)
 
 export function Note({ children }: { children: ReactNode }) {
   return <p className="text-copy-14 px-4 py-4 text-[var(--ds-gray-900)]">{children}</p>
@@ -299,6 +281,19 @@ export function dueLabel(iso: string): string {
 }
 
 export const dueTone = (iso: string): Tone => (daysUntil(iso) < 0 ? 'red' : 'neutral')
+
+/**
+ * Štítek do seznamu. Krátký schválně: kolik přesně dní je něco po termínu,
+ * se řeší v profilu — v seznamu jde o to, aby červená padla do oka a nezabrala
+ * půlku řádku.
+ */
+export function dueBadge(iso: string): string {
+  const d = daysUntil(iso)
+  if (d < 0) return 'po termínu'
+  if (d === 0) return 'dnes'
+  if (d === 1) return 'zítra'
+  return `za ${d} dní`
+}
 
 /** 5 dětí / 2 děti / 1 dítě — bez tohohle to v češtině skřípe. */
 export function childCountLabel(n: number): string {

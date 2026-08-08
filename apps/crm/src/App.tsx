@@ -12,6 +12,8 @@ import { Clen } from './screens/clen'
 import { Dnes } from './screens/dnes'
 import { Eli } from './screens/eli'
 import { Ja } from './screens/ja'
+import { Dite } from './screens/dite'
+import { Pestoun } from './screens/pestoun'
 import { Rodina } from './screens/rodina'
 
 function useRoute(): [string, (r: string) => void] {
@@ -43,6 +45,10 @@ function Router() {
   else if (route === '/ja') screen = <Ja go={go} />
   else if (route.startsWith('/rodina/')) {
     screen = <Rodina id={route.slice('/rodina/'.length)} go={go} />
+  } else if (route.startsWith('/pestoun/')) {
+    screen = <Pestoun id={route.slice('/pestoun/'.length)} go={go} />
+  } else if (route.startsWith('/dite/')) {
+    screen = <Dite id={route.slice('/dite/'.length)} go={go} />
   } else if (route.startsWith('/clen/')) {
     screen = <Clen id={route.slice('/clen/'.length)} go={go} />
   } else if (route.startsWith('/spis/')) {
