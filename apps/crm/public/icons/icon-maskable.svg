@@ -1,0 +1,16 @@
+<!-- PLACEHOLDER maskable app icon. Replace with real artwork before shipping.
+
+     Maskable icons are cropped by the platform to whatever shape it likes
+     (circle, squircle, rounded square). Only the centred circle of 80% diameter
+     — r=205 on a 512 canvas — is guaranteed to survive, so the artwork is
+     scaled down to sit inside it and the background bleeds to all four edges.
+     No rounded corners here: the platform supplies the shape.
+
+     Full-bleed background, for purpose="maskable". -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#171717"/>
+  <text x="256" y="256" fill="#ffffff"
+        font-family="Geist Sans, ui-sans-serif, system-ui, sans-serif"
+        font-size="150" font-weight="450" letter-spacing="-7"
+        text-anchor="middle" dominant-baseline="central">V15C</text>
+</svg>

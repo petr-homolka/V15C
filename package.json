@@ -7,6 +7,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p schema/tsconfig.json && tsc --noEmit -p tools/seed/tsconfig.json",
     "emulator": "firebase emulators:start --only firestore,auth --project demo-v15c",
+    "dev": "cd apps/crm && npm run dev",
+    "build": "cd apps/crm && npm run build",
     "test:schema": "tsx tests/schema.test.mjs",
     "test": "npm run test:schema && npm run test:rules",
     "test:rules": "firebase emulators:exec --only firestore --project demo-rules \"node tests/rules.test.mjs\"",
@@ -14,7 +16,8 @@
     "seed:clear": "cd tools/seed && npm run seed -- clear",
     "seed:reseed": "cd tools/seed && npm run seed -- reseed",
     "seed:stats": "cd tools/seed && npm run seed -- stats",
-    "seed:dump": "cd tools/seed && npm run seed -- dump"
+    "seed:dump": "cd tools/seed && npm run seed -- dump",
+    "install:app": "cd apps/crm && npm install"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^4.0.1",

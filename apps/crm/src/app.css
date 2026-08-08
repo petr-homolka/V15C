@@ -1,0 +1,37 @@
+/*
+ * Jediné místo, kde se do aplikace dostane vzhled.
+ *
+ * Tailwind v4 → `tokens/theme.css` (mapování @theme + geistové utility)
+ * a `fonts/fonts.css` (CLAUDE.md). `geist.css` se NEimportuje, ten je pro
+ * variantu bez Tailwindu a tokeny by se definovaly dvakrát.
+ */
+@import 'tailwindcss';
+@import '../../../design-system/tokens/theme.css';
+@import '../../../design-system/fonts/fonts.css';
+@import '../../../design-system/pwa/pwa.css';
+
+/* Bez tohohle by Tailwind prohledával jen soubory pod tímto adresářem. */
+@source '../src/**/*.{ts,tsx}';
+
+/* --- co je vlastní téhle aplikaci ----------------------------------------- */
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  background: var(--ds-background-100);
+  color: var(--ds-gray-1000);
+  font-family: var(--font-geist-sans);
+  /* Dvojklik na tlačítko v mobilu nesmí zvětšit stránku. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Lišta pohledu je jediná věc nad obsahem, tak ať drží tokenizované sklo. */
+.app-bar {
+  background: color-mix(in oklab, var(--ds-background-100) 88%, transparent);
+  backdrop-filter: saturate(1.6) blur(12px);
+}

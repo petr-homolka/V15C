@@ -1,0 +1,15 @@
+<!-- PLACEHOLDER app icon. Replace with real artwork before shipping.
+
+     Colours are the resolved literals from pwa/colors.json (--ds-gray-1000 and
+     --ds-background-100, light theme). An SVG in a manifest cannot use var(),
+     so these are baked in; re-run scripts/build-pwa.mjs after a token sync to
+     see whether they moved.
+
+     Full-bleed variant, for purpose="any". -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#171717"/>
+  <text x="256" y="256" fill="#ffffff"
+        font-family="Geist Sans, ui-sans-serif, system-ui, sans-serif"
+        font-size="208" font-weight="450" letter-spacing="-10"
+        text-anchor="middle" dominant-baseline="central">V15C</text>
+</svg>

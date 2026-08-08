@@ -4,3 +4,4 @@ node_modules/
 *-debug.log
 demo-data.json
 package-lock.json
+dist/
