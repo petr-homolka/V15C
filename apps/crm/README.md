@@ -5,7 +5,7 @@ data a několik obrazovek. Slouží k tomu, aby se dalo klikat, ne k provozu.
 
 ```bash
 npm run install:app     # jednou
-npm run dev             # http://localhost:5173
+npm run dev             # http://localhost:5273
 npm run build           # tsc + vite build → apps/crm/dist
 ```
 
