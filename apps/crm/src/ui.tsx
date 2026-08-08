@@ -29,7 +29,7 @@ import type { ReactNode } from 'react'
 export function Screen({ children, wide }: { children: ReactNode; wide?: boolean }) {
   return (
     <div
-      className={`mx-auto w-full ${wide ? 'max-w-6xl' : 'max-w-4xl'} px-4 pb-16 pt-4 sm:px-6`}
+      className={`mx-auto w-full ${wide ? 'max-w-6xl' : 'max-w-4xl'} px-4 pb-16 pt-6 lg:px-6`}
     >
       {children}
     </div>

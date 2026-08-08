@@ -249,3 +249,28 @@ obrázek, ne údaj.
 **Zvonek ukazuje počet lhůt po termínu.** Notifikace se teprve navrhují
 (dok. 00), tak zatím ukazuje to jediné, co v systému opravdu „přišlo"
 a nepočká.
+
+
+---
+
+## 10. Rám podle Luminaux
+
+Z dodané šablony (True Black Sidebar) se převzalo **rozvržení rámu**, ne kód:
+
+| Prvek | Luminaux | U nás |
+| --- | --- | --- |
+| panel | `app-rail` 4 rem + `app-secondary` | totéž — lišta oblastí a navigace oblasti |
+| panel v tmavém | `sidebar-oled` s vlastními hexy | třída `dark` a tokeny Geistu |
+| lišta | 4 rem, hledání, ikony vpravo | 3,5 rem, jinak stejně |
+| drobečky | `page-header`, lepící, 2,75 rem | totéž |
+| rádius | `--border-radius: .75rem` | 12 px na kartách, 8 px na ovládání |
+| písmo | Inter / Plus Jakarta Sans | **Geist** (CLAUDE.md) |
+
+**Dvousloupcový panel je ta podstatná změna.** Předtím jsme měli jeden sloupec,
+ve kterém se míchala navigace se seznamem dat; po přepnutí oblasti se změnil
+celý obsah pod rukou. Teď lišta drží oblasti (Eli, Přehled, Agenda, Lidé,
+Nastavení) a sloupec vedle ní jen navigaci té jedné oblasti s počty.
+
+Písmo zůstává Geist schválně: šablona si vozí Inter z Google Fonts, ale
+CLAUDE.md říká Geist a fonty už jsou vendorované lokálně (bez CDN, což je
+u aplikace s citlivými daty správně).
