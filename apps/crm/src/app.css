@@ -109,6 +109,24 @@ body {
 }
 
 /*
+ * Měkčí karta — převzato z DashQ: větší rádius a **jemný stín místo tvrdé
+ * linky**. Rozdíl je malý na jedné kartě a velký na obrazovce, kde jich je
+ * osm: linky dělají mřížku, stíny dělají vrstvy.
+ *
+ * Stín je záměrně skoro neviditelný (4 % černé). Výraznější stín na kartě,
+ * která se nehýbe, vypadá jako chyba.
+ */
+.kt-card-soft {
+  border-radius: 1rem;
+  border-color: color-mix(in oklab, var(--border) 60%, transparent);
+  box-shadow: 0 10px 40px -12px rgb(0 0 0 / 0.05);
+}
+
+.dark .kt-card-soft {
+  box-shadow: 0 10px 40px -12px rgb(0 0 0 / 0.5);
+}
+
+/*
  * Hustota tabulky. KtUI má výchozí řádek pro dashboardy s pár řádky; my jich
  * ukazujeme dvacet, tak se stahuje svisle odsazení. Vodorovné zůstává —
  * to drží zarovnání se zbytkem karty.

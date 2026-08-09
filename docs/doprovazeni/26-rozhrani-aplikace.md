@@ -274,3 +274,33 @@ Nastavení) a sloupec vedle ní jen navigaci té jedné oblasti s počty.
 Písmo zůstává Geist schválně: šablona si vozí Inter z Google Fonts, ale
 CLAUDE.md říká Geist a fonty už jsou vendorované lokálně (bez CDN, což je
 u aplikace s citlivými daty správně).
+
+
+---
+
+## 11. Co se vzalo z DashQ
+
+DashQ je administrátorská šablona na **Bootstrapu 5 a jQuery** (ApexCharts,
+Bootstrap Icons, přepínání motivu přes `data-bs-theme` a proměnné `--bs-*`).
+Kód se z ní použít nedá — máme Tailwind 4, React 19 a KtUI; přenášet dva
+konkurenční CSS rámce v jedné aplikaci se nedělá. Přenesly se **tři nápady**:
+
+**Měkčí karta.** DashQ nemá tvrdou linku okolo karty, ale větší rádius (1 rem)
+a jemný stín. Vzniklo `.kt-card-soft` v `app.css` — linka zůstává, jen se
+ztlumí na 60 %, a pod ní je stín. V tmavém režimu je stín silnější, protože
+na černém podkladu je slabý stín stejně nevidět.
+
+**Jiskřička v dlaždici.** Číslo řekne kolik, jiskřička řekne kam to jde.
+`Spark` v `charts.tsx` je čára bez os a popisků — tvar, nic víc. Kreslí se
+**jen tam, kde je skutečná řada**: u dohod počet uzavřených ke konci každého
+měsíce, u lhůt jejich rozložení den po dni na týden dopředu, u návštěv počty
+po měsících. Dlaždice „Po termínu" jiskřičku nemá, protože historii stavu
+povinností nemáme a dokreslovat ji by byla lež.
+
+**Ovládání u nadpisu.** DashQ má v `page-header` volbu období a vývozy.
+U nás je to volba 3 / 6 / 12 měsíců (mění grafy i dlaždici návštěv) a tlačítko
+**Vývoz**, které stáhne otevřené lhůty jako CSV — středníky a s BOM, aby to
+otevřel český Excel bez rozsypaných sloupců.
+
+Zvolené období je bílá pilulka v zapuštěné liště, ne podtržítko: podtržítko
+se ztratí na statickém obrázku a stav ovladače má být vidět na první pohled.

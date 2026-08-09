@@ -93,7 +93,7 @@ export function Card({
   table?: boolean
 }) {
   return (
-    <section className={`kt-card ${table ? 'kt-card-table' : ''}`}>
+    <section className={`kt-card kt-card-soft ${table ? 'kt-card-table' : ''}`}>
       {title ? (
         <header className="kt-card-header">
           <h2 className="kt-card-title">{title}</h2>

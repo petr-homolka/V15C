@@ -116,3 +116,23 @@ export function Donut({
     </div>
   )
 }
+
+
+/**
+ * Jiskřička — graf do dlaždice. Bez os a popisků: nese tvar, ne hodnoty.
+ * Číslo je vedle ní velkým písmem, takže tenhle graf nemusí nic říkat sám.
+ */
+export function Spark({ points, tone = 'var(--ds-purple-700)' }: { points: number[]; tone?: string }) {
+  const w = 88
+  const h = 28
+  const max = Math.max(1, ...points)
+  const step = points.length > 1 ? w / (points.length - 1) : 0
+  const d = points
+    .map((v, i) => `${i === 0 ? 'M' : 'L'}${(i * step).toFixed(1)},${(h - (v / max) * (h - 4) - 2).toFixed(1)}`)
+    .join(' ')
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} className="h-7 w-22" aria-hidden="true">
+      <path d={d} fill="none" stroke={tone} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}

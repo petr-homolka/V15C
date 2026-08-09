@@ -8,8 +8,8 @@
  * Číslo bez cesty dál je k ničemu, takže každá dlaždice někam vede.
  */
 
-import { useMemo } from 'react'
-import { Area, Donut } from '../charts'
+import { useMemo, useState } from 'react'
+import { Area, Donut, Spark } from '../charts'
 import * as data from '../demo/data'
 import * as L from '../labels'
 import { usePersona } from '../persona'
@@ -19,7 +19,15 @@ import {
   daysUntil, formatDate, formatTime,
 } from '../ui'
 
+/** Období, za které se čtou grafy. Delší okno = plošší křivka, ne jiná data. */
+const PERIODS = [
+  { months: 3, label: '3 měsíce' },
+  { months: 6, label: '6 měsíců' },
+  { months: 12, label: '12 měsíců' },
+] as const
+
 export function Prehled({ go }: { go: (r: string) => void }) {
+  const [months, setMonths] = useState<number>(6)
   const { persona } = usePersona()
   const orgId = persona.organizationId!
   const mine = persona.role === 'key_worker' ? persona.personId : null
@@ -48,12 +56,12 @@ export function Prehled({ go }: { go: (r: string) => void }) {
     .sort((a, b) => a.startAt.localeCompare(b.startAt))
     .slice(0, 5)
 
-  /** Návštěvy po měsících — půl roku zpět, poslední sloupec je tento měsíc. */
+  /** Návštěvy po měsících — poslední sloupec je tento měsíc. */
   const visits = useMemo(() => {
     const out: Array<{ label: string; n: number }> = []
     const names = ['led', 'úno', 'bře', 'dub', 'kvě', 'čvn', 'čvc', 'srp', 'zář', 'říj', 'lis', 'pro']
     const now = new Date()
-    for (let i = 5; i >= 0; i--) {
+    for (let i = months - 1; i >= 0; i--) {
       const from = new Date(now.getFullYear(), now.getMonth() - i, 1)
       const to = new Date(now.getFullYear(), now.getMonth() - i + 1, 1)
       const n = data
@@ -66,10 +74,30 @@ export function Prehled({ go }: { go: (r: string) => void }) {
       out.push({ label: names[from.getMonth()]!, n })
     }
     return out
-  }, [orgId, mine])
+  }, [orgId, mine, months])
 
   const visitTotal = visits.reduce((sum, v) => sum + v.n, 0)
-  const visitDelta = (visits[5]?.n ?? 0) - (visits[4]?.n ?? 0)
+  const visitDelta = (visits.at(-1)?.n ?? 0) - (visits.at(-2)?.n ?? 0)
+
+  /**
+   * Kolik dohod bylo ve správě na konci každého z uplynulých měsíců. Počítá
+   * se z data uzavření — je to skutečná řada, ne dokreslená křivka.
+   */
+  const agreementTrend = useMemo(() => {
+    const now = new Date()
+    const rows = mine ? data.agreementsOfKeyWorker(orgId, mine) : data.agreements(orgId)
+    return Array.from({ length: months }, (_, i) => {
+      const to = new Date(now.getFullYear(), now.getMonth() - (months - 1 - i) + 1, 1)
+      return rows.filter((a) => a.concludedOn && new Date(a.concludedOn) < to).length
+    })
+  }, [orgId, mine, months])
+
+  /** Lhůty den po dni na týden dopředu — tvar toho, co přijde. */
+  const weekTrend = useMemo(
+    () =>
+      Array.from({ length: 8 }, (_, d) => obligations.filter((o) => daysUntil(o.dueOn) === d).length),
+    [obligations],
+  )
 
   /** Rozdělení dohod podle druhu péče. */
   const byBasis = useMemo(() => {
@@ -107,6 +135,42 @@ export function Prehled({ go }: { go: (r: string) => void }) {
       <PageHead
         title={`Dobrý den, ${persona.displayName.split(' ')[0]}.`}
         subtitle={persona.role === 'key_worker' ? 'Vaše agenda' : persona.organizationName}
+        actions={
+          <>
+            {/*
+              Ovladače u nadpisu — období vlevo, vývoz vpravo. Zvolené období
+              je bílá pilulka v zapuštěné liště: pozná se i na statickém
+              obrázku, což podtržítko neumí.
+            */}
+            <div className="flex rounded-lg bg-[var(--ds-gray-200)] p-0.5">
+              {PERIODS.map((p) => (
+                <button
+                  key={p.months}
+                  type="button"
+                  onClick={() => setMonths(p.months)}
+                  className={`text-label-13 rounded-md px-2.5 py-1 transition-colors ${
+                    months === p.months
+                      ? 'bg-[var(--ds-background-100)] text-[var(--ds-gray-1000)] shadow-[var(--ds-shadow-border-small)]'
+                      : 'text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)]'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => exportObligations(obligations)}
+              className="kt-btn kt-btn-outline kt-btn-sm"
+              title="Stáhne otevřené lhůty jako CSV"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 4v10m0 0 3.5-3.5M12 14l-3.5-3.5M5 17v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2" />
+              </svg>
+              Vývoz
+            </button>
+          </>
+        }
       />
 
       <Stack>
@@ -116,6 +180,7 @@ export function Prehled({ go }: { go: (r: string) => void }) {
             label="Dohody ve správě"
             value={agreements.length}
             note={`${children.length} dětí v péči`}
+            spark={agreementTrend}
             onClick={() => go('/seznam/dohody')}
           />
           <Tile
@@ -132,12 +197,14 @@ export function Prehled({ go }: { go: (r: string) => void }) {
             value={thisWeek.length}
             note="do sedmi dnů"
             tone={thisWeek.length ? 'amber' : 'neutral'}
+            spark={weekTrend}
             onClick={() => go('/seznam/dohody')}
           />
           <Tile
             icon="calendar"
-            label="Návštěvy za 6 měsíců"
+            label={`Návštěvy za ${PERIODS.find((p) => p.months === months)!.label}`}
             value={visitTotal}
+            spark={visits.map((v) => v.n)}
             note={
               visitDelta === 0
                 ? 'stejně jako předchozí měsíc'
@@ -270,6 +337,7 @@ function Tile({
   tone = 'neutral',
   small,
   icon,
+  spark,
   onClick,
 }: {
   label: string
@@ -278,6 +346,8 @@ function Tile({
   tone?: 'neutral' | 'red' | 'amber' | 'green'
   small?: boolean
   icon?: keyof typeof TILE_ICONS | string
+  /** Skutečná řada za číslem — jiskřička se kreslí jen tam, kde ji máme. */
+  spark?: number[]
   onClick?: () => void
 }) {
   const color =
@@ -292,7 +362,7 @@ function Tile({
     <button
       type="button"
       onClick={onClick}
-      className="kt-card p-4 text-left transition-colors hover:bg-[var(--ds-gray-100)]"
+      className="kt-card kt-card-soft p-4 text-left transition-colors hover:bg-[var(--ds-gray-100)]"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="text-copy-13 text-[var(--muted-foreground)]">{label}</div>
@@ -314,12 +384,56 @@ function Tile({
           </span>
         ) : null}
       </div>
-      <div className={`${small ? 'text-heading-20' : 'text-heading-32'} pt-1 tabular-nums ${color}`}>
-        {value}
+      <div className="flex items-end justify-between gap-2">
+        <div className={`${small ? 'text-heading-20' : 'text-heading-32'} pt-1 tabular-nums ${color}`}>
+          {value}
+        </div>
+        {spark && spark.some((n) => n > 0) ? (
+          <Spark
+            points={spark}
+            tone={
+              tone === 'red'
+                ? 'var(--ds-red-700)'
+                : tone === 'amber'
+                  ? 'var(--ds-amber-700)'
+                  : tone === 'green'
+                    ? 'var(--ds-green-700)'
+                    : 'var(--ds-purple-700)'
+            }
+          />
+        ) : null}
       </div>
       {note ? (
         <div className="text-copy-13 truncate pt-0.5 text-[var(--muted-foreground)]">{note}</div>
       ) : null}
     </button>
   )
+}
+
+/**
+ * Vývoz otevřených lhůt do CSV. Středník a BOM proto, že to lidé otevřou
+ * v Excelu s českým prostředím — čárka by rozhodila sloupce.
+ */
+function exportObligations(rows: Array<{
+  kind: string
+  subjectDisplayName: string
+  caseFileReference: string
+  dueOn: string
+}>) {
+  const esc = (s: string) => `"${s.replace(/"/g, '""')}"`
+  const csv = [
+    ['Povinnost', 'Koho se týká', 'Spis', 'Termín'].map(esc).join(';'),
+    ...rows.map((o) =>
+      [L.obligationKind(o.kind as never), o.subjectDisplayName, o.caseFileReference, o.dueOn]
+        .map((v) => esc(String(v ?? '')))
+        .join(';'),
+    ),
+  ].join('\r\n')
+
+  const url = URL.createObjectURL(new Blob([`﻿${csv}`], { type: 'text/csv;charset=utf-8' }))
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'lhuty.csv'
+  a.click()
+  URL.revokeObjectURL(url)
 }
