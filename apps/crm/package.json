@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "npm install --no-audit --no-fund",
     "dev": "vite",
+    "prebuild": "npm install --no-audit --no-fund",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

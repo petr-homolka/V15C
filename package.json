@@ -7,8 +7,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p schema/tsconfig.json && tsc --noEmit -p tools/seed/tsconfig.json",
     "emulator": "firebase emulators:start --only firestore,auth --project demo-v15c",
-    "dev": "npm --prefix apps/crm install --no-audit --no-fund && npm --prefix apps/crm run dev",
-    "build": "npm --prefix apps/crm install --no-audit --no-fund && npm --prefix apps/crm run build",
+    "dev": "npm --prefix apps/crm run dev",
+    "build": "npm --prefix apps/crm run build",
     "test:schema": "tsx tests/schema.test.mjs",
     "test": "npm run test:schema && npm run test:rules",
     "test:rules": "firebase emulators:exec --only firestore --project demo-rules \"node tests/rules.test.mjs\"",

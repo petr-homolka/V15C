@@ -29,6 +29,27 @@ git pull origin claude/github-design-resources-erjstg
 npm run dev
 ```
 
+### Když to spadne
+
+**„Failed to resolve import ‚@keenthemes/ktui'"** (nebo jiný balíček) znamená,
+že v `node_modules` chybí závislost, která do `package.json` přibyla později —
+typicky po `git pull` na starším naklonovaném repozitáři. Spusťte:
+
+```powershell
+npm install --prefix apps/crm
+npm run dev
+```
+
+Od nynějška si to `npm run dev` udělá sám (skript `predev`), a to i když ho
+spustíte z adresáře `apps/crm`. Co je nainstalované, ověříte:
+
+```powershell
+npm ls --prefix apps/crm @keenthemes/ktui
+```
+
+Když ani to nepomůže, smažte `apps\crm\node_modules` a spusťte `npm run dev`
+znovu — instalace se udělá celá od začátku.
+
 ### Co si prohlédnout
 
 - Vpravo nahoře je **přepínač person** — Klíčová osoba vidí svoje dohody,
