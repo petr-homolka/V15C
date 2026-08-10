@@ -1,0 +1,847 @@
+rules_version = '2';
+
+// Bezpečnostní pravidla = backend. Mezi klientem a Firestore není žádné
+// vlastní API (dok. 19). Proto tady musí být všechno, co drží model pohromadě.
+//
+// Tři zásady, ze kterých tvar pravidel vyplývá:
+//
+//   1. ROLE JSOU V TOKENU, ne v databázi. Každý `get()` v pravidlech je
+//      platba za čtení při KAŽDÉM dotazu (dok. 19 sekce 1). Členství se
+//      propisuje do custom claims Cloud Functionou při změně OrgMembership.
+//
+//   2. PRAVIDLA NEUMÍ SKRÝT POLE. Proto obsah spisu a kontaktní údaje žijí
+//      v podřízených dokumentech, ne jako pole (dok. 04). Kdyby byly polem,
+//      nešly by skrýt nikomu, kdo smí číst nadřazený dokument.
+//
+//      Pravidla také NEFILTRUJÍ dotaz — jen ho povolí, nebo zamítnou celý.
+//      Každý seznamový dotaz proto musí být napsaný tak, aby k němu
+//      existovalo pravidlo, které projde beze čtení jiných dokumentů.
+//
+//   3. NIC SE NEMAŽE. Nikde není `allow delete` — ani pro org_admin
+//      (dok. 10, 16). Zrušení je nový stav nebo storno záznam. Skartace
+//      běží v Cloud Function s admin právy, mimo tato pravidla.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ============================================================ */
+    /* Pomocné funkce — čistě nad tokenem a cestou, bez čtení        */
+    /* ============================================================ */
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSuperadmin() {
+      return signedIn() && request.auth.token.sa == true;
+    }
+
+    // Role v dané organizaci, nebo null. Bez čtení databáze.
+    function roleIn(orgId) {
+      return signedIn() && request.auth.token.orgs != null
+        ? request.auth.token.orgs[orgId]
+        : null;
+    }
+
+    function isMember(orgId) {
+      return roleIn(orgId) != null;
+    }
+
+    function hasRole(orgId, roles) {
+      return roleIn(orgId) in roles;
+    }
+
+    // Kdo smí do OBSAHU spisu. Účetní a observer ne — vidí jen metadata
+    // a čísla (dok. 04).
+    function canReadContent(orgId) {
+      return hasRole(orgId, ['org_admin', 'manager', 'supervisor',
+                             'key_worker', 'social_worker']);
+    }
+
+    // Kdo smí ke kontaktním údajům. Oddělené právě proto, že to jde
+    // (dok. 04) — a v aplikaci příbuzných se adresa pěstouna nikdy
+    // nezobrazuje (dok. 09).
+    function canReadContacts(orgId) {
+      return hasRole(orgId, ['org_admin', 'manager', 'supervisor', 'key_worker']);
+    }
+
+    // Vedení. Schvaluje vydání údajů ven (dok. 13) a vidí přehledy.
+    function isManagement(orgId) {
+      return hasRole(orgId, ['org_admin', 'manager', 'supervisor']);
+    }
+
+    function isOrgAdmin(orgId) {
+      return hasRole(orgId, ['org_admin']);
+    }
+
+    // Osobní identita — u zařízení a vlastní paměti Eli.
+    function isSelf(personId) {
+      return signedIn() && request.auth.token.pid == personId;
+    }
+
+    // Autor zápisu musí být přihlášený člověk, nikdy Eli (dok. 14).
+    function authorIsCaller() {
+      return request.resource.data.createdByPersonId == request.auth.token.pid;
+    }
+
+    // Zápis do archivovaného spisu se nepovoluje — archiv se jen čte
+    // (dok. 18). Stav je v metadatech spisu, takže tohle je jediné místo,
+    // kde se `get()` vyplatí: jen při zápisu, ne při čtení.
+    function caseFileActive(orgId, caseFileId) {
+      return get(/databases/$(database)/documents/orgs/$(orgId)/caseFiles/$(caseFileId))
+               .data.lifecycle == 'active';
+    }
+
+    /* ============================================================ */
+    /* platform/* — číselníky                                       */
+    /* ============================================================ */
+
+    // Sady pravidel, standardy, vzory, ceník. Čte každý přihlášený,
+    // protože se podle nich počítá na klientu. Zapisuje jen superadmin —
+    // novou výchozí sadu organizace přebírá vědomě (dok. 07).
+    match /platform/{document=**} {
+      allow read: if signedIn();
+      allow write: if isSuperadmin();
+    }
+
+    /* ============================================================ */
+    /* entities/{uid} — registr entit                                */
+    /* ============================================================ */
+
+    // Index, ne profil (entities.ts). Drží druh, vlastníka, cestu k profilu
+    // a zobrazovaný název — žádný obsah.
+    //
+    // Čte se podle `organizationId` v samotném dokumentu, takže to nestojí
+    // žádné další čtení. `list` je zakázaný: kdyby šel vypsat, dal by se
+    // z něj přečíst seznam všech dětí a rodin napříč organizacemi.
+    match /entities/{uid} {
+      allow get: if isSuperadmin()
+                 || (resource.data.organizationId == null && signedIn())
+                 || (resource.data.organizationId != null
+                     && isMember(resource.data.organizationId));
+      allow list: if false;
+      // Registr píše Function spolu se vznikem profilu — jinak by se
+      // rozešel s tím, na co ukazuje.
+      allow write: if false;
+    }
+
+    /* ============================================================ */
+    /* verifications/{token} — ověření z QR kódu                     */
+    /* ============================================================ */
+
+    // Čitelné BEZ přihlášení — QR na dopise musí fungovat komukoli,
+    // kdo ten dopis dostal. Právě proto v tom dokumentu NENÍ nic z obsahu:
+    // jen vydavatel, datum, druh dokumentu, jednací číslo a otisk
+    // (branding.ts). Odkaz na samotný dokument dostane až přihlášený,
+    // kdo na něj má právo — rozhoduje přihlášení, ne držení papíru.
+    //
+    // `list` je zakázaný: kdyby šel vypsat, dal by se z něj přečíst přehled
+    // toho, kdo komu co posílá.
+    match /verifications/{token} {
+      allow get: if true;
+      allow list: if false;
+      allow write: if false;   // píše pouze Cloud Function
+    }
+
+    /* ============================================================ */
+    /* Marketplace vzdělávání                                        */
+    /* ============================================================ */
+
+    // Je členem JAKÉKOLI organizace? U ceny nezáleží které — pracovnice
+    // doprovázející organizace ceník vidět má.
+    function isMember2() {
+      return signedIn() && request.auth.token.orgs != null
+             && request.auth.token.orgs.keys().size() > 0;
+    }
+
+    // Ověřený pěstoun z veřejného webu. Příznak je v tokenu, ne v databázi,
+    // aby čtení ceny nestálo další čtení (README sekce 1.2).
+    function isVerifiedCarer() {
+      return signedIn() && request.auth.token.carer == true;
+    }
+
+    function providerRole(providerId) {
+      return signedIn() && request.auth.token.providers != null
+        ? request.auth.token.providers[providerId]
+        : null;
+    }
+    function isProviderStaff(providerId) {
+      return providerRole(providerId) != null;
+    }
+
+    // Profil pořadatele je VEŘEJNÝ — má být k nalezení i mimo systém.
+    // Nejsou v něm osobní údaje účastníků, jen údaje o firmě.
+    match /providers/{providerId} {
+      allow get, list: if true;
+      allow create: if isSuperadmin();
+      allow update: if isProviderStaff(providerId) || isSuperadmin();
+      allow delete: if false;
+
+      // Kdo za pořadatele pracuje. Ne veřejné.
+      match /members/{personId} {
+        allow read: if isProviderStaff(providerId) || isSuperadmin();
+        allow write: if isSuperadmin();
+      }
+
+      // Sklad kurzů. Veřejně jen to, co je vylistované — nevylistovaný
+      // kurz je rozpracovaný a nikomu do něj nic není.
+      match /courses/{courseId} {
+        allow get, list: if resource.data.status == 'listed'
+                         || isProviderStaff(providerId) || isSuperadmin();
+        allow create, update: if isProviderStaff(providerId);
+        allow delete: if false;
+
+        match /sessions/{sessionId} {
+          allow get, list: if true;
+          allow create, update: if isProviderStaff(providerId);
+          allow delete: if false;
+        }
+      }
+
+      // Nabídky služeb — respit, terapie, doučování. Stejná pravidla jako
+      // u kurzů: veřejné jen vylistované.
+      match /services/{serviceId} {
+        allow get, list: if resource.data.status == 'listed'
+                         || isProviderStaff(providerId) || isSuperadmin();
+        allow create, update: if isProviderStaff(providerId);
+        allow delete: if false;
+      }
+    }
+
+    // Veřejná výkladní skříň. Čitelná BEZ přihlášení, aby se nabídka dala
+    // najít na internetu a koupit i mimo systém — a právě proto v ní nesmí
+    // být nic osobního ANI CENA (marketplace.ts).
+    match /listings/{listingId} {
+      allow get, list: if resource.data.visibility == 'public' || signedIn();
+      allow write: if false;   // píše Function při vylistování nabídky
+
+      // CENA. Kdyby byla polem nabídky, skrytá by nebyla — pravidla neumí
+      // skrýt pole (dok. 04, 19). Proto je to vlastní dokument s vlastním
+      // pravidlem.
+      //
+      // Vidí ji: člen doprovázející organizace, ověřený pěstoun z veřejného
+      // webu, a zaměstnanec poskytovatele u vlastní nabídky.
+      match /pricing/{docId} {
+        allow get: if isMember2() || isVerifiedCarer() || isProviderStaff(resource.data.providerId);
+        allow list: if false;
+        allow write: if false;
+      }
+    }
+
+    // Účet registrovaný na veřejném webu. Existuje jen kvůli tomu, aby
+    // člověk uviděl ceny a mohl objednat — do CRM se s ním nedostane,
+    // protože nemá roli v žádné organizaci.
+    match /publicProfiles/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isSuperadmin());
+      allow list: if isSuperadmin();
+      // Registrovat se smí každý, ale ověření si nastavit nemůže — to je
+      // rozhodnutí systému, ne přání uživatele.
+      allow create: if signedIn() && request.auth.uid == uid
+                    && request.resource.data.verification.status == 'none';
+      allow update: if signedIn() && request.auth.uid == uid
+                    && request.resource.data.verification == resource.data.verification;
+      allow delete: if false;
+    }
+
+    // Objednávka. Vidí ji kupující a pořadatel — nikdo jiný.
+    match /orders/{orderId} {
+      allow get: if signedIn() && (
+                   isProviderStaff(resource.data.providerId)
+                   || (resource.data.buyer.kind == 'organization'
+                       && isMember(resource.data.buyer.organizationId))
+                 );
+      allow list: if false;      // výpis vždy přes dotaz s filtrem, ne plošně
+      allow create, update: if false;   // zakládá a mění Function
+      allow delete: if false;
+
+      // Přístupy ke kurzu. Pořadatel vidí jméno a e-mail účastníka a nic víc.
+      match /enrolments/{enrolmentId} {
+        allow read: if signedIn() && (
+                      isProviderStaff(get(/databases/$(database)/documents/orders/$(orderId)).data.providerId)
+                      || isSelf(resource.data.personId)
+                    );
+        allow write: if false;
+      }
+    }
+
+    // Certifikát vystavuje pořadatel. Čte ho účastník, jeho organizace
+    // a pořadatel — hodiny z něj plní zákonnou povinnost, takže se
+    // nesmí dát upravit z klienta.
+    match /certificates/{certificateId} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow write: if false;
+    }
+
+    // Potvrzení služby. Protějšek certifikátu — potvrzuje DNY, které se
+    // počítají proti čtrnáctidennímu nároku (§ 47a odst. 2 písm. b).
+    // Ze stejného důvodu se nesmí dát upravit z klienta.
+    //
+    // Je v něm jméno dítěte, takže na rozdíl od certifikátu ho nesmí číst
+    // každý přihlášený — jen poskytovatel a organizace, která ho objednala.
+    match /confirmations/{confirmationId} {
+      allow get: if signedIn() && (
+                   isProviderStaff(resource.data.providerId)
+                   || isMember(resource.data.organizationId)
+                 );
+      allow list: if false;
+      allow write: if false;
+    }
+
+    /* ============================================================ */
+    /* transfers/{code} — jediná mezi-organizační kolekce            */
+    /* ============================================================ */
+
+    // Předávací kód. Zapisuje POUZE Cloud Function (admin SDK obchází
+    // pravidla), aby ani jedna strana nemohla přepsat obsah druhé.
+    // Čtení je cílené na jeden kód, nikdy výpis — jinak by šlo zjistit,
+    // kdo od koho odchází.
+    match /transfers/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow write: if false;
+    }
+
+    /* ============================================================ */
+    /* orgs/{orgId}                                                 */
+    /* ============================================================ */
+
+    match /orgs/{orgId} {
+
+      allow get: if isMember(orgId) || isSuperadmin();
+      allow list: if isSuperadmin();
+      allow update: if isOrgAdmin(orgId);
+      allow create: if isSuperadmin();
+      allow delete: if false;
+
+      /* ---------- členství, předplatné, nastavení ---------- */
+
+      // Členství čte každý člen (potřebuje vidět kolegy a zástupy),
+      // mění jen org_admin. Změna se propisuje do claims Functionou.
+      match /members/{personId} {
+        allow read: if isMember(orgId);
+        allow create, update: if isOrgAdmin(orgId);
+        allow delete: if false;   // odchod je endedOn + revoked, ne delete
+      }
+
+      // Předplatné a kredit: vidí vedení, mění platební Function.
+      match /subscription/{docId} {
+        allow read: if isManagement(orgId);
+        allow write: if false;
+      }
+      match /wallet/{docId} {
+        allow read: if isManagement(orgId);
+        allow write: if false;
+      }
+
+      // Nastavení čtou všichni (klient je potřebuje k vykreslení),
+      // mění org_admin. Sem patří i vypínače upozornění (dok. 16).
+      match /settings/{scope} {
+        allow read: if isMember(orgId);
+        allow write: if isOrgAdmin(orgId);
+      }
+
+      // Směrnice, standardy, knihovna vět, checklisty: čtou všichni,
+      // mění vedení. Verzované — nová verze je nový dokument.
+      match /policies/{policyId} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId);
+        allow delete: if false;
+      }
+      match /standards/{standardId} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId);
+        allow delete: if false;
+      }
+      match /sentences/{id} {
+        // Věty ukládá i Klíčová osoba — knihovna roste z praxe (dok. 07).
+        allow read: if isMember(orgId);
+        allow create, update: if isMember(orgId);
+        allow delete: if false;
+      }
+      match /checklists/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId);
+        allow delete: if false;
+      }
+
+      // Branding a šablony dopisních papírů. Čtou všichni, protože podle
+      // nich klient vykresluje náhled dokumentu; mění je vedení.
+      match /branding/{docId} {
+        allow read: if isMember(orgId);
+        allow write: if isManagement(orgId);
+      }
+      match /letterheads/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId);
+        allow delete: if false;   // nová verze je nový dokument
+      }
+
+      // Číselné řady jednacích čísel. Přiděluje Cloud Function transakčně —
+      // z klienta by dvě zprávy vytvořené naráz dostaly stejné číslo.
+      match /referenceSeries/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isManagement(orgId)
+                              && request.resource.data.lastSequence == resource.data.lastSequence;
+        allow delete: if false;
+      }
+
+      // Oprávnění k AI. Vidí vedení, mění se mimo klienta — o zařazení
+      // schopnosti do tarifu rozhoduje vlastník produktu (media.ts).
+      match /entitlements/{docId} {
+        allow read: if isMember(orgId);
+        allow write: if false;
+      }
+
+      // Vlastní položky číselníků — „+ Přidat nové“ v každé nabídce.
+      //
+      // PŘIDAT smí každý, kdo pracuje se spisem: kdyby na novou kategorii
+      // výdaje musel čekat na admina, přestane ji používat a napíše to
+      // do poznámky. To je horší než volná nabídka.
+      //
+      // VYŘADIT z nabídky smí vedení — je to změna pro celou organizaci.
+      //
+      // SMAZAT je JEDINÉ místo v celém modelu, kde `delete` existuje. Platí
+      // jen pro nepoužitou položku a rozhoduje o tom Cloud Function, která
+      // umí spočítat použití; klient tady delete nemá (viz codebooks.ts).
+      match /codebookItems/{id} {
+        allow read: if isMember(orgId);
+        allow create: if isMember(orgId) && authorIsCaller();
+        allow update: if isManagement(orgId)
+                      || (isMember(orgId) && resource.data.createdByPersonId == request.auth.token.pid);
+        allow delete: if false;
+      }
+
+      // Objem dat organizace. Počítadlo píše Function při nahrání a archivaci;
+      // do kvóty se počítají jen aktivní spisy, archiv je zdarma (dok. 19).
+      match /quota/{docId} {
+        allow read: if isManagement(orgId);
+        allow write: if false;
+      }
+
+      /* ---------- osoby: metadata vs. kontakty ---------- */
+
+      match /persons/{personId} {
+        allow read: if isMember(orgId);
+        allow create, update: if isMember(orgId) && canReadContent(orgId);
+        allow delete: if false;
+
+        // Kontaktní údaje a profil pečující osoby. TOHLE je ten důvod,
+        // proč nejsou polem osoby (dok. 04).
+        match /private/{docId} {
+          allow read: if canReadContacts(orgId);
+          allow write: if canReadContacts(orgId);
+        }
+
+        // Zařízení pro podpis a push. Vlastník si spravuje své,
+        // org_admin může odebrat cizí (ztracený telefon, dok. 19).
+        match /devices/{deviceId} {
+          allow read: if isSelf(personId) || isManagement(orgId);
+          allow create: if isSelf(personId);
+          allow update: if isSelf(personId) || isOrgAdmin(orgId);
+          allow delete: if false;   // odebrání je status: 'revoked'
+        }
+      }
+
+      match /children/{childId} {
+        allow read: if isMember(orgId);
+        allow create, update: if canReadContent(orgId);
+        allow delete: if false;
+
+        match /private/{docId} {
+          allow read: if canReadContacts(orgId);
+          allow write: if canReadContacts(orgId);
+        }
+
+        // Kniha života je DÍTĚTE, ne organizace (dok. 10). Zapisuje dítě,
+        // pěstoun a Klíčová osoba; přístup rodiče stojí na trojím souhlasu
+        // a odebrat ho může kdokoli z nich sám. Eli ji nikdy nečte (dok. 17).
+        match /lifeBook/{entryId} {
+          allow read: if canReadContent(orgId);
+          allow create: if canReadContent(orgId) && authorIsCaller();
+          allow update: if false;   // oprava je nový záznam
+          allow delete: if false;
+        }
+        match /lifeBookGrants/{grantId} {
+          allow read: if canReadContent(orgId);
+          allow create, update: if canReadContent(orgId);
+          allow delete: if false;
+        }
+      }
+
+      // Zájemci a odmítnutí. Bez nich nelze roční výkaz nikdy dopočítat
+      // zpětně (dok. 13) — proto se zapisují hned a nemažou.
+      match /inquiries/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isMember(orgId);
+        allow delete: if false;
+      }
+
+      /* ---------- dohody ---------- */
+
+      // Dohoda = karta rodiny. Přejmenovat ji smí Klíčová osoba, protože
+      // je to popisek, ne identita — všechno je vedené pod UID a spisovou
+      // značkou (entities.ts). Původní názvy zůstávají v `naming.previousNames`.
+      match /agreements/{agreementId} {
+        allow read: if isMember(orgId);
+        allow create, update: if canReadContent(orgId);
+        allow delete: if false;
+
+        // Umístění dětí. U přechodné péče se střídají a dohoda trvá dál —
+        // dohoda bez umístění je platný stav (dok. 18).
+        match /placements/{placementId} {
+          allow read: if isMember(orgId);
+          allow create, update: if canReadContent(orgId);
+          allow delete: if false;
+        }
+
+        // Souhlas ORP (§ 154 SpŘ) a vyjádření ORP (§ 10 odst. 3) —
+        // dva různé dokumenty pro různé osoby (dok. 01, 18).
+        match /consents/{id} {
+          allow read: if isMember(orgId);
+          allow create, update: if canReadContent(orgId);
+          allow delete: if false;
+        }
+        match /orpStatements/{id} {
+          allow read: if isMember(orgId);
+          allow create, update: if canReadContent(orgId);
+          allow delete: if false;
+        }
+
+        // Vzdělávací období se DOPOČÍTÁVAJÍ — zapisuje je Function.
+        match /educationPeriods/{id} {
+          allow read: if isMember(orgId);
+          allow write: if false;
+        }
+      }
+
+      /* ---------- spis ---------- */
+
+      match /caseFiles/{caseFileId} {
+
+        // METADATA: hlavička, počty, nejbližší lhůta. Čte každý člen —
+        // včetně účetní a observera, kteří dál nevidí.
+        allow get, list: if isMember(orgId);
+        // Ukazatele píše Function; hlavičku smí měnit, kdo vidí obsah.
+        allow create, update: if canReadContent(orgId);
+        allow delete: if false;
+
+        // OBSAH: zápisy, kontakty, výdaje, respity, vzdělávání.
+        // Do archivu se nepřipisuje (dok. 18).
+        match /entries/{entryId} {
+          allow read: if canReadContent(orgId);
+          allow create: if canReadContent(orgId)
+                        && authorIsCaller()
+                        && caseFileActive(orgId, caseFileId);
+          // Oprava je storno + nový záznam; update jen pro storno a doplnění.
+          allow update: if canReadContent(orgId);
+          allow delete: if false;
+        }
+
+        // Tenký index. Píše Function při vzniku záznamu, aby se osa
+        // nerozešla s obsahem (dok. 12).
+        match /timeline/{entryId} {
+          allow read: if isMember(orgId)
+                      && (canReadContent(orgId)
+                          || resource.data.visibilityClass == 'metadata');
+          allow write: if false;
+        }
+
+        match /documents/{documentId} {
+          allow read: if canReadContent(orgId);
+          allow create: if canReadContent(orgId) && authorIsCaller();
+          allow update: if canReadContent(orgId);
+          allow delete: if false;   // vyřazení jen skartačním řízením
+
+          // Přepis vyfoceného dokladu. Na rozdíl od diktátu se smí opravovat
+          // KDYKOLI — originál zůstává, takže je pořád proti čemu srovnat
+          // (scans.ts). `ocrText` je surový výstup stroje a nepřepisuje se;
+          // to hlídá Function, protože pravidla neumí porovnávat pole
+          // napříč verzemi.
+          match /transcript/{versionNo} {
+            allow read: if canReadContent(orgId);
+            allow create: if canReadContent(orgId) && authorIsCaller();
+            allow update: if canReadContent(orgId)
+                          && request.resource.data.ocrText == resource.data.ocrText;
+            allow delete: if false;
+
+            match /revisions/{revisionNo} {
+              allow read: if canReadContent(orgId);
+              allow create: if canReadContent(orgId);
+              allow update, delete: if false;
+            }
+          }
+
+          // Index dědí viditelnost dokumentu, protože je jeho podkolekcí —
+          // kdyby žil vedle, obešel by se jím model oprávnění (dok. 17).
+          // Píše ho indexovací Function.
+          match /index/{versionNo} {
+            allow read: if canReadContent(orgId);
+            allow write: if false;
+
+            match /chunks/{chunkNo} {
+              allow read: if canReadContent(orgId);
+              allow write: if false;
+            }
+          }
+        }
+
+        // Koncepty. Píše je Function (volání modelu), edituje člověk.
+        match /drafts/{draftId} {
+          allow read: if canReadContent(orgId);
+          allow create: if false;                    // vzniká z Functiony
+          allow update: if canReadContent(orgId);    // člověk upravuje
+          allow delete: if false;                    // zahození je status
+
+          // Auditní stopa úprav. Append-only: rozdíl mezi navrženým
+          // a uloženým textem je doklad o tom, kolik napsal člověk (dok. 14).
+          match /revisions/{revisionNo} {
+            allow read: if canReadContent(orgId);
+            allow create: if canReadContent(orgId);
+            allow update, delete: if false;
+          }
+        }
+
+        // Diktáty. Přepis se smí upravovat jen v OKNĚ — a to okno vynucuje
+        // databáze, ne klient, protože ho jinak jde obejít úpravou požadavku.
+        // `editableUntilMs` existuje právě proto: pravidla umí srovnat
+        // `request.time.toMillis()` s číslem, s ISO stringem ne (media.ts).
+        //
+        // Po zavření okna se nic nezakazuje — oprava je nový záznam ve spisu
+        // (dok. 10). Souhrn zůstává upravitelný trvale, protože to není
+        // záznam o řečeném, ale pracovní výstup.
+        match /dictations/{dictationId} {
+          allow read: if canReadContent(orgId);
+          allow create: if canReadContent(orgId) && authorIsCaller();
+          allow update: if canReadContent(orgId)
+                        && (
+                          // souhrn a stav — vždy
+                          request.resource.data.transcript.text == resource.data.transcript.text
+                          // přepis — jen v okně
+                          || (resource.data.transcript.editableUntilMs != null
+                              && request.time.toMillis() < resource.data.transcript.editableUntilMs)
+                        );
+          allow delete: if false;
+
+          match /revisions/{revisionNo} {
+            allow read: if canReadContent(orgId);
+            allow create: if canReadContent(orgId);
+            allow update, delete: if false;
+          }
+        }
+
+        // Zprávy o průběhu PP. Vytvoření a doručení řídí Function,
+        // protože na tom visí lhůty a tři adresáti (dok. 05).
+        match /reports/{reportId} {
+          allow read: if canReadContent(orgId);
+          allow create, update: if canReadContent(orgId);
+          allow delete: if false;
+        }
+
+        // Vlákna. Podatelna ('registry') a vlákno s Eli ('assistant')
+        // nesmějí mít mezi účastníky pěstouna ani dítě — dopis od soudu
+        // o jiné rodině v takovém vlákně by byl únik (dok. 14).
+        match /threads/{threadId} {
+          allow read: if canReadContent(orgId);
+          allow create, update: if canReadContent(orgId);
+          allow delete: if false;
+
+          match /messages/{messageId} {
+            allow read: if canReadContent(orgId);
+            allow create: if canReadContent(orgId) && authorIsCaller();
+            allow update: if canReadContent(orgId);  // jen readBy
+            allow delete: if false;                  // oprava je nová zpráva
+          }
+        }
+      }
+
+      /* ---------- ploché kolekce ---------- */
+
+      // Lhůty se DOPOČÍTÁVAJÍ a nikdy nedopisují ručně (dok. 11).
+      match /obligations/{id} {
+        allow read: if isMember(orgId);
+        allow write: if false;
+      }
+
+      // Povinnosti vůči úřadům. Vedení je vidí jako přehled; nechodí to
+      // jako výzvy (dok. 16).
+      match /mandateObligations/{id} {
+        allow read: if isManagement(orgId);
+        allow create, update: if isManagement(orgId);
+        allow delete: if false;
+      }
+
+      // Úkol NIKDY nezavírá zákonnou lhůtu (dok. 12) — proto je to obyčejná
+      // kolekce bez zvláštní ochrany.
+      match /tasks/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if isMember(orgId);
+        allow delete: if false;   // zrušení je status: 'cancelled'
+      }
+
+      // Kalendář. Vlastní události si každý spravuje sám; ostatní vidí
+      // vytížení, ne obsah (dok. 11).
+      match /events/{id} {
+        allow read: if isMember(orgId);
+        allow create: if isMember(orgId);
+        allow update: if isMember(orgId)
+                      && (resource.data.ownerPersonId == request.auth.token.pid
+                          || isManagement(orgId));
+        allow delete: if false;   // zrušení je status: 'cancelled'
+      }
+
+      /* ---------- úřady ---------- */
+
+      // Vydání údajů VEN schvaluje vedení, ne Klíčová osoba sama (dok. 13).
+      match /authorityRequests/{id} {
+        allow read: if canReadContent(orgId);
+        allow create: if canReadContent(orgId);
+        allow update: if isManagement(orgId);
+        allow delete: if false;
+      }
+
+      // Podatelna. Do potvrzení podání nežije v žádném spisu (dok. 14).
+      match /submissions/{id} {
+        allow read: if canReadContent(orgId);
+        allow create: if canReadContent(orgId);
+        allow update: if canReadContent(orgId);
+        allow delete: if false;
+      }
+
+      // Roční výkaz počítá Function; vedení ho čte a odesílá ručně.
+      match /registryReturns/{year} {
+        allow read: if isManagement(orgId);
+        allow update: if isManagement(orgId);
+        allow create, delete: if false;
+      }
+
+      // Reporty pro účetní. Účetní je vidí, obsah spisů ne.
+      match /reportDefinitions/{id} {
+        allow read: if isManagement(orgId) || hasRole(orgId, ['accountant']);
+        allow create, update: if isManagement(orgId) || hasRole(orgId, ['accountant']);
+        allow delete: if false;
+      }
+
+      // Zrcadlo objednávek organizace, aby „naše kurzy“ byl jeden dotaz
+      // bez sahání do kořenové kolekce. Píše Function spolu s objednávkou.
+      match /courseOrders/{id} {
+        allow read: if isMember(orgId);
+        allow write: if false;
+      }
+
+      // Interní hlídání a doučování zaměstnancem organizace. Nefakturuje se,
+      // protože obě strany jsou tatáž organizace — ale dny se do nároku
+      // počítají stejně a způsobilost podle § 49 odst. 4 platí i tady
+      // (marketplace.ts).
+      match /internalDeliveries/{id} {
+        allow read: if canReadContent(orgId);
+        allow create: if canReadContent(orgId) && authorIsCaller();
+        allow update: if canReadContent(orgId);
+        allow delete: if false;
+      }
+
+      match /exitPackages/{id} {
+        allow read: if isManagement(orgId);
+        allow create: if isManagement(orgId);
+        allow update, delete: if false;
+      }
+
+      /* ---------- Eli ---------- */
+
+      // Relace a tahy jsou soukromé tomu, kdo se ptá. Konverzace s Eli
+      // NENÍ spis (dok. 15) — kdyby byla, každá úvaha nahlas by se stala
+      // materiálem, který čte inspekce.
+      match /assistant/{sessionId} {
+        allow read: if isSelf(resource.data.personId);
+        allow create: if isMember(orgId) && request.resource.data.personId == request.auth.token.pid;
+        allow update: if false;
+        allow delete: if false;
+
+        match /turns/{turnId} {
+          allow read: if isSelf(get(/databases/$(database)/documents/orgs/$(orgId)/assistant/$(sessionId)).data.personId);
+          allow write: if false;   // píše Function, která volá model
+        }
+      }
+
+      // Návrhy akcí. Provádí a vrací zpět člověk, ale zápis výsledku
+      // dělá Function, aby stupně 2 a 3 nešly obejít z klienta (dok. 15).
+      match /assistantActions/{id} {
+        allow read: if isSelf(resource.data.proposedForPersonId) || isManagement(orgId);
+        allow write: if false;
+      }
+
+      // Paměť Eli. Vlastní si člověk spravuje sám — obrazovka
+      // „Co si Eli pamatuje“ (dok. 17). Zapomenutí je storno, ne delete.
+      match /memory/{id} {
+        allow read: if (resource.data.scope == 'person' && isSelf(resource.data.ownerId))
+                    || (resource.data.scope == 'organization' && isMember(orgId));
+        allow create: if isMember(orgId);
+        allow update: if (resource.data.scope == 'person' && isSelf(resource.data.ownerId))
+                      || (resource.data.scope == 'organization' && isManagement(orgId));
+        allow delete: if false;
+      }
+
+      // Účtování a audit volání modelu. Píše jen Function.
+      match /aiUsage/{id} {
+        allow read: if isManagement(orgId);
+        allow write: if false;
+      }
+
+      /* ---------- audit a logy ---------- */
+
+      // Append-only. Create smí každý člen (klient loguje své nahlédnutí),
+      // ale update ani delete NIKDO — jinak by audit nebyl audit.
+      match /audit/{id} {
+        allow read: if isManagement(orgId);
+        allow create: if isMember(orgId)
+                      && request.resource.data.personId == request.auth.token.pid;
+        allow update, delete: if false;
+      }
+
+      // Nahlížení agregovaně za spis, osobu a den (dok. 12). Deterministické
+      // id znamená, že inkrement je jeden zápis bez čtení.
+      match /viewLogs/{logId} {
+        allow read: if isManagement(orgId);
+        allow create, update: if isMember(orgId)
+                              && request.resource.data.personId == request.auth.token.pid;
+        allow delete: if false;
+      }
+
+      // Odnesení kopie jednotlivě — to je ten úkon, na který míří 13a
+      // i GDPR (dok. 12).
+      match /exportLogs/{id} {
+        allow read: if isManagement(orgId);
+        allow create: if isMember(orgId)
+                      && request.resource.data.personId == request.auth.token.pid;
+        allow update, delete: if false;
+      }
+
+      match /lendings/{id} {
+        allow read: if isMember(orgId);
+        allow create, update: if canReadContent(orgId);
+        allow delete: if false;
+      }
+
+      // Žádost o nahlédnutí VČETNĚ odmítnutí — 13a to žádá výslovně (dok. 12).
+      match /inspectionRequests/{id} {
+        allow read: if isMember(orgId);
+        allow create: if isMember(orgId);
+        allow update: if isManagement(orgId);
+        allow delete: if false;
+      }
+
+      // Podpisový obřad ověřuje Function — nesmí být ovlivnitelný klientem
+      // (dok. 08). Z chatu se nepodepisuje nikdy (dok. 15, stupeň 3).
+      match /signatures/{id} {
+        allow read: if canReadContent(orgId);
+        allow write: if false;
+      }
+    }
+
+    // Cokoli nepokrytého je zakázané. Nová kolekce si musí pravidlo
+    // napsat, ne ho zdědit.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

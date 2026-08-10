@@ -1,0 +1,70 @@
+{
+  "//": [
+    "Dvě domény, jeden projekt, jedna databáze (marketplace.ts, DOMAINS):",
+    "  doprovazeni.com — CRM, bez role v organizaci tam není co dělat",
+    "  pestouni.com    — marketplace, veřejný katalog a účty pěstounů",
+    "",
+    "Hranicí nejsou domény, ale bezpečnostní pravidla. Doména rozhoduje",
+    "o tom, co se vykreslí; o tom, co jde přečíst, rozhoduje token.",
+    "",
+    "Obě domény musí být v Authentication → Authorized domains, jinak",
+    "přihlášení na jedné z nich mlčky selže."
+  ],
+
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+
+  "hosting": [
+    {
+      "target": "crm",
+      "public": "apps/crm/dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{ "source": "**", "destination": "/index.html" }],
+      "headers": [
+        {
+          "//": "CRM se neindexuje — není tam nic pro vyhledávače a spis se hledat nemá.",
+          "source": "**",
+          "headers": [
+            { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+            { "key": "X-Content-Type-Options", "value": "nosniff" },
+            { "key": "Referrer-Policy", "value": "same-origin" }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "marketplace",
+      "public": "apps/marketplace/dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "//rewrites": [
+        "Katalog se předrenderuje Cloud Functionou, aby ho našly vyhledávače;",
+        "cena se do předrenderovaného HTML NEDOSTANE (marketplace.ts).",
+        "Zbytek je SPA."
+      ],
+      "rewrites": [
+        { "source": "/nabidka/**", "function": "renderPublicCatalogue" },
+        { "source": "/overeni/**", "function": "renderVerification" },
+        { "source": "**", "destination": "/index.html" }
+      ],
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            { "key": "X-Content-Type-Options", "value": "nosniff" },
+            { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "emulators": {
+    "firestore": { "port": 8080 },
+    "auth": { "port": 9099 },
+    "hosting": { "port": 5000 },
+    "ui": { "enabled": true, "port": 4000 },
+    "singleProjectMode": true
+  }
+}

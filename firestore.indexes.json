@@ -1,0 +1,310 @@
+{
+  "//": [
+    "Složené indexy. Každý odpovídá jednomu seznamu v UI — pravidlo z README",
+    "sekce 1.4: každá obrazovka je jeden dotaz. Když se objeví nový seznam,",
+    "přidá se index; když dotaz vyžaduje víc než jeden index, je to signál,",
+    "že se má do záznamu denormalizovat další pole.",
+    "",
+    "Jednopolové indexy vytváří Firestore sám a nejsou tady."
+  ],
+
+  "indexes": [
+    {
+      "//": "Co mi utíká — napříč rodinami, jeden dotaz (dok. 11)",
+      "collectionGroup": "obligations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "assigneePersonId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Přehled lhůt pro vedení bez filtru na osobu",
+      "collectionGroup": "obligations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "kind", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Lhůty jedné rodiny — rozpad na pěstouna a každé dítě",
+      "collectionGroup": "obligations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "caseFileId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+
+    {
+      "//": "Moje úkoly",
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "assigneePersonId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Úkoly u jedné rodiny",
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "caseFileId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+
+    {
+      "//": "Moje rodiny — výchozí filtr UI (dok. 03 sekce 0)",
+      "collectionGroup": "caseFiles",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "keyWorkerPersonId", "order": "ASCENDING" },
+        { "fieldPath": "lifecycle", "order": "ASCENDING" },
+        { "fieldPath": "indicators.nextContactDueOn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Rodiny po lhůtě — přehled pro vedení",
+      "collectionGroup": "caseFiles",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "lifecycle", "order": "ASCENDING" },
+        { "fieldPath": "indicators.overdueObligationCount", "order": "DESCENDING" },
+        { "fieldPath": "reference", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Archiv — dotaz po letech je první třídy použití (dok. 18)",
+      "collectionGroup": "caseFiles",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "lifecycle", "order": "ASCENDING" },
+        { "fieldPath": "archivedOn", "order": "DESCENDING" }
+      ]
+    },
+
+    {
+      "//": "Spis chronologicky — časová osa (dok. 12)",
+      "collectionGroup": "timeline",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "visibilityClass", "order": "ASCENDING" },
+        { "fieldPath": "occurredAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Osa filtrovaná na druh záznamu",
+      "collectionGroup": "timeline",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "refType", "order": "ASCENDING" },
+        { "fieldPath": "occurredAt", "order": "DESCENDING" }
+      ]
+    },
+
+    {
+      "//": "Záznamy jednoho druhu ve spisu — např. všechny osobní styky",
+      "collectionGroup": "entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "kind", "order": "ASCENDING" },
+        { "fieldPath": "voided", "order": "ASCENDING" },
+        { "fieldPath": "occurredAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Výdaje k osobě přes celou organizaci — podklad pro účetní (dok. 07)",
+      "collectionGroup": "entries",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "kind", "order": "ASCENDING" },
+        { "fieldPath": "boundToPersonId", "order": "ASCENDING" },
+        { "fieldPath": "occurredAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Respitní dny dítěte za rok — kontrola čtrnáctidenního nároku",
+      "collectionGroup": "entries",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "kind", "order": "ASCENDING" },
+        { "fieldPath": "childId", "order": "ASCENDING" },
+        { "fieldPath": "from", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Vzdělávací hodiny osoby v období (dok. 01, 10)",
+      "collectionGroup": "entries",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "kind", "order": "ASCENDING" },
+        { "fieldPath": "personId", "order": "ASCENDING" },
+        { "fieldPath": "educationPeriodId", "order": "ASCENDING" }
+      ]
+    },
+
+    {
+      "//": "Dokumenty spisu podle kategorie",
+      "collectionGroup": "documents",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Co Eli ještě nepřečetla — dávkové doindexování archivu (dok. 17)",
+      "collectionGroup": "documents",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "indexable", "order": "ASCENDING" },
+        { "fieldPath": "indexStatus", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+
+    {
+      "//": "Umístění dítěte v čase — u přechodné péče se děti střídají (dok. 18)",
+      "collectionGroup": "placements",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "childId", "order": "ASCENDING" },
+        { "fieldPath": "startedOn", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Aktivní umístění u dohody",
+      "collectionGroup": "placements",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "endedOn", "order": "ASCENDING" },
+        { "fieldPath": "startedOn", "order": "DESCENDING" }
+      ]
+    },
+
+    {
+      "//": "Můj kalendář na období (dok. 11)",
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "ownerPersonId", "order": "ASCENDING" },
+        { "fieldPath": "startAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Vytížení týmu — vidí se rozložení, ne obsah",
+      "collectionGroup": "events",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "startAt", "order": "ASCENDING" },
+        { "fieldPath": "ownerPersonId", "order": "ASCENDING" }
+      ]
+    },
+
+    {
+      "//": "Podatelna — nezpracovaná podání (dok. 14)",
+      "collectionGroup": "submissions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "receivedOn", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Otevřené žádosti úřadů podle lhůty (dok. 13)",
+      "collectionGroup": "authorityRequests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "decision", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Lhůty vůči úřadům — přehled pro vedení, ne výzvy (dok. 16)",
+      "collectionGroup": "mandateObligations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dueOn", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "//": "Odmítnutí zájemců pro roční výkaz § 49c odst. 4 (dok. 13)",
+      "collectionGroup": "inquiries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "outcome", "order": "ASCENDING" },
+        { "fieldPath": "refusalReason", "order": "ASCENDING" },
+        { "fieldPath": "receivedOn", "order": "ASCENDING" }
+      ]
+    },
+
+    {
+      "//": "Vlákna podle poslední zprávy",
+      "collectionGroup": "threads",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "kind", "order": "ASCENDING" },
+        { "fieldPath": "lastMessageAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Co si Eli pamatuje — obrazovka nastavení (dok. 17)",
+      "collectionGroup": "memory",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "ownerId", "order": "ASCENDING" },
+        { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "lastUsedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Nahlížení do spisů — kontrola cross-case přístupu (dok. 03, 12)",
+      "collectionGroup": "viewLogs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "crossCaseAccess", "order": "ASCENDING" },
+        { "fieldPath": "day", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "//": "Spotřeba AI za období — účtování kreditu (dok. 19)",
+      "collectionGroup": "aiUsage",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "purpose", "order": "ASCENDING" },
+        { "fieldPath": "at", "order": "DESCENDING" }
+      ]
+    }
+  ],
+
+  "fieldOverrides": [
+    {
+      "//": [
+        "Vektorové hledání nad dokumenty (dok. 17). Firestore neumí fulltext,",
+        "ale KNN přes findNearest umí — takže Eli hledá bez další",
+        "infrastruktury. 768 dimenzí odpovídá běžnému embedding modelu;",
+        "při změně modelu se mění i indexVersion a archiv se přeindexuje."
+      ],
+      "collectionGroup": "chunks",
+      "fieldPath": "embedding",
+      "vectorConfig": { "dimension": 768, "flat": {} }
+    },
+    {
+      "//": "Tokeny pro přesné hledání: sp. zn., č. j., jména v dokumentech",
+      "collectionGroup": "index",
+      "fieldPath": "keywords",
+      "indexes": [
+        { "queryScope": "COLLECTION_GROUP", "arrayConfig": "CONTAINS" }
+      ]
+    }
+  ]
+}

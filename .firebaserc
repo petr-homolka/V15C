@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "demo-v15c"
+  },
+  "targets": {
+    "demo-v15c": {
+      "hosting": {
+        "crm": ["v15c-crm"],
+        "marketplace": ["v15c-marketplace"]
+      }
+    }
+  }
+}
