@@ -1,5 +1,55 @@
 # V15C
 
+## Spuštění u sebe (Windows, PowerShell)
+
+Potřebujete **Node.js 20.19 nebo novější** (doporučeně LTS 22) a **Git**.
+Verzi ověříte `node -v`. Nic dalšího — databáze ani Firebase pro prohlížení
+prototypu není potřeba, testovací data se staví v prohlížeči.
+
+Každý příkaz na samostatný řádek (starší PowerShell neumí `&&`):
+
+```powershell
+git clone https://github.com/petr-homolka/V15C.git
+cd V15C
+git checkout claude/github-design-resources-erjstg
+npm run dev
+```
+
+Poprvé to trvá minutu — `npm run dev` si sám doinstaluje závislosti aplikace.
+Pak otevřete **http://localhost:5273**.
+
+Port je připíchnutý schválně (`strictPort` ve `vite.config.ts`): když ho něco
+obsadí, Vite se neodstěhuje jinam a zahlásí chybu. To je lepší než ladit
+omylem starší prototyp na 5173.
+
+Aplikaci zastavíte `Ctrl+C`. Novou verzi si stáhnete takto:
+
+```powershell
+git pull origin claude/github-design-resources-erjstg
+npm run dev
+```
+
+### Co si prohlédnout
+
+- Vpravo nahoře je **přepínač person** — Klíčová osoba vidí svoje dohody,
+  vedení celou organizaci. Data se tím mění, ne jen popisek.
+- Vlevo je **dvojpanel**: lišta oblastí a navigace, ve které se Dohody,
+  Pěstouni, Děti a Tým rozbalí na jména. Šipka dole panel zúží.
+- Vpravo je lišta **připnutých lidí** (od šířky okna 1024 px).
+- Tmavý režim a další volby jsou v **Nastavení → Pohled a vzhled**.
+
+### Další příkazy
+
+Tyhle potřebují závislosti i v korunu repozitáře (`npm install` v `V15C`):
+
+| Příkaz | K čemu |
+| --- | --- |
+| `npm run build` | produkční build aplikace do `apps/crm/dist` |
+| `npm run typecheck` | kontrola typů v `schema/` a `tools/seed/` |
+| `npm test` | testy schématu a pravidel Firestore (potřebuje emulátor) |
+| `npm run emulator` | Firestore + Auth emulátor |
+| `npm run seed` | naplnění emulátoru testovacími daty |
+
 ## Design system
 
 This repo uses **Geist** — Vercel's design system — vendored in

@@ -7,17 +7,17 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p schema/tsconfig.json && tsc --noEmit -p tools/seed/tsconfig.json",
     "emulator": "firebase emulators:start --only firestore,auth --project demo-v15c",
-    "dev": "cd apps/crm && (test -d node_modules || npm install) && npm run dev",
-    "build": "cd apps/crm && (test -d node_modules || npm install) && npm run build",
+    "dev": "npm --prefix apps/crm install --no-audit --no-fund && npm --prefix apps/crm run dev",
+    "build": "npm --prefix apps/crm install --no-audit --no-fund && npm --prefix apps/crm run build",
     "test:schema": "tsx tests/schema.test.mjs",
     "test": "npm run test:schema && npm run test:rules",
     "test:rules": "firebase emulators:exec --only firestore --project demo-rules \"node tests/rules.test.mjs\"",
-    "seed": "cd tools/seed && npm run seed",
-    "seed:clear": "cd tools/seed && npm run seed -- clear",
-    "seed:reseed": "cd tools/seed && npm run seed -- reseed",
-    "seed:stats": "cd tools/seed && npm run seed -- stats",
-    "seed:dump": "cd tools/seed && npm run seed -- dump",
-    "install:app": "cd apps/crm && npm install"
+    "seed": "npm --prefix tools/seed run seed",
+    "seed:clear": "npm --prefix tools/seed run seed -- clear",
+    "seed:reseed": "npm --prefix tools/seed run seed -- reseed",
+    "seed:stats": "npm --prefix tools/seed run seed -- stats",
+    "seed:dump": "npm --prefix tools/seed run seed -- dump",
+    "install:app": "npm --prefix apps/crm install"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^4.0.1",
@@ -26,5 +26,8 @@
     "firebase-tools": "^13.0.0",
     "tsx": "^4.23.11",
     "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.19"
   }
 }
