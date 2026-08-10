@@ -13,7 +13,7 @@
  * │  └──┴──────────┴──────────────────────────────────────────────┘   │
  * │                                                                   │
  * │ **Lišta (4 rem)** drží oblasti — pět ikon, nic víc. **Sloupec**   │
- * │ (13 rem) ukazuje navigaci té jedné oblasti. Přepnutí oblasti je   │
+ * │ (15 rem) ukazuje navigaci té jedné oblasti. Přepnutí oblasti je   │
  * │ jedno kliknutí a nemění přitom celý seznam pod rukou.             │
  * │                                                                   │
  * │ Panel je černý v obou režimech — třídou `dark` se uvnitř přepnou  │
@@ -22,7 +22,7 @@
  * │ Položky Dohody / Pěstouni / Děti / Tým se **rozbalí na rychlý     │
  * │ seznam jmen** (`NavGroup`) — skok na kartu bez cesty přes tabulku. │
  * │ Plný seznam se řazením a stránkováním zůstává ve střední části.    │
- * │ Vpravo je lišta připnutých lidí (`PinRail`), od 1280 px.           │
+ * │ Vpravo je lišta připnutých lidí (`PinRail`), 4 rem, od 1024 px.    │
  * └───────────────────────────────────────────────────────────────────┘
  */
 
@@ -32,7 +32,7 @@ import * as data from './demo/data'
 import { Face, type FaceKind } from './face'
 import * as L from './labels'
 import { usePersona } from './persona'
-import { PinRail } from './pins'
+import { PinRail, togglePin, usePins } from './pins'
 import { Chevron, Chip, daysUntil, dueBadge, type Tone } from './ui'
 
 export type Segment = 'dohody' | 'pestouni' | 'deti' | 'tym'
@@ -138,7 +138,7 @@ export function Shell({
         <main className="flex-1">{children}</main>
       </div>
 
-      {/* Připnutí lidé vpravo — až od 1280 px, na užším displeji by kradli šířku. */}
+      {/* Připnutí lidé vpravo — 4 rem, od 1024 px, jako „chat rail" v šabloně. */}
       <PinRail go={go} />
     </div>
   )
@@ -167,13 +167,13 @@ function Sidebar({
 }) {
   return (
     <aside
-      className={`dark fixed inset-y-0 left-0 z-50 flex w-[17rem] shrink-0 bg-[var(--ds-background-200)] transition-transform duration-200 lg:sticky lg:top-0 lg:h-dvh lg:translate-x-0 ${
-        mini ? 'lg:w-16' : 'lg:w-[17rem]'
+      className={`dark fixed inset-y-0 left-0 z-50 flex w-[19rem] shrink-0 bg-[var(--ds-background-200)] transition-transform duration-200 lg:sticky lg:top-0 lg:h-dvh lg:translate-x-0 ${
+        mini ? 'lg:w-16' : 'lg:w-[19rem]'
       } ${open ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* --- lišta oblastí ------------------------------------------- */}
       <div className="flex w-16 shrink-0 flex-col items-center border-r border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)]">
-        <div className="flex h-14 items-center">
+        <div className="flex h-16 items-center">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--ds-purple-700)]">
             <span className="text-label-14 text-white">E</span>
           </span>
@@ -202,7 +202,7 @@ function Sidebar({
 
       {/* --- navigace oblasti ---------------------------------------- */}
       <div className={`flex min-w-0 flex-1 flex-col ${mini ? 'lg:hidden' : ''}`}>
-        <div className="flex h-14 items-center px-4">
+        <div className="flex h-16 items-center px-4">
           <span className="text-heading-16 truncate text-[var(--ds-gray-1000)]">
             {AREAS.find((a) => a.key === area)?.label}
           </span>
@@ -354,7 +354,7 @@ function NavRow({
     <button
       type="button"
       onClick={onClick}
-      className={`text-copy-14 flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ${
+      className={`text-copy-14 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors ${
         active
           ? 'bg-[var(--ds-gray-200)] text-[var(--ds-gray-1000)]'
           : 'text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-200)] hover:text-[var(--ds-gray-1000)]'
@@ -419,7 +419,7 @@ function NavGroup({
         <button
           type="button"
           onClick={() => go(`/seznam/${segment}`)}
-          className="min-w-0 flex-1 truncate px-3 py-2 text-left hover:text-[var(--ds-gray-1000)]"
+          className="min-w-0 flex-1 truncate px-3 py-2.5 text-left hover:text-[var(--ds-gray-1000)]"
         >
           {label}
         </button>
@@ -438,7 +438,7 @@ function NavGroup({
       </div>
 
       {open ? (
-        <div className="pb-2 pl-3">
+        <div className="pb-2 pl-5">
           {items.length > QUICK_LIMIT ? (
             <input
               value={query}
@@ -449,7 +449,7 @@ function NavGroup({
           ) : null}
           <ul className="max-h-64 overflow-y-auto">
             {shown.map((i) => (
-              <li key={i.uid}>
+              <li key={i.uid} className="group/row relative">
                 <button
                   type="button"
                   onClick={() => go(i.route)}
@@ -470,11 +470,12 @@ function NavGroup({
                       </span>
                     ) : null}
                   </span>
+                  {/* Tečka ustoupí, když se objeví špendlík — jinak by se tlačily. */}
                   {i.alert ? (
                     <span
                       aria-label={i.alert.text}
                       title={i.alert.text}
-                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full transition-opacity group-hover/row:opacity-0 ${
                         i.alert.tone === 'red'
                           ? 'bg-[var(--ds-red-700)]'
                           : i.alert.tone === 'amber'
@@ -484,6 +485,12 @@ function NavGroup({
                     />
                   ) : null}
                 </button>
+                {/*
+                  Špendlík ze šablony (`nav-fav`): objeví se na řádku při
+                  přejetí a připne člověka do pravé lišty. Připnuté zůstává
+                  vidět vždy, jinak by se nedalo odepnout.
+                */}
+                <PinToggle uid={i.uid} name={i.name} />
               </li>
             ))}
           </ul>
@@ -502,6 +509,39 @@ function NavGroup({
         </div>
       ) : null}
     </div>
+  )
+}
+
+/** Špendlík na řádku rychlého seznamu — připne do pravé lišty. */
+function PinToggle({ uid, name }: { uid: string; name: string }) {
+  const pins = usePins()
+  const on = pins.includes(uid)
+  return (
+    <button
+      type="button"
+      onClick={() => togglePin(uid)}
+      aria-pressed={on}
+      aria-label={on ? `Odepnout ${name}` : `Připnout ${name}`}
+      title={on ? 'Odepnout z pravé lišty' : 'Připnout do pravé lišty'}
+      className={`absolute right-1 top-1/2 -translate-y-1/2 rounded-md p-1 transition-opacity ${
+        on
+          ? 'text-[var(--ds-purple-700)] opacity-100'
+          : 'text-[var(--ds-gray-700)] opacity-0 hover:text-[var(--ds-gray-1000)] group-hover/row:opacity-100 focus-visible:opacity-100'
+      }`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        className="h-3.5 w-3.5"
+        fill={on ? 'currentColor' : 'none'}
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M9 4h6l-1 5 3 3v2h-4v5l-1 1-1-1v-5H6v-2l3-3-1-5Z" />
+      </svg>
+    </button>
   )
 }
 
@@ -537,7 +577,7 @@ function TopBar({ onMenu, go }: { onMenu: () => void; go: (r: string) => void })
   const { persona } = usePersona()
   return (
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--ds-background-100)]/85 pt-[env(safe-area-inset-top)] backdrop-blur-sm">
-      <div className="flex h-14 items-center gap-2 px-4 lg:px-6">
+      <div className="flex h-16 items-center gap-2 px-4 lg:px-6">
         <span className="lg:hidden">
           <IconButton label="Menu" onClick={onMenu}>
             <path d="M3 5h18M3 12h18M3 19h18" />
@@ -581,7 +621,7 @@ function TopBar({ onMenu, go }: { onMenu: () => void; go: (r: string) => void })
 function PageBar({ route, go }: { route: string; go: (r: string) => void }) {
   const crumbs = breadcrumbs(route)
   return (
-    <div className="sticky top-14 z-20 flex h-11 items-center gap-1 border-b border-[var(--border)] bg-[var(--ds-background-100)] px-4 lg:px-6">
+    <div className="sticky top-16 z-20 flex h-11 items-center gap-1 border-b border-[var(--border)] bg-[var(--ds-background-100)] px-4 lg:px-6">
       {crumbs.map((c, i) => (
         <span key={c.label + i} className="flex min-w-0 items-center gap-1">
           {i > 0 ? <span className="text-[var(--ds-gray-600)]">/</span> : null}

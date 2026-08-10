@@ -356,3 +356,41 @@ označení řádku — „koho mám připnutého" je pracovní poznámka, ne úd
 
 Lišta se ukazuje od 1280 px. Na užším displeji by ubrala šířku tabulce,
 a to je horší obchod než přijít o zkratku.
+
+
+---
+
+## 14. Rozměry přeměřené podle šablony
+
+Ze stránky `page-layouts/dual-sidebar` (uložená stránka dema, ne koupený
+balík) šla poprvé přečíst skutečná geometrie. Rám se podle ní srovnal:
+
+| Rozměr | Luminaux | dřív u nás | teď |
+| --- | --- | --- | --- |
+| panel celkem | `--sidebar-width: 19rem` | 17 rem | **19 rem** |
+| lišta oblastí | `.app-rail` 4 rem | 4 rem | 4 rem |
+| sloupec navigace | zbytek, tj. 15 rem | 13 rem | **15 rem** |
+| zúžený panel | `--sidebar-width-min: 4rem` | 4 rem | 4 rem |
+| horní lišta | `h-16`, tj. 4 rem | 3,5 rem | **4 rem** |
+| řádek navigace | `px-3 py-2.5`, 14 px | `py-2` | **`py-2.5`** |
+| podseznam | `pl-5` | `pl-3` | **`pl-5`** |
+| pravá lišta | `--chat-rail-width: 4rem`, od 1024 px, `z-45` | 3,5 rem, od 1280 px | **4 rem, od 1024 px** |
+
+Potvrdilo se i to, co jsme uhodli správně: `.app-sidebar__inner > .app-rail
++ .app-secondary` je přesně naše struktura, tlačítko „Hide panel" je v šabloně
+taky **dole v liště**, a lišta je o odstín tmavší než sloupec navigace
+(`color-mix(surface-muted 92%, foreground 8%)`; u nás to samé dělají
+`--ds-background-100` a `--ds-background-200`).
+
+**Převzatý prvek: špendlík na řádku.** Šablona má u každé položky navigace
+tlačítko `nav-fav`, které se objeví při přejetí a přidá položku do oblíbených.
+U nás je to totéž s jiným cílem: špendlík na řádku rychlého seznamu **připne
+člověka do pravé lišty**. Připnutý špendlík zůstává vidět, aby se dalo
+odepnout, a odznak lhůty při přejetí ustoupí, aby se netlačily.
+
+Co se **nepřevzalo**: písmo (šablona veze Inter a JetBrains Mono z Google
+Fonts, my máme Geist lokálně), zelená barevnost, a `data-*` atributy na
+`.app-shell` — režimy panelu držíme ve stavu Reactu, ne v atributech na `body`.
+
+Soubory šablony do repozitáře nepatří (licencovaný cizí kód). Rozměry v téhle
+tabulce jsou přeměřená čísla, ne převzatý kód — proto smí být tady.

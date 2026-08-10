@@ -106,8 +106,8 @@ export function PinRail({ go }: { go: (r: string) => void }) {
   const pinned = pins.map((uid) => everyone.find((i) => i.uid === uid)).filter((i) => i !== undefined)
 
   return (
-    // z-40: karta u avataru musí přebít lepící horní lištu (z-30) i drobečky (z-20).
-    <aside className="sticky top-0 z-40 hidden h-dvh w-14 shrink-0 flex-col items-center gap-2 border-l border-[var(--border)] bg-[var(--ds-background-100)] py-3 xl:flex">
+    // Rozměry ze šablony: 4 rem, sticky, celá výška, z-45 (nad horní lištou).
+    <aside className="sticky top-0 z-45 hidden h-dvh w-16 shrink-0 flex-col items-center gap-4 border-l border-[var(--border)] bg-[var(--ds-background-100)] py-4 lg:flex">
       {pinned.map((i) => (
         <button
           key={i.uid}
