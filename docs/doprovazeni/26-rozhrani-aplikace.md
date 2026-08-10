@@ -304,3 +304,22 @@ otevřel český Excel bez rozsypaných sloupců.
 
 Zvolené období je bílá pilulka v zapuštěné liště, ne podtržítko: podtržítko
 se ztratí na statickém obrázku a stav ovladače má být vidět na první pohled.
+
+
+---
+
+## 12. Panel má dvě šířky
+
+Luminaux má obě podoby jako dvě stránky dema (`sidebar-black` a `minified`).
+U nás je to **jeden panel a přepínač**, ne dva návrhy:
+
+- **celý** — lišta oblastí (4 rem) plus navigace oblasti s počty (13 rem),
+- **zúžený** — jen lišta oblastí; navigace zmizí a obsah se rozšíří o 13 rem.
+
+Přepíná se šipkou na spodku lišty a volba se pamatuje (`v15c.panel`
+v prohlížeči). Je to volba práce, ne vzhledu: kdo čte tabulku o šesti
+sloupcích, chce šířku; kdo přeskakuje mezi oblastmi, chce rozcestník.
+
+Na mobilu přepínač není — tam je panel šuplík a vždy se otevře celý.
+V zúženém stavu není vidět karta osoby na spodku panelu; přepnutí person
+i odhlášení zůstává v liště nahoře, takže se nic neztratí.

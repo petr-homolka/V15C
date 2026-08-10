@@ -90,7 +90,20 @@ export function Shell({
   route: string
 }) {
   const [open, setOpen] = useState(false)
+  /**
+   * Zúžený panel: zbude jen lišta oblastí, navigace oblasti se skryje.
+   * Volba je uživatelova a drží se mezi návštěvami — kdo pracuje v tabulkách,
+   * chce šířku; kdo hledá, chce rozcestník.
+   */
+  const [mini, setMini] = useState(() => localStorage.getItem(PANEL_KEY) === 'mini')
   const area = areaOf(route)
+
+  const toggleMini = () => {
+    setMini((was) => {
+      localStorage.setItem(PANEL_KEY, was ? 'full' : 'mini')
+      return !was
+    })
+  }
 
   return (
     <div className="flex min-h-dvh bg-[var(--ds-background-200)]">
@@ -103,6 +116,8 @@ export function Shell({
 
       <Sidebar
         open={open}
+        mini={mini}
+        onToggleMini={toggleMini}
         area={area}
         route={route}
         go={(r) => {
@@ -122,13 +137,21 @@ export function Shell({
 
 /* --- panel ---------------------------------------------------------------- */
 
+/** Klíč v prohlížeči pro šířku panelu. */
+const PANEL_KEY = 'v15c.panel'
+
 function Sidebar({
   open,
+  mini,
+  onToggleMini,
   area,
   route,
   go,
 }: {
   open: boolean
+  /** Zúžený panel — platí jen na širokém displeji; v šuplíku je vždy celý. */
+  mini: boolean
+  onToggleMini: () => void
   area: Area
   route: string
   go: (r: string) => void
@@ -136,8 +159,8 @@ function Sidebar({
   return (
     <aside
       className={`dark fixed inset-y-0 left-0 z-50 flex w-[17rem] shrink-0 bg-[var(--ds-background-200)] transition-transform duration-200 lg:sticky lg:top-0 lg:h-dvh lg:translate-x-0 ${
-        open ? 'translate-x-0' : '-translate-x-full'
-      }`}
+        mini ? 'lg:w-16' : 'lg:w-[17rem]'
+      } ${open ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* --- lišta oblastí ------------------------------------------- */}
       <div className="flex w-16 shrink-0 flex-col items-center border-r border-[var(--ds-gray-alpha-400)] bg-[var(--ds-background-100)]">
@@ -157,10 +180,19 @@ function Sidebar({
             />
           ))}
         </nav>
+        {/* Přepínač šířky. Na mobilu nemá smysl — tam je panel šuplík. */}
+        <div className="hidden py-3 lg:block">
+          <RailButton
+            label={mini ? 'Rozbalit panel' : 'Zúžit panel'}
+            icon={mini ? 'M9 6l6 6-6 6' : 'M15 6l-6 6 6 6'}
+            active={false}
+            onClick={onToggleMini}
+          />
+        </div>
       </div>
 
       {/* --- navigace oblasti ---------------------------------------- */}
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className={`flex min-w-0 flex-1 flex-col ${mini ? 'lg:hidden' : ''}`}>
         <div className="flex h-14 items-center px-4">
           <span className="text-heading-16 truncate text-[var(--ds-gray-1000)]">
             {AREAS.find((a) => a.key === area)?.label}
