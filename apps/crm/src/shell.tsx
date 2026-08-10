@@ -18,6 +18,11 @@
  * │                                                                   │
  * │ Panel je černý v obou režimech — třídou `dark` se uvnitř přepnou  │
  * │ tokeny Geistu na tmavé hodnoty, takže nepřibyl žádný hex.         │
+ * │                                                                   │
+ * │ Položky Dohody / Pěstouni / Děti / Tým se **rozbalí na rychlý     │
+ * │ seznam jmen** (`NavGroup`) — skok na kartu bez cesty přes tabulku. │
+ * │ Plný seznam se řazením a stránkováním zůstává ve střední části.    │
+ * │ Vpravo je lišta připnutých lidí (`PinRail`), od 1280 px.           │
  * └───────────────────────────────────────────────────────────────────┘
  */
 
@@ -27,6 +32,7 @@ import * as data from './demo/data'
 import { Face, type FaceKind } from './face'
 import * as L from './labels'
 import { usePersona } from './persona'
+import { PinRail } from './pins'
 import { Chevron, Chip, daysUntil, dueBadge, type Tone } from './ui'
 
 export type Segment = 'dohody' | 'pestouni' | 'deti' | 'tym'
@@ -131,6 +137,9 @@ export function Shell({
         <PageBar route={route} go={go} />
         <main className="flex-1">{children}</main>
       </div>
+
+      {/* Připnutí lidé vpravo — až od 1280 px, na užším displeji by kradli šířku. */}
+      <PinRail go={go} />
     </div>
   )
 }
@@ -210,10 +219,6 @@ function Sidebar({
 }
 
 function AreaNav({ area, route, go }: { area: Area; route: string; go: (r: string) => void }) {
-  const { persona } = usePersona()
-  const orgId = persona.organizationId
-  const count = (segment: Segment) => (orgId ? listOf(segment, orgId, persona).length : 0)
-
   if (area === 'eli') {
     return (
       <>
@@ -239,11 +244,12 @@ function AreaNav({ area, route, go }: { area: Area; route: string; go: (r: strin
     return (
       <>
         <NavRow label="Dnes" active={route === '/dnes'} onClick={() => go('/dnes')} />
-        <NavRow
+        <NavGroup
+          segment="dohody"
           label="Dohody"
-          badge={count('dohody')}
+          route={route}
+          go={go}
           active={route.startsWith('/seznam/dohody') || route.startsWith('/rodina/')}
-          onClick={() => go('/seznam/dohody')}
         />
       </>
     )
@@ -252,23 +258,26 @@ function AreaNav({ area, route, go }: { area: Area; route: string; go: (r: strin
   if (area === 'lide') {
     return (
       <>
-        <NavRow
+        <NavGroup
+          segment="pestouni"
           label="Pěstouni"
-          badge={count('pestouni')}
+          route={route}
+          go={go}
           active={route.startsWith('/seznam/pestouni') || route.startsWith('/pestoun/')}
-          onClick={() => go('/seznam/pestouni')}
         />
-        <NavRow
+        <NavGroup
+          segment="deti"
           label="Děti"
-          badge={count('deti')}
+          route={route}
+          go={go}
           active={route.startsWith('/seznam/deti') || route.startsWith('/dite/')}
-          onClick={() => go('/seznam/deti')}
         />
-        <NavRow
+        <NavGroup
+          segment="tym"
           label="Tým"
-          badge={count('tym')}
+          route={route}
+          go={go}
           active={route.startsWith('/seznam/tym') || route.startsWith('/clen/')}
-          onClick={() => go('/seznam/tym')}
         />
       </>
     )
@@ -358,6 +367,141 @@ function NavRow({
         </span>
       ) : null}
     </button>
+  )
+}
+
+/**
+ * Položka menu, která se dá rozbalit na **rychlý seznam**.
+ *
+ * Kliknutí na název vede do plného seznamu ve střední části (tam je řazení,
+ * seskupení, stránkování — to do panelu nepatří). Šipka vedle rozbalí jména
+ * přímo v menu, aby se dalo skočit na kartu bez cesty přes seznam.
+ *
+ * Rozbalený seznam je krátký schválně: deset jmen a nad tím filtr. Panel je
+ * rozcestník, ne druhá tabulka.
+ */
+const QUICK_LIMIT = 10
+
+function NavGroup({
+  segment,
+  label,
+  active,
+  route,
+  go,
+}: {
+  segment: Segment
+  label: string
+  active: boolean
+  route: string
+  go: (r: string) => void
+}) {
+  const { persona } = usePersona()
+  const orgId = persona.organizationId
+  const [open, setOpen] = useState(active)
+  const [query, setQuery] = useState('')
+
+  const items = orgId ? listOf(segment, orgId, persona) : []
+  const needle = fold(query.trim())
+  const found = needle
+    ? items.filter((i) => fold(i.name).includes(needle) || fold(i.town ?? '').includes(needle))
+    : items
+  const shown = found.slice(0, QUICK_LIMIT)
+
+  return (
+    <div>
+      <div
+        className={`text-copy-14 flex w-full items-center rounded-lg transition-colors ${
+          active
+            ? 'bg-[var(--ds-gray-200)] text-[var(--ds-gray-1000)]'
+            : 'text-[var(--ds-gray-900)] hover:bg-[var(--ds-gray-200)]'
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => go(`/seznam/${segment}`)}
+          className="min-w-0 flex-1 truncate px-3 py-2 text-left hover:text-[var(--ds-gray-1000)]"
+        >
+          {label}
+        </button>
+        <span className="text-label-12 tabular-nums text-[var(--ds-gray-700)]">{items.length}</span>
+        <button
+          type="button"
+          onClick={() => setOpen((was) => !was)}
+          aria-expanded={open}
+          aria-label={open ? `Sbalit ${label}` : `Rozbalit ${label}`}
+          className="flex h-8 w-8 items-center justify-center text-[var(--ds-gray-700)] hover:text-[var(--ds-gray-1000)]"
+        >
+          <span className={`block transition-transform duration-150 ${open ? 'rotate-90' : ''}`}>
+            <Chevron />
+          </span>
+        </button>
+      </div>
+
+      {open ? (
+        <div className="pb-2 pl-3">
+          {items.length > QUICK_LIMIT ? (
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Filtr…"
+              className="text-copy-13 mb-1 h-8 w-full rounded-md border border-[var(--ds-gray-alpha-400)] bg-transparent px-2 text-[var(--ds-gray-1000)] placeholder:text-[var(--ds-gray-700)]"
+            />
+          ) : null}
+          <ul className="max-h-64 overflow-y-auto">
+            {shown.map((i) => (
+              <li key={i.uid}>
+                <button
+                  type="button"
+                  onClick={() => go(i.route)}
+                  className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors ${
+                    route === i.route
+                      ? 'bg-[var(--ds-gray-200)]'
+                      : 'hover:bg-[var(--ds-gray-200)]'
+                  }`}
+                >
+                  <Face uid={i.uid} name={i.name} kind={i.kind} size="xs" />
+                  <span className="min-w-0 flex-1">
+                    <span className="text-copy-13 block truncate text-[var(--ds-gray-1000)]">
+                      {i.name}
+                    </span>
+                    {i.town ? (
+                      <span className="text-label-12 block truncate text-[var(--ds-gray-700)]">
+                        {i.town}
+                      </span>
+                    ) : null}
+                  </span>
+                  {i.alert ? (
+                    <span
+                      aria-label={i.alert.text}
+                      title={i.alert.text}
+                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                        i.alert.tone === 'red'
+                          ? 'bg-[var(--ds-red-700)]'
+                          : i.alert.tone === 'amber'
+                            ? 'bg-[var(--ds-amber-700)]'
+                            : 'bg-[var(--ds-gray-600)]'
+                      }`}
+                    />
+                  ) : null}
+                </button>
+              </li>
+            ))}
+          </ul>
+          {found.length > shown.length ? (
+            <button
+              type="button"
+              onClick={() => go(`/seznam/${segment}`)}
+              className="text-label-12 px-2 pt-1 text-[var(--ds-purple-700)] hover:underline"
+            >
+              a další {found.length - shown.length} v seznamu
+            </button>
+          ) : null}
+          {found.length === 0 ? (
+            <p className="text-label-12 px-2 py-1 text-[var(--ds-gray-700)]">Nic nenalezeno.</p>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
   )
 }
 

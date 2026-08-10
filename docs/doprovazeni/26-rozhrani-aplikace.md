@@ -323,3 +323,36 @@ sloupcích, chce šířku; kdo přeskakuje mezi oblastmi, chce rozcestník.
 Na mobilu přepínač není — tam je panel šuplík a vždy se otevře celý.
 V zúženém stavu není vidět karta osoby na spodku panelu; přepnutí person
 i odhlášení zůstává v liště nahoře, takže se nic neztratí.
+
+
+---
+
+## 13. Dvojpanel a připnutí lidé
+
+Luminaux má v „dual sidebar" dvě svislé lišty vlevo a messenger vpravo.
+U nás z toho vzniklo tohle:
+
+**Vlevo: menu, které se rozbalí na jména.** Položky Dohody, Pěstouni, Děti
+a Tým mají u sebe šipku. Kliknutí na název jde do plného seznamu ve střední
+části, šipka rozbalí **rychlý seznam** přímo v panelu: avatar, jméno, obec
+a tečka, když něco přeteklo. Deset jmen a nad nimi filtr, ne víc.
+
+Dělení práce je záměrné: **panel je rozcestník, tabulka je nástroj.** Řazení,
+seskupení podle obce, stránkování a hledání zůstávají v seznamu ve středu —
+to je pohled pro vedení a pro dávkovou práci. Panel řeší jinou úlohu: „vím,
+koho hledám, chci se tam dostat na dvě kliknutí."
+
+**Vpravo: připnutí lidé.** Tam, kde má Luminaux chat, máme lištu avatarů
+těch, se kterými má člověk zrovna co dělat. Kliknutím se otevře karta: obec,
+nejbližší lhůta, telefon jako odkaz `tel:`, e-mail, otevření karty
+a odepnutí. Do prázdné lišty se napoprvé připnou ti, u kterých je lhůta po
+termínu — prázdný pruh by nikdo nezaplnil.
+
+**Chat tam nebude.** S pěstounem se mluví telefonem a osobně; psané slovo
+o dítěti patří do spisu, kde má datum, autora a dohledatelnost. Bublina, která
+se nikam nezapíše, je u téhle agendy krok zpátky (dok. 16, 21). Připnutí je
+proto soukromé a leží v prohlížeči (`v15c.pins`), stejně jako barevné
+označení řádku — „koho mám připnutého" je pracovní poznámka, ne údaj o rodině.
+
+Lišta se ukazuje od 1280 px. Na užším displeji by ubrala šířku tabulce,
+a to je horší obchod než přijít o zkratku.

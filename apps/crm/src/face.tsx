@@ -196,9 +196,9 @@ export type FaceKind = 'child' | 'person' | 'family'
 
 /* --- zobrazení ------------------------------------------------------------ */
 
-const SIZES = { sm: 'h-8 w-8', md: 'h-10 w-10', lg: 'h-16 w-16' }
-const GLYPH = { sm: 'h-4 w-4', md: 'h-5 w-5', lg: 'h-8 w-8' }
-const TEXT = { sm: 'text-label-13', md: 'text-label-14', lg: 'text-heading-20' }
+const SIZES = { xs: 'h-6 w-6', sm: 'h-8 w-8', md: 'h-10 w-10', lg: 'h-16 w-16' }
+const GLYPH = { xs: 'h-3 w-3', sm: 'h-4 w-4', md: 'h-5 w-5', lg: 'h-8 w-8' }
+const TEXT = { xs: 'text-label-12', sm: 'text-label-13', md: 'text-label-14', lg: 'text-heading-20' }
 
 export function Face({
   uid,
