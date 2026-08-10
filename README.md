@@ -16,11 +16,11 @@ npm run dev
 ```
 
 Poprvé to trvá minutu — `npm run dev` si sám doinstaluje závislosti aplikace.
-Pak otevřete **http://localhost:5273**.
+Pak otevřete **http://localhost:5373**.
 
 Port je připíchnutý schválně (`strictPort` ve `vite.config.ts`): když ho něco
 obsadí, Vite se neodstěhuje jinam a zahlásí chybu. To je lepší než ladit
-omylem starší prototyp na 5173.
+omylem starší prototyp na 5173, 5175 nebo 5273.
 
 Aplikaci zastavíte `Ctrl+C`. Novou verzi si stáhnete takto:
 
